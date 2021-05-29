@@ -1,5 +1,5 @@
 ## Welcome to my website
-This is my website, with its own domain, created with [Link](https://github.com/MeowKing5/praxor.tk)
+This is my website, with its own domain, created with [github pages!](https://pages.github.com/)
 
 ### Markdown
 
