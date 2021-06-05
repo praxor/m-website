@@ -1,4 +1,3 @@
-### MOTD
-Frickware v1 will come out soon, please stop spamming my dms on discord about it.
-
 ![Image](https://i.imgur.com/RsIjmhT.png)
+### NOTE
+Frickware v1 is in development, please do not harass me about it.
