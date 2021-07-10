@@ -1,2 +1,2 @@
-# Frickware
-¯\\\_(ツ)\_/¯
+# WEBSITE REPO
+dont clone :P
