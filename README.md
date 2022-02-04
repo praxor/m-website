@@ -1,4 +1,7 @@
-# mung
+# Praxor's Website 2.0 Repository
+Welcome to the repository of my website! Please do not steal my work or republish this as your own.
 
-Q: Good website?
-> best website fym
+- yo mam
+- so hot
+- she ha
+- susi b
