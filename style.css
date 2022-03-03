@@ -5,9 +5,11 @@ html {
 
 .top {
     margin-top: 80px;
+    padding: 5px;
 }
 
 .tui-window {
     max-width: 720px;
-    text-align: center;
+    text-align: left;
+    padding: 5px;
 }
