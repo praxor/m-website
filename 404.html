@@ -1,31 +1,56 @@
 <!DOCTYPE html>
 <head>
-    <title>Uh oh!</title>
-    <style>
-        html {font: Source+Sans+Pro;}
-        body {background-color: rgb(27, 27, 33);}
-        h1 {color: white;}
-        h2 {color: white;}
-        h3 {color: white;}
-        h4 {color: rgb(24, 24, 30);}
-        li {color: white;}
-        p {color: white;}
-    </style>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap" rel="stylesheet">
+    <title>Praxor's Website V3</title>
     <link href="style.css" type="text/css" rel="stylesheet">
     <link rel="icon" href="./icon.png">
+    <link rel="stylesheet" href="dist/tuicss.min.css"/>
+    <script src="dist/tuicss.min.js"></script>
+<!-- Primary Meta Tags -->
+<meta name="title" content="Praxor's Website V3">
+<meta name="description" content="Hey there, and welcome to my website!">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://praxor.wtf/">
+<meta property="og:title" content="Praxor's Website V3">
+<meta property="og:description" content="Hey there, and welcome to my website!">
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://praxor.wtf">
+<meta property="twitter:title" content="Praxor's Website V3">
+<meta property="twitter:description" content="Hey there, and welcome to my website!">
 </head>
-<html>
-    <center>
-        <h1>What... just happened?</h1>
-        <hr>
-        <p>You had just tried to access a page that doesn't exist or you do not have access to.</p>
-        <p>Here's a dumb cat:</p>
-        <video controls autoplay loop>
-            <source src="https://thumbs.gfycat.com/AltruisticIllinformedDwarfrabbit-mobile.mp4" type="video/mp4">
-            Your browser doesn't support video output.
-        </video>
-    </center>
+<html lang="en" class="tui-bg-red-black">
+    <body class="tui-bg-red-black">
+        <div class="tui-nav">
+          <span class="tui-datetime" data-format="y/M/d H:m:s"></span>
+          <ul>
+            <li class="tui-dropdown">
+              <a href="https://praxor.wtf"><span class="red-168-text">H</span>ome</a>
+            <li class="tui-dropdown">
+              <span class="red-168-text">E</span>xtras
+              <div class="tui-dropdown-content">
+                <ul>
+                  <li>
+                    <a href="https://praxor.wtf/friends"><span class="red-168-text">F</span>riends</a>
+                  </li>
+                  <li>
+                    <a href="https://praxor.wtf/files">F<span class="red-168-text">i</span>les</a>
+                  </li>
+                </ul>
+              </div>
+            <li class="tui-dropdown">
+              <a href="https://praxor.wtf/about"><span class="red-168-text">A</span>bout</a>
+          </ul>
+        </div>
+        <div class="center">
+            <div class="tui-window black-168 top">
+                <fieldset class="tui-fieldset" style="color:yellow;">
+                    <legend>DEADZONE</legend>
+                    403 - Forbidden (This page does not exist.)
+                </fieldset>
+            </div>
+        </div>
+      </body>
 </html>
