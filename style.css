@@ -1,29 +1,4 @@
-li {
-    font-family: 'Oxygen', sans-serif;
-    font-size: 16px;
-  }
-
-h1 {
-    font-family: "Source+Sans+Pro", sans-serif;
-    font-size: 300;
-}
-
-h2 {
-    font-family: "Source+Sans+Pro", sans-serif;
-    font-size: 100;
-}
-
-h3 {
-    font-family: "Source+Sans+Pro", sans-serif;
-    font-size: 100;
-}
-
-h4 {
-  font-family: "Source+Sans+Pro", sans-serif;
-  font-size: 100;
-}
-
-p {
-    font-family: "Source+Sans+Pro", sans-serif;
-    font-size: 100;
+body {
+    font: 'Lucida Console';
+    font-size: 18px;
 }
