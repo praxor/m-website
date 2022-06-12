@@ -1,7 +1,10 @@
 html {
-    background: rgb(2,0,36);
-    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(84,9,121,1) 35%, rgba(205,0,255,1) 100%);
+    background: rgb(193,0,176);
+    background: linear-gradient(90deg, rgba(193,0,176,1) 0%, rgba(119,0,122,1) 29%, rgba(0,0,0,1) 100%);
     font: 15px Arial, sans-serif;
+    font-size: large;
+    font-family: 'Roboto Mono', monospace;
+    font-family: 'Source Sans Pro', sans-serif;
 }
 
 h1 {
@@ -21,5 +24,13 @@ h4 {
 }
 
 h5 {
+    color: rgb(255,255,255)
+}
+
+fieldset {
+    color: rgb(255,255,255)
+}
+
+p {
     color: rgb(255,255,255)
 }
