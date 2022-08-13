@@ -1,6 +1,5 @@
 html {
-    background: rgb(193,0,176);
-    background: linear-gradient(90deg, rgba(193,0,176,1) 0%, rgba(119,0,122,1) 29%, rgba(0,0,0,1) 100%);
+    background: linear-gradient(90deg, rgb(29, 29, 29) 0%, rgb(27, 27, 27)9%, rgb(24, 24, 24) 100%);
     font: 15px Arial, sans-serif;
     font-size: large;
     font-family: 'Roboto Mono', monospace;
