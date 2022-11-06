@@ -1,34 +1,9 @@
 html {
-    background: linear-gradient(90deg, rgb(29, 29, 29) 0%, rgb(27, 27, 27)9%, rgb(24, 24, 24) 100%);
-    font: 15px Arial, sans-serif;
-    font-size: large;
-    font-family: 'Roboto Mono', monospace;
+    background: rgb(2,0,36);
+    background: linear-gradient(90deg, rgba(0,0,50,1) 0%, rgba(9,9,121,1) 50%, rgba(0,140,160,1) 100%);
+    font-family: 'Inconsolata', monospace;
 }
 
-h1 {
-    color: rgb(255,255,255)
-}
-
-h2 {
-    color: rgb(255,255,255)
-}
-
-h3 {
-    color: rgb(255,255,255)
-}
-
-h4 {
-    color: rgb(255,255,255)
-}
-
-h5 {
-    color: rgb(255,255,255)
-}
-
-fieldset {
-    color: rgb(255,255,255)
-}
-
-p {
+h1, h2, h3, h4, h5, fieldset, p {
     color: rgb(255,255,255)
 }
