@@ -1,0 +1,507 @@
+@import "https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Fira+Sans:ital,wght@0,100;0,300;0,400;0,600;1,100;1,300;1,400;1,600&display=swap";
+
+#site-fundraising {
+	display: flex;
+	align-items: center;
+	font-family: fira sans, sans-serif;
+	height: 4em;
+	width: 100%;
+	z-index: 50
+}
+
+#site-fundraising .caption {
+	margin-left: 1em;
+	gap: .5em;
+	align-items: center;
+	color: #fff
+}
+
+#site-fundraising .donate-btn {
+	margin-left: auto;
+	padding: .5em 1em;
+	margin-right: 1em;
+	border-radius: 4px;
+	background-color: #ffd500;
+	color: #000;
+	cursor: pointer;
+	text-decoration: none
+}
+
+#site-footer {
+	display: flex;
+	position: fixed;
+	padding: 1em;
+	align-items: center;
+	z-index: 2;
+	top: 0;
+	margin: .5em;
+	border-radius: 15px;
+	max-width: 3em;
+	max-height: 3em;
+	overflow: hidden;
+	white-space: nowrap;
+	opacity: 50%;
+	transition: .3s background-color, .3s opacity, .3s color, .3s max-width
+}
+
+#site-footer:hover {
+	opacity: 100%;
+	background-color: rgba(0, 0, 0, .5);
+	color: #fff;
+	max-width: 27em
+}
+
+#site-footer #legal {
+	margin-left: 1em;
+	user-select: none;
+	transition: .3s opacity
+}
+
+#site-footer #icon {
+	background-image: url(./assets/icon.png);
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: center;
+	height: 3em;
+	width: 3em;
+	min-width: 3em
+}
+
+@media only screen and (max-width:768px) {
+	#site-footer #icon {
+		display: none
+	}
+}
+
+#yoshitiles {
+	filter: blur(8px);
+	-webkit-filter: blur(8px);
+}
+
+#site-header {
+	display: flex;
+	position: absolute;
+	padding: 1em;
+	width: calc(100% - 2em);
+	align-items: center;
+	z-index: 1
+}
+
+#site-header #links {
+	display: flex;
+	margin-left: auto;
+	margin-right: 20px;
+	font-size: 1.1em
+}
+
+@media only screen and (max-width:768px) {
+	#site-header #links {
+		font-size: .8em;
+		margin-right: auto;
+		gap: 1em
+	}
+}
+
+#site-header #links a {
+	display: flex;
+	align-items: center;
+	gap: .5em;
+	text-decoration: none;
+	padding: .8em;
+	border-radius: 5px;
+	font-size: 1.1em;
+	cursor: pointer
+}
+
+#site-header #links a:hover {
+	background-color: rgba(255, 255, 255, .8)
+}
+
+#site-hero {
+	position: relative;
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	justify-content: center;
+	gap: 10%;
+	height: 100%;
+	background-image: url(index.css);
+	background-size: contain;
+    border-width: 10em;
+    border-image: url(./oraxor.png) 108 repeat;
+}
+
+#site-hero.center {
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	gap: 1em
+}
+
+#site-hero.center h1 {
+	color: #fff;
+	margin: 0
+}
+
+#site-hero.center p {
+	color: #fff;
+	font-size: 1.1em;
+	text-align: center
+}
+
+#site-hero #scroll {
+	font-size: 3em;
+	position: absolute;
+	text-align: center;
+	width: 60%;
+	top: 80%;
+    color: black;
+	cursor: pointer
+}
+
+#site-hero .logo,
+#site-hero .part {
+	display: flex
+}
+
+#site-hero .button {
+	user-select: none;
+	display: flex;
+	flex-direction: column;
+	padding: 10px 20px;
+	width: 15em;
+	border: 1px solid #000000;
+	background-color: #461455;
+	transform-style: preserve-3d;
+	transition: .3s transform;
+	cursor: pointer
+}
+
+#site-hero .button .caption,
+#site-hero button .caption {
+	font-weight: 700;
+	font-size: 2em
+}
+
+#site-hero .button .fineprint,
+#site-hero button .fineprint {
+	opacity: 50%;
+	font-size: .7em
+}
+
+#site-hero .button .icon,
+#site-hero button .icon {
+	position: absolute;
+	left: calc(100% - 1.25em);
+	top: calc(100% - 1.25em);
+	font-size: 3em;
+	height: fit-content;
+	width: fit-content
+}
+
+#site-hero .button:before,
+#site-hero button:before {
+	content: "";
+	position: absolute;
+	transform: translateZ(-1px);
+	width: 100%;
+	height: 100%;
+	left: -10px;
+	top: 15%;
+	background-color: #25032e;
+	border: 1px solid #dcdcfa;
+	transition: .3s left, .3s top
+}
+
+#site-hero .button:hover,
+#site-hero button:hover {
+	background-color: #9509b8;
+	color: #dcdcfa
+}
+
+#site-hero .button:hover:before,
+#site-hero button:hover:before {
+	left: 0%;
+	top: 0%
+}
+
+#site-hero .part {
+	display: flex;
+	align-items: center;
+	flex-direction: row;
+	gap: 2em
+}
+
+@media only screen and (max-width:768px) {
+	#site-hero .part {
+		flex-direction: column
+	}
+}
+
+#site-hero .part .main-container {
+	position: relative
+}
+
+#site-hero .part .main {
+	top: 0;
+	display: flex;
+	position: absolute;
+	flex-shrink: 2;
+	justify-content: space-between;
+	transform: scale(0);
+	transition: .3s transform;
+	width: 100%
+}
+
+#site-hero .logo {
+	gap: 2em;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	width: 100%;
+	padding: 5% 0;
+}
+
+#site-hero .logo img {
+	width: 50vw;
+	max-width: 50vw
+}
+
+@media only screen and (max-width:768px) {
+	#site-hero .logo img {
+		width: 70vw;
+		max-width: 70vw;
+	}
+}
+
+#site-hero .logo #ver {
+	font-size: 10em;
+	font-weight: 700;
+	color: #3e3e3e
+}
+
+@keyframes coming-soon-bob {
+	0% {
+		transform: rotate(-20deg) translateY(-1.5em) translateX(0em)
+	}
+
+	100% {
+		transform: rotate(-20deg) translateY(-1.5em) translateX(0em) scale(1.05)
+	}
+}
+
+#site-hero .logo #ver .coming-soon {
+	position: absolute;
+	background-color: red;
+	color: #fff;
+	font-size: .5em;
+	white-space: nowrap;
+	padding: .2em;
+	transform: rotate(-20deg) translateY(-1.5em) translateX(0em);
+	animation: coming-soon-bob .4s alternate infinite ease;
+	text-shadow: -3px 3px 0 #000;
+	-webkit-text-stroke: 0
+}
+
+.button-simple,
+input[type=button],
+input[type=submit] {
+	user-select: none;
+	font-family: fira sans, sans-serif;
+	display: flex;
+	flex-grow: 2;
+	align-items: center;
+	justify-content: center;
+	padding: 10px 20px;
+	width: 15em;
+	height: 3em;
+	gap: .5em;
+	border: 1px solid #dcdcfa;
+	background-color: #9dff88;
+	cursor: pointer
+}
+
+.button-simple .iconify,
+input[type=button] .iconify,
+input[type=submit] .iconify {
+	font-size: 1.2em
+}
+
+.button-simple:hover,
+input[type=button]:hover,
+input[type=submit]:hover {
+	background-color: #fff2e7;
+	color: #7c6d5e
+}
+
+.section {
+	display: flex;
+	flex-direction: column;
+	padding: 30px 0 60px;
+	background-color: #80136d;
+	line-height: 1.6;
+    color: #000000;
+}
+
+.section .inner {
+	max-width: 78rem;
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: 1rem;
+	padding-right: 1em;
+	width: 100%
+}
+
+@media only screen and (max-width:768px) {
+	.section .inner {
+		padding-right: 0;
+		padding-left: 0
+	}
+}
+
+.section .inner .title {
+	font-size: 2em;
+	font-weight: 700;
+	margin-bottom: 1em;
+	border-bottom-style: solid;
+	border-bottom-width: 10px;
+	border-bottom-color: #1c0022
+}
+
+@media only screen and (max-width:768px) {
+	.section .inner .title {
+		text-align: center
+	}
+}
+
+.section .inner .description {
+	font-size: 1.2em;
+	margin-bottom: 2em
+}
+
+@media only screen and (max-width:768px) {
+	.section .inner .description {
+		margin-left: 1em;
+		margin-right: 1em
+	}
+}
+
+.section .inner .contents-list {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	gap: 1em
+}
+
+.section .inner .contents-list .entry {
+	display: flex;
+	width: 100%;
+	gap: 2em
+}
+
+.section .inner .contents-list .entry .entry-title {
+	font-weight: 700;
+	min-width: 30%
+}
+
+.section .inner .contents {
+	display: flex;
+	justify-content: space-between;
+	gap: 3em
+}
+
+@media only screen and (max-width:768px) {
+	.section .inner .contents {
+		flex-direction: column
+	}
+
+	.section .inner .contents .entry {
+		margin-left: 4em;
+		margin-right: 4em;
+		width: inherit !important
+	}
+
+	.section .inner .contents .entry .entry-description {
+		text-align: justify
+	}
+}
+
+.section .inner .contents .entry {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1em;
+	width: 20em
+}
+
+.section .inner .contents .entry .iconify {
+	font-size: 6em
+}
+
+.section .inner .contents .entry .caption {
+	font-size: 2em;
+	font-weight: 700;
+	padding-bottom: .3em
+}
+
+.section .inner .contents .entry .description {
+	font-size: 1.1em
+}
+
+#download-form {
+	display: flex;
+	width: 100%
+}
+
+#download-form form {
+	display: flex;
+	align-items: center;
+	gap: 1em;
+	width: 100%
+}
+
+#download-form form .button-simple {
+	max-width: 10em
+}
+
+#download-form form input[type=text] {
+	min-width: 0;
+	font-family: fira sans, sans-serif;
+	display: flex;
+	flex-grow: 2;
+	height: 2.8em;
+	gap: .5em;
+	border: 1px solid #dcdcfa;
+	background-color: #9dff88
+}
+
+a {
+	color: #fff
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+	position: relative;
+	color: #FFFFFF;
+	background-color: #000000;
+	background-image: url();
+	font-family: fira sans, sans-serif
+}
+
+button {
+	display: inherit;
+	margin: inherit;
+	background: inherit;
+	color: inherit;
+	border: inherit;
+	padding: inherit;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+	width: inherit;
+	text-align: inherit
+}
