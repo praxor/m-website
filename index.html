@@ -26,14 +26,23 @@
             <div id="body" style="padding: 5px;">
                 <h2>Praxor is love, praxor is life.</h2>
                 <h6>"The Praxor Anthem"</h6>
-                <audio autoplay controls>
-                    <source src="./mule.mp3" type="audio/mp3">
+                <audio id="myAudio" autoplay controls>
+                    <source src="mule.mp3" type="audio/mp3">
                     "*insert fitting website music here* (Audio not supported)
                 </audio>
                 <a href="https://discord.gg/rjZHDCT2MW" target="_blank" style="text-decoration: none;"><h3 style="background: linear-gradient(90deg, rgba(10,10,20,1) 0%, rgba(50,50,100,1) 100%);border-radius: 20px;padding: 7px;width:40%">Join the Praxor Discord Server!</h3></a>
                 <a href="https://www.youtube.com/channel/UCGdB3wD8KAJKucB84BzVtbg" target="_blank" style="text-decoration: none;"><h3 style="background: linear-gradient(90deg, rgba(10,10,20,1) 0%, rgba(50,50,100,1) 100%);border-radius: 20px;padding: 7px;width:40%">Visit the Praxor YouTube Channel!</h3></a>
                 <a href="https://twitch.tv/praxorlive" target="_blank" style="text-decoration: none;"><h3 style="background: linear-gradient(90deg, rgba(10,10,20,1) 0%, rgba(50,50,100,1) 100%);border-radius: 20px;padding: 7px;width:40%">Visit the Praxor Twitch Channel!</h3></a>
             </div>
+            <p id="demo"></p>
+            <p>Click the button to find out if the audio automatically started to play as soon as it was ready.</p>
+            <button onclick="myFunction()">Try it</button>
+            <script>
+                function myFunction() {
+                    var x = document.getElementById("myAudio").autoplay;
+                    document.getElementById("demo").innerHTML = x;
+                }
+            </script>
             <footer style="text-align-last: center;padding: 5px">
                 <p>Discord: praxor#4945 | © Praxor Industry</p>
             </footer>
