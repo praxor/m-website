@@ -5,7 +5,7 @@ html {
     font-family: 'Inconsolata', monospace;
 }
 
-h1, h2, h3, h4, h5, fieldset, p {
+h1, h2, h3, h4, h5, h6, fieldset, p {
     color: rgb(255,255,255)
 }
 
