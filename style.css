@@ -1,9 +1,22 @@
 html {
-    background: rgb(2,0,36);
-    background: linear-gradient(90deg, rgba(0,0,50,1) 0%, rgba(9,9,121,1) 50%, rgba(0,140,160,1) 100%);
+    background: linear-gradient(-45deg, #5534eb, #6f17ad, #df17e6, #a10b6c);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
     font-family: 'Inconsolata', monospace;
 }
 
 h1, h2, h3, h4, h5, fieldset, p {
     color: rgb(255,255,255)
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
 }
