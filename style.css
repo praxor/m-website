@@ -1,7 +1,7 @@
 html {
-    background: linear-gradient(-45deg, #5534eb, #6f17ad, #df17e6, #a10b6c);
+    background: linear-gradient(45deg, #eb4034, #eb7434, #ebc034, #dceb34, #9feb34, #68eb34, #34eb8f, #34ebeb, #348feb, #345ceb, #7734eb, #ab34eb, #e534eb, #eb349c, #eb3453, #eb3434);
     background-size: 400% 400%;
-    animation: gradient 15s ease infinite;
+    animation: gradient 30s ease-in-out infinite;
     font-family: 'Inconsolata', monospace;
 }
 
