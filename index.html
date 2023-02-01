@@ -1,46 +1,71 @@
 <!DOCTYPE html>
-<head>
-    <link href="./style.css" rel="stylesheet">
-    <title>Praxor | Home</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@600&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" href="./oraxor.png">
-    <meta name="description" content="PRAXOR IS SO SEXY WOO HOO SEX SEX SEX **SEX** ***SEX***">
-    <meta property="og:title" content="Praxor | Home">
-    <meta property="og:site_name" content="praxor.wtf">
-    <meta property="og:url" content="https://praxor.wtf">
-    <meta property="og:description" content="PRAXOR IS SO SEXY WOO HOO SEX SEX SEX **SEX** ***SEX***">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content="">
-</head>
-<html>
-    <body>
-        <center>
-            <div id="title">
-                <h1 style="padding: 15px">Praxor's Cool and Amazing Website!</h1>
-            </div>
-            <hr style="width:69%;">
-            <h2>" 私は戦争が大好きです "</h2>
-            <hr style="width:69%;">
-            <div id="body" style="padding: 5px;">
-                <h2>Praxor is love, praxor is life.</h2>
-                <audio id="praxorAnthem" autoplay controls>
-                    <source src="mule.mp3" type="audio/mpeg">
-                    "*insert fitting website music here* (Audio not supported)
-                </audio>
-                <a href="https://discord.gg/rjZHDCT2MW" target="_blank" style="text-decoration: none;"><h3 style="background: linear-gradient(90deg, rgba(10,10,20,1) 0%, rgba(50,50,100,1) 100%);border-radius: 20px;padding: 7px;width:40%">Join the Praxor Discord Server!</h3></a>
-                <a href="https://www.youtube.com/channel/UCGdB3wD8KAJKucB84BzVtbg" target="_blank" style="text-decoration: none;"><h3 style="background: linear-gradient(90deg, rgba(10,10,20,1) 0%, rgba(50,50,100,1) 100%);border-radius: 20px;padding: 7px;width:40%">Visit the Praxor YouTube Channel!</h3></a>
-                <a href="https://twitch.tv/praxorlive" target="_blank" style="text-decoration: none;"><h3 style="background: linear-gradient(90deg, rgba(10,10,20,1) 0%, rgba(50,50,100,1) 100%);border-radius: 20px;padding: 7px;width:40%">Visit the Praxor Twitch Channel!</h3></a>
-            </div>
-            <script>
-                function myFunction() {
-                    var x = document.getElementById("praxorAnthem").autoplay;
-                }
-            </script>
-            <footer style="text-align-last: center;padding: 5px">
-                <p>Discord: praxor#4945 | © Praxor Industry</p>
-            </footer>
-        </center>
+<html style="padding:4px">
+    <head>
+        <title>Praxor's Website</title>
+        <link rel=stylesheet href="style.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+        <link rel=icon href="oraxor.png">
+    </head>
+    <body style="background-color:rgb(24,24,24);padding:12px">
+        <div class="top-bar" style="position: fixed;">
+            <center>
+                <span>! Website Under Development !</span>
+            </center>
+        </div>
+        <div>
+            <center>
+                <h1 style="font-size: 48px" class="rainbowText">Praxor's Fruitalicious Website</h1>
+                <hr width="69%">
+                <p>"The blood on my hands wash away as a new life is ahead of me."</p>
+            </center>
+        </div>
+        <br>
+        <div>
+            <center>
+                <h2>About</h2>
+                <hr width="69%">
+                <p style="padding: 15px;">You can basically call this an "All About Me" project that I did by myself. Yeah. I'm praxor. If you are genuinely new to my website, this website has everything about me in it! Well, the stuff I want you to know.</p>
+            </center>
+            <!---
+            <ul>
+                <li style="color: rgb(240,240,240)">Normal Text.</li>
+                <li style="color:rgb(240,131,131);">Bad Text</li>
+                <li style="color:rgb(240,240,131)">Warning Text</li>
+                <li style="color:rgb(131,240,131)">Green Text</li>
+            </ul>
+            --->
+        </div>
+        <br>
+        <div>
+            <center>
+                <h2>Subpages</h2>
+                <hr width="69%">
+            </center>
+            <ul style="margin: 5%;">
+                <li style="color:rgb(240,240,131);background-color:rgb(150,150,41);">Notice: !<em>Under Construction</em>!</li>
+            </ul>
+        </div>
+        <br>
+        <script type="text/javascript">
+            window.addEventListener("load", function() {
+              var elements = document.getElementsByClassName("rainbowText");
+              for (let i = 0; i < elements.length; i++) {
+                generateRainbowText(elements[i]);
+              }
+            });
+
+            function generateRainbowText(element) {
+              var text = element.innerText;
+              element.innerHTML = "";
+              for (let i = 0; i < text.length; i++) {
+                let charElem = document.createElement("span");
+                charElem.style.color = "hsl(" + (360 * i / text.length) + ",80%,50%)";
+                charElem.innerHTML = text[i];
+                element.appendChild(charElem);
+              }
+            }
+        </script>
     </body>
 </html>

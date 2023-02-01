@@ -1,22 +1,48 @@
 html {
-    background: linear-gradient(45deg, #eb4034, #eb7434, #ebc034, #dceb34, #9feb34, #68eb34, #34eb8f, #34ebeb, #348feb, #345ceb, #7734eb, #ab34eb, #e534eb, #eb349c, #eb3453, #eb3434);
-    background-size: 400% 400%;
-    animation: gradient 30s ease-in-out infinite;
-    font-family: 'Inconsolata', monospace;
+    background-color:rgb(21,21,21);
+    color:rgb(241,241,241);
 }
 
-h1, h2, h3, h4, h5, h6, fieldset, p {
-    color: rgb(255,255,255)
+div {
+    background-color:rgb(31,31,31);
+    border:1px;
+    border-radius:3px;
+    border-color:rgb(27,27,27);
+    padding:4px
 }
 
-@keyframes gradient {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
+a {
+    text-decoration: underline;
+    transition:  200ms;
+    color: rgba(0,0,0,0);
+}
+/* Links Hover Animation */
+a:hover {
+    text-decoration:underline;
+    color: white;
+}
+
+img {
+    border: 3px solid rgb(193,193,193);
+    border-image: linear-gradient(142deg, #7400ff 10%, #0093ff 90%) 1;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    align-items: center;
+    min-height 100vh;
+    font-family: consolas;
+}
+
+.top-bar {
+    background-color: rgb(150,150,41);
+    height: 25px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    border-radius: 0px;
+    padding: 4px;
+    /* Thanks ChatGPT! */
 }
