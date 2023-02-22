@@ -1,0 +1,17 @@
+footer {
+    position: absolute;
+    bottom: 0;
+    height: 30px;
+    font-size: 13px;
+}
+
+.deadCenter {
+    margin: auto
+}
+
+body {
+    font-family: monospace;
+    font-size: 14px;
+    color: antiquewhite;
+    background-color: #6822b3;
+}
