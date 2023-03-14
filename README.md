@@ -2,4 +2,4 @@
 
 Glad you found this! No longer advertising it.
 
-Do not copy! :)
+Normal copyright laws are in effect. No forking!
