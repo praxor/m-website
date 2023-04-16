@@ -1,17 +1,28 @@
-footer {
-    position: absolute;
-    bottom: 0;
-    height: 30px;
-    font-size: 13px;
+html {
+    background: linear-gradient(315deg, rgba(193,0,176,1) 0%, rgba(119,0,122,1) 29%, rgba(0,224,255,1) 100%);
+	background-size: 400% 400%;
+	animation: gradient 15s ease infinite;
+	height: 100vh;
+    color: white;
+    font-family: 'Chivo Mono', monospace;
+    min-height: 80vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+    
 }
 
-.deadCenter {
-    margin: auto
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
 }
 
-body {
-    font-family: monospace;
-    font-size: 14px;
-    color: antiquewhite;
-    background-color: #6822b3;
-}
+@import url("https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css");
