@@ -5,12 +5,12 @@ html {
 	height: 100vh;
     color: white;
     font-family: 'Chivo Mono', monospace;
+    justify-content: center;
     min-height: 80vh;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	flex-direction: column;
-    
 }
 
 @keyframes gradient {
