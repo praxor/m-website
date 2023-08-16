@@ -1,4 +1,4 @@
-# The Praxor Website Repository [![my website](https://img.shields.io/badge/click_to_visit-my_website-purple)](https://praxor.wtf)
+# The Praxor Website Repository [![my website](https://img.shields.io/badge/click_to_visit_my_website-6822b3)](https://praxor.wtf)
 
 Glad you found this! No longer advertising it.
 
