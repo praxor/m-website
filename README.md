@@ -4,6 +4,6 @@ Glad you found this! No longer advertising it.
 
 Normal copyright laws are in effect. Please don't fork!
 
-I WOULD LOVE HELP IF YOU CAN HELP ME MAINTAIN KEEPING THE DOMAIN, IT COSTS A LOT FOR SOME REASON :P
+I would loooove if you could help me out and help keep the domain, it's pretty swag if I do say so myself.
 
 [![kofi](https://img.shields.io/badge/kofi-%23F16061.svg?&style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/praxor)
