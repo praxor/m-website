@@ -1,16 +1,16 @@
 html {
-    background: linear-gradient(315deg, rgba(193,0,176,1), rgba(104,34,179,1) 100%);
+    background: linear-gradient(315deg, rgba(14,14,14), rgba(104,34,179,1) 100%);
 	background-size: 400% 400%;
 	animation: gradient 15s ease infinite;
-	height: 100vh;
+	height: 100%;
     color: white;
     font-family: 'Chivo Mono', monospace;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
-    min-height: 80vh;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-direction: column;
 }
 
 @keyframes gradient {
@@ -26,55 +26,3 @@ html {
 }
 
 @import url("https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css");
-
-/* Thank you > cargo.site < for letting me use your code! :^) */
-.flier {
-	pointer-events: none;
-}
-
-.flier > * {
-        animation: fly 50s linear infinite;
-        pointer-events: none !important;
-	top: 0;
-	left: 0;
-	transform: translateX(-120%) translateY(-120%) rotateZ(0);
-	position: fixed;
-	animation-delay: 1s;
-	z-index: 999999;
-}
-
-@keyframes fly {
-
-	98.001%, 0% {
-                display: block;
-		transform: translateX(-200%) translateY(100vh) rotateZ(0deg)
-	}
-
-	15% {
-		transform: translateX(100vw) translateY(-100%) rotateZ(180deg)
-	}
-
-	15.001%, 18% {
-		transform: translateX(100vw) translateY(-30%) rotateZ(0deg)
-	}
-
-	40% {
-		transform: translateX(-200%) translateY(3vh) rotateZ(-180deg)
-	}
-
-	40.001%, 43% {
-		transform: translateX(-200%) translateY(-100%) rotateZ(-180deg)
-	}
-
-	65% {
-		transform: translateX(100vw) translateY(50vh) rotateZ(0deg)
-	}
-
-	65.001%, 68% {
-		transform: translateX(20vw) translateY(-200%) rotateZ(180deg)
-	}
-
-	95% {
-		transform: translateX(10vw) translateY(100vh) rotateZ(0deg)
-	}
-}
