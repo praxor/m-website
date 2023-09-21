@@ -43,5 +43,63 @@
                 </div>
             </div>
         </nav>
+        <main>
+        <div class="container">
+                <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+                    <p class="col-md-4 mb-0 text-body-secondary">© 2023 The Praxor Industries</p>
+                    <a href="#" class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#777777" class="bi bi-arrow-up" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"/>
+                        </svg>
+                    </a>
+                    <ul class="nav col-md-4 justify-content-end">
+                        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary" id="alreadyHome2">Home</a></li>
+                        <li class="nav-item"><a href="https://praxor.wtf/contact" class="nav-link px-2 text-body-secondary">Contact</a></li>
+                        <li class="nav-item"><a href="https://praxor.wtf/about" class="nav-link px-2 text-body-secondary">About</a></li>
+                    </ul>
+                </footer>
+            </div>
+            <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                <div id="alreadyHomeToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header">
+                        <img src="https://praxor.wtf/oraxor.png" width="16" height="16" class="rounded me-2" alt="praxor website logo">
+                        <strong class="me-auto">The Praxor Website</strong>
+                        <small>now</small>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        You're already on the home page!
+                    </div>
+                </div>
+            </div>
+        </main>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
+        <script>
+            const toastTrigger = document.getElementById('alreadyHome')
+            const toastTrigger2 = document.getElementById('alreadyHome2')
+            const alreadyHomeToast = document.getElementById('alreadyHomeToast')
+            const alreadyHomeToast2 = document.getElementById('alreadyHomeToast')
+
+            if (toastTrigger) {
+                const toastBootstrap = bootstrap.Toast.getOrCreateInstance(alreadyHomeToast)
+                toastTrigger.addEventListener('click', () => {
+                    toastBootstrap.show()
+              })
+            }
+            if (toastTrigger2) {
+                const toastBootstrap = bootstrap.Toast.getOrCreateInstance(alreadyHomeToast)
+                toastTrigger2.addEventListener('click', () => {
+                    toastBootstrap.show()
+                })
+            }
+        </script>
+        <script type="text/javascript">
+            var clockElement = document.getElementById('clock');
+            function clock() {
+                clockElement.textContent = new Date().toString();
+            }
+            setInterval(clock, 1000);
+        </script>
     </body>
 </html>
