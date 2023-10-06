@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
     <head>
-        <title>The Praxor Fan Art</title>
+        <title>The Praxor Art Collection</title>
         <link rel="icon" href="https://praxor.wtf/oraxor.png">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -26,12 +26,12 @@
                             <a class="nav-link active" aria-current="page" href="https://praxor.wtf/home">Home</a>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Stuff</a>
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Extras</a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="https://praxor.wtf/art">Fan Art</a></li>
-                                <li><a class="dropdown-item" href="https://praxor.wtf/friends">My Friends</a></li>
+                                <li><a class="dropdown-item" href="https://praxor.wtf/art">Art Album</a></li>
                                 <li><a class="dropdown-item" href="https://praxor.wtf/merch">Merchandise</a></li>
                                 <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="https://praxor.wtf/thanks">Special Thanks</a></li>
                                 <li><a class="dropdown-item" href="https://praxor.wtf/about">About</a></li>
                             </ul>
                         </li>
@@ -46,7 +46,7 @@
         <main>
             <div class="p-5">
                 <div class="container text-center">
-                    <h1 class="display-5">The Praxor Fan Art Album</h1>
+                    <h1 class="display-5">The Praxor Art Museum Collection Extravaganza</h1>
                 </div>
             </div>
             <div class="album py-5 bg-body-tertiary">
@@ -74,7 +74,7 @@
                             <div class="card shadow-sm">
                                 <img class="bd-placeholder-img card-img-top" src="https://praxor.wtf/praxor2.png">
                                 <div class="card-body">
-                                    <p class="card-text">This cool remaster of the original praxor image, <i>also created by toohi</i>, is truly a work of art as her newborn style was able to create this delicate piece of imagery.</p>
+                                    <p class="card-text">This cool remaster of the original praxor image, <i>also created by toohi</i>, is truly a work of art as her new drawing style was able to create this delicate piece of art.</p>
                                     <div class="d-flex text-back">
                                         <figure>
                                             <blockquote class="blockquote">
@@ -286,41 +286,9 @@
                     </ul>
                 </footer>
             </div>
-            <div class="toast-container position-fixed bottom-0 end-0 p-3">
-                <div id="alreadyHomeToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="toast-header">
-                        <img src="https://praxor.wtf/oraxor.png" width="16" height="16" class="rounded me-2" alt="praxor website logo">
-                        <strong class="me-auto">The Praxor Website</strong>
-                        <small>now</small>
-                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                    </div>
-                    <div class="toast-body">
-                        You're already on the home page!
-                    </div>
-                </div>
-            </div>
         </main>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
-        <script>
-            const toastTrigger = document.getElementById('alreadyHome')
-            const toastTrigger2 = document.getElementById('alreadyHome2')
-            const alreadyHomeToast = document.getElementById('alreadyHomeToast')
-            const alreadyHomeToast2 = document.getElementById('alreadyHomeToast')
-
-            if (toastTrigger) {
-                const toastBootstrap = bootstrap.Toast.getOrCreateInstance(alreadyHomeToast)
-                toastTrigger.addEventListener('click', () => {
-                    toastBootstrap.show()
-              })
-            }
-            if (toastTrigger2) {
-                const toastBootstrap = bootstrap.Toast.getOrCreateInstance(alreadyHomeToast)
-                toastTrigger2.addEventListener('click', () => {
-                    toastBootstrap.show()
-                })
-            }
-        </script>
         <script type="text/javascript">
             var clockElement = document.getElementById('clock');
             function clock() {

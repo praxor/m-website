@@ -12,6 +12,19 @@
                 left: 50%;
                 position: absolute;
             }
+            .jumbotron-background-gradient {
+                background: linear-gradient(180deg, rgba(104,34,179,10) 0%, rgba(0,0,0,1) 100%);
+                background-size: 200% 200%;
+                animation: bg-pan-top;
+            }
+            @keyframes bg-pan-top {
+                0% {
+                    background-position: 50% 100%;
+                }
+                100% {
+                    background-position: 50% 0%;
+                }
+            }
         </style>
     </head>
     <body>
@@ -26,12 +39,12 @@
                             <a class="nav-link active" aria-current="page" href="#" id="alreadyHome">Home</a>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Stuff</a>
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Extras</a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="https://praxor.wtf/art">Fan Art</a></li>
-                                <li><a class="dropdown-item" href="https://praxor.wtf/friends">My Friends</a></li>
+                                <li><a class="dropdown-item" href="https://praxor.wtf/art">Art Album</a></li>
                                 <li><a class="dropdown-item" href="https://praxor.wtf/merch">Merchandise</a></li>
                                 <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="https://praxor.wtf/thanks">Special Thanks</a></li>
                                 <li><a class="dropdown-item" href="https://praxor.wtf/about">About</a></li>
                             </ul>
                         </li>
@@ -44,15 +57,16 @@
             </div>
         </nav>
         <main>
-            <div class="px-4 py-4 text-center" style="background: linear-gradient(120deg, rgba(104,34,179,10) 0%, rgba(0,0,0,1) 100%);">
+            <div class="px-4 py-4 text-center jumbotron-background-gradient">
                 <div class="container rounded" style="background-color: rgba(25,25,25,0.7);">
                     <div class="px-4 py-5 my-5">
                         <img src="https://praxor.wtf/oraxor.png">
                         <h1 class="display-5 fw-bold text-body-emphasis" style="font-family: Consolas, monospace;"><i>The Praxor Website</i></h1>
-                        <p class="lead" style="font-family: Consolas, monospace;">Welcome to my website. Feel free to stay a while and <i>scroll</i>.</p>
+                        <p class="lead text-body-secondary" style="font-family: Consolas, monospace;">Welcome to my website. Feel free to stay a while and <i>scroll</i>.</p>
                     </div>
                 </div>
             </div>
+            <br>
             <div class="py-5 px-5">
                 <div class="container d-flex justify-content-center">
                     <div class="row row-cols-3">
@@ -80,7 +94,7 @@
                                 <img src="https://praxor.wtf/oraxor.png" class="card-img-top" alt="what the hell">
                                 <div class="card-body">
                                     <h5 class="card-title">Want more praxor?</h5>
-                                    <p class="card-text">Feel free to get in touch, I don't bite.</p>
+                                    <p class="card-text">Feel free to get in touch, I don't bite. <i>You can also find my socials on this page.</i></p>
                                     <a class="btn btn-primary" href="https://praxor.wtf/contact">contact me</a>
                                 </div>
                             </div>
@@ -88,6 +102,7 @@
                     </div>
                 </div>
             </div>
+            <br>
             <div class="container">
                 <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
                     <p class="col-md-4 mb-0 text-body-secondary">© 2023 The Praxor Industries</p>

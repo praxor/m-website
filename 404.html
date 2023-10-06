@@ -3,31 +3,43 @@
     <head>
         <title>404</title>
         <style>
-            body {
-                background-color: black;
-                font-family: Consolas, monospace;
-            }
             h1 {
                 color: white;
             }
-            .container {
-                align-content: center;
-                align-items: center;
-                height: 90vh
+            html, body {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                width: 100%;
             }
-            .contents {
-                align-items: center;
-                align-content: center;
+            body {
+                display: table;
+                background-color: black;
+                font-family: Consolas, monospace;
+            }
+            .dc {
+                text-align: center;
+                display: table-cell;
+                vertical-align: middle;
+            }
+            h3 {
+                color: rgb(24,24,24);
             }
         </style>
     </head>
     <body>
-        <div id="container">
-            <div id="contents">
-                <center>
-                    <h1>The resource could not be found on the server.</h1>
-                </center>
-            </div>
+        <div class="dc">
+            <h1>404: Not Found</h1>
+            <h3>Javascript is not supported, so you can't enjoy the cool effect.</h3>
+            <video width="320" height="320" controls>
+                <source src="https://praxor.wtf/catttt.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
         </div>
     </body>
+    <script>
+        const currentUrl = window.location.href;
+        // change the text to missing page url
+        document.querySelector("h3").innerHTML = currentUrl;
+    </script>
 </html>
