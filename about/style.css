@@ -1,0 +1,73 @@
+/* this stupid fucking background color i hate you so fucking much */
+.bg-rainblou {
+    -webkit-animation: rainblou 1s infinite;
+    -moz-animation: rainblou 1s infinite;
+    -o-animation: rainblou 1s infinite;
+    -ms-animation: rainblou 1s infinite;
+    animation: rainblou 1s infinite;
+}
+@keyframes rainblou {
+    0% {background-color: #ff3a3a};
+    10% {background-color: #ff9b30};
+    20% {background-color: #f3ff27};
+    30% {background-color: #8afa42};
+    40% {background-color: #60f487};
+    50% {background-color: #52efe8};
+    60% {background-color: #4575ec};
+    70% {background-color: #5139ef};
+    80% {background-color: #833ef3};
+    90% {background-color: #f755eb};
+    100% {background-color: #ff3a3a};
+}
+@-webkit-keyframes rainblou {
+    0% {background-color: #ff3a3a};
+    10% {background-color: #ff9b30};
+    20% {background-color: #f3ff27};
+    30% {background-color: #8afa42};
+    40% {background-color: #60f487};
+    50% {background-color: #52efe8};
+    60% {background-color: #4575ec};
+    70% {background-color: #5139ef};
+    80% {background-color: #833ef3};
+    90% {background-color: #f755eb};
+    100% {background-color: #ff3a3a};
+}
+@-moz-keyframes rainblou {
+    0% {background-color: #ff3a3a};
+    10% {background-color: #ff9b30};
+    20% {background-color: #f3ff27};
+    30% {background-color: #8afa42};
+    40% {background-color: #60f487};
+    50% {background-color: #52efe8};
+    60% {background-color: #4575ec};
+    70% {background-color: #5139ef};
+    80% {background-color: #833ef3};
+    90% {background-color: #f755eb};
+    100% {background-color: #ff3a3a};
+}
+@-ms-keyframes rainblou {
+    0% {background-color: #ff3a3a};
+    10% {background-color: #ff9b30};
+    20% {background-color: #f3ff27};
+    30% {background-color: #8afa42};
+    40% {background-color: #60f487};
+    50% {background-color: #52efe8};
+    60% {background-color: #4575ec};
+    70% {background-color: #5139ef};
+    80% {background-color: #833ef3};
+    90% {background-color: #f755eb};
+    100% {background-color: #ff3a3a};
+}
+@-o-keyframes rainblou {
+    0% {background-color: #ff3a3a};
+    10% {background-color: #ff9b30};
+    20% {background-color: #f3ff27};
+    30% {background-color: #8afa42};
+    40% {background-color: #60f487};
+    50% {background-color: #52efe8};
+    60% {background-color: #4575ec};
+    70% {background-color: #5139ef};
+    80% {background-color: #833ef3};
+    90% {background-color: #f755eb};
+    100% {background-color: #ff3a3a};
+}
