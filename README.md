@@ -1,9 +1,13 @@
 # The Praxor Website Repository [![my website](https://img.shields.io/badge/click_to_visit_my_website-6822b3)](https://praxor.wtf)
 
-Glad you found this! No longer advertising it.
+**THIS. IS. PRAXOR.**<br>
+**The new praxor medium.**<br>
+**James Bond's Long Oxlong.**<br>
+**Mike Hawk.**<br>
 
-Normal copyright laws are in effect. Please don't fork!
+*Me.<br>*
+*Praxor.<br>*
+*Hi.<br>*
 
-I would loooove if you could help me out and help keep the domain, it's pretty swag if I do say so myself.
-
+### SUPPORT THE WEBSITE PLEA
 [![kofi](https://img.shields.io/badge/kofi-%23F16061.svg?&style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/praxor)
