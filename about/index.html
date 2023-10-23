@@ -6,18 +6,25 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-        <!-- <link href="style.css" rel="stylesheet"> --->
         <style>
             .navbar-brand {
                 transform: translateX(-50%);
                 left: 50%;
                 position: absolute;
             }
+            audio::-webkit-media-controls-play-button,
+            audio::-webkit-media-controls-panel {
+                background-color: #6822b3;
+                color: #6822b3;
+            }
+            hr {
+                border-color: #6822b3 !important;
+            }
         </style>
     </head>
     <body style="background-color: #511b8c;">
         <marquee class="bg-warning text-black" style="font-family: consolas, monospace;">The Praxor Website // Under Construction</marquee>
-        <nav class="navbar navbar-expand-lg sticky-top" style="background-color: #6822b3">
+        <nav class="navbar navbar-expand-lg sticky-top shadow" style="background-color: #6822b3">
             <a class="navbar-brand">
                 <img src="https://praxor.wtf/media/oraxor.png" width="35" height="35" d-inline-block align-text-top>
             </a>
@@ -55,19 +62,19 @@
                     <i><h1 class="display-5 px-5 py-5">About The Praxor Website</h1></i>
                 </div>
             </div>
-            <div class="px-4 py-4 bg-rainblou" style="font-family:Consolas, monospace;background-color: #6822b3">
+            <div class="px-4 py-4" style="font-family:Consolas, monospace;background-color: #6822b3">
                 <div class="container px-4 py-4 rounded" style="background-color: rgba(10,10,10,0.3);">
-                    <h2>Hello world!</h2><audio src="../media/mule.mp3" controls autoplay loop></audio>
+                    <h2>Hello world!</h2><audio style="border-color: #6822b3 !important;" src="../media/mule.mp3" controls autoplay loop></audio>
                     <p>I am praxor, a web developer. Pretty sad, aye? Not really, I find joy in creating websites, so I just kinda made this one for fun. Y'know, casual stuff. I made this version of my website using <a href="https://getbootstrap.com" target="_blank">Bootstrap 5.3</a>, and I have had the most fun learning and making this website with this cool design library. Anyways, there's a violent history to this website, so I am gonna share it with you now.</p>
                     <hr>
                     <h3>Section 1: From the beginning</h3>
                     <p>ok so basically like i woke up one day, decided to get the domain praxor.tk, and then go wild with <a href="https://pages.github.com" target="_blank">Github Pages</a>. Not my proudest moment, but it certainly was a beginning for a silly goober like me who was learning HTML at the time.</p>
-                    <img src="https://praxor.wtf/media/oraxor.png" style="border: 10px;border-color: black;border-width: 10px;">
-                    <figcaption>Screenshot of my first website.</figcaption>
+                    <img class="border shadow-lg" src="../media/websitescreenshot1.png" width="100%">
+                    <figcaption class="blockquote-footer">Screenshot of my first website.</figcaption>
                 </div>
             </div>
             <div class="container" style="background-color: #511b8c;">
-                <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top" style="background-color: #511b8c;border-color: #6822b3">
+                <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top" style="background-color: #511b8c;border-color: #6822b3 !important;">
                     <p class="col-md-4 mb-0 text-body-secondary">© 2023 The Praxor Industries</p>
                     <a href="#" class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
                         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#777777" class="bi bi-arrow-up" viewBox="0 0 16 16">
