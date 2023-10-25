@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Whatever you do, do not go to the console and type praxorCount(number).. but replace number with the amount of times I said praxor on this page. Well, I guess this one would count. But only when I said "praxor", praxorCount doesn't count (lol). -->
+<!-- Whatever you do, do not go to the console and type praxorCount(praxors).. but replace 'praxors' with the amount of times I said praxor on this page. Well, I guess this one would count. But only when I said "praxor", praxorCount doesn't count (lol) and praxor.wtf/praxor.tk also doesn't count. :P -->
 <html lang="en" data-bs-theme="dark">
     <head>
         <title>About The Praxor Website</title>
@@ -32,14 +32,50 @@
             }
 
             .flier > * {
-                animation: fly 50s linear infinite;
-                pointer-events: none !important;
+                    animation: fly 50s linear infinite;
+                    pointer-events: none !important;
                 top: 0;
                 left: 0;
                 transform: translateX(-120%) translateY(-120%) rotateZ(0);
                 position: fixed;
                 animation-delay: 1s;
                 z-index: 999999;
+            }
+
+            @keyframes fly {
+
+                98.001%, 0% {
+                            display: block;
+                    transform: translateX(-200%) translateY(100vh) rotateZ(0deg)
+                }
+
+                15% {
+                    transform: translateX(100vw) translateY(-100%) rotateZ(180deg)
+                }
+
+                15.001%, 18% {
+                    transform: translateX(100vw) translateY(-30%) rotateZ(0deg)
+                }
+
+                40% {
+                    transform: translateX(-200%) translateY(3vh) rotateZ(-180deg)
+                }
+
+                40.001%, 43% {
+                    transform: translateX(-200%) translateY(-100%) rotateZ(-180deg)
+                }
+
+                65% {
+                    transform: translateX(100vw) translateY(50vh) rotateZ(0deg)
+                }
+
+                65.001%, 68% {
+                    transform: translateX(20vw) translateY(-200%) rotateZ(180deg)
+                }
+
+                95% {
+                    transform: translateX(10vw) translateY(100vh) rotateZ(0deg)
+                }
             }
          </style>
     </head>
@@ -76,7 +112,7 @@
                 </div>
             </div>
         </nav>
-        <main style="background-color: #511b8c;">
+        <main style="background-color: #511b8c;color:white;">
             <div class="px-5 py-5" style="background-color: #511b8c;">
                 <div class="container d-flex text-center justify-content-center px-5 py-5">
                     <i><h1 class="display-5 px-5 py-5">About The Praxor Website</h1></i>
@@ -120,32 +156,32 @@
                         <div class="carousel-inner">
                             <div class="carousel-item active">
                                 <img src="../media/websitescreenshot4.png" class="d-block w-100" alt="First website screenshot">
-                                <div class="carousel-caption d-none d-md-block">
-                                    <h5>Praxor Website "V4.0"</h5>
-                                    <p>A gradient background website (bc I thought that they looked cool) (it was also not version 4.0)</p>
+                                <div class="carousel-caption d-none d-md-block rounded" style="background-color: rgba(0,0,0,0.7) !important;">
+                                    <h5 style="color: white !important;">Praxor Website "V4.0"</h5>
+                                    <p style="color: white !important;">A gradient background website (bc I thought that they looked cool) (it was also not version 4.0)</p>
                                 </div>
                             </div>
                             <div class="carousel-item">
                                 <img src="../media/websitescreenshot5.png" class="d-block w-100" alt="Second website screenshot">
-                                <div class="carousel-caption d-none d-md-block">
-                                    <h5>Praxor's Fruitalicious Website</h5>
-                                    <p>This was a bad example of "design", and more of a mistake, hence the title. I don't know why I defended this with my life.</p>
+                                <div class="carousel-caption d-none d-md-block rounded" style="background-color: rgba(0,0,0,0.7) !important;">
+                                    <h5 style="color: white !important;">Praxor's Fruitalicious Website</h5>
+                                    <p style="color: white !important;">This was a bad example of "design", and more of a mistake, hence the title. I don't know why I defended this with my life.</p>
                                 </div>
                             </div>
                             <div class="carousel-item">
                                 <img src="../media/websitescreenshot6.png" class="d-block w-100" alt="Third website screenshot">
-                                <div class="carousel-caption d-none d-md-block">
-                                    <h5>Praxor Website V3.3</h5>
-                                    <p>Another gradient background website. This one features a fucking flying png of a cat that flies on the screen. What the fuck! (literally, like the domain)</p>
+                                <div class="carousel-caption d-none d-md-block rounded" style="background-color: rgba(0,0,0,0.7) !important;">
+                                    <h5 style="color: white !important;">"The Praxor Website Frontend Website"</h5>
+                                    <p style="color: white !important;">Another gradient background website. This one features a fucking flying png of a cat that flies on the screen. What the fuck! (literally, like the domain)</p>
                                 </div>
                             </div>
                         </div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#websiteScreenshotCarousel" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="carousel-control-prev-icon rounded" aria-hidden="true" style="background-color: rgba(0,0,0,0.7) !important;"></span>
                             <span class="visually-hidden">Previous</span>
                         </button>
                         <button class="carousel-control-next" type="button" data-bs-target="#websiteScreenshotCarousel" data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="carousel-control-next-icon rounded" aria-hidden="true" style="background-color: rgba(0,0,0,0.7) !important;"></span>
                             <span class="visually-hidden">Next</span>
                         </button>
                     </div>
@@ -155,21 +191,17 @@
                     <h4 class="text-center">...thank you for visiting.</h4>
                 </div>
             </div>
+            <div class="container d-flex text-center justify-content-center p-2">
+                <button onclick="meowMeow.play();" class="d-flex justify-content-center">click to pet the flying cat</button>
+            </div>
             <div class="container" style="background-color: #511b8c;">
-                <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top p-2" style="background-color: #511b8c;border-color: #6822b3 !important;">
-                    <p class="col-md-4 mb-0 text-body-secondary">© 2023 The Praxor Industries</p>
-                    <ul class="nav col-md-4 justify-content-end">
-                        <li class="nav-item"><a href="https://praxor.wtf/home" class="nav-link px-2 text-body-secondary">Home</a></li>
-                        <li class="nav-item"><a href="https://praxor.wtf/contact" class="nav-link px-2 text-body-secondary">Contact</a></li>
-                        <li class="nav-item"><a href="https://praxor.wtf/about" class="nav-link px-2 text-body-secondary">About</a></li>
-                    </ul>
+                <footer class="justify-content-between align-items-center py-3 my-4 border-top p-2" style="background-color: #511b8c;border-color: #6822b3 !important;">
+                    <p class="text-center">© 2023 The Praxor Industries</p>
                 </footer>
             </div>
         </main>
         <div class="flier">
-            <a onclick="meowMeow.play();">
-                <img src="oraxor.png" width="100px">
-            </a>
+            <img src="../media/oraxor.png" width="100px">
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
@@ -181,7 +213,7 @@
             setInterval(clock, 1000);
         </script>
         <script>
-            var meowMeow = new Audio('mewmewmew.wav');
+            var meowMeow = new Audio('../media/mewmewmew.wav');
         </script>
         <script>
             function praxorCount(praxors) {
