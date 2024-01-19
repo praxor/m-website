@@ -2,9 +2,8 @@
 
 <b>Welcome to The Praxor Website's GitHub Repository</b>
 
-*Me.*
-*Praxor.*
-*Hi.*
+GOOD EVENING LADIES AND GENTLEMEN! This is the realest website you're ever going to visit... and I don't think you know what's coming!
+Not only is the praxor website still in development, *even while finished right now*, it always is going to receive a change, making it the most FRONT AND FORWARD PAGE THAT YOU'RE GONNA SEE!
 
 <hr>
 
