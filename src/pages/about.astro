@@ -10,6 +10,20 @@ import Header from '../components/Header.astro';
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <link rel="icon" href="/favicon.ico" />
+    <!-- Open Graph / Discord -->
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={Astro.url.href} />
+		<meta property="og:title" content="the praxor website" />
+		<meta property="og:description" content="learn more about buddy ol' praxor." />
+		<meta property="og:image" content="https://praxor.de/media/snes_undertall.png" />
+
+		<!-- Twitter -->
+		<meta property="twitter:card" content="summary_large_image" />
+		<meta property="twitter:url" content={Astro.url.href} />
+		<meta property="twitter:title" content="the praxor website" />
+		<meta property="twitter:description" content="learn more about buddy ol' praxor!" />
+		<meta property="twitter:image" content="https://praxor.de/media/snes_undertall.png" />
   </head>
   <body>
     <Header />
