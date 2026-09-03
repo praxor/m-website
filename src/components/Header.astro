@@ -1,0 +1,227 @@
+---
+const base = import.meta.env.BASE_URL;
+---
+<header class="site-header" role="banner">
+  <div class="container">
+    <a class="logo" href={base}>
+      <img src="https://praxor.de/media/oraxor.png" alt="oraxor the cat" width="36" height="36" decoding="async" />
+    </a>
+    <nav class="nav" role="navigation" aria-label="Main">
+      <a href={`${base}art`}>art</a>
+      <a href={`${base}about`}>about</a>
+      <a class="cult-link" href={`${base}cult`}>cult</a>
+    </nav>
+    <div class="actions">
+      <button id="contact-btn" class="cta" aria-haspopup="dialog" aria-expanded="false">contact</button>
+      <div class="header-socials">
+        <a href="https://open.spotify.com/artist/5qjpeOAlOrY6kilCDZzYoz" target="_blank" rel="noopener" aria-label="Spotify" title="open praxor on spotify" class="social-btn">
+          <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>spotify</title><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3"/></svg>
+        </a>
+        <a href="https://soundcloud.com/praxor" target="_blank" rel="noopener" aria-label="SoundCloud" title="open praxor on soundcloud" class="social-btn">
+          <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>soundcloud</title><path d="M23.999 14.165c-.052 1.796-1.612 3.169-3.4 3.169h-8.18a.68.68 0 0 1-.675-.683V7.862a.747.747 0 0 1 .452-.724s.75-.513 2.333-.513a5.364 5.364 0 0 1 2.763.755 5.433 5.433 0 0 1 2.57 3.54c.282-.08.574-.121.868-.12.884 0 1.73.358 2.347.992s.948 1.49.922 2.373ZM10.721 8.421c.247 2.98.427 5.697 0 8.672a.264.264 0 0 1-.53 0c-.395-2.946-.22-5.718 0-8.672a.264.264 0 0 1 .53 0ZM9.072 9.448c.285 2.659.37 4.986-.006 7.655a.277.277 0 0 1-.55 0c-.331-2.63-.256-5.02 0-7.655a.277.277 0 0 1 .556 0Zm-1.663-.257c.27 2.726.39 5.171 0 7.904a.266.266 0 0 1-.532 0c-.38-2.69-.257-5.21 0-7.904a.266.266 0 0 1 .532 0Zm-1.647.77a26.108 26.108 0 0 1-.008 7.147.272.272 0 0 1-.542 0 27.955 27.955 0 0 1 0-7.147.275.275 0 0 1 .55 0Zm-1.67 1.769c.421 1.865.228 3.5-.029 5.388a.257.257 0 0 1-.514 0c-.21-1.858-.398-3.549 0-5.389a.272.272 0 0 1 .543 0Zm-1.655-.273c.388 1.897.26 3.508-.01 5.412-.026.28-.514.283-.54 0-.244-1.878-.347-3.54-.01-5.412a.283.283 0 0 1 .56 0Zm-1.668.911c.4 1.268.257 2.292-.026 3.572a.257.257 0 0 1-.514 0c-.241-1.262-.354-2.312-.023-3.572a.283.283 0 0 1 .563 0Z"/></svg>
+        </a>
+        <a href="https://www.youtube.com/@realpraxor" target="_blank" rel="noopener" aria-label="YouTube" title="open praxor on youtube" class="social-btn">
+          <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>youtube</title><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        </a>
+        <a href="https://x.com/praxorf" target="_blank" rel="noopener" aria-label="Twitter" title="open praxor on x" class="social-btn">
+          <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>x</title><path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z"/></svg>
+        </a>
+      </div>
+    </div>
+    <button id="menu-toggle" class="menu-toggle" type="button" aria-label="Toggle menu" aria-controls="mobile-nav" aria-expanded="false">☰</button>
+  </div>
+  <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile navigation">
+    <a href={`${base}art`}>art</a>
+    <a href={`${base}about`}>about</a>
+    <a class="cult-link" href={`${base}cult`}>cult</a>
+  </nav>
+  <style>
+    .site-header{position:sticky;top:0;z-index:40;background:var(--card);border-bottom:1px solid var(--muted-border)}
+    .site-header .container{max-width:1100px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:18px}
+    .logo{display:inline-block;text-decoration:none}
+    .logo img{height:36px;width:auto;border-radius:0;display:block}
+    .nav{display:flex;gap:16px;margin-left:8px}
+    .nav a{color:var(--muted);text-decoration:none;padding:6px 8px;border-radius:8px;font-weight:600}
+    .nav a:hover{background:rgba(255,255,255,0.02);color:var(--text)}
+    .cult-link{color:var(--card)!important}
+    .actions{margin-left:auto;display:flex;align-items:center;gap:8px}
+    .menu-toggle{display:none;background:transparent;border:0;color:var(--muted);font-size:1.1rem}
+    .mobile-nav{display:none}
+
+    @media (max-width:780px){
+      .nav{display:none}
+      .menu-toggle{display:inline-block;margin-left:auto}
+      .actions{display:none}
+      .site-header .container{padding:12px}
+      .mobile-nav{display:flex;flex-direction:column;gap:4px;max-height:0;padding:0 12px;border-top:1px solid transparent;opacity:0;overflow:hidden;transform:translateY(-8px);transition:max-height .32s ease,padding .32s ease,opacity .24s ease,transform .32s ease,border-color .32s ease;visibility:hidden}
+      .mobile-nav.open{max-height:120px;padding:8px 12px 14px;border-top-color:var(--muted-border);opacity:1;transform:translateY(0);visibility:visible}
+      .mobile-nav a{color:var(--muted);text-decoration:none;padding:10px 8px;border-radius:8px;font-weight:600}
+      .mobile-nav a:hover,.mobile-nav a:focus{background:rgba(255,255,255,0.04);color:var(--text)}
+      .mobile-nav .cult-link{color:var(--card)!important}
+    }
+  </style>
+
+  <div id="contact-panel" class="contact-panel" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="contact-overlay" tabindex="-1"></div>
+    <div class="contact-inner" role="document">
+      <button id="contact-close" class="contact-close" aria-label="Close contact panel">✕</button>
+      <div class="modal-top">
+        <div class="confetti" aria-hidden="true">
+          <span class="piece piece-1"></span>
+          <span class="piece piece-2"></span>
+          <span class="piece piece-3"></span>
+          <span class="piece piece-4"></span>
+          <span class="piece piece-5"></span>
+          <span class="piece piece-6"></span>
+          <span class="piece piece-7"></span>
+          <span class="piece piece-8"></span>
+        </div>
+        <img class="modal-cat" src="https://praxor.de/media/oraxor.png" alt="oraxor the cat" />
+      </div>
+      <h2 class="modal-title">contact</h2>
+      <p class="modal-lead"> <em>
+        email: <a href="mailto:admin@praxor.de">admin@praxor.de</a><br>
+        discord: @<strong>trapstars</strong><br>
+      </em></p>
+    </div>
+  </div>
+
+  <style>
+    .contact-panel{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:60;pointer-events:none;opacity:0;transition:opacity .28s ease}
+    .contact-panel .contact-overlay{position:absolute;inset:0;background:rgba(6,4,18,0.6);backdrop-filter:blur(0px);-webkit-backdrop-filter:blur(0px);opacity:0;transition:backdrop-filter .36s ease, opacity .28s ease}
+    .contact-panel .contact-inner{position:relative;z-index:2;max-width:420px;width:calc(100% - 40px);background:var(--card);border:1px solid var(--muted-border);padding:18px;border-radius:12px;box-shadow:0 20px 60px rgba(4,2,10,0.6);transform:translateY(8px) scale(.98);opacity:0;transition:transform .36s cubic-bezier(.2,.9,.2,1),opacity .28s ease}
+    .contact-inner::before{content:"";position:absolute;inset:0;border-radius:12px;padding:1px;background:linear-gradient(90deg, rgba(104,34,179,0.18), rgba(104,34,179,0.06));pointer-events:none}
+    .modal-top{position:absolute;left:50%;top:-36px;width:72px;height:72px;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:2}
+    .modal-top .confetti{position:absolute;left:50%;top:50%;transform:translate(-50%,-10%);width:220px;height:140px;pointer-events:none;z-index:1}
+    .modal-top .confetti .piece{position:absolute;width:10px;height:10px;border-radius:2px;opacity:0;transform:translate(0,0) rotate(0deg);}
+    .modal-top .confetti .piece-1{left:50%;top:50%;--x:-80px;--y:-120px;background:#ff5e7e;--d:0s}
+    .modal-top .confetti .piece-2{left:50%;top:50%;--x:-40px;--y:-110px;background:#ffb470;--d:0s}
+    .modal-top .confetti .piece-3{left:50%;top:50%;--x:0px;--y:-120px;background:#ffd36b;--d:0s}
+    .modal-top .confetti .piece-4{left:50%;top:50%;--x:40px;--y:-110px;background:#7ee4a3;--d:0s}
+    .modal-top .confetti .piece-5{left:50%;top:50%;--x:80px;--y:-100px;background:#7ec9ff;--d:0s}
+    .modal-top .confetti .piece-6{left:50%;top:50%;--x:-60px;--y:-70px;background:#c58cff;--d:0s}
+    .modal-top .confetti .piece-7{left:50%;top:50%;--x:20px;--y:-60px;background:#ff8fcf;--d:0s}
+    .modal-top .confetti .piece-8{left:50%;top:50%;--x:60px;--y:-70px;background:#ffd2a6;--d:0s}
+
+    .modal-cat{position:relative;height:72px;width:72px;border-radius:0;object-fit:cover;display:block;opacity:1;will-change:transform,opacity;transform-origin:center}
+
+    @keyframes cat-slide-in {
+      from { transform: translateX(-120vw) translateY(0) scale(.9); opacity:0 }
+      to { transform: translateX(-50%) translateY(0) scale(1); opacity:1 }
+    }
+
+    .contact-panel.open .modal-top{animation:cat-slide-in .9s cubic-bezier(.16,.8,.2,1) forwards; animation-play-state:running}
+
+    @keyframes confetti-throw {
+      from { opacity:1; transform: translate(0,0) rotate(0deg) scale(1) }
+      to { opacity:0; transform: translate(var(--x), var(--y)) rotate(720deg) scale(.9) }
+    }
+    .contact-panel.open .modal-top .confetti .piece{animation:confetti-throw .9s cubic-bezier(.15,.8,.2,1) forwards; animation-delay: calc(var(--d) + 1s); animation-play-state:running}
+
+    .modal-title{margin:8px 0 6px;color:var(--accent);text-align:center;font-size:1.4rem;padding-top:10px}
+
+    @keyframes cat-explode {
+      0% { opacity:1; transform:rotate(0deg) scale(1) }
+      50% { transform:rotate(45deg) scale(.96) }
+      100% { opacity:0; transform:rotate(1080deg) scale(.6) }
+    }
+    .contact-panel.closing .modal-cat{animation:cat-explode 3s cubic-bezier(.2,.9,.2,1) forwards; animation-play-state:running}
+
+    @keyframes top-fall {
+      0% { transform:translate3d(-50%,0,0) }
+      100% { transform:translate3d(-50%,120vh,0) }
+    }
+    .contact-panel.closing .modal-top{animation:top-fall 3s ease-in forwards; animation-play-state:running}
+
+    @keyframes confetti-explode {
+      from { opacity:1; transform: translate(0,0) rotate(0deg) scale(1) }
+      to { opacity:0; transform: translate(calc(var(--x) * 1.6), calc(var(--y) * 1.6)) rotate(1080deg) scale(.9) }
+    }
+    .contact-panel.closing .modal-top .confetti .piece{animation: none !important; opacity:0 !important; transform:none !important}
+    .modal-lead{margin:0 0 8px;color:var(--muted);font-style:italic;text-align:center;opacity:1}
+    .contact-panel.open{pointer-events:auto;opacity:1}
+    .contact-panel.open .contact-overlay{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);opacity:1}
+    .contact-panel.open .contact-inner{transform:translateY(0) scale(1);opacity:1}
+    .contact-close{position:absolute;right:14px;top:12px;background:transparent;border:0;color:var(--muted);font-size:1.1rem}
+    .contact-panel h3{margin:6px 0 8px;color:var(--accent)}
+    .contact-panel a{color:var(--accent)}
+  </style>
+
+  <script>
+    (function(){
+      const btn = document.getElementById('contact-btn') as HTMLButtonElement;
+      const menuToggle = document.getElementById('menu-toggle');
+      const mobileNav = document.getElementById('mobile-nav');
+      const panel = document.getElementById('contact-panel') as HTMLElement;
+      const close = document.getElementById('contact-close') as HTMLButtonElement | null;
+      const closeMobileNav = function(){
+        if (!menuToggle || !mobileNav) return;
+        mobileNav.classList.remove('open');
+        menuToggle.setAttribute('aria-expanded','false');
+      };
+      if (menuToggle && mobileNav) {
+        menuToggle.addEventListener('click', function(){
+          const isOpen = mobileNav.classList.toggle('open');
+          menuToggle.setAttribute('aria-expanded', String(isOpen));
+        });
+        mobileNav.querySelectorAll('a').forEach((link)=> link.addEventListener('click', closeMobileNav));
+        document.addEventListener('keydown', function(e){
+          if (e.key === 'Escape') closeMobileNav();
+        });
+      }
+      function openPanel(){
+        panel.classList.remove('closing');
+        panel.classList.add('open');
+        panel.setAttribute('aria-hidden','false');
+        btn.setAttribute('aria-expanded','true');
+        const focusable = panel.querySelector<HTMLElement>('a, button, [tabindex], input');
+        if(focusable) focusable.focus();
+      }
+      function closePanel(){
+        if (!panel || panel.classList.contains('closing')) return;
+        panel.classList.add('closing');
+
+          const modalCat = panel.querySelector('.modal-cat');
+          const finishClose = function(){
+            panel.classList.remove('closing');
+            panel.classList.remove('open');
+            panel.setAttribute('aria-hidden','true');
+            btn.setAttribute('aria-expanded','false');
+            btn.focus();
+          };
+
+        if (modalCat) {
+          const handler = function(e: Event){
+            if (e.target !== modalCat) return;
+            modalCat.removeEventListener('animationend', handler);
+            finishClose();
+          };
+          modalCat.addEventListener('animationend', handler);
+        } else {
+          finishClose();
+        }
+      }
+      if (btn) {
+        btn.addEventListener('click', function(){
+          const open = panel.classList.contains('open');
+          if(open) closePanel(); else openPanel();
+        });
+      }
+      if (close) {
+        close.addEventListener('click', closePanel);
+      }
+      const overlay = panel.querySelector('.contact-overlay');
+      if (overlay) {
+        overlay.addEventListener('click', closePanel);
+      }
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closePanel(); });
+    })();
+  </script>
+  <script>
+    if (typeof window !== 'undefined') {
+      window.addEventListener('load', function() {
+        document.documentElement.classList.add('is-loaded');
+      });
+    }
+  </script>
+</header>

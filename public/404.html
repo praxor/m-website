@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>404</title>
+        <style>
+            h1 {
+                color: white;
+            }
+            html, body {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                width: 100%;
+            }
+            body {
+                display: table;
+                background-color: black;
+                font-family: Consolas, monospace;
+            }
+            .dc {
+                text-align: center;
+                display: table-cell;
+                vertical-align: middle;
+            }
+            h3 {
+                color: rgb(24,24,24);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="dc">
+            <h1>404: Not Found</h1>
+            <h3>Javascript is not supported, so you can't enjoy the cool effect.</h3>
+            <video width="320" height="320" controls loop>
+                <source src="https://praxor.de/media/catttt.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </body>
+    <script>
+        const currentUrl = window.location.href;
+        // change the text to missing page url
+        document.querySelector("h3").innerHTML = currentUrl;
+    </script>
+</html>

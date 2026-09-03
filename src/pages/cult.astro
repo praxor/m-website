@@ -1,0 +1,58 @@
+---
+import Header from '../components/Header.astro';
+import '../styles/global.css';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>cult</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+  </head>
+  <body class="cult-page">
+    <Header />
+    <main class="cult-main">
+      <section class="cult-hero" aria-labelledby="cult-title">
+        <p class="cult-kicker">so you want in, huh?</p>
+        <div class="cult-title-band">
+          <h1 id="cult-title">the cult</h1>
+        </div>
+        <p class="cult-intro">did you wanna take a journey? do it with praxoria.</p>
+        <div class="cult-writing-space">
+          <h2>about our cause</h2>
+          <p>well, i'd probably go on a 500 page monologue about it if i fucking wanted to, but i don't. we don't even do anything bad. so what are you waiting for?</p>
+        </div>
+        <a class="cult-join" href="https://discord.gg/u2SQwTusMS" target="_blank" rel="noopener">apply now!</a>
+      </section>
+    </main>
+  </body>
+</html>
+
+<style>
+  .cult-page{--bg:#020812;--card:#061326;--text:#dcecff;--muted:#7895b8;--accent:#3872b1;--accent-dark:#061c32;--accent-10:rgba(56,114,177,.1);--accent-12:rgba(56,114,177,.18);--muted-border:rgba(56,114,177,.2);background-color:var(--bg);background-image:linear-gradient(rgba(2,8,18,.88),rgba(2,8,18,.94)),url('https://praxor.de/media/bluebricks.png');background-repeat:repeat;background-size:auto;position:relative};
+  .cult-page::after{content:"";position:fixed;left:0;right:0;bottom:0;height:96px;background:linear-gradient(180deg,transparent,#000 72%);pointer-events:none;z-index:0}
+  .cult-page::before{background-image:url('https://praxor.de/media/bluebricks.png');opacity:.08}
+  :global(.cult-page .site-header){background:var(--card);border-color:var(--muted-border)}
+  :global(.cult-page .cta){background:linear-gradient(180deg,#1b6caf,#061c32);color:#fff;border-color:#3872b1;box-shadow:0 8px 20px rgba(8,57,107,.35)}
+  :global(.cult-page .cta:hover){background:linear-gradient(180deg,#2585d3,#092842);box-shadow:0 14px 30px rgba(8,57,107,.5)}
+  :global(.cult-page .cult-link){color:var(--accent)!important;background:rgba(77,163,255,.12);box-shadow:inset 0 -2px 0 var(--accent)}
+  :global(.cult-page .mobile-nav .cult-link){color:var(--accent)!important}
+  .cult-main{min-height:calc(100vh - 76px);display:grid;place-items:center;padding:clamp(3rem,8vw,7rem) 20px 8rem;box-sizing:border-box;position:relative;z-index:1}
+  .cult-hero{position:relative;width:min(100%,760px);text-align:center}
+  .cult-kicker,.cult-title-band,.cult-intro,.cult-writing-space,.cult-join{position:relative;z-index:1}
+  .cult-kicker{margin:0 0 1rem;color:var(--accent);font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+  .cult-title-band{width:100vw;margin-left:calc(50% - 50vw);background:#000;border:4px solid #000;padding:1rem 20px;box-sizing:border-box}
+  .cult-hero h1{margin:0;font-size:clamp(3.6rem,12vw,8rem);line-height:.9;letter-spacing:0;color:transparent;background:linear-gradient(90deg,#ff3b81,#ff9f43,#ffe45e,#56e58a,#42d9ff,#568cff,#d56cff,#ff3b81);background-size:220% 100%;background-clip:text;-webkit-background-clip:text;-webkit-text-stroke:2px #000;animation:rainbow-title 8s linear infinite}
+  @keyframes rainbow-title{from{background-position:0 50%}to{background-position:220% 50%}}
+  .cult-intro{max-width:560px;margin:1.5rem auto 0;color:var(--muted);font-size:clamp(1rem,2vw,1.2rem);line-height:1.6}
+  .cult-writing-space{margin:3rem auto 2rem;padding:2rem;text-align:left;background:rgba(4,14,29,.92);border:1px solid var(--muted-border);border-left:4px solid var(--accent);border-radius:8px;box-shadow:0 18px 50px rgba(0,0,0,.4)}
+  .cult-writing-space h2{margin:0 0 .7rem;color:var(--accent);font-size:1.1rem}
+  .cult-writing-space p{margin:0;color:var(--muted);line-height:1.7}
+  .cult-join{display:inline-flex;align-items:center;justify-content:center;padding:12px 22px;border:1px solid #4a88c2;border-radius:6px;background:#12518d;color:#fff;text-decoration:none;font-weight:700;box-shadow:0 10px 26px rgba(8,57,107,.4);transition:transform .18s ease,background .18s ease,box-shadow .18s ease}
+  .cult-join:hover,.cult-join:focus-visible{background:#1b6caf;box-shadow:0 14px 32px rgba(8,57,107,.55);transform:translateY(-2px)}
+  .cult-join:focus-visible{outline:3px solid rgba(119,188,255,.4);outline-offset:3px}
+  @media (max-width:780px){.cult-main{min-height:calc(100vh - 60px)}.cult-hero{width:100%}.cult-writing-space{padding:1.4rem}}
+  @media (prefers-reduced-motion:reduce){.cult-hero h1{animation:none}}
+</style>

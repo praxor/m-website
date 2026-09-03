@@ -1,0 +1,179 @@
+:root{
+  --bg: #0b0614;
+  --card: #130623;
+  --text: #f3f0ff;
+  --muted: #bfb3f5;
+  --accent: #6822b3;
+  --accent-contrast: #ffffff;
+  --accent-dark: #541a93;
+  --accent-10: rgba(104,34,179,0.06);
+  --accent-12: rgba(104,34,179,0.12);
+  --pattern-url: url('https://praxor.de/media/bricks.png');
+  --muted-border: rgba(74,16,205,0.08);
+}
+
+html, body { height: 100%; }
+body{
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: "IBM Plex Sans", Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+.ibm-plex-sans { font-family: "IBM Plex Sans", sans-serif; font-optical-sizing: auto; font-variation-settings: "wdth" 100; }
+.ibm-plex-sans-100 { font-weight: 100; font-style: normal; }
+.ibm-plex-sans-200 { font-weight: 200; font-style: normal; }
+.ibm-plex-sans-300 { font-weight: 300; font-style: normal; }
+.ibm-plex-sans-400 { font-weight: 400; font-style: normal; }
+.ibm-plex-sans-500 { font-weight: 500; font-style: normal; }
+.ibm-plex-sans-600 { font-weight: 600; font-style: normal; }
+.ibm-plex-sans-700 { font-weight: 700; font-style: normal; }
+
+body::before{
+  content: "";
+  position:fixed;
+  inset:0;
+  background-image: var(--pattern-url);
+  background-repeat:repeat;
+  background-size: auto;
+  opacity: 0.04;
+  pointer-events:none;
+  z-index:0;
+}
+
+header, main, footer, .wrap, .site-header, .card{position:relative;z-index:1}
+
+html, body, * {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+html::-webkit-scrollbar, body::-webkit-scrollbar, *::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+
+header, .card, .nav a, .btn, .cta, .logo img, img, .m-item, h1, p, .contact-inner {
+  opacity: 0;
+  transform: translateY(8px) scale(.995);
+  transition: opacity .6s ease, transform .6s cubic-bezier(.2,.9,.2,1);
+}
+
+header{transition-delay:0s}
+.logo img{transition-delay:.05s}
+.nav a{transition-delay:.08s}
+.card{transition-delay:.12s}
+.m-item{transition-delay:.14s}
+.contact-inner{transition-delay:.16s}
+.btn{transition-delay:.18s}
+
+html.is-loaded header, html.is-loaded .card, html.is-loaded .nav a, html.is-loaded .btn, html.is-loaded .cta, html.is-loaded .logo img, html.is-loaded img, html.is-loaded .m-item, html.is-loaded h1, html.is-loaded p, html.is-loaded .contact-inner {
+  opacity: 1;
+  transform: none;
+}
+
+.socials{
+  margin-top:12px;
+  padding:10px 14px;
+  background: rgba(0,0,0,0.5);
+  border-radius:8px;
+  display:flex;
+  gap:10px;
+  align-items:center;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+.social-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:44px;
+  height:44px;
+  border-radius:8px;
+  color:#fff;
+  transition:background .18s ease,transform .14s cubic-bezier(.2,.9,.2,1),box-shadow .14s ease;
+}
+.social-btn svg{display:block;width:20px;height:20px}
+.social-btn svg path{fill:currentColor}
+.social-btn:hover,.social-btn:focus{
+  background:rgba(255,255,255,0.04);
+  transform:translateY(-2px) scale(1.04);
+  box-shadow:0 8px 24px rgba(6,4,18,0.5), 0 0 18px rgba(104,34,179,0.06);
+}
+.social-btn:focus{outline:none;box-shadow:0 0 0 4px rgba(104,34,179,0.12)}
+
+.center-contents{text-align:center;display:flex;flex-direction:column;align-items:center;}
+
+.site-footer{position:relative;color:var(--muted);margin-top:48px}
+.site-footer .footer-fade{position:absolute;left:0;right:0;top:0;height:140px;background:linear-gradient(180deg,transparent,rgba(0,0,0,1));pointer-events:none}
+.site-footer .footer-inner{position:relative;padding:36px 20px 48px}
+.site-footer .footer-nav{display:flex;gap:28px;justify-content:center;max-width:1100px;margin:0 auto}
+.site-footer .footer-col h4{color:#fff;margin:0 0 8px;font-size:0.95rem}
+.site-footer .footer-col ul{list-style:none;margin:0;padding:0}
+.site-footer .footer-col li{margin:6px 0}
+.site-footer .footer-col a{color:#ddd;text-decoration:none;font-size:0.95rem}
+.site-footer .footer-col a:hover{color:#fff;text-decoration:underline}
+
+@media (max-width:780px){
+  .site-footer .footer-nav{flex-direction:column;align-items:center}
+  .site-footer .footer-col{width:100%;text-align:center}
+}
+
+.wrap{min-height:auto;display:flex;align-items:center;justify-content:center;padding:3rem}
+main{flex:1}
+.card{max-width:900px;background:var(--card);border:1px solid var(--muted-border);padding:3rem;border-radius:14px;border-left:4px solid var(--accent-dark)}
+
+.h1, h1{margin:0 0 .5rem;font-size:clamp(1.8rem,3.6vw,3rem);letter-spacing:-0.02em;color:var(--accent)}
+.lead{margin:0 0 1.5rem;color:var(--muted);font-size:1.05rem}
+.buttons{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-block;padding:10px 16px;border-radius:10px;text-decoration:none;font-weight:600;color:var(--accent-contrast);background:var(--accent)}
+.btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--muted-border)}
+footer{margin-top:1.75rem;color:var(--muted);font-size:.95rem}
+
+a{color:var(--accent);text-decoration:none}
+a:hover{opacity:0.9}
+a:focus{outline:3px solid var(--accent-12);outline-offset:3px}
+.btn:focus{outline:3px solid var(--accent-12);outline-offset:3px}
+
+
+.site-header{position:sticky;top:0;z-index:40;background:var(--card);border-bottom:1px solid var(--muted-border)}
+.site-header .container{max-width:1100px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:18px}
+.logo{font-weight:700;color:var(--text);text-decoration:none;font-size:1.05rem}
+.nav{display:flex;gap:16px;margin-left:8px}
+.nav a{color:var(--muted);text-decoration:none;padding:6px 8px;border-radius:8px;font-weight:600}
+.nav a:hover{background:var(--accent-10);color:var(--text)}
+.actions{margin-left:auto}
+.cta{
+  background: linear-gradient(180deg,var(--accent),var(--accent-dark));
+  color:var(--accent-contrast);
+  padding:10px 14px;
+  border-radius:12px;
+  text-decoration:none;
+  font-weight:700;
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:0.95rem;
+  border:1px solid rgba(0,0,0,0.08);
+  box-shadow:0 8px 20px rgba(104,34,179,0.10);
+  transition:transform .14s ease,box-shadow .18s ease,opacity .12s ease;
+}
+.cta:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(104,34,179,0.12)}
+.cta:active{transform:translateY(0);box-shadow:0 6px 14px rgba(0,0,0,0.2)}
+.cta:focus{outline:3px solid var(--accent-12);outline-offset:3px}
+.menu-toggle{display:none;background:transparent;border:0;color:var(--muted);font-size:1.1rem}
+
+@media (max-width:780px){
+  .nav{display:none}
+  .menu-toggle{display:inline-block;margin-left:auto}
+  .actions{display:none}
+  .site-header .container{padding:12px}
+}
+
+.header-socials{display:flex;gap:8px;margin-left:8px}
+.header-socials .social-btn{width:36px;height:36px}
+.header-socials .social-btn svg{width:16px;height:16px}
+@media (max-width:780px){
+  .header-socials{display:none}
+}

@@ -1,0 +1,20 @@
+---
+const { items = [] } = Astro.props as { items: Array<{ src: string; title?: string }> };
+---
+<div class="masonry">
+  {items.map((item) => (
+    <figure class="m-item">
+      <img src={item.src} alt={item.title || 'art'} loading="lazy" decoding="async" />
+      {item.title ? <figcaption>{item.title}</figcaption> : null}
+    </figure>
+  ))}
+</div>
+
+<style>
+  .masonry{column-count:3;column-gap:1rem}
+  .m-item{break-inside:avoid;display:inline-block;width:100%;margin:0 0 1rem;border-radius:10px;overflow:hidden}
+  .m-item img{width:100%;height:auto;display:block;object-fit:cover}
+  .m-item figcaption{padding:8px 6px;color:var(--muted);font-size:.95rem}
+  @media (max-width:900px){.masonry{column-count:2}}
+  @media (max-width:600px){.masonry{column-count:1}}
+</style>
