@@ -1,0 +1,102 @@
+{
+  "name": "the very cool",
+  "description": "album by toohi",
+  "tracks": [
+    {
+      "title": "party",
+      "artist": "toohi",
+      "src": "/musicplayer/music/bday/01 party.opus",
+      "duration": "0:47"
+    },
+    {
+      "title": "THESURREAL",
+      "artist": "toohi",
+      "src": "/musicplayer/music/bday/02 THESURREAL.opus",
+      "duration": "3:32"
+    },
+    {
+      "title": "invalid",
+      "artist": "toohi",
+      "src": "/musicplayer/music/bday/03 invalid.opus",
+      "duration": "2:29"
+    },
+    {
+      "title": "ACCESSGRANTED",
+      "artist": "toohi",
+      "src": "/musicplayer/music/bday/04 ACCESSGRANTED.opus",
+      "duration": "1:41"
+    },
+    {
+      "title": "lonely, in your room again",
+      "artist": "toohi",
+      "src": "/musicplayer/music/bday/05 lonely, in your room again.opus",
+      "duration": "2:19"
+    },
+    {
+      "title": "DECADE",
+      "artist": "toohi",
+      "src": "/musicplayer/music/bday/06 DECADE.opus",
+      "duration": "2:11"
+    },
+    {
+      "title": "apples",
+      "artist": "toohi",
+      "src": "/musicplayer/music/bday/07 apples.opus",
+      "duration": "2:21"
+    },
+    {
+      "title": "rhombus",
+      "artist": "toohi",
+      "src": "/musicplayer/music/bday/08 rhombus.opus",
+      "duration": "4:25"
+    },
+    {
+      "title": "slash sit",
+      "artist": "toohi",
+      "src": "/musicplayer/music/bday/09 slash sit.opus",
+      "duration": "2:27"
+    },
+    {
+      "title": "praxors composer troubles",
+      "artist": "toohi",
+      "src": "/musicplayer/music/bday/10 praxors composer troubles.opus",
+      "duration": "3:45"
+    },
+    {
+      "title": "salty",
+      "artist": "toohi",
+      "src": "/musicplayer/music/bday/11 salty.opus",
+      "duration": "2:31"
+    },
+    {
+      "title": "try harder",
+      "artist": "toohi",
+      "src": "/musicplayer/music/bday/12 try harder.opus",
+      "duration": "2:49"
+    },
+    {
+      "title": "DIPHENHYDRAMINE",
+      "artist": "toohi",
+      "src": "/musicplayer/music/bday/13 DIPHENHYDRAMINE.opus",
+      "duration": "3:11"
+    },
+    {
+      "title": "GHOST IN THE MACHINE",
+      "artist": "toohi",
+      "src": "/musicplayer/music/bday/14 GHOST IN THE MACHINE.opus",
+      "duration": "2:54"
+    },
+    {
+      "title": "^UN.4TUNA.TE",
+      "artist": "toohi",
+      "src": "/musicplayer/music/bday/15 ^UN.4TUNA.TE.opus",
+      "duration": "2:24"
+    },
+    {
+      "title": "fr",
+      "artist": "toohi",
+      "src": "/musicplayer/music/bday/16 fr.opus",
+      "duration": "1:52"
+    }
+  ]
+}

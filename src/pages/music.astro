@@ -17,10 +17,14 @@ const base = import.meta.env.BASE_URL;
             <summary><span class="folder-glyph" aria-hidden="true"></span><strong>all/</strong></summary>
             <button class="tree-playlist active" type="button" data-playlist-url={`${base}musicplayer/playlists/all.json`} data-playlist-name="all.playlist"><span class="file-glyph">.pl</span>all.playlist</button>
           </details>
+          <details class="music-folder">
+            <summary><span class="folder-glyph" aria-hidden="true"></span><strong>bday/</strong></summary>
+            <button class="tree-playlist" type="button" data-playlist-url={`${base}musicplayer/playlists/bday.json`} data-playlist-name="bday.playlist"><span class="file-glyph">.pl</span>bday.playlist</button>
+          </details>
         </aside>
         <section class="music-workspace" aria-live="polite">
           <div class="workspace-topline"><span>playlist file</span><span id="workspace-count"></span></div>
-          <div class="workspace-heading"><div id="workspace-cover-box" class="workspace-cover-box"><svg class="workspace-note-fallback" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l11-2v13M9 9l11-2M6 21a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm11-3a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" /></svg><img id="workspace-cover" class="workspace-cover" src="" alt="" /></div><div><h2 id="workspace-title">chill.playlist</h2><p id="workspace-description">loading the little files...</p></div></div>
+          <div class="workspace-heading"><div id="workspace-cover-box" class="workspace-cover-box"><svg class="workspace-note-fallback" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l11-2v13M9 9l11-2M6 21a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm11-3a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" /></svg><img id="workspace-cover" class="workspace-cover" src="" alt="" /></div><div><h2 id="workspace-title">blank.playlist</h2><p id="workspace-description">loading...</p></div></div>
           <div id="workspace-tracks" class="workspace-tracks"></div>
         </section>
       </div>

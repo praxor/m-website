@@ -1,0 +1,10 @@
+{
+  "name": "ocs-playlist",
+  "description": "these are the four song themes from my birthday album that i tied to my ocs. credits to toohi! <3",
+  "tracks": [
+    { "title": "lonely, in your room again", "artist": "toohi", "src": "/musicplayer/music/ocs/05 lonely, in your room again.opus", "duration": "2:19" },
+    { "title": "rhombus", "artist": "toohi", "src": "/musicplayer/music/ocs/08 rhombus.opus", "duration": "4:25" },
+    { "title": "slash sit", "artist": "toohi", "src": "/musicplayer/music/ocs/09 slash sit.opus", "duration": "2:27" },
+    { "title": "DIPHENHYDRAMINE", "artist": "toohi", "src": "/musicplayer/music/ocs/13 DIPHENHYDRAMINE.opus", "duration": "3:11" }
+  ]
+}
