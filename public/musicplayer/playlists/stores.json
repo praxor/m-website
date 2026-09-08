@@ -1,0 +1,30 @@
+{
+  "name": "stores",
+  "description": "this fuckass 4th album of mine, exclusively set on my website! oh no wait, it's on soundcloud too. siiighhh...",
+  "tracks": [
+    {
+      "title": "walgreens shopping cart",
+      "artist": "praxor",
+      "src": "/musicplayer/music/stores/wsc.mp3",
+      "duration": "1:16"
+    },
+    {
+      "title": "foot locker goblins",
+      "artist": "praxor",
+      "src": "/musicplayer/music/stores/flg.mp3",
+      "duration": "1:49"
+    },
+    {
+      "title": "walmart parking lot",
+      "artist": "praxor",
+      "src": "/musicplayer/music/stores/wpl.mp3",
+      "duration": "1:24"
+    },
+    {
+      "title": "costco food court",
+      "artist": "praxor",
+      "src": "/musicplayer/music/stores/cfc.mp3",
+      "duration": "1:45"
+    }
+  ]
+}

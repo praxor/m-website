@@ -1,0 +1,12 @@
+{
+  "name": "not mine",
+  "description": "these songs are misc. unreleased. they don't really belong to me, but I have modified them still. could say they're... remixes... even if they're unofficial...",
+  "tracks": [
+    {
+      "title": "vaw",
+      "artist": "???",
+      "src": "/musicplayer/music/remixes/vaw.wav",
+      "duration": "3:16"
+    }
+  ]
+}

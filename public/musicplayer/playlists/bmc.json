@@ -1,0 +1,136 @@
+{
+  "name": "The Bonk Machine OST",
+  "description": "This is the soundtrack for the coolest game, in my opinion, which is a biased opinion, The Bonk Machine! ✨\nThe Bonk Machine is an unreleased game. Due to a change in stance between developers, the game has halted development indefinitely.\n\nOST created by Praxor and Toohi!\nSpecial Thanks: Joystix!",
+  "tracks": [
+    {
+      "title": "That One Funky Alarm To Dance To (TOFADTD)",
+      "src": "/musicplayer/music/tbm/funkyalarm.mp3",
+      "duration": "0:26"
+    },
+    {
+      "title": "stmpwyfs",
+      "src": "/musicplayer/music/tbm/stmpwyfs.mp3",
+      "duration": "1:33"
+    },
+    {
+      "title": "Hittin' Different",
+      "src": "/musicplayer/music/tbm/hittindifferent.mp3",
+      "duration": "1:00"
+    },
+    {
+      "title": "Hittin Different But The Drummer Is On Drugs",
+      "src": "/musicplayer/music/tbm/hdalt.mp3",
+      "duration": "1:00"
+    },
+    {
+      "title": "Overworld",
+      "src": "/musicplayer/music/tbm/overworld.mp3",
+      "duration": "3:16"
+    },
+    {
+      "title": "Conflict",
+      "src": "/musicplayer/music/tbm/conflict.mp3",
+      "duration": "2:54"
+    },
+    {
+      "title": "Ill Will",
+      "src": "/musicplayer/music/tbm/illwill.mp3",
+      "duration": "3:02"
+    },
+    {
+      "title": "Shuffle",
+      "src": "/musicplayer/music/tbm/shuffle.mp3",
+      "duration": "4:34"
+    },
+    {
+      "title": "TMW You Had Too Much Vitamin C",
+      "src": "/musicplayer/music/tbm/tmwyhtmvc.mp3",
+      "duration": "0:16"
+    },
+    {
+      "title": "The Funklest Day Of Yo Life (TFDOYL)",
+      "src": "/musicplayer/music/tbm/tfdoyl.mp3",
+      "duration": "2:07"
+    },
+    {
+      "title": "Chase Music",
+      "src": "/musicplayer/music/tbm/chasemusic.mp3",
+      "duration": "1:20"
+    },
+    {
+      "title": "Chase Music ???",
+      "src": "/musicplayer/music/tbm/chasemusicalter.mp3",
+      "duration": "3:45"
+    },
+    {
+      "title": "danger",
+      "src": "/musicplayer/music/tbm/danger.mp3",
+      "duration": "0:46"
+    },
+    {
+      "title": "Crystal Dive",
+      "src": "/musicplayer/music/tbm/crystaldive.mp3",
+      "duration": "3:12"
+    },
+    {
+      "title": "Between A Rock And A Hard Place",
+      "src": "/musicplayer/music/tbm/betweenarockandahardplace.mp3",
+      "duration": "4:33"
+    },
+    {
+      "title": "Claustrophobe",
+      "src": "/musicplayer/music/tbm/claustrophobe.mp3",
+      "duration": "4:45"
+    },
+    {
+      "title": "Graphight",
+      "src": "/musicplayer/music/tbm/graphight.mp3",
+      "duration": "4:04"
+    },
+    {
+      "title": "When A Blue Flame Meets A Dark Flame (WABFMADF)",
+      "src": "/musicplayer/music/tbm/wabfmadf.mp3",
+      "duration": "1:41"
+    },
+    {
+      "title": "Subterranean Fortress",
+      "src": "/musicplayer/music/tbm/subterraneanfortresss.mp3",
+      "duration": "2:33"
+    },
+    {
+      "title": "Lullaby",
+      "src": "/musicplayer/music/tbm/lullaby.mp3",
+      "duration": "1:01"
+    },
+    {
+      "title": "Tension",
+      "src": "/musicplayer/music/tbm/tension.mp3",
+      "duration": "0:33"
+    },
+    {
+      "title": "an awkward encounter with a cat",
+      "src": "/musicplayer/music/tbm/awkwardencounter.mp3",
+      "duration": "1:46"
+    },
+    {
+      "title": "a message to you, my friend",
+      "src": "/musicplayer/music/tbm/message.mp3",
+      "duration": "1:21"
+    },
+    {
+      "title": "a message to you, my friend (alt. ver.)",
+      "src": "/musicplayer/music/tbm/messagealt.mp3",
+      "duration": "1:33"
+    },
+    {
+      "title": "Where Am I?",
+      "src": "/musicplayer/music/tbm/whereami.mp3",
+      "duration": "2:29"
+    },
+    {
+      "title": "FRIENDZONED",
+      "src": "/musicplayer/music/tbm/fz.mp3",
+      "duration": "3:49"
+    }
+  ]
+}
