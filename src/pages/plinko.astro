@@ -1,0 +1,201 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="plinko" bodyClass="plinko-page">
+    <main class="plinko-main">
+      <section class="plinko-frame" aria-labelledby="plinko-title">
+        <div class="plinko-heading">
+          <h1 id="plinko-title">plinko</h1>
+        </div>
+        <div class="plinko-board">
+          <canvas id="plinko-canvas" aria-label="Plinko board with oraxor the cat">your browser does not support canvas.</canvas>
+        </div>
+      </section>
+    </main>
+</Layout>
+
+<style>
+  .plinko-page{background:var(--bg)}
+  .plinko-main{min-height:calc(100vh - 76px);box-sizing:border-box;display:flex;align-items:center;justify-content:center;max-width:1180px;margin:0 auto;padding:1.5rem 20px 1.25rem}
+  .plinko-frame{position:relative;display:flex;flex:0 0 auto;width:min(84vw,780px);aspect-ratio:1;min-height:0;flex-direction:column;overflow:hidden;background:var(--card);border:1px solid var(--muted-border);border-radius:16px;box-shadow:0 24px 60px rgba(4,2,10,.35),inset 0 1px 0 var(--accent-12)}
+  .plinko-frame::before{content:"";position:absolute;top:0;left:12%;right:12%;height:1px;background:var(--accent);opacity:.65;box-shadow:0 0 18px var(--accent);pointer-events:none}
+  .plinko-heading{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.4rem .9rem;border-bottom:1px solid var(--muted-border)}
+  .plinko-main h1{margin:0;color:var(--accent);font-size:1.15rem;line-height:1;letter-spacing:.04em}
+  .plinko-board{display:flex;flex:1;min-height:0;margin:.85rem;border:1px solid var(--muted-border);border-radius:10px;background:radial-gradient(circle at 50% 0%,var(--accent-10),transparent 44%),rgba(11,6,20,.32);box-shadow:inset 0 0 0 1px rgba(255,255,255,.015)}
+  #plinko-canvas{display:block;width:100%;min-height:0;flex:1;background:transparent}
+  @media (max-width:780px){.plinko-main{width:100%;min-height:calc(100vh - 60px);padding:1.5rem 12px 1rem;overflow-x:hidden}.plinko-frame{width:calc(100vw - 24px);max-width:420px;min-width:280px;height:min(68vh,580px);aspect-ratio:auto}}
+  @media (max-width:480px){.plinko-heading{padding-left:1rem;padding-right:1rem}.plinko-board{margin:.5rem}}
+</style>
+
+<script>
+  import * as planck from 'planck';
+
+  const initializePlinko = () => {
+  const canvas = document.querySelector<HTMLCanvasElement>('#plinko-canvas');
+  if (!canvas) return;
+  const context = canvas?.getContext('2d');
+  const cat = new Image();
+  cat.crossOrigin = 'anonymous';
+  cat.src = 'https://praxor.de/media/oraxor.png';
+  let world: planck.World;
+  let catBody: planck.Body;
+  let width = 0;
+  let height = 0;
+  let scale = 1;
+  let spawnAt = 0;
+  let animationFrame = 0;
+  const slotCount = 7;
+
+  const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+  const compactBoard = window.matchMedia('(max-width: 780px)').matches;
+
+  const resizeCanvas = () => {
+    if (!canvas || !context) return;
+    const ratio = window.devicePixelRatio || 1;
+    const bounds = canvas.getBoundingClientRect();
+    width = bounds.width;
+    height = bounds.height;
+    canvas.width = Math.round(bounds.width * ratio);
+    canvas.height = Math.round(bounds.height * ratio);
+    context.setTransform(ratio, 0, 0, ratio, 0, 0);
+    scale = width / 12;
+    createBoard();
+  };
+
+  const createBoard = () => {
+    if (!canvas) return;
+    world = new planck.World(planck.Vec2(0, 10));
+    const worldWidth = width / scale;
+    const worldHeight = height / scale;
+    const pegGap = compactBoard ? .62 : .78;
+    const pegRadius = .085;
+    const slotHeight = .65;
+    const slotWidth = (worldWidth - .4) / slotCount;
+
+    const walls = world.createBody();
+    walls.createFixture(planck.Edge(planck.Vec2(.2, 0), planck.Vec2(.2, worldHeight)), { restitution: .55 });
+    walls.createFixture(planck.Edge(planck.Vec2(worldWidth - .2, 0), planck.Vec2(worldWidth - .2, worldHeight)), { restitution: .55 });
+    walls.createFixture(planck.Edge(planck.Vec2(.2, worldHeight - .15), planck.Vec2(worldWidth - .2, worldHeight - .15)), { restitution: .35 });
+    for (let slot = 1; slot < slotCount; slot += 1) {
+      const x = .2 + slot * slotWidth;
+      walls.createFixture(planck.Edge(planck.Vec2(x, worldHeight - .15), planck.Vec2(x, worldHeight - slotHeight)), { restitution: .35 });
+    }
+
+    const addPegSection = (startY: number, rows: number) => {
+      for (let row = 0; row < rows; row += 1) {
+      const count = Math.floor(worldWidth / .95);
+      const offset = row % 2 === 0 ? 0 : .475;
+      const y = startY + row * pegGap;
+      for (let column = 0; column < count; column += 1) {
+        const x = .65 + column * .95 + offset;
+        if (x > worldWidth - .65) continue;
+        const peg = world.createBody({ position: planck.Vec2(x, y) });
+        peg.createFixture(planck.Circle(pegRadius), { restitution: .78, friction: .08 });
+      }
+    }
+    };
+
+    const fieldRows = Math.max(5, Math.floor((worldHeight - slotHeight - 1.35) / pegGap));
+    addPegSection(1.15, fieldRows);
+
+    spawnCat(worldWidth);
+  };
+
+  const spawnCat = (worldWidth: number) => {
+    catBody = world.createDynamicBody({
+      position: planck.Vec2(2 + Math.random() * (worldWidth - 4), .35),
+      linearVelocity: planck.Vec2((Math.random() - .5) * 1.2, 0),
+      angularVelocity: (Math.random() - .5) * 2,
+    });
+    catBody.createFixture(planck.Circle(.28), { density: 1, friction: .18, restitution: .7 });
+  };
+
+  const drawBoard = () => {
+    if (!context || !world || !catBody) return;
+    context.clearRect(0, 0, width, height);
+    context.fillStyle = accent;
+    context.globalAlpha = .58;
+    for (let body = world.getBodyList(); body; body = body.getNext()) {
+      if (body === catBody) continue;
+      for (let fixture = body.getFixtureList(); fixture; fixture = fixture.getNext()) {
+        const shape = fixture.getShape();
+        if (shape.getType() === 'circle') {
+          const circle = shape as planck.Circle;
+          const position = body.getWorldPoint(circle.m_p);
+          context.beginPath();
+          context.arc(position.x * scale, position.y * scale, circle.m_radius * scale, 0, Math.PI * 2);
+          context.fill();
+        }
+      }
+    }
+    context.globalAlpha = 1;
+
+    const worldWidth = width / scale;
+    const slotWidth = (worldWidth - .4) / slotCount;
+    const slotTop = height - .65 * scale;
+    const slotColors = [
+      'rgba(104,34,179,.18)',
+      'rgba(104,34,179,.10)',
+      'rgba(104,34,179,.15)',
+      'rgba(104,34,179,.08)',
+      'rgba(104,34,179,.15)',
+      'rgba(104,34,179,.10)',
+      'rgba(104,34,179,.18)',
+    ];
+    for (let slot = 0; slot < slotCount; slot += 1) {
+      context.fillStyle = slotColors[slot];
+      context.fillRect((.2 + slot * slotWidth) * scale, slotTop, slotWidth * scale, .65 * scale);
+    }
+    context.strokeStyle = accent;
+    context.lineWidth = 1;
+    context.globalAlpha = .42;
+    for (let slot = 0; slot <= slotCount; slot += 1) {
+      const x = (.2 + slot * slotWidth) * scale;
+      context.beginPath();
+      context.moveTo(x, height);
+      context.lineTo(x, slotTop);
+      context.stroke();
+    }
+    context.globalAlpha = 1;
+
+    const position = catBody.getPosition();
+    const size = .72 * scale;
+    context.save();
+    context.translate(position.x * scale, position.y * scale);
+    context.rotate(catBody.getAngle());
+    if (cat.complete && cat.naturalWidth > 0) {
+      context.drawImage(cat, -size / 2, -size / 2, size, size);
+    }
+    context.restore();
+  };
+
+  const animate = () => {
+    if (!world || !catBody) return;
+    world.step(1 / 60, 8, 3);
+    if (catBody.getPosition().y > height / scale + 1) {
+      world.destroyBody(catBody);
+      spawnAt = performance.now() + 350;
+    }
+    if (!catBody.getWorld()) spawnAt = spawnAt || performance.now() + 350;
+    if (!catBody.getWorld() && performance.now() >= spawnAt) {
+      spawnCat(width / scale);
+      spawnAt = 0;
+    }
+    drawBoard();
+    animationFrame = requestAnimationFrame(animate);
+  };
+
+  cat.addEventListener('load', drawBoard);
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+  animationFrame = requestAnimationFrame(animate);
+  document.addEventListener('astro:before-swap', () => {
+    cancelAnimationFrame(animationFrame);
+    window.removeEventListener('resize', resizeCanvas);
+    cat.removeEventListener('load', drawBoard);
+  }, { once: true });
+  };
+
+  document.addEventListener('astro:page-load', initializePlinko);
+  initializePlinko();
+</script>

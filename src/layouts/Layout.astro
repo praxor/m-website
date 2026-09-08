@@ -1,0 +1,57 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import Header from '../components/Header.astro';
+import MusicPlayer from '../components/MusicPlayer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  bodyClass?: string;
+}
+
+const { title, description = 'the praxor website', bodyClass = '' } = Astro.props;
+const image = 'https://praxor.de/media/res/snes_undertall.png';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>{title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <link rel="icon" href="/favicon.ico" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.url.href} />
+    <meta property="og:title" content="the praxor website" />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={Astro.url.href} />
+    <meta property="twitter:title" content="the praxor website" />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={image} />
+    <ClientRouter />
+  </head>
+  <body class={bodyClass}>
+    <div class="page-shell">
+      <Header />
+      <slot />
+    </div>
+    <MusicPlayer />
+  </body>
+</html>
+
+<script>
+  const markPageLoaded = () => {
+    document.documentElement.classList.remove('is-transitioning');
+    document.documentElement.classList.add('is-loaded');
+  };
+  document.addEventListener('astro:before-swap', () => {
+    document.documentElement.classList.remove('is-loaded');
+    document.documentElement.classList.add('is-transitioning');
+  });
+  document.addEventListener('astro:page-load', markPageLoaded);
+  markPageLoaded();
+</script>

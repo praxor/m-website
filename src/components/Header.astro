@@ -1,13 +1,22 @@
 ---
+import { characters } from '../data/characters';
 const base = import.meta.env.BASE_URL;
 ---
-<header class="site-header" role="banner">
+<header class="site-header" role="banner" data-persisted-shell transition:persist transition:animate="none">
   <div class="container">
     <a class="logo" href={base}>
       <img src="https://praxor.de/media/oraxor.png" alt="oraxor the cat" width="36" height="36" decoding="async" />
     </a>
     <nav class="nav" role="navigation" aria-label="Main">
       <a href={`${base}art`}>art</a>
+      <div class="character-menu">
+        <a class="character-menu-link" href={`${base}characters`}>characters <span class="character-chevron" aria-hidden="true"></span></a>
+        <div class="character-menu-panel">
+          {characters.map((character) => <a href={`${base}characters/${character.slug}`}>{character.name}</a>)}
+        </div>
+      </div>
+      <a href={`${base}plinko`}>plinko</a>
+      <a href={`${base}music`}>music</a>
       <a href={`${base}about`}>about</a>
       <a class="cult-link" href={`${base}cult`}>cult</a>
     </nav>
@@ -28,37 +37,89 @@ const base = import.meta.env.BASE_URL;
         </a>
       </div>
     </div>
-    <button id="menu-toggle" class="menu-toggle" type="button" aria-label="Toggle menu" aria-controls="mobile-nav" aria-expanded="false">☰</button>
+    <button id="menu-toggle" class="menu-toggle" type="button" aria-label="Toggle menu" aria-controls="mobile-nav" aria-expanded="false">
+      <span class="menu-icon" aria-hidden="true"><i></i><i></i><i></i></span>
+    </button>
   </div>
   <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile navigation">
     <a href={`${base}art`}>art</a>
+    <div class="mobile-character-menu">
+      <div class="mobile-character-row">
+        <a href={`${base}characters`}>characters</a>
+        <button class="mobile-character-toggle" type="button" aria-label="Show character links" aria-controls="mobile-character-links" aria-expanded="false">⌄</button>
+      </div>
+      <div id="mobile-character-links" class="mobile-character-links">
+        {characters.map((character) => <a href={`${base}characters/${character.slug}`}>{character.name}</a>)}
+      </div>
+    </div>
+    <a href={`${base}plinko`}>plinko</a>
+    <a href={`${base}music`}>music</a>
     <a href={`${base}about`}>about</a>
-    <a class="cult-link" href={`${base}cult`}>cult</a>
+    <div class="mobile-socials" aria-label="Social links">
+      <a href="https://open.spotify.com/artist/5qjpeOAlOrY6kilCDZzYoz" target="_blank" rel="noopener" aria-label="Spotify" title="open praxor on spotify" class="social-btn">
+        <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>spotify</title><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3"/></svg>
+      </a>
+      <a href="https://soundcloud.com/praxor" target="_blank" rel="noopener" aria-label="SoundCloud" title="open praxor on soundcloud" class="social-btn">
+        <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>soundcloud</title><path d="M23.999 14.165c-.052 1.796-1.612 3.169-3.4 3.169h-8.18a.68.68 0 0 1-.675-.683V7.862a.747.747 0 0 1 .452-.724s.75-.513 2.333-.513a5.364 5.364 0 0 1 2.763.755 5.433 5.433 0 0 1 2.57 3.54c.282-.08.574-.121.868-.12.884 0 1.73.358 2.347.992s.948 1.49.922 2.373ZM10.721 8.421c.247 2.98.427 5.697 0 8.672a.264.264 0 0 1-.53 0c-.395-2.946-.22-5.718 0-8.672a.264.264 0 0 1 .53 0ZM9.072 9.448c.285 2.659.37 4.986-.006 7.655a.277.277 0 0 1-.55 0c-.331-2.63-.256-5.02 0-7.655a.277.277 0 0 1 .556 0Zm-1.663-.257c.27 2.726.39 5.171 0 7.904a.266.266 0 0 1-.532 0c-.38-2.69-.257-5.21 0-7.904a.266.266 0 0 1 .532 0Zm-1.647.77a26.108 26.108 0 0 1-.008 7.147.272.272 0 0 1-.542 0 27.955 27.955 0 0 1 0-7.147.275.275 0 0 1 .55 0Zm-1.67 1.769c.421 1.865.228 3.5-.029 5.388a.257.257 0 0 1-.514 0c-.21-1.858-.398-3.549 0-5.389a.272.272 0 0 1 .543 0Zm-1.655-.273c.388 1.897.26 3.508-.01 5.412-.026.28-.514.283-.54 0-.244-1.878-.347-3.54-.01-5.412a.283.283 0 0 1 .56 0Zm-1.668.911c.4 1.268.257 2.292-.026 3.572a.257.257 0 0 1-.514 0c-.241-1.262-.354-2.312-.023-3.572a.283.283 0 0 1 .563 0Z"/></svg>
+      </a>
+      <a href="https://www.youtube.com/@realpraxor" target="_blank" rel="noopener" aria-label="YouTube" title="open praxor on youtube" class="social-btn">
+        <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>youtube</title><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+      </a>
+      <a href="https://x.com/praxorf" target="_blank" rel="noopener" aria-label="Twitter" title="open praxor on x" class="social-btn">
+        <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>x</title><path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z"/></svg>
+      </a>
+    </div>
   </nav>
   <style>
     .site-header{position:sticky;top:0;z-index:40;background:var(--card);border-bottom:1px solid var(--muted-border)}
-    .site-header .container{max-width:1100px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:18px}
+    .site-header .container{max-width:1100px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:14px}
     .logo{display:inline-block;text-decoration:none}
-    .logo img{height:36px;width:auto;border-radius:0;display:block}
-    .nav{display:flex;gap:16px;margin-left:8px}
-    .nav a{color:var(--muted);text-decoration:none;padding:6px 8px;border-radius:8px;font-weight:600}
+    .logo img{height:32px;width:auto;border-radius:0;display:block}
+    .logo.secret-ready img{animation:secret-cat-spin .32s linear infinite}
+    @keyframes secret-cat-spin{to{transform:rotate(360deg)}}
+    .nav{display:flex;gap:12px;margin-left:6px}
+    .nav a{color:var(--muted);text-decoration:none;padding:5px 7px;border-radius:8px;font-weight:600}
     .nav a:hover{background:rgba(255,255,255,0.02);color:var(--text)}
+    .character-menu{position:relative;display:flex;align-items:center}
+    .character-chevron{display:inline-block;width:6px;height:6px;margin:0 0 3px 6px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg);transition:transform .18s ease}
+    .character-menu:hover .character-chevron,.character-menu:focus-within .character-chevron{transform:rotate(225deg)}
+    .character-menu-panel{position:absolute;top:calc(100% + 10px);left:0;min-width:170px;padding:6px;background:var(--card);border:1px solid var(--muted-border);border-radius:8px;box-shadow:0 16px 34px rgba(4,2,10,.4);opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .18s ease,transform .18s ease,visibility .18s ease}
+    .character-menu:hover .character-menu-panel,.character-menu:focus-within .character-menu-panel{opacity:1;visibility:visible;transform:translateY(0)}
+    .character-menu-panel a{display:block;white-space:nowrap}
     .cult-link{color:var(--card)!important}
-    .actions{margin-left:auto;display:flex;align-items:center;gap:8px}
-    .menu-toggle{display:none;background:transparent;border:0;color:var(--muted);font-size:1.1rem}
+    .actions{margin-left:auto;display:flex;align-items:center;gap:6px}
+    .menu-toggle{display:none;width:38px;height:34px;padding:0;background:transparent;border:1px solid transparent;border-radius:7px;color:var(--muted);line-height:1;cursor:pointer}
+    .menu-toggle:hover,.menu-toggle:focus-visible{background:var(--accent-10);color:var(--text)}
+    .menu-icon{position:relative;display:block;width:18px;height:14px;margin:auto}
+    .menu-icon i{position:absolute;left:0;width:18px;height:2px;border-radius:2px;background:currentColor;transition:transform .24s ease,opacity .18s ease,top .24s ease}
+    .menu-icon i:nth-child(1){top:0}.menu-icon i:nth-child(2){top:6px}.menu-icon i:nth-child(3){top:12px}
+    .menu-toggle[aria-expanded="true"] .menu-icon i:nth-child(1){top:6px;transform:rotate(45deg)}
+    .menu-toggle[aria-expanded="true"] .menu-icon i:nth-child(2){opacity:0;transform:scaleX(0)}
+    .menu-toggle[aria-expanded="true"] .menu-icon i:nth-child(3){top:6px;transform:rotate(-45deg)}
     .mobile-nav{display:none}
 
     @media (max-width:780px){
       .nav{display:none}
       .menu-toggle{display:inline-block;margin-left:auto}
       .actions{display:none}
-      .site-header .container{padding:12px}
-      .mobile-nav{display:flex;flex-direction:column;gap:4px;max-height:0;padding:0 12px;border-top:1px solid transparent;opacity:0;overflow:hidden;transform:translateY(-8px);transition:max-height .32s ease,padding .32s ease,opacity .24s ease,transform .32s ease,border-color .32s ease;visibility:hidden}
-      .mobile-nav.open{max-height:120px;padding:8px 12px 14px;border-top-color:var(--muted-border);opacity:1;transform:translateY(0);visibility:visible}
-      .mobile-nav a{color:var(--muted);text-decoration:none;padding:10px 8px;border-radius:8px;font-weight:600}
+      .site-header .container{padding:8px 12px}
+      .mobile-nav{position:absolute;top:100%;left:0;right:0;box-sizing:border-box;display:flex;flex-direction:column;gap:2px;max-height:0;padding:0 12px;background:var(--card);border-top:1px solid transparent;opacity:0;overflow:hidden;transform:translateY(-8px);transition:max-height .32s ease,padding .32s ease,opacity .24s ease,transform .32s ease,border-color .32s ease;visibility:hidden}
+      .mobile-nav.open{max-height:520px;padding:8px 12px 4px;border-top-color:var(--muted-border);opacity:1;transform:translateY(0);visibility:visible}
+      .mobile-nav a{display:block;color:var(--muted);text-decoration:none;padding:11px 10px;border-radius:8px;font-weight:600}
       .mobile-nav a:hover,.mobile-nav a:focus{background:rgba(255,255,255,0.04);color:var(--text)}
       .mobile-nav .cult-link{color:var(--card)!important}
+      .mobile-character-row{display:flex;align-items:center;gap:4px}
+      .mobile-character-row>a{flex:1}
+      .mobile-character-toggle{width:38px;height:38px;border:0;border-radius:7px;background:transparent;color:var(--muted);font:inherit;font-size:1rem;cursor:pointer;transition:background .18s ease,transform .24s ease}
+      .mobile-character-toggle:hover,.mobile-character-toggle:focus-visible{background:var(--accent-10);color:var(--text)}
+      .mobile-character-toggle[aria-expanded="true"]{transform:rotate(180deg)}
+      .mobile-character-links{max-height:0;overflow:hidden;opacity:0;transition:max-height .28s ease,opacity .2s ease}
+      .mobile-character-links.open{max-height:180px;opacity:1}
+      .mobile-character-links a{padding:8px 20px;font-size:.92rem}
+      .mobile-socials{display:flex;align-items:center;justify-content:center;gap:4px;padding:5px 4px 0;border-top:1px solid var(--muted-border);margin-top:2px}
+      .mobile-socials .social-btn{display:flex;align-items:center;justify-content:center;width:38px;height:34px;padding:0;font-size:16px}
     }
+    @media (max-width:780px){.character-menu{display:none}}
   </style>
 
   <div id="contact-panel" class="contact-panel" role="dialog" aria-modal="true" aria-hidden="true">
@@ -149,72 +210,206 @@ const base = import.meta.env.BASE_URL;
 
   <script>
     (function(){
-      const btn = document.getElementById('contact-btn') as HTMLButtonElement;
-      const menuToggle = document.getElementById('menu-toggle');
-      const mobileNav = document.getElementById('mobile-nav');
-      const panel = document.getElementById('contact-panel') as HTMLElement;
-      const close = document.getElementById('contact-close') as HTMLButtonElement | null;
-      const closeMobileNav = function(){
+      const sizeSocialIcons = function(){
+        document.querySelectorAll<SVGElement>('.social-btn svg').forEach((icon)=>{
+          icon.setAttribute('width','20');
+          icon.setAttribute('height','20');
+        });
+      };
+      sizeSocialIcons();
+      document.addEventListener('astro:page-load', sizeSocialIcons);
+      const logo = document.querySelector<HTMLAnchorElement>('.logo');
+      const cultUrl = new URL('cult', document.baseURI).href;
+      let secretLogoTimer: number | undefined;
+      let secretLogoReady = false;
+      let rumbleContext: AudioContext | undefined;
+      let rumbleGain: GainNode | undefined;
+      let rumbleOscillators: OscillatorNode[] = [];
+      let rumbleNoiseSource: AudioBufferSourceNode | undefined;
+      let rumbleActive = false;
+      let shakeFrame = 0;
+      let shakeStartedAt = 0;
+      let shakeX = 0;
+      let shakeY = 0;
+      let shakeTargetX = 0;
+      let shakeTargetY = 0;
+      let nextShakeTarget = 0;
+      const stopRumble = function(){
+        rumbleActive = false;
+        if (rumbleGain) {
+          rumbleGain.gain.cancelScheduledValues(rumbleGain.context.currentTime);
+          rumbleGain.gain.setTargetAtTime(0.0001, rumbleGain.context.currentTime, .03);
+        }
+        if (rumbleNoiseSource) rumbleNoiseSource.stop();
+        rumbleNoiseSource = undefined;
+        rumbleOscillators.forEach((oscillator) => oscillator.stop());
+        rumbleOscillators = [];
+        if (rumbleContext) void rumbleContext.close();
+        rumbleContext = undefined;
+        rumbleGain = undefined;
+      };
+      const startRumble = async function(){
+        if (rumbleActive) return;
+        rumbleActive = true;
+        rumbleContext = new AudioContext();
+        await rumbleContext.resume();
+        if (!rumbleActive || !rumbleContext) return;
+        rumbleGain = rumbleContext.createGain();
+        rumbleGain.gain.value = 0.0001;
+        rumbleGain.connect(rumbleContext.destination);
+        const noiseBuffer = rumbleContext.createBuffer(1, rumbleContext.sampleRate * 2, rumbleContext.sampleRate);
+        const noiseData = noiseBuffer.getChannelData(0);
+        for (let index = 0; index < noiseData.length; index += 1) noiseData[index] = Math.random() * 2 - 1;
+        rumbleNoiseSource = rumbleContext.createBufferSource();
+        rumbleNoiseSource.buffer = noiseBuffer;
+        rumbleNoiseSource.loop = true;
+        const rumbleFilter = rumbleContext.createBiquadFilter();
+        rumbleFilter.type = 'lowpass';
+        rumbleFilter.frequency.value = 150;
+        rumbleFilter.Q.value = .7;
+        rumbleNoiseSource.connect(rumbleFilter);
+        rumbleFilter.connect(rumbleGain);
+        rumbleNoiseSource.start();
+        rumbleOscillators = [28, 36].map((frequency, index) => {
+          const oscillator = rumbleContext!.createOscillator();
+          oscillator.type = index === 0 ? 'sine' : 'triangle';
+          oscillator.frequency.value = frequency;
+          oscillator.connect(rumbleGain!);
+          oscillator.start();
+          return oscillator;
+        });
+        rumbleGain.gain.exponentialRampToValueAtTime(.035, rumbleContext.currentTime + .12);
+      };
+      const rampSecretShake = function(now: number){
+        if (!secretLogoReady || !logo) return;
+        const intensity = Math.min(1, (now - shakeStartedAt) / 1700);
+        const distance = 3 + intensity * 15;
+        const speed = .06 - intensity * .042;
+        if (now >= nextShakeTarget) {
+          shakeTargetX = (Math.random() * 2 - 1) * distance;
+          shakeTargetY = (Math.random() * 2 - 1) * distance * .45;
+          nextShakeTarget = now + speed * 1000;
+        }
+        shakeX += (shakeTargetX - shakeX) * .35;
+        shakeY += (shakeTargetY - shakeY) * .35;
+        logo.style.transform = `translate(${shakeX}px,${shakeY}px)`;
+        shakeFrame = window.requestAnimationFrame(rampSecretShake);
+      };
+      const cancelSecretLogo = function(){
+        if (secretLogoTimer) window.clearTimeout(secretLogoTimer);
+        secretLogoTimer = undefined;
+        if (shakeFrame) window.cancelAnimationFrame(shakeFrame);
+        shakeFrame = 0;
+        shakeX = 0;
+        shakeY = 0;
+        shakeTargetX = 0;
+        shakeTargetY = 0;
+        nextShakeTarget = 0;
+        logo?.style.removeProperty('transform');
+        logo?.classList.remove('secret-ready');
+        stopRumble();
+      };
+      logo?.addEventListener('pointerdown', function(){
+        if (!window.matchMedia('(max-width: 780px)').matches) return;
+        secretLogoReady = false;
+        secretLogoTimer = window.setTimeout(() => {
+          secretLogoReady = true;
+          logo?.classList.add('secret-ready');
+          shakeStartedAt = performance.now();
+          shakeFrame = window.requestAnimationFrame(rampSecretShake);
+          void startRumble();
+        }, 700);
+      });
+      logo?.addEventListener('pointerup', function(event){
+        if (!secretLogoReady) {
+          cancelSecretLogo();
+          return;
+        }
+        event.preventDefault();
+        cancelSecretLogo();
+        secretLogoReady = false;
+        if (window.matchMedia('(max-width: 780px)').matches) {
+          window.location.href = cultUrl;
+        }
+      });
+      logo?.addEventListener('pointercancel', cancelSecretLogo);
+      logo?.addEventListener('pointerleave', cancelSecretLogo);
+      const setupHeaderInteractions = function(){
+        const btn = document.getElementById('contact-btn') as HTMLButtonElement;
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileNav = document.getElementById('mobile-nav');
+        const mobileCharacterToggle = document.querySelector<HTMLButtonElement>('.mobile-character-toggle');
+        const mobileCharacterLinks = document.getElementById('mobile-character-links');
+        const panel = document.getElementById('contact-panel') as HTMLElement;
+        const close = document.getElementById('contact-close') as HTMLButtonElement | null;
+        if (!btn || !panel || btn.dataset.bound === 'true') return;
+        btn.dataset.bound = 'true';
+        const closeMobileNav = function(){
         if (!menuToggle || !mobileNav) return;
         mobileNav.classList.remove('open');
         menuToggle.setAttribute('aria-expanded','false');
-      };
-      if (menuToggle && mobileNav) {
-        menuToggle.addEventListener('click', function(){
-          const isOpen = mobileNav.classList.toggle('open');
-          menuToggle.setAttribute('aria-expanded', String(isOpen));
-        });
-        mobileNav.querySelectorAll('a').forEach((link)=> link.addEventListener('click', closeMobileNav));
-        document.addEventListener('keydown', function(e){
-          if (e.key === 'Escape') closeMobileNav();
-        });
-      }
-      function openPanel(){
-        panel.classList.remove('closing');
-        panel.classList.add('open');
-        panel.setAttribute('aria-hidden','false');
-        btn.setAttribute('aria-expanded','true');
-        const focusable = panel.querySelector<HTMLElement>('a, button, [tabindex], input');
-        if(focusable) focusable.focus();
-      }
-      function closePanel(){
-        if (!panel || panel.classList.contains('closing')) return;
-        panel.classList.add('closing');
-
-          const modalCat = panel.querySelector('.modal-cat');
-          const finishClose = function(){
-            panel.classList.remove('closing');
-            panel.classList.remove('open');
-            panel.setAttribute('aria-hidden','true');
-            btn.setAttribute('aria-expanded','false');
-            btn.focus();
-          };
-
-        if (modalCat) {
-          const handler = function(e: Event){
-            if (e.target !== modalCat) return;
-            modalCat.removeEventListener('animationend', handler);
-            finishClose();
-          };
-          modalCat.addEventListener('animationend', handler);
-        } else {
-          finishClose();
+        mobileCharacterLinks?.classList.remove('open');
+        mobileCharacterToggle?.setAttribute('aria-expanded','false');
+        };
+        if (menuToggle && mobileNav) {
+          menuToggle.addEventListener('click', function(){
+            const isOpen = mobileNav.classList.toggle('open');
+            menuToggle.setAttribute('aria-expanded', String(isOpen));
+          });
+          mobileNav.querySelectorAll('a').forEach((link)=> link.addEventListener('click', closeMobileNav));
+          document.addEventListener('keydown', function(e){
+            if (e.key === 'Escape') closeMobileNav();
+          });
         }
-      }
-      if (btn) {
+        if (mobileCharacterToggle && mobileCharacterLinks) {
+          mobileCharacterToggle.addEventListener('click', function(){
+            const isOpen = mobileCharacterLinks.classList.toggle('open');
+            mobileCharacterToggle.setAttribute('aria-expanded', String(isOpen));
+          });
+        }
+        function openPanel(){
+          panel.classList.remove('closing');
+          panel.classList.add('open');
+          panel.setAttribute('aria-hidden','false');
+          btn.setAttribute('aria-expanded','true');
+          const focusable = panel.querySelector<HTMLElement>('a, button, [tabindex], input');
+          if(focusable) focusable.focus();
+        }
+        function closePanel(){
+          if (panel.classList.contains('closing')) return;
+          panel.classList.add('closing');
+
+            const modalCat = panel.querySelector('.modal-cat');
+            const finishClose = function(){
+              panel.classList.remove('closing');
+              panel.classList.remove('open');
+              panel.setAttribute('aria-hidden','true');
+              btn.setAttribute('aria-expanded','false');
+              btn.focus();
+            };
+
+          if (modalCat) {
+            const handler = function(e: Event){
+              if (e.target !== modalCat) return;
+              modalCat.removeEventListener('animationend', handler);
+              finishClose();
+            };
+            modalCat.addEventListener('animationend', handler);
+          } else {
+            finishClose();
+          }
+        }
         btn.addEventListener('click', function(){
           const open = panel.classList.contains('open');
           if(open) closePanel(); else openPanel();
         });
-      }
-      if (close) {
-        close.addEventListener('click', closePanel);
-      }
-      const overlay = panel.querySelector('.contact-overlay');
-      if (overlay) {
-        overlay.addEventListener('click', closePanel);
-      }
-      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closePanel(); });
+        if (close) close.addEventListener('click', closePanel);
+        const overlay = panel.querySelector('.contact-overlay');
+        if (overlay) overlay.addEventListener('click', closePanel);
+        document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closePanel(); });
+      };
+      setupHeaderInteractions();
+      document.addEventListener('astro:page-load', setupHeaderInteractions);
     })();
   </script>
   <script>

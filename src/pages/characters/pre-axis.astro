@@ -1,0 +1,18 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+<Layout title="pre-axis information">
+  <main class="pre-axis-main">
+    <a href="/characters">← all characters</a>
+    <h1>pre-axis information</h1>
+    <div class="pre-axis-copy">
+      <p>[add information about the pre-axis versions of praxor here]</p>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .pre-axis-main{max-width:760px;margin:clamp(2rem,6vw,5rem) auto;padding:clamp(2rem,5vw,3.5rem);background:var(--card);border:1px solid var(--muted-border);border-radius:16px;box-shadow:inset 0 1px 0 var(--accent-12)}
+  .pre-axis-main h1{margin:1.5rem 0;color:var(--accent);font-size:1.15rem;line-height:1;letter-spacing:.04em}
+  .pre-axis-copy{color:var(--muted);line-height:1.7}
+</style>

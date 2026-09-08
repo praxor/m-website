@@ -1,0 +1,541 @@
+---
+const base = import.meta.env.BASE_URL;
+---
+<div id="music-player-shell" transition:persist="music-player-shell" transition:animate="none">
+<aside id="persistent-music-player" class="music-player" aria-label="Music player" data-persisted-shell data-playlist-url={`${base}musicplayer/playlists/all.json`} hidden>
+	<audio id="music-audio" preload="metadata"></audio>
+	<canvas id="music-visualizer" class="music-visualizer" aria-hidden="true"></canvas>
+	<div class="music-player-main">
+		<div class="music-art" aria-hidden="true">
+			<svg class="music-note-fallback" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l11-2v13M9 9l11-2M6 21a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm11-3a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" /></svg>
+			<img class="music-cover-image" src="" alt="" width="40" height="40" />
+		</div>
+		<button class="music-control music-play" type="button" data-action="play" aria-label="Play">&#9654;</button>
+		<div class="music-track-info">
+			<span class="music-eyebrow">now playing</span>
+			<strong id="music-track-title">select a track</strong>
+			<span id="music-track-time">0:00 / 0:00</span>
+		</div>
+		<div class="music-transport">
+			<button class="music-control" type="button" data-action="previous" aria-label="Previous track">&#9664;&#9664;</button>
+			<button class="music-control" type="button" data-action="next" aria-label="Next track">&#9654;&#9654;</button>
+		</div>
+		<input id="music-progress" class="music-progress" type="range" min="0" max="100" value="0" aria-label="Track progress" />
+		<label class="music-volume" aria-label="Volume">
+			<span aria-hidden="true">&#9835;</span>
+			<input id="music-volume" type="range" min="0" max="1" step="0.01" value="0.8" />
+		</label>
+		<button class="music-control music-playlist-toggle" type="button" data-action="playlist" aria-expanded="false" aria-controls="music-playlist" aria-label="Toggle playlist">&#9776;</button>
+	</div>
+	<div id="music-playlist" class="music-playlist" hidden></div>
+</aside>
+
+<div id="rolling-cats" class="rolling-cats" aria-hidden="true">
+	<div class="rolling-cat-line">
+		{Array.from({ length: 28 }, () => <span class="rolling-cat"><img src="https://praxor.de/media/oraxor.png" alt="" width="44" height="44" /></span>)}
+	</div>
+</div>
+
+</div>
+
+<style>
+	.music-player{position:fixed;left:50%;bottom:12px;z-index:80;width:min(620px,calc(100% - 28px));transform:translateX(-50%);background:var(--card);border:1px solid var(--muted-border);border-radius:9px;color:var(--text);overflow:visible;pointer-events:auto;isolation:isolate}
+	.music-player[hidden]{display:none}
+	.music-player.player-entering{animation:music-player-enter .58s cubic-bezier(.2,.9,.2,1) both}
+	@keyframes music-player-enter{from{opacity:0;transform:translate(-50%,24px) scale(.98)}to{opacity:1;transform:translate(-50%,0) scale(1)}}
+	.music-visualizer{position:absolute;inset:0;z-index:0;width:100%;height:100%;opacity:.16;pointer-events:none}
+	.music-player-main{position:relative;z-index:2;min-height:50px;display:flex;align-items:center;justify-content:center;gap:7px;padding:5px 9px;width:100%;box-sizing:border-box;border-radius:9px;overflow:hidden}
+	.music-art{width:34px;height:34px;flex:0 0 34px;border:1px solid var(--muted-border);border-radius:6px;background:var(--accent-10);overflow:hidden}
+	.music-art img{display:block;width:100%;height:100%;object-fit:cover}
+	.music-note-fallback{display:block;width:20px;height:20px;margin:7px;color:var(--accent)}.music-note-fallback path{fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.music-cover-image{display:none!important}.music-art.has-cover .music-note-fallback{display:none}.music-art.has-cover .music-cover-image{display:block!important}
+	.music-player[data-persisted-shell] img{opacity:1;transform:none}
+	.music-player.player-entering .music-art img{animation:music-cat-enter .42s cubic-bezier(.2,.9,.2,1) both}
+	@keyframes music-cat-enter{from{opacity:0;transform:scale(.82)}to{opacity:1;transform:scale(1)}}
+	.rolling-cats{display:none;position:fixed;left:0;right:0;bottom:0;z-index:48;height:48px;overflow:visible;pointer-events:none}
+	.rolling-cats.is-active{display:block}
+	.rolling-cat{position:absolute;left:-50px;bottom:0;display:none;width:44px;height:44px}
+	.rolling-cat.spawned{display:block}
+	.rolling-cat img{display:block;width:44px;height:44px;object-fit:contain}
+	@media (max-width:600px){.rolling-cats{display:none!important}}
+	.music-control{width:27px;height:27px;flex:0 0 27px;padding:0;border:0;border-radius:6px;background:transparent;color:var(--muted);font:inherit;font-size:.68rem;cursor:pointer}
+	.music-control:hover,.music-control:focus-visible{background:var(--accent-10);color:var(--text)}
+	.music-play{width:30px;height:30px;flex-basis:30px;border-radius:50%;background:var(--accent);color:var(--accent-contrast);font-size:.78rem}
+	.music-play:hover,.music-play:focus-visible{background:var(--accent-dark);color:var(--accent-contrast)}
+	.music-track-info{display:flex;flex-direction:column;min-width:110px;max-width:145px;overflow:hidden;line-height:1.1}
+	.music-eyebrow{color:var(--accent);font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+	.music-track-info strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.82rem;margin-top:3px}
+	.music-track-info span{color:var(--muted);font-size:.7rem}
+	.music-progress,.music-volume input{appearance:none;height:3px;border:0;border-radius:2px;background:linear-gradient(to right,var(--accent) var(--fill,0%),var(--muted-border) var(--fill,0%));outline:0;cursor:pointer}
+	.music-progress{flex:0 1 180px;width:min(24vw,180px);min-width:70px}
+	.music-progress::-webkit-slider-thumb,.music-volume input::-webkit-slider-thumb{appearance:none;width:0;height:0;border:0;background:transparent}
+	.music-progress:hover::-webkit-slider-thumb,.music-volume input:hover::-webkit-slider-thumb{width:9px;height:9px;border-radius:50%;background:var(--accent)}
+	.music-progress::-moz-range-thumb,.music-volume input::-moz-range-thumb{width:0;height:0;border:0;background:transparent}
+	.music-progress:hover::-moz-range-thumb,.music-volume input:hover::-moz-range-thumb{width:9px;height:9px;border:0;border-radius:50%;background:var(--accent)}
+	.music-transport{display:flex;gap:1px}
+	.music-volume{display:flex;align-items:center;gap:4px;color:var(--muted);font-size:.85rem}
+	.music-volume input{width:58px}
+	.music-playlist{position:fixed;left:50%;bottom:72px;z-index:90;width:min(620px,calc(100% - 28px));max-height:260px;overflow-y:auto;border:1px solid var(--muted-border);border-radius:9px 9px 0 0;background:var(--card);padding:4px;scrollbar-width:thin;scrollbar-color:var(--accent-dark) transparent;box-shadow:0 -10px 30px rgba(4,2,10,.28);transform:translateX(-50%)}
+	.music-playlist:not([hidden]){animation:music-playlist-in .24s cubic-bezier(.2,.9,.2,1) both}
+	.music-playlist.playlist-closing{animation:music-playlist-out .18s ease both}
+	@keyframes music-playlist-in{from{opacity:0;transform:translateY(-7px);max-height:0}to{opacity:1;transform:none;max-height:260px}}
+	@keyframes music-playlist-out{from{opacity:1;transform:none;max-height:260px}to{opacity:0;transform:translateY(-5px);max-height:0}}
+	.music-track{width:100%;display:grid;grid-template-columns:18px 24px 1px minmax(0,1fr) auto;align-items:center;gap:7px;padding:6px 8px;border:1px solid transparent;border-radius:5px;background:transparent;color:var(--muted);font:inherit;font-size:.78rem;text-align:left;cursor:pointer}
+	.music-track:hover,.music-track:focus-visible,.music-track.active{background:var(--accent-10);border-color:var(--muted-border);color:var(--text)}
+	.music-track.active{border-color:var(--accent)}
+	.music-track-play{color:var(--accent);font-size:.6rem;opacity:0}.music-track:hover .music-track-play,.music-track:focus-visible .music-track-play,.music-track.active .music-track-play{opacity:1}
+	.music-track small{color:var(--accent)}
+	.music-track-divider{height:15px;background:var(--muted-border)}
+	.music-track-details{display:flex;min-width:0;align-items:center;gap:6px;overflow:hidden}.music-track-details strong,.music-track-details em{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.music-track-details strong{color:var(--muted);font-size:.75rem;font-weight:500}.music-track-details em{font-style:normal;font-weight:600}.music-track-details b{color:var(--accent)}.music-track time{color:var(--muted);font-size:.68rem}
+	@media (max-width:600px){.music-player{bottom:8px;width:calc(100% - 16px)}.music-art{display:none}.music-track-info{min-width:0;max-width:none;flex:1}.music-volume{display:none}.music-player-main{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;gap:4px 6px;min-height:0;padding:7px 9px}.music-progress{grid-column:1 / -1;width:100%;min-width:0;margin-top:2px}.music-playlist{max-height:220px}.music-track{grid-template-columns:18px 22px 1px minmax(0,1fr) auto;gap:5px;padding:5px 6px}}
+</style>
+
+<style is:global>
+	#persistent-music-player .music-track{width:100%;display:grid;grid-template-columns:18px 24px 1px minmax(0,1fr) auto;align-items:center;gap:7px;padding:6px 8px;border:1px solid transparent;border-radius:5px;background:transparent;color:var(--muted);font:inherit;font-size:.78rem;text-align:left;cursor:pointer}
+	#persistent-music-player .music-track:hover,#persistent-music-player .music-track:focus-visible,#persistent-music-player .music-track.active{background:var(--accent-10);border-color:var(--muted-border);color:var(--text)}
+	#persistent-music-player .music-track.active{border-color:var(--accent)}
+	#persistent-music-player .music-track-play{color:var(--accent);font-size:.6rem;opacity:0}
+	#persistent-music-player .music-track:hover .music-track-play,#persistent-music-player .music-track:focus-visible .music-track-play,#persistent-music-player .music-track.active .music-track-play{opacity:1}
+	#persistent-music-player .music-track small{color:var(--accent)}
+	#persistent-music-player .music-track-divider{height:15px;background:var(--muted-border)}
+	#persistent-music-player .music-track-details{display:flex;min-width:0;align-items:center;gap:6px;overflow:hidden}
+	#persistent-music-player .music-track-details strong,#persistent-music-player .music-track-details em{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+	#persistent-music-player .music-track-details strong{color:var(--muted);font-size:.75rem;font-weight:500}
+	#persistent-music-player .music-track-details em{font-style:normal;font-weight:600}
+	#persistent-music-player .music-track-details b{color:var(--accent)}
+	#persistent-music-player .music-track time{color:var(--muted);font-size:.68rem}
+	@media (max-width:600px){#persistent-music-player .music-track{grid-template-columns:18px 22px 1px minmax(0,1fr) auto;gap:5px;padding:5px 6px}}
+</style>
+
+<script>
+	import { parseBlob } from 'music-metadata-browser';
+
+	const initializeMusicPlayer = () => {
+	const player = document.querySelector<HTMLElement>('#persistent-music-player');
+	if (!player || player.dataset.initialized === 'true') return;
+	player.dataset.initialized = 'true';
+	const audio = document.querySelector<HTMLAudioElement>('#music-audio');
+	const playButton = player?.querySelector<HTMLButtonElement>('[data-action="play"]');
+	const title = document.querySelector<HTMLElement>('#music-track-title');
+	const time = document.querySelector<HTMLElement>('#music-track-time');
+	const progress = document.querySelector<HTMLInputElement>('#music-progress');
+	const volume = document.querySelector<HTMLInputElement>('#music-volume');
+	const playlist = document.querySelector<HTMLElement>('#music-playlist');
+	const playlistToggle = player?.querySelector<HTMLButtonElement>('[data-action="playlist"]');
+	const artwork = player?.querySelector<HTMLImageElement>('.music-art img');
+	const artworkBox = player?.querySelector<HTMLElement>('.music-art');
+	const visualizer = document.querySelector<HTMLCanvasElement>('#music-visualizer');
+	const rollingCats = document.querySelector<HTMLElement>('#rolling-cats');
+	const rollingCatNodes = rollingCats ? Array.from(rollingCats.querySelectorAll<HTMLElement>('.rolling-cat')) : [];
+	let tracks: HTMLButtonElement[] = [];
+	let currentTrack = -1;
+	let pendingTrack = -1;
+	let pendingAutoplay = true;
+	let playlistUrl = player?.dataset.playlistUrl || '';
+	let audioContext: AudioContext | null = null;
+	let analyser: AnalyserNode | null = null;
+	let sourceNode: MediaElementAudioSourceNode | null = null;
+	let visualizerFrame = 0;
+	let waveformState: number[] = [];
+	type RollingCatState = {
+		element: HTMLElement;
+		x: number;
+		y: number;
+		velocityX: number;
+		velocityY: number;
+		gravity: number;
+		rotation: number;
+		rotationVelocity: number;
+		grounded: boolean;
+		spawned: boolean;
+		team: 'A' | 'B' | null;
+	};
+	const rollingCatStates: RollingCatState[] = rollingCatNodes.map((element) => ({
+		element,
+		x: -50,
+		y: 0,
+		velocityX: 130,
+		velocityY: 0,
+		gravity: 980,
+		rotation: 0,
+		rotationVelocity: 360,
+		grounded: true,
+		spawned: false,
+		team: null,
+	}));
+	const jumpEvents = Array.from({ length: 19 * 2 }, (_, index) => {
+		const second = Math.floor(index / 2);
+		return { time: 82 + second + (index % 2 ? .5 : 0), team: index % 2 ? 'B' as const : 'A' as const };
+	});
+	const jumpVelocity = 360;
+	let rollingFrame = 0;
+	let rollingSpawnCount = 0;
+	let rollingPlayStart = 0;
+	let previousAudioTime = 0;
+	let nextJumpEvent = 0;
+	let rollingActive = false;
+	let audioIsSeeking = false;
+	const seekThreshold = .75;
+	const cancelCatAnimations = (element: HTMLElement) => {
+		(element as HTMLElement & { getAnimations: () => Animation[] }).getAnimations().forEach((animation) => animation.cancel());
+	};
+	type EnrichedTrack = { title?: string; artist?: string; src?: string; duration?: string; cover?: string };
+
+	const enrichTrack = async (track: { title?: string; artist?: string; src?: string; duration?: string }): Promise<EnrichedTrack> => {
+		if (!track.src) return track;
+		try {
+			const response = await fetch(track.src);
+			const metadata = await parseBlob(await response.blob());
+			const picture = metadata.common.picture?.[0];
+			return {
+				...track,
+				title: metadata.common.title || track.title,
+				artist: metadata.common.artist || track.artist,
+				duration: track.duration || (metadata.format.duration ? formatTime(metadata.format.duration) : undefined),
+				cover: picture ? URL.createObjectURL(new Blob([picture.data], { type: picture.format })) : undefined,
+			};
+		} catch {
+			return track;
+		}
+	};
+
+	const renderPlaylist = async (playlistData: { cover?: string; tracks?: Array<{ title?: string; artist?: string; src?: string; duration?: string }> }) => {
+		if (!playlist) return;
+		playlist.replaceChildren();
+		const tracksData = await Promise.all((playlistData.tracks || []).map(async (track) => {
+			const enriched = await enrichTrack(track);
+			return enriched.cover ? enriched : { ...enriched, cover: playlistData.cover };
+		}));
+		tracksData.forEach((track, index) => {
+			const button = document.createElement('button');
+			button.className = 'music-track';
+			button.type = 'button';
+			button.dataset.playerTrack = String(index);
+			button.dataset.playerSrc = track.src || '';
+			button.dataset.playerTitle = track.title || `track ${index + 1}`;
+			button.dataset.trackTitle = button.dataset.playerTitle;
+			if ('cover' in track && track.cover) button.dataset.playerCover = track.cover;
+			const artist = track.artist ? `<strong>${track.artist}</strong><b aria-hidden="true">·</b>` : '';
+			button.innerHTML = `<span class="music-track-play" aria-hidden="true">▶</span><small>${String(index + 1).padStart(2, '0')}</small><span class="music-track-divider" aria-hidden="true"></span><span class="music-track-details">${artist}<em>${button.dataset.playerTitle}</em></span><time>${track.duration || '--:--'}</time>`;
+			playlist.append(button);
+		});
+		tracks = Array.from(playlist.querySelectorAll<HTMLButtonElement>('[data-player-track]'));
+		if (pendingTrack >= 0) {
+			const requestedTrack = pendingTrack;
+			pendingTrack = -1;
+			selectTrack(requestedTrack, pendingAutoplay);
+		}
+	};
+
+	const loadPlaylist = async (url = playlistUrl, trackIndex = -1, autoplay = true) => {
+		if (!player) return;
+		try {
+			playlistUrl = url;
+			if (trackIndex >= 0) {
+				pendingTrack = trackIndex;
+				pendingAutoplay = autoplay;
+			}
+			const response = await fetch(url, { cache: 'no-store' });
+			if (!response.ok) throw new Error(`Playlist request failed: ${response.status}`);
+			await renderPlaylist(await response.json());
+		} catch (error) {
+			console.error('Unable to load music playlist.', error);
+		}
+	};
+
+	const formatTime = (seconds: number) => {
+		if (!Number.isFinite(seconds)) return '0:00';
+		return `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, '0')}`;
+	};
+
+	const stopVisualizer = () => {
+		if (visualizerFrame) cancelAnimationFrame(visualizerFrame);
+		visualizerFrame = 0;
+		waveformState = [];
+		const context = visualizer?.getContext('2d');
+		if (context && visualizer) context.clearRect(0, 0, visualizer.width, visualizer.height);
+	};
+
+	const drawVisualizer = () => {
+		const playerAudio = audio;
+		if (!visualizer || !analyser || !audioContext || !playerAudio || playerAudio.paused) return;
+		const context = visualizer.getContext('2d');
+		if (!context) return;
+		const ratio = window.devicePixelRatio || 1;
+		const width = visualizer.clientWidth;
+		const height = visualizer.clientHeight;
+		if (visualizer.width !== Math.round(width * ratio) || visualizer.height !== Math.round(height * ratio)) {
+			visualizer.width = Math.round(width * ratio);
+			visualizer.height = Math.round(height * ratio);
+		}
+		context.setTransform(ratio, 0, 0, ratio, 0, 0);
+		context.clearRect(0, 0, width, height);
+		const samples = new Uint8Array(analyser.fftSize);
+		analyser.getByteTimeDomainData(samples);
+		if (waveformState.length !== samples.length) waveformState = Array.from({ length: samples.length }, () => .5);
+		context.beginPath();
+		context.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+		context.lineWidth = 1;
+		for (let index = 0; index < samples.length; index += 1) {
+			const x = (index / (samples.length - 1)) * width;
+			const target = samples[index] / 255;
+			waveformState[index] += (target - waveformState[index]) * .12;
+			const y = waveformState[index] * height * 1.36 - height * .18;
+			if (index === 0) context.moveTo(x, y); else context.lineTo(x, y);
+		}
+		context.stroke();
+		visualizerFrame = requestAnimationFrame(drawVisualizer);
+	};
+
+	const startVisualizer = async () => {
+		if (!audio) return;
+		if (!audioContext) {
+			audioContext = new AudioContext();
+			sourceNode = audioContext.createMediaElementSource(audio);
+			analyser = audioContext.createAnalyser();
+			analyser.fftSize = 256;
+			analyser.smoothingTimeConstant = .88;
+			sourceNode.connect(analyser);
+			analyser.connect(audioContext.destination);
+		}
+		if (audioContext.state === 'suspended') await audioContext.resume();
+		if (!visualizerFrame) drawVisualizer();
+	};
+
+	const showPlayer = () => {
+		if (!player) return;
+		const firstAppearance = player.dataset.entered !== 'true';
+		player.hidden = false;
+		player.setAttribute('aria-hidden', 'false');
+		if (firstAppearance) {
+			player.dataset.entered = 'true';
+			player.classList.add('player-entering');
+			player.addEventListener('animationend', () => player.classList.remove('player-entering'), { once: true });
+		}
+	};
+
+	const updatePlayButton = () => {
+		if (!playButton || !audio) return;
+		playButton.textContent = audio.paused ? '\u25b6' : '\u275a\u275a';
+		playButton.setAttribute('aria-label', audio.paused ? 'Play' : 'Pause');
+		player?.classList.toggle('is-playing', !audio.paused);
+	};
+
+	const selectTrack = (index: number, autoplay = true) => {
+		const track = tracks[index];
+		if (!track) {
+			pendingTrack = index;
+			pendingAutoplay = autoplay;
+			return;
+		}
+		if (!audio) return;
+		currentTrack = index;
+		audio.src = track.dataset.playerSrc || '';
+		audio.load();
+		if (artworkBox) artworkBox.classList.toggle('has-cover', Boolean(track.dataset.playerCover));
+		if (artwork && track.dataset.playerCover) artwork.src = track.dataset.playerCover;
+		if (title) title.textContent = track.dataset.playerTitle || 'track';
+		const isRollingGirl = (track.dataset.playerTitle || '').toLowerCase().includes('rolling girl');
+		player.classList.toggle('rolling-girl', isRollingGirl);
+		resetRollingCats();
+		tracks.forEach((item, itemIndex) => item.classList.toggle('active', itemIndex === index));
+		window.dispatchEvent(new CustomEvent('music:track-change', { detail: { index, title: track.dataset.playerTitle || 'track', src: audio.src } }));
+		showPlayer();
+		if (autoplay) void audio.play();
+	};
+
+	const resetRollingCats = () => {
+		rollingActive = Boolean(audio && player?.classList.contains('rolling-girl'));
+		rollingPlayStart = audio?.currentTime || 0;
+		previousAudioTime = rollingPlayStart;
+		nextJumpEvent = jumpEvents.findIndex((event) => event.time > rollingPlayStart);
+		if (nextJumpEvent < 0) nextJumpEvent = jumpEvents.length;
+		rollingSpawnCount = 0;
+		rollingCats?.classList.remove('is-active');
+		rollingCatStates.forEach((cat) => {
+			cancelCatAnimations(cat.element);
+			cat.element.classList.remove('spawned');
+			cat.spawned = false;
+			cat.team = null;
+			cat.x = -50;
+			cat.y = 0;
+			cat.velocityY = 0;
+			cat.grounded = true;
+			cat.element.style.transform = 'translate3d(-50px, 0, 0) rotate(0deg)';
+		});
+	};
+
+	const spawnRollingCat = () => {
+		const cat = rollingCatStates.find((item) => !item.spawned);
+		if (!cat) return;
+		cat.spawned = true;
+		cat.team = rollingSpawnCount % 2 === 0 ? 'A' : 'B';
+		cat.x = -50;
+		cat.y = 0;
+		cat.velocityX = 130;
+		cat.velocityY = 0;
+		cat.rotation = 0;
+		cat.rotationVelocity = 360;
+		cat.grounded = true;
+		cat.element.dataset.team = cat.team;
+		cat.element.dataset.tag = cat.team;
+		cat.element.classList.add('spawned');
+		rollingSpawnCount += 1;
+	};
+
+	const jumpTeam = (team: 'A' | 'B') => {
+		rollingCatStates.filter((cat) => cat.spawned && cat.team === team && cat.grounded).forEach((cat) => {
+			cat.velocityY = jumpVelocity;
+			cat.grounded = false;
+		});
+	};
+
+	const resetCatBodies = () => {
+		rollingCats?.classList.remove('is-active');
+		rollingCatStates.forEach((cat) => {
+			cancelCatAnimations(cat.element);
+			cat.element.classList.remove('spawned');
+			cat.spawned = false;
+			cat.team = null;
+			cat.x = -50;
+			cat.y = 0;
+			cat.velocityY = 0;
+			cat.grounded = true;
+			cat.element.style.transform = 'translate3d(-50px, 0, 0) rotate(0deg)';
+		});
+	};
+
+	const synchronizeToAudioTime = (currentTime: number) => {
+		resetCatBodies();
+		rollingSpawnCount = Math.max(0, currentTime - rollingPlayStart >= 5 ? Math.floor(currentTime - rollingPlayStart - 5) + 1 : 0);
+		nextJumpEvent = jumpEvents.findIndex((event) => event.time > currentTime);
+		if (nextJumpEvent < 0) nextJumpEvent = jumpEvents.length;
+		previousAudioTime = currentTime;
+	};
+
+	const updateRollingPhysics = (deltaTime: number) => {
+		if (!audio) return;
+		const currentTime = audio.currentTime;
+		if (audioIsSeeking) {
+			previousAudioTime = currentTime;
+			return;
+		}
+		if (Math.abs(currentTime - previousAudioTime) > seekThreshold) {
+			synchronizeToAudioTime(currentTime);
+			return;
+		}
+		if (currentTime < previousAudioTime - .25) {
+			rollingActive = player?.classList.contains('rolling-girl') ?? false;
+			synchronizeToAudioTime(currentTime);
+			return;
+		}
+		if (!rollingActive || audio.paused) return;
+		const elapsed = currentTime - rollingPlayStart;
+		if (elapsed >= 5) {
+			const targetCount = Math.floor(elapsed - 5) + 1;
+			while (rollingSpawnCount < targetCount) spawnRollingCat();
+			rollingCats?.classList.add('is-active');
+		}
+		if (currentTime < previousAudioTime - .25) previousAudioTime = currentTime;
+		while (nextJumpEvent < jumpEvents.length && jumpEvents[nextJumpEvent].time <= currentTime) {
+			if (jumpEvents[nextJumpEvent].time > previousAudioTime) jumpTeam(jumpEvents[nextJumpEvent].team);
+			nextJumpEvent += 1;
+		}
+		previousAudioTime = currentTime;
+		const width = window.innerWidth;
+		rollingCatStates.forEach((cat) => {
+			if (!cat.spawned) return;
+			cat.x += cat.velocityX * deltaTime;
+			cat.y += cat.velocityY * deltaTime;
+			cat.velocityY -= cat.gravity * deltaTime;
+			cat.rotation += cat.rotationVelocity * deltaTime;
+			if (cat.y <= 0) { cat.y = 0; cat.velocityY = 0; cat.grounded = true; }
+			cat.element.style.transform = `translate3d(${cat.x}px, ${-cat.y}px, 0) rotate(${cat.rotation}deg)`;
+			if (cat.x > width + 60) { cat.spawned = false; cat.element.classList.remove('spawned'); }
+		});
+	};
+
+	const rollingAnimationLoop = (timestamp: number) => {
+		const previous = Number(player?.dataset.rollingFrame || timestamp);
+		const deltaTime = Math.min((timestamp - previous) / 1000, .05);
+		if (player) player.dataset.rollingFrame = String(timestamp);
+		updateRollingPhysics(deltaTime);
+		rollingFrame = requestAnimationFrame(rollingAnimationLoop);
+	};
+
+	const stepTrack = (direction: number) => {
+		if (!tracks.length) return;
+		const next = currentTrack < 0 ? 0 : (currentTrack + direction + tracks.length) % tracks.length;
+		selectTrack(next);
+	};
+
+	player?.addEventListener('click', (event) => {
+		const target = event.target as HTMLElement;
+		const actionButton = target.closest<HTMLButtonElement>('[data-action]');
+		const trackButton = target.closest<HTMLButtonElement>('[data-player-track]');
+		if (trackButton) selectTrack(Number(trackButton.dataset.playerTrack));
+		if (!actionButton || !audio) return;
+		if (actionButton.dataset.action === 'play') {
+			if (currentTrack < 0) selectTrack(0);
+			else if (audio.paused) void audio.play();
+			else audio.pause();
+		}
+		if (actionButton.dataset.action === 'previous') stepTrack(-1);
+		if (actionButton.dataset.action === 'next') stepTrack(1);
+		if (actionButton.dataset.action === 'playlist' && playlist && playlistToggle) {
+			const isOpen = !playlist.hidden;
+			if (isOpen) {
+				playlist.classList.add('playlist-closing');
+				playlist.addEventListener('animationend', () => {
+					playlist.hidden = true;
+					playlist.classList.remove('playlist-closing');
+				}, { once: true });
+			} else {
+				playlist.hidden = false;
+			}
+			playlistToggle.setAttribute('aria-expanded', String(!isOpen));
+		}
+	});
+
+	audio?.addEventListener('play', () => { updatePlayButton(); void startVisualizer(); });
+	audio?.addEventListener('pause', () => { updatePlayButton(); stopVisualizer(); });
+	audio?.addEventListener('seeking', () => { audioIsSeeking = true; });
+	audio?.addEventListener('seeked', () => { audioIsSeeking = false; synchronizeToAudioTime(audio.currentTime); });
+	audio?.addEventListener('ended', () => stepTrack(1));
+	audio?.addEventListener('timeupdate', () => {
+		if (!audio || !progress || !time) return;
+		const fill = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
+		progress.value = String(fill);
+		progress.style.setProperty('--fill', `${fill}%`);
+		time.textContent = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
+	});
+	progress?.addEventListener('input', () => {
+		if (audio?.duration) {
+			audio.currentTime = (Number(progress.value) / 100) * audio.duration;
+			progress.style.setProperty('--fill', `${progress.value}%`);
+		}
+	});
+	volume?.addEventListener('input', () => {
+		if (audio) audio.volume = Number(volume.value);
+		volume.style.setProperty('--fill', `${Number(volume.value) * 100}%`);
+	});
+	if (audio && volume) {
+		audio.volume = Number(volume.value);
+		volume.style.setProperty('--fill', `${Number(volume.value) * 100}%`);
+	}
+
+	document.addEventListener('click', (event) => {
+		const target = (event.target as HTMLElement).closest<HTMLButtonElement>('[data-player-launch]');
+		if (!target) return;
+		const trackIndex = Number(target.dataset.playerLaunch || 0);
+		if (target.dataset.playerPlaylist) void loadPlaylist(target.dataset.playerPlaylist, trackIndex);
+		else selectTrack(trackIndex);
+	});
+
+	void loadPlaylist();
+	resetRollingCats();
+	rollingFrame = requestAnimationFrame(rollingAnimationLoop);
+	};
+
+	document.addEventListener('astro:page-load', initializeMusicPlayer);
+	initializeMusicPlayer();
+</script>

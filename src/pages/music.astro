@@ -1,0 +1,160 @@
+---
+import Layout from '../layouts/Layout.astro';
+const base = import.meta.env.BASE_URL;
+---
+<Layout title="music" description="listen to some music boy.">
+  <main class="music-main">
+    <section class="music-frame" aria-labelledby="music-title">
+      <header class="music-heading">
+        <h1 id="music-title">music</h1>
+        <p class="music-note">so we've got my music on my phone then some BULLSHIT!!!!!!!!!!!!!!!</p>
+      </header>
+      <button id="music-tree-toggle" class="music-tree-toggle" type="button" aria-label="Toggle playlist folders" aria-expanded="false">‹</button>
+      <div class="music-browser">
+        <aside class="music-tree collapsed" aria-label="Music folders">
+          <div class="tree-root"><strong>music/</strong></div>
+          <details class="music-folder" open>
+            <summary><span class="folder-glyph" aria-hidden="true"></span><strong>all/</strong></summary>
+            <button class="tree-playlist active" type="button" data-playlist-url={`${base}musicplayer/playlists/all.json`} data-playlist-name="all.playlist"><span class="file-glyph">.pl</span>all.playlist</button>
+          </details>
+        </aside>
+        <section class="music-workspace" aria-live="polite">
+          <div class="workspace-topline"><span>playlist file</span><span id="workspace-count"></span></div>
+          <div class="workspace-heading"><div id="workspace-cover-box" class="workspace-cover-box"><svg class="workspace-note-fallback" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l11-2v13M9 9l11-2M6 21a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm11-3a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" /></svg><img id="workspace-cover" class="workspace-cover" src="" alt="" /></div><div><h2 id="workspace-title">chill.playlist</h2><p id="workspace-description">loading the little files...</p></div></div>
+          <div id="workspace-tracks" class="workspace-tracks"></div>
+        </section>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<script>
+  import { parseBlob } from 'music-metadata-browser';
+
+  const initializeMusicPage = () => {
+  const musicMain = document.querySelector<HTMLElement>('.music-main');
+  if (!musicMain || musicMain.dataset.initialized === 'true') return;
+  musicMain.dataset.initialized = 'true';
+  const playlistButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('.tree-playlist'));
+  const workspaceTitle = document.querySelector<HTMLElement>('#workspace-title');
+  const workspaceDescription = document.querySelector<HTMLElement>('#workspace-description');
+  const workspaceCount = document.querySelector<HTMLElement>('#workspace-count');
+  const workspaceCover = document.querySelector<HTMLImageElement>('#workspace-cover');
+  const workspaceCoverBox = document.querySelector<HTMLElement>('#workspace-cover-box');
+  const workspaceTracks = document.querySelector<HTMLElement>('#workspace-tracks');
+  const tree = document.querySelector<HTMLElement>('.music-tree');
+  const treeToggle = document.querySelector<HTMLButtonElement>('#music-tree-toggle');
+
+  const formatDuration = (seconds: number) => `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, '0')}`;
+  type EnrichedTrack = { title?: string; artist?: string; src?: string; duration?: string; cover?: string };
+  const enrichTrack = async (track: { title?: string; artist?: string; src?: string; duration?: string }): Promise<EnrichedTrack> => {
+    if (!track.src) return track;
+    try {
+      const response = await fetch(track.src);
+      const metadata = await parseBlob(await response.blob());
+      const picture = metadata.common.picture?.[0];
+      return {
+        ...track,
+        title: metadata.common.title || track.title,
+        artist: metadata.common.artist || track.artist,
+        duration: track.duration || (metadata.format.duration ? formatDuration(metadata.format.duration) : undefined),
+        cover: picture ? URL.createObjectURL(new Blob([picture.data], { type: picture.format })) : undefined,
+      };
+    } catch {
+      return track;
+    }
+  };
+
+  const openPlaylist = async (button: HTMLButtonElement) => {
+    if (!workspaceTitle || !workspaceDescription || !workspaceCount || !workspaceTracks) return;
+    playlistButtons.forEach((item) => item.classList.toggle('active', item === button));
+    if (tree && window.matchMedia('(max-width: 600px)').matches) {
+      tree.classList.add('collapsed');
+      treeToggle?.setAttribute('aria-expanded', 'false');
+    }
+    workspaceTracks.replaceChildren();
+    workspaceTitle.textContent = button.dataset.playlistName || 'playlist';
+    workspaceDescription.textContent = 'opening file...';
+    try {
+      const response = await fetch(button.dataset.playlistUrl || '', { cache: 'no-store' });
+      if (!response.ok) throw new Error(`Playlist request failed: ${response.status}`);
+      const data = await response.json() as { description?: string; cover?: string; tracks?: Array<{ title?: string; artist?: string; src?: string; duration?: string }> };
+      const tracks = await Promise.all((data.tracks || []).map(enrichTrack));
+      workspaceDescription.textContent = data.description || 'a small pile of sounds.';
+      const firstCover = data.cover || tracks.find((track) => typeof track.cover === 'string')?.cover;
+      if (workspaceCoverBox) workspaceCoverBox.classList.toggle('has-cover', Boolean(firstCover));
+      if (workspaceCover && firstCover) workspaceCover.src = firstCover;
+      workspaceCount.textContent = `${tracks.length} track${tracks.length === 1 ? '' : 's'}`;
+      tracks.forEach((track, index) => {
+        const trackButton = document.createElement('button');
+        trackButton.className = 'workspace-track';
+        trackButton.type = 'button';
+        trackButton.dataset.playerLaunch = String(index);
+        trackButton.dataset.playerPlaylist = button.dataset.playlistUrl || '';
+        trackButton.dataset.trackTitle = track.title || `track ${index + 1}`;
+        const artist = track.artist ? `<strong>${track.artist}</strong><b aria-hidden="true">·</b>` : '';
+        trackButton.innerHTML = `<span class="track-play-icon" aria-hidden="true">▶</span><small>${String(index + 1).padStart(2, '0')}</small><span class="track-divider" aria-hidden="true"></span><span class="track-details">${artist}<em>${track.title || `track ${index + 1}`}</em></span><time>${track.duration || '--:--'}</time>`;
+        workspaceTracks.append(trackButton);
+      });
+    } catch {
+      workspaceDescription.textContent = 'could not open this file.';
+      workspaceCount.textContent = '';
+    }
+  };
+
+  playlistButtons.forEach((button) => button.addEventListener('click', () => { void openPlaylist(button); }));
+  const initialPlaylist = playlistButtons[0];
+  if (initialPlaylist) void openPlaylist(initialPlaylist);
+  window.addEventListener('music:track-change', (event) => {
+    const detail = (event as CustomEvent<{ title?: string }>).detail;
+    document.querySelectorAll<HTMLButtonElement>('.workspace-track').forEach((track) => track.classList.toggle('active', track.dataset.trackTitle === detail.title));
+  });
+  treeToggle?.addEventListener('click', () => {
+    if (!tree) return;
+    const collapsed = tree.classList.toggle('collapsed');
+    treeToggle.setAttribute('aria-expanded', String(!collapsed));
+  });
+  };
+
+  document.addEventListener('astro:page-load', initializeMusicPage);
+  initializeMusicPage();
+</script>
+
+<style>
+  .music-main{flex:0 1 auto;width:calc(100% - 40px);max-width:980px;box-sizing:border-box;margin:0 auto;padding:clamp(3rem,8vw,6rem) 0}
+  .music-frame{position:relative;padding:clamp(1.5rem,4vw,3rem);border:1px solid var(--muted-border);border-radius:16px;background:var(--card);box-shadow:inset 0 1px 0 var(--accent-12);animation:music-frame-in .5s cubic-bezier(.2,.9,.2,1) both}
+  @keyframes music-frame-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .music-heading{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;margin:0 0 2rem;padding-bottom:1rem;border-bottom:1px solid var(--muted-border)}
+  .music-heading h1{margin:0;color:var(--accent);font-size:1.15rem;line-height:1;letter-spacing:.04em}
+  .music-note{margin:0;color:var(--muted);font-size:.78rem;text-align:right}
+  .music-tree-toggle{display:none}.music-browser{display:grid;grid-template-columns:30% 70%;min-height:330px;border:1px solid var(--muted-border);border-radius:9px;overflow:hidden}.music-tree{padding:14px 10px;background:rgba(0,0,0,.12);border-right:1px solid var(--muted-border)}.tree-root{display:flex;gap:8px;align-items:center;padding:8px;color:var(--accent);font-size:.85rem}.music-folder{padding:2px 0}.music-folder summary{display:flex;align-items:center;gap:7px;padding:9px 8px;color:var(--muted);cursor:pointer;list-style:none;font-size:.83rem}.music-folder summary::-webkit-details-marker{display:none}.music-folder summary:hover{color:var(--text)}
+  .music-folder summary::-webkit-details-marker{display:none}
+  .folder-glyph{color:var(--accent);font-size:1rem;transition:transform .22s ease}.music-folder[open] .folder-glyph{transform:rotate(0)}.music-folder:not([open]) .folder-glyph{transform:rotate(-90deg)}.tree-playlist{display:flex;align-items:center;gap:7px;width:100%;padding:8px 8px 8px 28px;border:0;border-radius:5px;background:transparent;color:var(--muted);font:inherit;font-size:.78rem;text-align:left;cursor:pointer}.tree-playlist:hover,.tree-playlist:focus-visible,.tree-playlist.active{background:var(--accent-10);color:var(--text)}.file-glyph{color:var(--accent);font-size:.65rem;font-weight:700}.music-workspace{padding:clamp(1.25rem,4vw,2.5rem);background:rgba(0,0,0,.08);transition:opacity .2s ease,transform .2s ease}.workspace-topline{display:flex;justify-content:space-between;color:var(--muted);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase}.music-workspace h2{margin:1.2rem 0 .6rem;color:var(--accent);font-size:clamp(1.4rem,3vw,2.1rem);line-height:1}.music-workspace p{margin:0 0 1.5rem;color:var(--muted);font-size:.9rem}.workspace-tracks{display:flex;flex-direction:column;gap:4px}.workspace-track{display:grid;grid-template-columns:20px 30px 1px minmax(0,1fr) auto;gap:9px;align-items:center;padding:10px 9px;border:1px solid transparent;border-radius:5px;background:transparent;color:var(--muted);font:inherit;text-align:left;cursor:pointer}.workspace-track:hover,.workspace-track:focus-visible,.workspace-track.active{background:var(--accent-10);border-color:var(--muted-border);color:var(--text)}.workspace-track.active{border-color:var(--accent)}.track-play-icon{color:var(--accent);font-size:.65rem;opacity:0}.workspace-track:hover .track-play-icon,.workspace-track:focus-visible .track-play-icon,.workspace-track.active .track-play-icon{opacity:1}.workspace-track small{color:var(--accent)}.track-divider{height:18px;background:var(--muted-border)}.track-details{display:flex;min-width:0;align-items:center;gap:7px;overflow:hidden}.track-details strong,.track-details em{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.track-details strong{font-size:.8rem;color:var(--muted);font-weight:500}.track-details em{font-style:normal;font-weight:600}.track-details b{color:var(--accent)}.workspace-track time{color:var(--muted);font-size:.72rem}
+  .workspace-heading{display:flex;align-items:center;gap:1rem;margin:1.2rem 0 1.5rem}.workspace-cover-box{display:grid;place-items:center;width:72px;height:72px;flex:0 0 72px;border:1px solid var(--muted-border);border-radius:7px;background:var(--accent-10);overflow:hidden}.workspace-cover{display:none;width:100%;height:100%;object-fit:cover}.workspace-note-fallback{width:30px;height:30px;color:var(--accent)}.workspace-note-fallback path{fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}.workspace-cover-box.has-cover .workspace-cover{display:block}.workspace-cover-box.has-cover .workspace-note-fallback{display:none}.workspace-heading h2{margin:0 0 .6rem}.workspace-heading p{margin:0}
+  @media (max-width:600px){.music-main{width:calc(100% - 28px);padding:3rem 0 6rem}.music-frame{padding:1.25rem 1rem 1.5rem}.music-heading{display:block;margin-bottom:1.5rem}.music-note{margin-top:.8rem;text-align:left}.music-browser{position:relative;display:block;min-height:360px}.music-tree{position:absolute;inset:0 25% 0 0;z-index:2;overflow:auto;background:var(--card);transform:translateX(0);transition:transform .25s ease;border-right:1px solid var(--muted-border)}.music-tree.collapsed{transform:translateX(-100%)}.music-workspace{min-height:328px;padding:1.25rem}.music-tree-toggle{position:absolute;top:82px;left:10px;z-index:4;display:flex;width:32px;height:32px;align-items:center;justify-content:center;border:1px solid var(--muted-border);border-radius:50%;background:var(--card);color:var(--accent);font:inherit;font-size:1.4rem;cursor:pointer;transition:left .25s ease,transform .25s ease}.music-tree-toggle[aria-expanded="false"]{left:8px;transform:rotate(180deg)}.workspace-track{grid-template-columns:20px 24px 1px minmax(0,1fr);gap:6px}.workspace-track time{grid-column:4;margin-top:-3px}}
+</style>
+
+<style is:global>
+  .music-folder{animation:music-folder-in .32s ease both}
+  .music-folder:nth-child(2){animation-delay:.06s}.music-folder:nth-child(3){animation-delay:.12s}.music-folder:nth-child(4){animation-delay:.18s}
+  @keyframes music-folder-in{from{opacity:0;transform:translateX(-7px)}to{opacity:1;transform:none}}
+  .music-folder[open] > .tree-playlist{animation:music-file-in .22s ease both}
+  @keyframes music-file-in{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
+  .workspace-tracks{max-height:340px;overflow-y:auto;padding-right:4px;scrollbar-width:thin;scrollbar-color:var(--accent-dark) transparent}
+  .workspace-track{display:grid;grid-template-columns:20px 30px 1px minmax(0,1fr) auto;gap:8px;align-items:center;padding:7px 8px;border:1px solid transparent;border-radius:5px;background:transparent;color:var(--muted);font:inherit;text-align:left;cursor:pointer;animation:music-track-in .24s ease both}
+  .workspace-track:nth-child(2){animation-delay:.05s}.workspace-track:nth-child(3){animation-delay:.1s}.workspace-track:nth-child(4){animation-delay:.15s}
+  @keyframes music-track-in{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+  .workspace-track:hover,.workspace-track:focus-visible,.workspace-track.active{background:var(--accent-10);border-color:var(--muted-border);color:var(--text)}
+  .workspace-track.active{border-color:var(--accent)}
+  .workspace-track .track-play-icon{color:var(--accent);font-size:.65rem;opacity:0}
+  .workspace-track:hover .track-play-icon,.workspace-track:focus-visible .track-play-icon,.workspace-track.active .track-play-icon{opacity:1}
+  .workspace-track small{color:var(--accent)}
+  .workspace-track .track-divider{height:15px;background:var(--muted-border)}
+  .workspace-track .track-details{display:flex;min-width:0;align-items:center;gap:6px;overflow:hidden}
+  .workspace-track .track-details strong,.workspace-track .track-details em{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .workspace-track .track-details strong{font-size:.8rem;color:var(--muted);font-weight:500}
+  .workspace-track .track-details em{font-style:normal;font-weight:600}
+  .workspace-track .track-details b{color:var(--accent)}
+  .workspace-track time{color:var(--muted);font-size:.72rem}
+  @media (max-width:600px){.workspace-tracks{max-height:250px;padding-right:2px}.workspace-track{grid-template-columns:20px 24px 1px minmax(0,1fr);gap:6px;padding:6px}.workspace-track time{grid-column:4;margin-top:-3px}}
+</style>

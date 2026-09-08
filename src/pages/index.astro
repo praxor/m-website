@@ -1,33 +1,9 @@
 ---
-import Header from '../components/Header.astro';
-import '../styles/global.css';
+import Layout from '../layouts/Layout.astro';
 ---
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<title>home</title>
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
-		<link rel="icon" href="/favicon.ico" />
-		<!-- Open Graph / Discord -->
-		<meta property="og:type" content="website" />
-		<meta property="og:url" content={Astro.url.href} />
-		<meta property="og:title" content="the praxor website" />
-		<meta property="og:description" content="welcome... my website society..." />
-		<meta property="og:image" content="https://praxor.de/media/snes_undertall.png" />
 
-		<!-- Twitter -->
-		<meta property="twitter:card" content="summary_large_image" />
-		<meta property="twitter:url" content={Astro.url.href} />
-		<meta property="twitter:title" content="the praxor website" />
-		<meta property="twitter:description" content="welcome... my website society..." />
-		<meta property="twitter:image" content="https://praxor.de/media/snes_undertall.png" />
-	</head>
-	<body>
-		<Header />
-		<main>
+<Layout title="home" description="welcome... my website society...">
+	<main>
 			<section class="home-hero" aria-labelledby="home-title">
 				<div class="hero-copy">
 					<p class="hero-kicker">welcome to my website</p>
@@ -40,10 +16,8 @@ import '../styles/global.css';
 					</button>
 				</div>
 			</section>
-		</main>
-		
-	</body>
-</html>
+	</main>
+</Layout>
 
 <style>
 	.home-hero{max-width:1100px;min-height:calc(100vh - 76px);margin:0 auto;padding:clamp(4rem,10vw,8rem) 20px 5rem;display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,420px);align-items:center;gap:clamp(2rem,8vw,7rem);box-sizing:border-box}
@@ -78,6 +52,10 @@ import '../styles/global.css';
 </style>
 
 <script>
+	if (Math.random() < 0.01) {
+		window.location.replace('/surprise/');
+	}
+
 	const catTrigger = document.querySelector<HTMLButtonElement>('.cat-trigger');
 	catTrigger?.addEventListener('click', () => {
 		window.location.href = 'https://praxor.de/media/paxogroove.mp4';

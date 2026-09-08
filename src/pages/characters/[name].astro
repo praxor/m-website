@@ -1,0 +1,46 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { characters } from '../../data/characters';
+import { marked } from 'marked';
+
+export function getStaticPaths() {
+  return characters.map((character) => ({
+    params: { name: character.slug },
+    props: { character },
+  }));
+}
+
+const { character } = Astro.props;
+const renderMarkdown = (value: string) => marked.parse(value);
+---
+<Layout title={character.name}>
+    <main class="character-main">
+      <a class="character-back" href="/characters">← all characters</a>
+      <article class="character-biography">
+        <p class="character-quote">{character.quote}</p>
+        <h1 id="character-title">{character.name}</h1>
+        <div class="bio-divider"></div>
+        <div class="character-overview">
+          <div class="character-detail-portrait">
+            {character.image ? <img src={character.image} alt={character.name} /> : <span>portrait slot</span>}
+          </div>
+          <section class="bio-section character-info"><h2>character info</h2><div class="markdown-body" set:html={renderMarkdown(character.info)} /></section>
+        </div>
+        <div class="bio-divider"></div>
+        <div class="bio-scroll">
+          <section class="bio-section"><h2>introduction</h2><div class="markdown-body" set:html={renderMarkdown(character.introduction)} /></section>
+          <div class="bio-divider"></div>
+          <section class="bio-section"><h2>backstory</h2><div class="markdown-body" set:html={renderMarkdown(character.backstory)} /></section>
+          <div class="bio-divider"></div>
+          <section class="bio-section credits"><h2>credits · {character.credits}</h2></section>
+        </div>
+      </article>
+    </main>
+</Layout>
+
+<style>
+  .character-main{max-width:1160px;margin:clamp(2rem,6vw,5rem) auto;padding:clamp(2rem,5vw,3.5rem);background:var(--card);border:1px solid var(--muted-border);border-radius:16px;box-shadow:inset 0 1px 0 var(--accent-12)}
+  .character-back{display:inline-block;margin-bottom:2rem;color:var(--muted);font-size:.9rem}
+  .character-biography{max-width:1000px;margin:0 auto}.character-quote{margin:0 0 1rem;color:var(--muted);font-size:.9rem;font-style:italic;text-align:center}.character-biography>h1{margin:0;color:var(--accent);font-size:1.15rem;line-height:1;letter-spacing:.04em;text-align:center}.bio-divider{height:1px;margin:1.4rem 0;background:var(--muted-border)}.character-overview{display:grid;grid-template-columns:minmax(280px,1fr) minmax(240px,.72fr);gap:clamp(2rem,6vw,5rem);align-items:start}.character-detail-portrait{display:grid;place-items:center;aspect-ratio:1;width:100%;border:2px solid var(--accent);color:var(--muted);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase}.character-detail-portrait img{width:100%;height:100%;object-fit:contain}.bio-section h2{margin:0 0 .7rem;color:var(--accent);font-size:1rem;text-align:center;text-transform:lowercase}.character-info{position:sticky;top:1rem;padding-top:1rem}.markdown-body{color:var(--muted);line-height:1.7}.markdown-body ul{padding-left:1.2rem}.bio-scroll{max-height:min(58vh,620px);overflow-y:auto;padding:0 1rem 1rem;border-top:1px solid var(--muted-border);scrollbar-width:thin}.bio-scroll .bio-section{padding-top:1.4rem}.credits h2{color:var(--muted);font-size:.78rem;font-weight:500;letter-spacing:.04em;text-align:center}
+  @media (max-width:680px){.character-main{margin:1rem 12px;padding:1.5rem 12px}.character-overview{grid-template-columns:1fr;gap:1.5rem}.character-info{position:static;padding-top:0}.bio-scroll{max-height:none;padding-left:0;padding-right:0}}
+</style>

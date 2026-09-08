@@ -1,49 +1,30 @@
 ---
-import '../styles/global.css';
-import Header from '../components/Header.astro';
+import Layout from '../layouts/Layout.astro';
 import ArtGrid from '../components/ArtGrid.astro';
 
 const items = [
-  { src: '../media/fanart1.png', title: 'toohi' },
-  { src: '../media/fanart2.jpeg', title: 'blueistic' },
-  { src: '../media/fanart3.png', title: 'fyre' },
-  { src: '../media/fanart4.png', title: 'louies' },
-  { src: '../media/fanart5.png', title: 'toohi' },
-  { src: '../media/fanart6.png', title: 'toohi' },
-  { src: '../media/fanart7.png', title: 'toohi' },
-  { src: '../media/fanart8.png', title: '???' },
-  { src: '../media/fanart9.png', title: 'toohi' },
-  { src: '../media/fanart10.png', title: 'can you guess who did it' },
-  { src: '../media/fanart11.png', title: 'lego_foxy' },
-  { src: '../media/fanart12.png', title: 'lotterytickett' },
-  { src: '../media/fanart13.jpg', title: 'mcpattychon'},
+  { src: '../media/fanart/fanart1.png', title: 'toohi' },
+  { src: '../media/fanart/fanart2.jpeg', title: 'blueistic' },
+  { src: '../media/fanart/fanart3.png', title: 'fyre' },
+  { src: '../media/fanart/fanart4.png', title: 'louies' },
+  { src: '../media/fanart/fanart5.png', title: 'toohi' },
+  { src: '../media/fanart/fanart6.png', title: 'toohi' },
+  { src: '../media/fanart/fanart7.png', title: 'toohi' },
+  { src: '../media/fanart/fanart8.png', title: '???' },
+  { src: '../media/fanart/fanart9.png', title: 'toohi' },
+  { src: '../media/fanart/fanart10.png', title: 'can you guess who did it' },
+  { src: '../media/fanart/fanart11.png', title: 'lego_foxy' },
+  { src: '../media/fanart/fanart12.png', title: 'lotterytickett' },
+  { src: '../media/fanart/fanart13.jpg', title: 'mcpattychon'},
+  { src: '../media/fanart/fanart14.png', title: 'milk / cowcat' },
+  { src: '../media/fanart/fanart15.png', title: 'angelbeat09' },
+  { src: '../media/fanart/fanart16.jpg', title: 'mynt719' },
+  { src: '../media/fanart/fanart17.png', title: '???' },
+  { src: '../media/fanart/fanart18.png', title: 'mynt719' },
+  { src: '../media/fanart/fanart19.png', title: 'mynt719' }
 ];
 ---
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>art</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
-    <link rel="icon" href="/favicon.ico" />
-    <!-- Open Graph / Discord -->
-		<meta property="og:type" content="website" />
-		<meta property="og:url" content={Astro.url.href} />
-		<meta property="og:title" content="the praxor website" />
-		<meta property="og:description" content="check out my wonderful fanart." />
-		<meta property="og:image" content="https://praxor.de/media/snes_undertall.png" />
-
-		<!-- Twitter -->
-		<meta property="twitter:card" content="summary_large_image" />
-		<meta property="twitter:url" content={Astro.url.href} />
-		<meta property="twitter:title" content="the praxor website" />
-		<meta property="twitter:description" content="check out my wonderful fanart." />
-		<meta property="twitter:image" content="https://praxor.de/media/snes_undertall.png" />
-  </head>
-  <body>
-    <Header />
+<Layout title="art" description="check out my wonderful fanart.">
     <main class="wrap">
       <section class="card">
         <div class="center-contents">
@@ -54,5 +35,4 @@ const items = [
         <ArtGrid items={items} />
       </section>
     </main>
-  </body>
-</html>
+</Layout>
