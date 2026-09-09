@@ -1,7 +1,7 @@
 {
   "name": "m-website",
   "type": "module",
-  "version": "9.0.1a",
+  "version": "9.0.1c",
   "engines": {
     "node": ">=22.12.0"
   },

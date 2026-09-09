@@ -43,8 +43,8 @@ const base = import.meta.env.BASE_URL;
 	.music-player[hidden]{display:none}
 	.music-player.player-entering{animation:music-player-enter .58s cubic-bezier(.2,.9,.2,1) both}
 	@keyframes music-player-enter{from{opacity:0;transform:translate(-50%,24px) scale(.98)}to{opacity:1;transform:translate(-50%,0) scale(1)}}
-	.music-visualizer{position:absolute;inset:0;z-index:0;width:100%;height:100%;opacity:.16;pointer-events:none}
-	.music-player-main{position:relative;z-index:2;min-height:50px;display:flex;align-items:center;justify-content:center;gap:7px;padding:5px 9px;width:100%;box-sizing:border-box;border-radius:9px;overflow:hidden}
+	.music-visualizer{position:absolute;inset:0;z-index:0;width:100%;height:100%;opacity:.32;pointer-events:none}
+	.music-player-main{position:relative;z-index:2;min-height:50px;display:flex;align-items:center;justify-content:center;gap:7px;padding:5px 9px;width:100%;box-sizing:border-box;border-radius:9px;overflow:visible}
 	.music-art{width:34px;height:34px;flex:0 0 34px;border:1px solid var(--muted-border);border-radius:6px;background:var(--accent-10);overflow:hidden}
 	.music-art img{display:block;width:100%;height:100%;object-fit:cover}
 	.music-note-fallback{display:block;width:20px;height:20px;margin:7px;color:var(--accent)}.music-note-fallback path{fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.music-cover-image{display:none!important}.music-art.has-cover .music-note-fallback{display:none}.music-art.has-cover .music-cover-image{display:block!important}
@@ -257,47 +257,76 @@ const base = import.meta.env.BASE_URL;
 
 	const drawVisualizer = () => {
 		const playerAudio = audio;
-		if (!visualizer || !analyser || !audioContext || !playerAudio || playerAudio.paused) return;
+
+		if (!visualizer || !analyser || !audioContext || !playerAudio || playerAudio.paused) {
+			return;
+		}
+
 		const context = visualizer.getContext('2d');
 		if (!context) return;
+
 		const ratio = window.devicePixelRatio || 1;
 		const width = visualizer.clientWidth;
 		const height = visualizer.clientHeight;
-		if (visualizer.width !== Math.round(width * ratio) || visualizer.height !== Math.round(height * ratio)) {
+
+		if (
+			visualizer.width !== Math.round(width * ratio) ||
+			visualizer.height !== Math.round(height * ratio)
+		) {
 			visualizer.width = Math.round(width * ratio);
 			visualizer.height = Math.round(height * ratio);
 		}
+
 		context.setTransform(ratio, 0, 0, ratio, 0, 0);
 		context.clearRect(0, 0, width, height);
+
 		const samples = new Uint8Array(analyser.fftSize);
 		analyser.getByteTimeDomainData(samples);
-		if (waveformState.length !== samples.length) waveformState = Array.from({ length: samples.length }, () => .5);
+
 		context.beginPath();
-		context.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+		context.strokeStyle = getComputedStyle(document.documentElement)
+			.getPropertyValue('--accent')
+			.trim();
+
 		context.lineWidth = 1;
-		for (let index = 0; index < samples.length; index += 1) {
+		context.lineJoin = 'miter';
+		context.lineCap = 'butt';
+
+		for (let index = 0; index < samples.length; index += 2) {
 			const x = (index / (samples.length - 1)) * width;
 			const target = samples[index] / 255;
-			waveformState[index] += (target - waveformState[index]) * .12;
-			const y = waveformState[index] * height * 1.36 - height * .18;
-			if (index === 0) context.moveTo(x, y); else context.lineTo(x, y);
+
+			const y = target * height * 1.36 - height * 0.18;
+
+			if (index === 0) {
+				context.moveTo(x, y);
+			} else {
+				context.lineTo(x, y);
+			}
 		}
+
 		context.stroke();
+
 		visualizerFrame = requestAnimationFrame(drawVisualizer);
 	};
 
 	const startVisualizer = async () => {
 		if (!audio) return;
+
 		if (!audioContext) {
 			audioContext = new AudioContext();
 			sourceNode = audioContext.createMediaElementSource(audio);
 			analyser = audioContext.createAnalyser();
-			analyser.fftSize = 256;
-			analyser.smoothingTimeConstant = .88;
+
+			analyser.fftSize = 2048;
+			analyser.smoothingTimeConstant = 0;
+
 			sourceNode.connect(analyser);
 			analyser.connect(audioContext.destination);
 		}
+
 		if (audioContext.state === 'suspended') await audioContext.resume();
+
 		if (!visualizerFrame) drawVisualizer();
 	};
 
