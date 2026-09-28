@@ -12,7 +12,7 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^7.2.10",
+    "astro": "^7.3.4",
     "marked": "^18.0.12",
     "music-metadata-browser": "^2.5.11",
     "planck": "^1.5.0"

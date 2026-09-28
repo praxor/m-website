@@ -154,7 +154,7 @@ html.is-loaded header, html.is-loaded .card, html.is-loaded .nav a, html.is-load
 
 .wrap{min-height:auto;display:flex;align-items:center;justify-content:center;padding:3rem}
 main{flex:1}
-.card{max-width:900px;background:var(--card);border:1px solid var(--muted-border);padding:3rem;border-radius:16px;box-shadow:inset 0 1px 0 var(--accent-12)}
+.card{max-width:1200px;background:var(--card);border:1px solid var(--muted-border);padding:3rem;border-radius:16px;box-shadow:inset 0 1px 0 var(--accent-12)}
 .card h1,.center-contents h1{margin:0;color:var(--accent);font-size:1.15rem;line-height:1;letter-spacing:.04em}
 
 .h1, h1{margin:0 0 .5rem;font-size:clamp(1.8rem,3.6vw,3rem);letter-spacing:-0.02em;color:var(--accent)}
