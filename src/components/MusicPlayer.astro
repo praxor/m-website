@@ -156,11 +156,16 @@ import { Image } from 'astro:assets';
 		y: number;
 		velocityY: number;
 		gravity: number;
+		entryStartY: number;
+		entryStartTime: number;
+		entryDuration: number;
+		entering: boolean;
 		rotation: number;
 		rotationVelocity: number;
 		grounded: boolean;
 		spawned: boolean;
 		exitAfterLanding: boolean;
+		exitStartTime: number;
 		team: 'A' | 'B' | null;
 	};
 	const rollingCatStates: RollingCatState[] = rollingCatNodes.map((element) => ({
@@ -170,11 +175,16 @@ import { Image } from 'astro:assets';
 		y: 0,
 		velocityY: 0,
 		gravity: 980,
+		entryStartY: 0,
+		entryStartTime: 0,
+		entryDuration: 0,
+		entering: false,
 		rotation: 0,
 		rotationVelocity: 360,
 		grounded: true,
 		spawned: false,
 		exitAfterLanding: false,
+		exitStartTime: 0,
 		team: null,
 	}));
 	const jumpEvents = [...Array.from({ length: 19 * 2 }, (_, index) => {
@@ -184,14 +194,19 @@ import { Image } from 'astro:assets';
 		const second = Math.floor(index / 2);
 		return { time: 151 + second + (index % 2 ? .5 : 0), team: index % 2 ? 'B' as const : 'A' as const };
 	})];
-	const waveStart = 171;
-	const waveEnd = 186;
+	const waveStart = 170;
+	const waveEnd = 188;
 	const waveRows = 4;
 	const waveColumns = 7;
 	const waveInterval = .27;
-	const waveJumpVelocity = 240;
+	const waveJumpVelocity = 400;
+	const rollingExitWaveDuration = .7;
 	let waveOrder: number[] = [];
 	const jumpVelocity = 360;
+	const rollingCatsEnterAt = 12;
+	const rollingCatsLandAt = 13;
+	const rollingCatsWaveDuration = 0.45;
+	const rollingCatsEntryApex = 180;
 	let rollingFrame = 0;
 	let rollingPlayStart = 0;
 	let previousAudioTime = 0;
@@ -428,8 +443,13 @@ import { Image } from 'astro:assets';
 			cat.x = -50;
 			cat.y = 0;
 			cat.velocityY = 0;
+			cat.entryStartY = 0;
+			cat.entryStartTime = 0;
+			cat.entryDuration = 0;
+			cat.entering = false;
 			cat.grounded = true;
 			cat.exitAfterLanding = false;
+			cat.exitStartTime = 0;
 			cat.element.style.transform = 'translate3d(-50px, 0, 0) rotate(0deg)';
 		});
 	};
@@ -459,13 +479,18 @@ import { Image } from 'astro:assets';
 			cat.x = -50;
 			cat.y = 0;
 			cat.velocityY = 0;
+			cat.entryStartY = 0;
+			cat.entryStartTime = 0;
+			cat.entryDuration = 0;
+			cat.entering = false;
 			cat.grounded = true;
 			cat.exitAfterLanding = false;
+			cat.exitStartTime = 0;
 			cat.element.style.transform = 'translate3d(-50px, 0, 0) rotate(0deg)';
 		});
 	};
 
-	const positionRollingCats = () => {
+	const positionRollingCats = (entering = false) => {
 		resetCatBodies();
 		rollingLineLength = Math.max(rollingCatStates.length * 48, window.innerWidth + 44);
 		rollingLineSpacing = rollingLineLength / rollingCatStates.length;
@@ -474,16 +499,21 @@ import { Image } from 'astro:assets';
 			cat.team = index % 2 === 0 ? 'A' : 'B';
 			cat.lineIndex = index;
 			cat.x = rollingLineOffset + index * rollingLineSpacing;
-			cat.y = 0;
+			const waveProgress = index / Math.max(rollingCatStates.length - 1, 1);
+			cat.entryStartY = entering ? -44 : 0;
+			cat.entryStartTime = rollingCatsEnterAt + waveProgress * rollingCatsWaveDuration;
+			cat.entryDuration = rollingCatsLandAt - cat.entryStartTime;
+			cat.entering = entering;
+			cat.y = cat.entryStartY;
 			cat.velocityY = 0;
 			cat.rotation = 0;
 			cat.rotationVelocity = 360;
-			cat.grounded = true;
+			cat.grounded = !entering;
 			cat.exitAfterLanding = false;
 			cat.element.style.bottom = '0px';
 			cat.element.dataset.team = cat.team;
 			cat.element.classList.add('spawned');
-			cat.element.style.transform = `translate3d(${cat.x - 44}px, 0, 0) rotate(0deg)`;
+			cat.element.style.transform = `translate3d(${cat.x - 44}px, ${-cat.y}px, 0) rotate(0deg)`;
 		});
 		rollingCats?.classList.add('is-active');
 	};
@@ -503,30 +533,24 @@ import { Image } from 'astro:assets';
 		if (rollingPhase === phase) return;
 		rollingPhase = phase;
 		if (phase === 'intro') {
-			if (time - rollingPlayStart >= 5 && !rollingCatStates.some((cat) => cat.spawned)) positionRollingCats();
+			if (time >= rollingCatsEnterAt && !rollingCatStates.some((cat) => cat.spawned)) {
+				positionRollingCats(time < rollingCatsLandAt);
+			}
 		} else if (phase === 'early-jumps' || phase === 'interlude' || phase === 'jumps') {
 			if (!rollingCatStates.some((cat) => cat.spawned)) positionRollingCats();
 		} else if (phase === 'wave') {
 			if (!rollingCatStates.some((cat) => cat.spawned)) positionRollingCats();
 			waveOrder = [
 				...Array.from({ length: waveColumns }, (_, index) => waveColumns - index - 1),
-				...Array.from({ length: waveColumns - 1 }, (_, index) => index + 1),
+				...Array.from({ length: waveColumns - 2 }, (_, index) => index + 1),
 			];
-			nextWaveStep = Math.max(0, Math.ceil((time - waveStart) / waveInterval));
+			nextWaveStep = Math.max(0, Math.floor((time - waveStart) / waveInterval));
 		} else if (phase === 'rest') {
 			if (!rollingCatStates.some((cat) => cat.spawned)) positionRollingCats();
-			rollingCatStates.forEach((cat) => {
-				if (!cat.spawned) return;
-				cat.y = 0;
-				cat.velocityY = 0;
-				cat.grounded = true;
-				cat.element.style.transform = `translate3d(${cat.x - 44}px, 0, 0) rotate(${cat.rotation}deg)`;
-			});
 		} else if (phase === 'final') {
 			if (!rollingCatStates.some((cat) => cat.spawned)) positionRollingCats();
 			rollingCatStates.forEach((cat) => {
-				cat.exitAfterLanding = true;
-				jumpCat(cat, true);
+				cat.exitStartTime = time + (cat.lineIndex / Math.max(rollingCatStates.length - 1, 1)) * rollingExitWaveDuration;
 			});
 		} else if (phase === 'done') {
 			resetCatBodies();
@@ -565,8 +589,8 @@ import { Image } from 'astro:assets';
 		}
 		if (!rollingActive || audio.paused) return;
 		enterRollingPhase(phaseForTime(currentTime), currentTime);
-		if (rollingPhase === 'intro' && currentTime - rollingPlayStart >= 5 && !rollingCatStates.some((cat) => cat.spawned)) {
-			positionRollingCats();
+		if (rollingPhase === 'intro' && currentTime >= rollingCatsEnterAt && !rollingCatStates.some((cat) => cat.spawned)) {
+			positionRollingCats(currentTime < rollingCatsLandAt);
 		}
 		if (currentTime < previousAudioTime - .25) previousAudioTime = currentTime;
 		while (nextJumpEvent < jumpEvents.length && jumpEvents[nextJumpEvent].time <= currentTime) {
@@ -587,10 +611,28 @@ import { Image } from 'astro:assets';
 		rollingCatStates.forEach((cat) => {
 			if (!cat.spawned) return;
 			cat.x = (rollingLineOffset + cat.lineIndex * rollingLineSpacing) % rollingLineLength;
-			cat.y += cat.velocityY * deltaTime;
-			cat.velocityY -= cat.gravity * deltaTime;
+			if (rollingPhase === 'final' && cat.grounded && currentTime >= cat.exitStartTime) {
+				cat.exitAfterLanding = true;
+				jumpCat(cat, true);
+			}
+			if (cat.entering) {
+				if (currentTime >= rollingCatsLandAt) {
+					cat.y = 0;
+					cat.velocityY = 0;
+					cat.grounded = true;
+					cat.entering = false;
+				} else if (currentTime >= cat.entryStartTime) {
+					const entryProgress = Math.min((currentTime - cat.entryStartTime) / cat.entryDuration, 1);
+					cat.y = cat.entryStartY * (1 - entryProgress) + 4 * rollingCatsEntryApex * entryProgress * (1 - entryProgress);
+				} else {
+					cat.y = cat.entryStartY;
+				}
+			} else {
+				cat.y += cat.velocityY * deltaTime;
+				cat.velocityY -= cat.gravity * deltaTime;
+				if (cat.y <= 0 && !cat.exitAfterLanding) { cat.y = 0; cat.velocityY = 0; cat.grounded = true; }
+			}
 			cat.rotation += cat.rotationVelocity * deltaTime;
-			if (cat.y <= 0 && !cat.exitAfterLanding) { cat.y = 0; cat.velocityY = 0; cat.grounded = true; }
 			cat.element.style.transform = `translate3d(${cat.x - 44}px, ${-cat.y}px, 0) rotate(${cat.rotation}deg)`;
 			if (cat.exitAfterLanding && cat.y < -(window.innerHeight + 60)) {
 				cat.spawned = false;
