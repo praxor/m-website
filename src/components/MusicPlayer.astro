@@ -94,7 +94,11 @@ import { Image } from 'astro:assets';
 
 <style is:global>
 	/* The view-transition-name on this wrapper makes it a stacking context; without a z-index, page cards (z-index:1) paint over the player. */
-	#music-player-shell{position:relative;z-index:200}
+	#music-player-shell{position:fixed;inset:0;z-index:200;pointer-events:none;view-transition-name:music-player}
+	/* Astro's "none" hides the old snapshot, so the player vanishes until the new page is ready; keep it visible. */
+	::view-transition-group(music-player),::view-transition-old(music-player),::view-transition-new(music-player){animation:none;mix-blend-mode:normal}
+	::view-transition-old(music-player){opacity:1}
+	::view-transition-new(music-player){opacity:1}
 	#persistent-music-player .music-track{width:100%;display:grid;grid-template-columns:18px 24px 1px minmax(0,1fr) auto;align-items:center;gap:7px;padding:6px 8px;border:1px solid transparent;border-radius:5px;background:transparent;color:var(--muted);font:inherit;font-size:.78rem;text-align:left;cursor:pointer}
 	#persistent-music-player .music-track:hover,#persistent-music-player .music-track:focus-visible,#persistent-music-player .music-track.active{background:var(--accent-10);border-color:var(--muted-border);color:var(--text)}
 	#persistent-music-player .music-track.active{border-color:var(--accent)}
@@ -746,11 +750,31 @@ import { Image } from 'astro:assets';
 	});
 
 	void loadPlaylist();
-	showPlayer();
 	resetRollingCats();
 	rollingFrame = requestAnimationFrame(rollingAnimationLoop);
 	};
 
 	document.addEventListener('astro:page-load', initializeMusicPlayer);
 	initializeMusicPlayer();
+
+	// Moving the persisted player during a swap resets playlist scroll and can pause audio.
+	let swapState: { scroll: number; playing: boolean } | null = null;
+	document.addEventListener('astro:before-swap', () => {
+		const list = document.querySelector<HTMLElement>('#music-playlist');
+		const media = document.querySelector<HTMLAudioElement>('#music-audio');
+		swapState = { scroll: list?.scrollTop ?? 0, playing: !!media && !media.paused && !media.ended };
+	});
+	document.addEventListener('astro:after-swap', () => {
+		if (!swapState) return;
+		const { scroll, playing } = swapState;
+		swapState = null;
+		const restore = () => {
+			const list = document.querySelector<HTMLElement>('#music-playlist');
+			const media = document.querySelector<HTMLAudioElement>('#music-audio');
+			if (list) list.scrollTop = scroll;
+			if (playing && media?.paused && !media.ended) void media.play().catch(() => {});
+		};
+		restore();
+		requestAnimationFrame(restore);
+	});
 </script>
