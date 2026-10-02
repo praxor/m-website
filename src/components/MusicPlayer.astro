@@ -44,7 +44,7 @@ import { Image } from 'astro:assets';
 </div>
 
 <style>
-	.music-player{position:fixed;left:50%;bottom:12px;z-index:80;width:min(720px,calc(100% - 28px));transform:translateX(-50%);background:var(--card);border:1px solid var(--muted-border);border-radius:9px;color:var(--text);overflow:visible;pointer-events:auto;isolation:isolate;transition:var(--theme-transition),background-color .22s ease,color .22s ease,border-color .22s ease}
+	.music-player{position:fixed;left:50%;bottom:12px;z-index:200;width:min(720px,calc(100% - 28px));transform:translateX(-50%);background:var(--card);border:1px solid var(--muted-border);border-radius:9px;color:var(--text);overflow:visible;pointer-events:auto;isolation:isolate;transition:var(--theme-transition),background-color .22s ease,color .22s ease,border-color .22s ease}
 	.music-player[hidden]{display:none}
 	.music-player.player-entering{animation:music-player-enter .58s cubic-bezier(.2,.9,.2,1) both}
 	@keyframes music-player-enter{from{opacity:0;transform:translate(-50%,24px) scale(.98)}to{opacity:1;transform:translate(-50%,0) scale(1)}}
