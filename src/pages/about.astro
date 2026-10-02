@@ -1,15 +1,53 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import { fanartOptions } from '../data/fanart';
 ---
 <Layout title="about" description="learn more about buddy ol' praxor.">
-    <main class="wrap">
-      <section class="card">
-        <div class="center-contents">
-            <h1>about me</h1>
-            <p class="lead">hey, i'm praxor.</p>
-            <p>i often larp as a little black kitty because i like to be cute and mysterious sometimes. however, i also enjoy coding and making music. you can find more of my socials here:</p>
+  <main class="wrap about-wrap">
+    <section class="card about-card">
+      <div class="about-intro">
+        <div class="about-copy">
+          <p class="about-kicker">ABOUT ME</p>
+          <h1>hey, i'm<br /><span>praxor.</span></h1>
+          <p class="about-description">the myth, the legend. i often larp as the TV-head guy or the little black kitty. why? i have no idea, however i also enjoy coding and making music, which i'm sure both the characters would do in their spare times anyways.</p>
 
-            <div class="socials">
+        </div>
+
+        <div class="fanart-column-window" data-fanart-column role="region" aria-label="Fanart gallery">
+          <div class="fanart-strip-track" data-fanart-track>
+            <div class="fanart-strip-set" data-fanart-set>
+              {fanartOptions.map((art, index) => (
+                <figure class="fanart-strip-item" role="button" tabindex="0" aria-haspopup="dialog" aria-label={`Open fanart by ${art.artist}`} data-art-index={index} data-art-width={art.width} data-art-height={art.height}>
+                  <div class="fanart-strip-art" style={`--art-ratio: ${art.width} / ${art.height}`}>
+                    <template data-fanart-image>
+                      <Image
+                        src={art.src}
+                        alt={`Fanart piece ${art.number}`}
+                        width={art.width}
+                        height={art.height}
+                        loading="eager"
+                        decoding="async"
+                        fetchpriority="low"
+                      />
+                    </template>
+                    <figcaption>{art.artist}</figcaption>
+                  </div>
+                </figure>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-bottom">
+        <div class="social-block">
+          <div class="social-heading">
+            <span class="social-label">find me around</span>
+            <span class="social-rule" aria-hidden="true"></span>
+          </div>
+          <p class="social-description">you can find more of my socials here:</p>
+          <div class="socials">
             <a href="https://open.spotify.com/artist/5qjpeOAlOrY6kilCDZzYoz" target="_blank" rel="noopener" aria-label="Spotify" title="open praxor on spotify" class="social-btn">
               <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <title>spotify</title>
@@ -37,21 +75,655 @@ import Layout from '../layouts/Layout.astro';
                 <path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z"/>
               </svg>
             </a>
-            </div>
-            <p class="site-version">The Praxor Website, version 9.0.1c</p>
           </div>
+        </div>
+        <p class="site-version">The Praxor Website, version 9.0.1c</p>
+      </div>
       </section>
-    </main>
+      <dialog id="fanart-gallery" class="fanart-gallery" aria-labelledby="gallery-title">
+        <div class="gallery-shell">
+          <header class="gallery-toolbar">
+            <div>
+              <p class="gallery-kicker">IMAGE GALLERY</p>
+              <h2 id="gallery-title">fanart</h2>
+            </div>
+            <div class="gallery-toolbar-actions">
+              <span id="gallery-counter" class="gallery-counter" aria-live="polite"></span>
+              <button class="gallery-close" type="button" data-gallery-close aria-label="Close gallery">×</button>
+            </div>
+          </header>
+          <div class="gallery-stage">
+            <button class="gallery-step" type="button" data-gallery-previous aria-label="Previous artwork"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m15 18-6-6 6-6" /></svg></button>
+            <figure class="gallery-feature">
+              <div class="gallery-image-frame"><img id="gallery-image" alt="" decoding="async" /></div>
+              <figcaption class="gallery-attribution">
+                <span id="gallery-caption" class="gallery-caption" hidden></span>
+                <span id="gallery-artist" class="gallery-artist"></span>
+              </figcaption>
+            </figure>
+            <button class="gallery-step" type="button" data-gallery-next aria-label="Next artwork"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6" /></svg></button>
+          </div>
+          <nav class="gallery-thumbnails" aria-label="Choose fanart">
+            {fanartOptions.map((art, index) => (
+              <button class="gallery-thumbnail" type="button" data-gallery-thumbnail={index} data-gallery-src={art.src} data-gallery-alt={`Fanart piece ${art.number} by ${art.artist}`} data-gallery-caption={art.caption || ''} data-gallery-artist={art.artist} aria-label={`Show fanart ${art.number} by ${art.artist}`}>
+                <img src={art.src} alt="" width={art.width} height={art.height} loading="lazy" decoding="async" />
+              </button>
+            ))}
+          </nav>
+        </div>
+      </dialog>
+  </main>
 </Layout>
 
 <style>
+  .about-wrap {
+    align-items: flex-start;
+    padding-top: clamp(2rem, 6vw, 5rem);
+    padding-bottom: 3rem;
+  }
+
+  .about-card {
+    width: min(100%, 1120px);
+    max-width: 1120px;
+    padding: clamp(1.25rem, 4vw, 3.5rem);
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse at 82% 16%, rgba(75, 90, 232, 0.13), transparent 34%),
+      linear-gradient(145deg, rgba(28, 14, 48, 0.98), rgba(15, 8, 27, 0.98));
+    border-color: rgba(177, 153, 255, 0.18);
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  }
+
+  .about-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 0.92fr) minmax(340px, 1.08fr);
+    align-items: center;
+    gap: clamp(2rem, 6vw, 5rem);
+    min-height: 400px;
+  }
+
+  .about-copy { max-width: 470px; }
+  .about-kicker, .social-label {
+    margin: 0 0 1.2rem;
+    color: #a99af2;
+    font: 600 0.72rem/1.2 "IBM Plex Sans", sans-serif;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .about-copy h1 {
+    margin: 0 0 0.85rem;
+    color: #f5f0ff;
+    font-size: clamp(3.6rem, 7vw, 6.2rem);
+    font-weight: 700;
+    line-height: 0.96;
+  }
+
+  .about-copy h1 span { color: #a895ff; }
+
+  .about-description {
+    max-width: 420px;
+    margin: 0;
+    color: #bdb4d1;
+    font-size: 1rem;
+    line-height: 1.8;
+  }
+
+  .fanart-column-window {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+  }
+
+  .fanart-strip-track { width: 100%; height: 100%; }
+  .fanart-strip-set {
+    display: grid;
+    grid-template-columns: repeat(var(--fanart-columns, 3), minmax(0, 1fr));
+    align-items: start;
+    gap: 4px;
+    width: 100%;
+    height: 100%;
+  }
+  .fanart-strip-column { position: relative; min-width: 0; height: 100%; overflow: hidden; }
+  .fanart-column-loop {
+    position: absolute;
+    inset: 0 auto auto 0;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    animation: fanart-scroll-up var(--fanart-loop-duration) linear infinite;
+  }
+  .fanart-column-loop:hover,
+  .fanart-column-loop:focus-within { animation-play-state: paused; }
+  .fanart-column-loop-set { display: flex; width: 100%; flex: none; flex-direction: column; gap: 0; }
+  .fanart-strip-item {
+    display: block;
+    min-width: 0;
+    width: 100%;
+    margin: 0;
+  }
+
+  .fanart-strip-art {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: var(--art-ratio);
+  }
+
+  .fanart-strip-item img {
+    display: block;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 2px solid var(--art-border-color, #b6a5e8);
+    box-sizing: border-box;
+    object-fit: contain;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.26);
+    transition: filter 0.18s ease;
+  }
+
+  .fanart-strip-item figcaption {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    padding: 0.45rem;
+    color: #fff;
+    background: rgba(5, 3, 12, 0.38);
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.35;
+    text-align: center;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.18s ease;
+  }
+
+  .fanart-strip-item:hover img,
+  .fanart-strip-item:focus-visible img { filter: brightness(0.42); }
+  .fanart-strip-item:hover figcaption,
+  .fanart-strip-item:focus-visible figcaption { opacity: 1; }
+  .fanart-strip-item:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+  @keyframes fanart-scroll-up {
+    to { transform: translateY(-50%); }
+  }
+
+  .fanart-strip-item[role="button"] { cursor: zoom-in; }
+  :global(body.fanart-gallery-open .site-header) {
+    --card: #000;
+    --bg: #000;
+    --text: #f5f5f5;
+    --muted: #b8b8b8;
+    --accent: #f5f5f5;
+    --accent-contrast: #000;
+    --accent-dark: #888;
+    --accent-10: rgba(255,255,255,.1);
+    --accent-12: rgba(255,255,255,.16);
+    --muted-border: rgba(255,255,255,.22);
+    color: var(--text);
+    background: #000;
+    border-color: var(--muted-border);
+  }
+  :global(body.fanart-gallery-open .site-header .cult-link) { color: #ccc !important; }
+  :global(.fanart-gallery .site-header) { position: fixed; inset: 0 0 auto; z-index: 2; box-sizing: border-box; width: 100%; }
+  .fanart-gallery {
+    --gallery-nav-height: 45px;
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    color: #f5f5f5;
+    background: #000;
+  }
+  .fanart-gallery[open] { display: grid; place-items: center; }
+  .fanart-gallery::backdrop { background: #000; }
+  .gallery-shell { box-sizing: border-box; display: grid; grid-template-rows: auto minmax(0,1fr) auto; gap: 1rem; width: min(100%,1280px); height: min(100dvh,1000px); padding: clamp(14px,3vw,32px); padding-top: calc(var(--gallery-nav-height) + clamp(14px,3vw,32px)); animation: gallery-enter .34s cubic-bezier(.2,.9,.2,1) both; }
+  .fanart-gallery.is-closing .gallery-shell { animation: gallery-exit .22s ease both; }
+  .gallery-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .gallery-kicker { margin: 0 0 3px; color: #a8a8a8; font-size: .68rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+  .gallery-toolbar h2 { margin: 0; color: #f5f5f5; font-size: 1.2rem; line-height: 1.2; letter-spacing: 0; }
+  .gallery-toolbar-actions { display: flex; align-items: center; gap: 16px; }
+  .gallery-counter { min-width: 58px; color: #aaa; font-variant-numeric: tabular-nums; font-size: .82rem; text-align: right; }
+  .gallery-close,.gallery-step { display: grid; place-items: center; padding: 0; border: 1px solid rgba(255,255,255,.24); border-radius: 2px; color: #f5f5f5; background: linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.025)); box-shadow: inset 0 1px 0 rgba(255,255,255,.08),0 3px 12px rgba(0,0,0,.38); cursor: pointer; transition: color .18s ease,background .18s ease,border-color .18s ease,box-shadow .18s ease,transform .18s ease; }
+  .gallery-close { width: 42px; height: 42px; font-size: 1.55rem; line-height: 1; }
+  .gallery-step { width: 42px; height: 42px; border-radius: 0; }
+  .gallery-step svg { display: block; width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .gallery-close:hover,.gallery-step:hover { transform: translateY(-2px); border-color: #fff; color: #fff; background: rgba(255,255,255,.14); box-shadow: inset 0 1px 0 rgba(255,255,255,.16),0 6px 18px rgba(255,255,255,.12); }
+  .gallery-close:active,.gallery-step:active { transform: translateY(0) scale(.96); background: rgba(255,255,255,.2); box-shadow: inset 0 1px 4px rgba(0,0,0,.6); }
+  .gallery-close:focus-visible,.gallery-step:focus-visible,.gallery-thumbnail:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+  .gallery-stage { display: grid; grid-template-columns: 42px minmax(0,1fr) 42px; align-items: center; justify-items: center; gap: clamp(8px,2vw,24px); min-height: 0; }
+  .gallery-feature { display: grid; grid-template-rows: minmax(0,1fr) auto; gap: 10px; width: 100%; height: 100%; min-width: 0; min-height: 0; margin: 0; }
+  .gallery-image-frame { position: relative; display: grid; place-items: center; justify-self: center; align-self: center; box-sizing: border-box; width: min(100%,960px); height: min(68vh,720px); max-height: 100%; min-width: 0; min-height: 0; overflow: hidden; }
+  .gallery-image-frame img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; min-width: 0; min-height: 0; object-fit: contain; animation: gallery-image-in .28s cubic-bezier(.2,.9,.3,1) both; }
+  .gallery-attribution { display: grid; gap: 1px; min-height: 1.25em; text-align: center; }
+  .gallery-caption { color: #e5e5e5; font-size: .86rem; line-height: 1.25; }
+  .gallery-caption[hidden] { display: none; }
+  .gallery-artist { color: #929292; font-size: .68rem; line-height: 1.2; }
+  .gallery-thumbnails { display: flex; gap: 8px; min-width: 0; overflow-x: auto; padding: 4px 3px 10px; scrollbar-width: thin; scrollbar-color: #666 transparent; }
+  .gallery-thumbnail { flex: 0 0 76px; width: 76px; height: 62px; padding: 0; overflow: hidden; border: 1px solid rgba(255,255,255,.2); background: #080808; cursor: pointer; opacity: .56; transition: opacity .18s ease,border-color .18s ease,box-shadow .18s ease,transform .18s ease; }
+  .gallery-thumbnail:hover { border-color: rgba(255,255,255,.82); opacity: .96; transform: translateY(-2px); }
+  .gallery-thumbnail[aria-current="true"] { border-color: #fff; box-shadow: 0 0 0 1px rgba(255,255,255,.3); opacity: 1; }
+  .gallery-thumbnail img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  @keyframes gallery-enter { from { opacity: 0; transform: translateY(12px) scale(.985); } to { opacity: 1; transform: none; } }
+  @keyframes gallery-exit { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateY(8px) scale(.99); } }
+  @keyframes gallery-image-in { from { opacity: 0; transform: scale(.985); } to { opacity: 1; transform: scale(1); } }
+  @keyframes gallery-image-change { from { opacity: 0; filter: blur(4px); transform: translateY(8px) scale(.985); } to { opacity: 1; filter: blur(0); transform: translateY(0) scale(1); } }
+  .gallery-image-frame img.is-changing { animation: gallery-image-change .32s cubic-bezier(.2,.9,.3,1) both; }
+
+  .about-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1rem;
+    margin-top: 1.75rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid rgba(177, 153, 255, 0.15);
+  }
+
+  .social-heading { display: flex; align-items: center; gap: 0.8rem; }
+  .social-heading .social-label { margin: 0; }
+  .social-rule { width: 2rem; height: 1px; background: rgba(177, 153, 255, 0.35); }
+  .social-description { margin: 0.4rem 0 0; color: #bdb4d1; font-size: 0.85rem; }
+  .about-bottom .socials { justify-content: flex-start; width: fit-content; margin-top: 0.55rem; padding: 0; background: transparent; }
+
   .site-version {
-    margin-top: 1rem;
-    color: var(--muted);
+    margin: 0;
+    color: #827991;
     font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
     font-size: 0.72rem;
-    letter-spacing: 0.04em;
-    text-align: center;
-    opacity: 0.82;
   }
+
+  @media (max-width: 780px) {
+    .about-intro { grid-template-columns: 1fr; gap: 1rem; }
+    .about-copy { max-width: none; }
+    .about-copy h1 { font-size: clamp(3.4rem, 15vw, 5.5rem); }
+    .fanart-column-window { height: 320px; }
+    .fanart-strip-set { gap: 4px; }
+    .about-bottom { align-items: flex-start; flex-direction: column; margin-top: 1.5rem; }
+  }
+
+  @media (max-width: 600px) {
+    .fanart-gallery { --gallery-nav-height: 53px; }
+    .gallery-shell { gap: .7rem; padding: 12px; padding-top: calc(var(--gallery-nav-height) + 12px); }
+    .gallery-stage { grid-template-columns: 34px minmax(0,1fr) 34px; gap: 6px; }
+    .gallery-step { width: 34px; height: 34px; }
+    .gallery-image-frame { height: min(56vh,480px); }
+    .gallery-thumbnail { flex-basis: 62px; width: 62px; height: 54px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fanart-column-window { overflow-y: auto; mask-image: none; }
+    .fanart-strip-set { height: auto; }
+    .fanart-strip-column { height: auto; overflow: visible; }
+    .fanart-column-loop { position: static; animation: none; }
+    .fanart-column-loop-set[data-fanart-copy] { display: none; }
+    .gallery-shell,.fanart-gallery.is-closing .gallery-shell,.gallery-image-frame img,.gallery-image-frame img.is-changing { animation: none; }
+    .gallery-thumbnail,.gallery-close,.gallery-step { transition: none; }
+  }
+
 </style>
+
+<script>
+  const setBorderFromImage = (image: HTMLImageElement): void => {
+    if (!image.complete || !image.naturalWidth) return;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = 16;
+    canvas.height = 16;
+    const context = canvas.getContext('2d', { willReadFrequently: true });
+    if (!context) return;
+
+    context.drawImage(image, 0, 0, canvas.width, canvas.height);
+    const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
+    const colors = new Map();
+
+    for (let index = 0; index < pixels.length; index += 4) {
+      if (pixels[index + 3] < 128) continue;
+
+      const red = pixels[index];
+      const green = pixels[index + 1];
+      const blue = pixels[index + 2];
+      const maximum = Math.max(red, green, blue);
+      const minimum = Math.min(red, green, blue);
+      const saturation = maximum === 0 ? 0 : (maximum - minimum) / maximum;
+      const key = `${red >> 4}-${green >> 4}-${blue >> 4}`;
+      const color = colors.get(key) ?? { count: 0, saturation: 0, red: 0, green: 0, blue: 0 };
+
+      color.count += 1;
+      color.saturation += saturation;
+      color.red += red;
+      color.green += green;
+      color.blue += blue;
+      colors.set(key, color);
+    }
+
+    const dominant = Array.from(colors.values()).sort((first, second) => {
+      const firstScore = first.count * (1 + (first.saturation / first.count) * 1.4);
+      const secondScore = second.count * (1 + (second.saturation / second.count) * 1.4);
+      return secondScore - firstScore;
+    })[0];
+
+    if (!dominant) return;
+    image.style.setProperty('--art-border-color', `rgb(${Math.round(dominant.red / dominant.count)} ${Math.round(dominant.green / dominant.count)} ${Math.round(dominant.blue / dominant.count)})`);
+  };
+
+  const setBorderWhenLoaded = (image: HTMLImageElement): void => {
+    if (image.complete && image.naturalWidth) {
+      setBorderFromImage(image);
+    } else {
+      image.addEventListener('load', () => setBorderFromImage(image), { once: true });
+    }
+  };
+
+  const fanartObservers = new WeakMap<HTMLElement, IntersectionObserver>();
+
+  const initializeFanartColumn = (column: HTMLElement): void => {
+    if (column.dataset.fanartInitializing === 'true') return;
+
+      const track = column.querySelector<HTMLDivElement>('[data-fanart-track]');
+      const set = track?.querySelector<HTMLDivElement>('[data-fanart-set]');
+      if (!track || !set) return;
+
+      column.dataset.fanartInitializing = 'true';
+      fanartObservers.get(column)?.disconnect();
+      track.querySelectorAll('[data-fanart-copy]').forEach((copy) => copy.remove());
+
+      const pieces = Array.from(set.querySelectorAll<HTMLElement>('.fanart-strip-item'))
+        .filter((piece) => !piece.closest('[data-fanart-copy]'));
+      if (!column.isConnected) return;
+
+      if (column.dataset.fanartShuffled !== 'true') {
+        for (let index = pieces.length - 1; index > 0; index -= 1) {
+          const swapIndex = Math.floor(Math.random() * (index + 1));
+          [pieces[index], pieces[swapIndex]] = [pieces[swapIndex], pieces[index]];
+        }
+
+        column.dataset.fanartShuffled = 'true';
+      }
+
+      const columns = window.matchMedia('(max-width: 780px)').matches ? 2 : 3;
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const artworkGap = 4;
+      const setStyle = getComputedStyle(set);
+      const columnGap = Number.parseFloat(setStyle.columnGap);
+      const columnWidth = (set.getBoundingClientRect().width - columnGap * (columns - 1)) / columns;
+      const columnHeights = new Array<number>(columns).fill(0);
+      const stripColumns = Array.from({ length: columns }, () => {
+        const stripColumn = document.createElement('div');
+        stripColumn.className = 'fanart-strip-column';
+        stripColumn.style.position = 'relative';
+        stripColumn.style.minWidth = '0';
+        stripColumn.style.height = prefersReducedMotion ? 'auto' : '100%';
+        stripColumn.style.overflow = prefersReducedMotion ? 'visible' : 'hidden';
+        return stripColumn;
+      });
+      const columnItems: HTMLElement[][] = Array.from({ length: columns }, () => []);
+
+      set.style.setProperty('--fanart-columns', String(columns));
+      pieces.forEach((piece) => {
+        const image = piece.querySelector<HTMLImageElement>('img');
+        piece.style.gridColumn = '';
+        const columnIndex = columnHeights.indexOf(Math.min(...columnHeights));
+        const width = Number(piece.dataset.artWidth);
+        const height = Number(piece.dataset.artHeight);
+        if (columnItems[columnIndex].length > 0) columnHeights[columnIndex] += artworkGap;
+        columnItems[columnIndex].push(piece);
+        columnHeights[columnIndex] += columnWidth * (height / width);
+      });
+
+      stripColumns.forEach((stripColumn, index) => {
+        const loop = document.createElement('div');
+        loop.className = 'fanart-column-loop';
+        loop.style.position = prefersReducedMotion ? 'static' : 'absolute';
+        loop.style.inset = '0 auto auto 0';
+        loop.style.display = 'flex';
+        loop.style.width = '100%';
+        loop.style.flexDirection = 'column';
+        loop.style.animation = prefersReducedMotion ? 'none' : `fanart-scroll-up ${Math.max(12, columnHeights[index] / 32)}s linear infinite`;
+
+        const sourceSet = document.createElement('div');
+        sourceSet.className = 'fanart-column-loop-set';
+        sourceSet.style.display = 'flex';
+        sourceSet.style.width = '100%';
+        sourceSet.style.flexDirection = 'column';
+        sourceSet.style.gap = `${artworkGap}px`;
+        sourceSet.append(...columnItems[index]);
+
+        const copy = sourceSet.cloneNode(true) as HTMLDivElement;
+        copy.setAttribute('data-fanart-copy', '');
+        copy.setAttribute('aria-hidden', 'true');
+        if (prefersReducedMotion) copy.style.display = 'none';
+        copy.querySelectorAll<HTMLElement>('.fanart-strip-item').forEach((item) => {
+          item.setAttribute('tabindex', '-1');
+        });
+
+        loop.append(sourceSet, copy);
+        stripColumn.append(loop);
+
+        if (!prefersReducedMotion) {
+          const pauseLoop = () => { loop.style.animationPlayState = 'paused'; };
+          const resumeLoop = () => {
+            if (!loop.contains(document.activeElement)) loop.style.animationPlayState = 'running';
+          };
+          loop.addEventListener('pointerenter', pauseLoop);
+          loop.addEventListener('pointerleave', resumeLoop);
+          loop.addEventListener('focusin', pauseLoop);
+          loop.addEventListener('focusout', resumeLoop);
+        }
+      });
+
+      set.replaceChildren(...stripColumns);
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+
+          const item = entry.target as HTMLElement;
+          const frame = item.querySelector<HTMLDivElement>('.fanart-strip-art');
+          if (!frame || frame.querySelector('img')) {
+            observer.unobserve(item);
+            return;
+          }
+          const template = frame?.querySelector<HTMLTemplateElement>('[data-fanart-image]');
+          const sourceImage = template?.content.querySelector<HTMLImageElement>('img');
+          if (!template || !sourceImage) {
+            observer.unobserve(item);
+            return;
+          }
+
+          const image = sourceImage.cloneNode(true) as HTMLImageElement;
+          frame.insertBefore(image, template);
+          template.remove();
+          setBorderWhenLoaded(image);
+          observer.unobserve(item);
+        });
+      }, { root: column, rootMargin: '120px 0px' });
+
+      track.querySelectorAll<HTMLElement>('.fanart-strip-item').forEach((item) => observer.observe(item));
+      fanartObservers.set(column, observer);
+      column.dataset.fanartInitializing = 'false';
+  };
+
+  const initializeFanartColumns = () => {
+    document.querySelectorAll<HTMLElement>('[data-fanart-column]').forEach((column) => {
+      void initializeFanartColumn(column);
+    });
+  };
+
+  const initializeFanartGallery = () => {
+    const column = document.querySelector<HTMLElement>('[data-fanart-column]');
+    const dialog = document.querySelector<HTMLDialogElement>('#fanart-gallery');
+    const featureImage = document.querySelector<HTMLImageElement>('#gallery-image');
+    const caption = document.querySelector<HTMLElement>('#gallery-caption');
+    const artistCredit = document.querySelector<HTMLElement>('#gallery-artist');
+    const counter = document.querySelector<HTMLElement>('#gallery-counter');
+    const thumbnails = dialog ? Array.from(dialog.querySelectorAll<HTMLButtonElement>('[data-gallery-thumbnail]')) : [];
+    if (!column || !dialog || !featureImage || !caption || !artistCredit || !counter || dialog.dataset.initialized === 'true') return;
+    dialog.dataset.initialized = 'true';
+
+    let activeIndex = 0;
+    let openingItem: HTMLElement | null = null;
+    let closeTimer: number | undefined;
+    const siteHeader = document.querySelector<HTMLElement>('.site-header');
+    let headerPlaceholder: Comment | null = null;
+    let headerThemeFrame: number | undefined;
+    const headerThemeProperties = ['--bg', '--card', '--text', '--muted', '--accent', '--accent-contrast', '--accent-dark', '--accent-10', '--accent-12', '--muted-border'];
+
+    const captureHeaderTheme = () => {
+      if (!siteHeader) return;
+      const computed = getComputedStyle(siteHeader);
+      headerThemeProperties.forEach((property) => siteHeader.style.setProperty(property, computed.getPropertyValue(property)));
+    };
+
+    const releaseHeaderTheme = () => {
+      if (!siteHeader) return;
+      if (headerThemeFrame !== undefined) cancelAnimationFrame(headerThemeFrame);
+      headerThemeFrame = requestAnimationFrame(() => {
+        headerThemeProperties.forEach((property) => siteHeader.style.removeProperty(property));
+        headerThemeFrame = undefined;
+      });
+    };
+
+    const moveHeaderIntoGallery = () => {
+      if (!siteHeader || headerPlaceholder) return;
+      headerPlaceholder = document.createComment('gallery-header-placeholder');
+      siteHeader.after(headerPlaceholder);
+      dialog.insertBefore(siteHeader, dialog.firstChild);
+    };
+
+    const restoreHeader = () => {
+      if (!siteHeader || !headerPlaceholder) return;
+      headerPlaceholder.before(siteHeader);
+      headerPlaceholder.remove();
+      headerPlaceholder = null;
+    };
+
+    const selectArtwork = (index: number) => {
+      if (!thumbnails.length) return;
+      activeIndex = (index + thumbnails.length) % thumbnails.length;
+      const thumbnail = thumbnails[activeIndex];
+      featureImage.classList.remove('is-changing');
+      featureImage.src = thumbnail.dataset.gallerySrc || '';
+      featureImage.alt = thumbnail.dataset.galleryAlt || '';
+      caption.textContent = thumbnail.dataset.galleryCaption || '';
+      caption.hidden = !caption.textContent;
+      artistCredit.textContent = thumbnail.dataset.galleryArtist || '';
+      counter.textContent = `${String(activeIndex + 1).padStart(2, '0')} / ${String(thumbnails.length).padStart(2, '0')}`;
+      thumbnails.forEach((item, itemIndex) => item.setAttribute('aria-current', String(itemIndex === activeIndex)));
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        void featureImage.offsetWidth;
+        featureImage.classList.add('is-changing');
+      }
+      if (dialog.open) thumbnails[activeIndex].scrollIntoView({ block: 'nearest', inline: 'center', behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    };
+
+    const closeGallery = () => {
+      if (!dialog.open || dialog.classList.contains('is-closing')) return;
+      captureHeaderTheme();
+      document.body.classList.remove('fanart-gallery-open');
+      releaseHeaderTheme();
+      dialog.classList.add('is-closing');
+      closeTimer = window.setTimeout(() => {
+        dialog.close();
+        dialog.classList.remove('is-closing');
+        openingItem?.focus();
+        openingItem = null;
+      }, 220);
+    };
+
+    const openGallery = (item: HTMLElement) => {
+      const index = Number(item.dataset.artIndex);
+      if (!Number.isInteger(index) || index < 0 || index >= thumbnails.length) return;
+      if (closeTimer !== undefined) window.clearTimeout(closeTimer);
+      dialog.classList.remove('is-closing');
+      openingItem = item;
+      captureHeaderTheme();
+      document.body.classList.add('fanart-gallery-open');
+      moveHeaderIntoGallery();
+      if (!dialog.open) dialog.showModal();
+      selectArtwork(index);
+      dialog.querySelector<HTMLButtonElement>('[data-gallery-close]')?.focus();
+      releaseHeaderTheme();
+    };
+
+    column.addEventListener('click', (event) => {
+      const item = (event.target as HTMLElement).closest<HTMLElement>('.fanart-strip-item[data-art-index]');
+      if (!item || item.closest('[data-fanart-copy]')) return;
+      openGallery(item);
+    });
+    column.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      const item = (event.target as HTMLElement).closest<HTMLElement>('.fanart-strip-item[data-art-index]');
+      if (!item || item.closest('[data-fanart-copy]')) return;
+      event.preventDefault();
+      openGallery(item);
+    });
+    dialog.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement;
+      if (target === dialog || target.closest('[data-gallery-close]')) closeGallery();
+      if (target.closest('[data-gallery-previous]')) selectArtwork(activeIndex - 1);
+      if (target.closest('[data-gallery-next]')) selectArtwork(activeIndex + 1);
+      const thumbnail = target.closest<HTMLButtonElement>('[data-gallery-thumbnail]');
+      if (thumbnail) selectArtwork(Number(thumbnail.dataset.galleryThumbnail));
+    });
+    dialog.addEventListener('cancel', (event) => {
+      event.preventDefault();
+      closeGallery();
+    });
+    dialog.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        closeGallery();
+      } else if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        selectArtwork(activeIndex - 1);
+      } else if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        selectArtwork(activeIndex + 1);
+      }
+    });
+    dialog.addEventListener('close', () => {
+      if (closeTimer !== undefined) window.clearTimeout(closeTimer);
+      dialog.classList.remove('is-closing');
+      restoreHeader();
+      if (document.body.classList.contains('fanart-gallery-open')) {
+        captureHeaderTheme();
+        document.body.classList.remove('fanart-gallery-open');
+        releaseHeaderTheme();
+      }
+      openingItem?.focus();
+      openingItem = null;
+    });
+    document.addEventListener('astro:before-swap', () => {
+      if (closeTimer !== undefined) window.clearTimeout(closeTimer);
+      captureHeaderTheme();
+      openingItem = null;
+      dialog.classList.remove('is-closing');
+      restoreHeader();
+      document.body.classList.remove('fanart-gallery-open');
+      releaseHeaderTheme();
+      if (dialog.open) dialog.close();
+    });
+  };
+
+  let fanartResizeTimer: number | undefined;
+  window.addEventListener('resize', () => {
+    if (fanartResizeTimer !== undefined) window.clearTimeout(fanartResizeTimer);
+    fanartResizeTimer = window.setTimeout(initializeFanartColumns, 120);
+  });
+
+  document.addEventListener('astro:page-load', initializeFanartColumns);
+  document.addEventListener('astro:page-load', initializeFanartGallery);
+  initializeFanartColumns();
+  initializeFanartGallery();
+</script>

@@ -1,0 +1,80 @@
+---
+import { Image } from 'astro:assets';
+---
+
+<header class="home-hero" aria-labelledby="home-title">
+  <div class="hero-copy">
+    <p class="hero-kicker">welcome to my website</p>
+    <h1 id="home-title">the praxor website</h1>
+    <p class="hero-lead">visit and do whatever else you do. meow.</p>
+  </div>
+  <div class="cat-stage" data-cat-stage aria-label="A wandering cat">
+    <button class="cat-trigger" type="button" aria-label="Click oraxor the cat for a surprise">
+      <Image class="bouncy-cat" src="https://praxor.de/media/res/oraxor.png" alt="oraxor the cat" width={300} height={300} fetchpriority="high" loading="eager" decoding="async" />
+    </button>
+  </div>
+</header>
+
+<style>
+  .home-hero{box-sizing:border-box;min-height:174px;display:grid;grid-template-columns:minmax(0,1fr) 174px;align-items:center;padding:8px 0;border-bottom:1px solid var(--muted-border);animation:hero-in .55s cubic-bezier(.2,.9,.3,1) both}
+  .hero-copy{min-width:0}
+  .hero-kicker{margin:0 0 7px;color:var(--accent);font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+  .hero-copy h1{margin:0;color:var(--text);font-size:2.25rem;line-height:1.05;letter-spacing:0}
+  .hero-lead{margin:9px 0 0;color:var(--muted);font-size:1rem}
+  .cat-stage{display:grid;place-items:center;height:158px;overflow:visible;perspective:850px;perspective-origin:50% 48%}
+  .cat-trigger{display:grid;place-items:center;width:154px;height:154px;padding:0;border:0;background:transparent;cursor:pointer;transform-style:preserve-3d;animation:cat-float 2.8s ease-in-out infinite}
+  .bouncy-cat{display:block;width:100%;height:100%;object-fit:contain;transform:rotate(-13deg) rotateX(var(--cat-tilt-x,0deg)) rotateY(var(--cat-tilt-y,0deg)) translateZ(22px);filter:drop-shadow(0 13px 10px rgba(0,0,0,.3));transition:transform .24s cubic-bezier(.2,.9,.3,1);will-change:transform}
+  .cat-trigger:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+  @keyframes cat-float{0%,100%{translate:0 0}50%{translate:0 -11px}}
+  @keyframes hero-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+  @media(max-width:700px){
+    .home-hero{min-height:142px;grid-template-columns:minmax(0,1fr) 112px}
+    .hero-copy h1{font-size:1.7rem}
+    .hero-kicker{font-size:.66rem}
+    .hero-lead{max-width:29rem;font-size:.88rem}
+    .cat-stage{height:128px}
+    .cat-trigger{width:120px;height:120px}
+  }
+  @media(max-width:420px){
+    .home-hero{grid-template-columns:minmax(0,1fr) 120px;min-height:126px}
+    .hero-copy h1{font-size:1.45rem}
+    .hero-lead{font-size:.82rem}
+    .cat-stage{height:104px}
+    .cat-trigger{width:100px;height:100px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    .home-hero,.cat-trigger{animation:none;opacity:1;transform:none}
+    .bouncy-cat{transition:none;transform:rotate(-13deg)}
+  }
+</style>
+
+<script>
+  const initializeCatParallax = () => {
+    const stage = document.querySelector<HTMLElement>('[data-cat-stage]');
+    const trigger = stage?.querySelector<HTMLButtonElement>('.cat-trigger');
+    if (!stage || !trigger || stage.dataset.parallaxInitialized === 'true') return;
+    stage.dataset.parallaxInitialized = 'true';
+
+    const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const resetTilt = () => {
+      stage.style.setProperty('--cat-tilt-x', '0deg');
+      stage.style.setProperty('--cat-tilt-y', '0deg');
+    };
+    stage.addEventListener('pointermove', (event) => {
+      if (motionPreference.matches || event.pointerType === 'touch') return;
+      const bounds = stage.getBoundingClientRect();
+      const horizontal = Math.max(-1, Math.min(1, ((event.clientX - bounds.left) / bounds.width - .5) * 2));
+      const vertical = Math.max(-1, Math.min(1, ((event.clientY - bounds.top) / bounds.height - .5) * 2));
+      stage.style.setProperty('--cat-tilt-x', `${-vertical * 8}deg`);
+      stage.style.setProperty('--cat-tilt-y', `${horizontal * 11}deg`);
+    });
+    stage.addEventListener('pointerleave', resetTilt);
+    motionPreference.addEventListener('change', (event) => { if (event.matches) resetTilt(); });
+    trigger.addEventListener('click', () => {
+      window.location.href = 'https://praxor.de/media/paxogroove.mp4';
+    });
+  };
+
+  document.addEventListener('astro:page-load', initializeCatParallax);
+  initializeCatParallax();
+</script>

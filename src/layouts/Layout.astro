@@ -44,14 +44,34 @@ const image = 'https://praxor.de/media/res/snes_undertall.png';
 </html>
 
 <script>
+  const themeProperties = ['--bg', '--card', '--text', '--muted', '--accent', '--accent-contrast', '--accent-dark', '--accent-10', '--accent-12', '--muted-border'];
+  const persistentThemeSurfaces = () => document.querySelectorAll<HTMLElement>('.site-header, #persistent-music-player');
+  const capturePersistentTheme = () => {
+    persistentThemeSurfaces().forEach((surface) => {
+      const computed = getComputedStyle(surface);
+      themeProperties.forEach((property) => surface.style.setProperty(property, computed.getPropertyValue(property)));
+      surface.dataset.themeTransitionCaptured = 'true';
+    });
+  };
+  const releasePersistentTheme = () => {
+    requestAnimationFrame(() => {
+      persistentThemeSurfaces().forEach((surface) => {
+        if (surface.dataset.themeTransitionCaptured !== 'true') return;
+        themeProperties.forEach((property) => surface.style.removeProperty(property));
+        delete surface.dataset.themeTransitionCaptured;
+      });
+    });
+  };
   const markPageLoaded = () => {
     document.documentElement.classList.remove('is-transitioning');
     document.documentElement.classList.add('is-loaded');
   };
   document.addEventListener('astro:before-swap', () => {
+    capturePersistentTheme();
     document.documentElement.classList.remove('is-loaded');
     document.documentElement.classList.add('is-transitioning');
   });
+  document.addEventListener('astro:after-swap', releasePersistentTheme);
   document.addEventListener('astro:page-load', markPageLoaded);
   markPageLoaded();
 </script>

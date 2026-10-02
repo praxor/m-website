@@ -10,7 +10,19 @@
   --accent-12: rgba(104,34,179,0.12);
   --pattern-url: url('https://praxor.de/media/res/bricks.png');
   --muted-border: rgba(74,16,205,0.08);
+  --theme-transition: --bg .22s ease, --card .22s ease, --text .22s ease, --muted .22s ease, --accent .22s ease, --accent-contrast .22s ease, --accent-dark .22s ease, --accent-10 .22s ease, --accent-12 .22s ease, --muted-border .22s ease;
 }
+
+@property --bg{syntax:"<color>";inherits:true;initial-value:#0b0614}
+@property --card{syntax:"<color>";inherits:true;initial-value:#130623}
+@property --text{syntax:"<color>";inherits:true;initial-value:#f3f0ff}
+@property --muted{syntax:"<color>";inherits:true;initial-value:#bfb3f5}
+@property --accent{syntax:"<color>";inherits:true;initial-value:#6822b3}
+@property --accent-contrast{syntax:"<color>";inherits:true;initial-value:#ffffff}
+@property --accent-dark{syntax:"<color>";inherits:true;initial-value:#541a93}
+@property --accent-10{syntax:"<color>";inherits:true;initial-value:rgba(104,34,179,.06)}
+@property --accent-12{syntax:"<color>";inherits:true;initial-value:rgba(104,34,179,.12)}
+@property --muted-border{syntax:"<color>";inherits:true;initial-value:rgba(74,16,205,.08)}
 
 html, body { height: 100%; }
 body{
@@ -19,7 +31,19 @@ body{
   font-family: "IBM Plex Sans", Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
   background: var(--bg);
   color: var(--text);
+  transition: var(--theme-transition), background-color .22s ease, color .22s ease;
   -webkit-font-smoothing: antialiased;
+}
+
+::view-transition-group(root){animation-duration:.48s}
+::view-transition-old(root){animation:theme-fade-out .3s ease both;mix-blend-mode:normal}
+::view-transition-new(root){animation:theme-fade-in .48s ease both;mix-blend-mode:normal}
+@keyframes theme-fade-out{to{opacity:0}}
+@keyframes theme-fade-in{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){
+  body{transition:none}
+  .site-header,#persistent-music-player{transition:none}
+  ::view-transition-old(root),::view-transition-new(root){animation:none!important}
 }
 
 /* Fixed-position overlays (e.g. the music player) must be direct, non-flex children of body:
@@ -152,9 +176,9 @@ html.is-loaded header, html.is-loaded .card, html.is-loaded .nav a, html.is-load
   .site-footer .footer-col{width:100%;text-align:center}
 }
 
-.wrap{min-height:auto;display:flex;align-items:center;justify-content:center;padding:3rem}
+.wrap{min-height:auto;display:flex;align-items:center;justify-content:center;padding:1.5rem}
 main{flex:1}
-.card{max-width:1200px;background:var(--card);border:1px solid var(--muted-border);padding:3rem;border-radius:16px;box-shadow:inset 0 1px 0 var(--accent-12)}
+.card{max-width:1200px;background:var(--card);border:1px solid var(--muted-border);padding:1.75rem;border-radius:2px;box-shadow:inset 0 1px 0 var(--accent-12)}
 .card h1,.center-contents h1{margin:0;color:var(--accent);font-size:1.15rem;line-height:1;letter-spacing:.04em}
 
 .h1, h1{margin:0 0 .5rem;font-size:clamp(1.8rem,3.6vw,3rem);letter-spacing:-0.02em;color:var(--accent)}
@@ -206,4 +230,9 @@ a:focus{outline:3px solid var(--accent-12);outline-offset:3px}
 .header-socials .social-btn{width:36px;height:36px;font-size:16px}
 @media (max-width:780px){
   .header-socials{display:none}
+}
+
+@media (max-width:780px){
+  .wrap{padding:1rem 12px}
+  .card{padding:1rem;border-radius:2px}
 }

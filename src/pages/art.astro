@@ -1,33 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ArtGrid from '../components/ArtGrid.astro';
-
-const items = [
-  { src: '../media/fanart/fanart1.png', title: 'toohi' },
-  { src: '../media/fanart/fanart2.jpeg', title: 'blueistic' },
-  { src: '../media/fanart/fanart3.png', title: 'fyre' },
-  { src: '../media/fanart/fanart4.png', title: 'louies' },
-  { src: '../media/fanart/fanart5.png', title: 'toohi' },
-  { src: '../media/fanart/fanart6.png', title: 'toohi' },
-  { src: '../media/fanart/fanart7.png', title: 'toohi' },
-  { src: '../media/fanart/fanart8.png', title: '???' },
-  { src: '../media/fanart/fanart9.png', title: 'toohi' },
-  { src: '../media/fanart/fanart10.png', title: 'can you guess who did it' },
-  { src: '../media/fanart/fanart11.png', title: 'lego_foxy' },
-  { src: '../media/fanart/fanart12.png', title: 'lotterytickett' },
-  { src: '../media/fanart/fanart13.jpg', title: 'mcpattychon'},
-  { src: '../media/fanart/fanart14.png', title: 'milk / cowcat' },
-  { src: '../media/fanart/fanart15.png', title: 'angelbeat09' },
-  { src: '../media/fanart/fanart16.jpg', title: 'mynt719' },
-  { src: '../media/fanart/fanart17.png', title: '???' },
-  { src: '../media/fanart/fanart18.png', title: 'mynt719' },
-  { src: '../media/fanart/fanart19.png', title: 'mynt719' },
-  { src: '../media/fanart/fanart20.png', title: 'toohi' },
-  { src: '../media/fanart/fanart21.jpg', title: 'null / roota / the_real_peter_griffin.' },
-  { src: '../media/fanart/fanart22.png', title: 'mcpattychon' },
-  { src: '../media/fanart/fanart23.png', title: 'null / roota / the_real_peter_griffin.' },
-  { src: '../media/fanart/fanart24.png', title: 'bibiipusheen.' },
-];
+import { fanartOptions } from '../data/fanart';
 ---
 <Layout title="art" description="check out my wonderful fanart.">
     <main class="wrap">
@@ -37,7 +11,7 @@ const items = [
           <p class="lead">all of my fanarts collected throughout some time. thank you to those who've supported me.</p>
           <br>
         </div>
-        <ArtGrid items={items} />
+        <ArtGrid items={fanartOptions} />
       </section>
     </main>
 </Layout>

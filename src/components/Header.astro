@@ -1,14 +1,14 @@
 ---
 import { characters } from '../data/characters';
+import { Image } from 'astro:assets';
 const base = import.meta.env.BASE_URL;
 ---
 <header class="site-header" role="banner" data-persisted-shell transition:persist transition:animate="none">
   <div class="container">
     <a class="logo" href={base}>
-      <img src="https://praxor.de/media/res/oraxor.png" alt="oraxor the cat" width="36" height="36" decoding="async" />
+      <Image src="https://praxor.de/media/res/oraxor.png" alt="oraxor the cat" width={36} height={36} loading="eager" decoding="async" />
     </a>
     <nav class="nav" role="navigation" aria-label="Main">
-      <a href={`${base}art`}>art</a>
       <div class="character-menu">
         <a class="character-menu-link" href={`${base}characters`}>characters <span class="character-chevron" aria-hidden="true"></span></a>
         <div class="character-menu-panel">
@@ -42,7 +42,6 @@ const base = import.meta.env.BASE_URL;
     </button>
   </div>
   <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile navigation">
-    <a href={`${base}art`}>art</a>
     <div class="mobile-character-menu">
       <div class="mobile-character-row">
         <a href={`${base}characters`}>characters</a>
@@ -71,14 +70,14 @@ const base = import.meta.env.BASE_URL;
     </div>
   </nav>
   <style>
-    .site-header{position:sticky;top:0;z-index:40;background:var(--card);border-bottom:1px solid var(--muted-border)}
-    .site-header .container{max-width:1100px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:14px}
+    .site-header{position:sticky;top:0;z-index:40;background:var(--card);border-bottom:1px solid var(--muted-border);transition:var(--theme-transition),background-color .22s ease,color .22s ease,border-color .22s ease}
+    .site-header .container{max-width:1100px;margin:0 auto;padding:6px 16px;display:flex;align-items:center;gap:10px}
     .logo{display:inline-block;text-decoration:none}
-    .logo img{height:32px;width:auto;border-radius:0;display:block}
+    .logo img{height:28px;width:auto;border-radius:0;display:block}
     .logo.secret-ready img{animation:secret-cat-spin .32s linear infinite}
     @keyframes secret-cat-spin{to{transform:rotate(360deg)}}
-    .nav{display:flex;gap:12px;margin-left:6px}
-    .nav a{color:var(--muted);text-decoration:none;padding:5px 7px;border-radius:8px;font-weight:600}
+    .nav{display:flex;gap:6px;margin-left:2px}
+    .nav a{color:var(--muted);text-decoration:none;padding:4px 6px;border-radius:7px;font-weight:600;transition:color .22s ease,background-color .22s ease}
     .nav a:hover{background:rgba(255,255,255,0.02);color:var(--text)}
     .character-menu{position:relative;display:flex;align-items:center}
     .character-chevron{display:inline-block;width:6px;height:6px;margin:0 0 3px 6px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg);transition:transform .18s ease}
@@ -87,8 +86,12 @@ const base = import.meta.env.BASE_URL;
     .character-menu:hover .character-menu-panel,.character-menu:focus-within .character-menu-panel{opacity:1;visibility:visible;transform:translateY(0)}
     .character-menu-panel a{display:block;white-space:nowrap}
     .cult-link{color:var(--card)!important}
-    .actions{margin-left:auto;display:flex;align-items:center;gap:6px}
-    .menu-toggle{display:none;width:38px;height:34px;padding:0;background:transparent;border:1px solid transparent;border-radius:7px;color:var(--muted);line-height:1;cursor:pointer}
+    .nav .cult-link{transition-duration:.12s}
+    .actions{margin-left:auto;display:flex;align-items:center;gap:4px}
+    .cta{padding:7px 10px;border-radius:8px;font-size:.88rem}
+    .header-socials{gap:4px;margin-left:4px}
+    .header-socials .social-btn{width:32px;height:32px}
+    .menu-toggle{display:none;width:44px;height:44px;padding:0;background:transparent;border:1px solid transparent;border-radius:7px;color:var(--muted);line-height:1;cursor:pointer}
     .menu-toggle:hover,.menu-toggle:focus-visible{background:var(--accent-10);color:var(--text)}
     .menu-icon{position:relative;display:block;width:18px;height:14px;margin:auto}
     .menu-icon i{position:absolute;left:0;width:18px;height:2px;border-radius:2px;background:currentColor;transition:transform .24s ease,opacity .18s ease,top .24s ease}
@@ -102,9 +105,10 @@ const base = import.meta.env.BASE_URL;
       .nav{display:none}
       .menu-toggle{display:inline-block;margin-left:auto}
       .actions{display:none}
-      .site-header .container{padding:8px 12px}
+      .site-header .container{padding:4px 12px}
+      .logo img{height:30px}
       .mobile-nav{position:absolute;top:100%;left:0;right:0;box-sizing:border-box;display:flex;flex-direction:column;gap:2px;max-height:0;padding:0 12px;background:var(--card);border-top:1px solid transparent;opacity:0;overflow:hidden;transform:translateY(-8px);transition:max-height .32s ease,padding .32s ease,opacity .24s ease,transform .32s ease,border-color .32s ease;visibility:hidden}
-      .mobile-nav.open{max-height:520px;padding:8px 12px 4px;border-top-color:var(--muted-border);opacity:1;transform:translateY(0);visibility:visible}
+      .mobile-nav.open{max-height:min(80vh,720px);padding:8px 12px 4px;border-top-color:var(--muted-border);opacity:1;overflow-y:auto;transform:translateY(0);visibility:visible}
       .mobile-nav a{display:block;color:var(--muted);text-decoration:none;padding:11px 10px;border-radius:8px;font-weight:600}
       .mobile-nav a:hover,.mobile-nav a:focus{background:rgba(255,255,255,0.04);color:var(--text)}
       .mobile-nav .cult-link{color:var(--card)!important}
@@ -114,12 +118,15 @@ const base = import.meta.env.BASE_URL;
       .mobile-character-toggle:hover,.mobile-character-toggle:focus-visible{background:var(--accent-10);color:var(--text)}
       .mobile-character-toggle[aria-expanded="true"]{transform:rotate(180deg)}
       .mobile-character-links{max-height:0;overflow:hidden;opacity:0;transition:max-height .28s ease,opacity .2s ease}
-      .mobile-character-links.open{max-height:180px;opacity:1}
+      .mobile-character-links.open{max-height:min(45vh,300px);overflow-y:auto;opacity:1}
       .mobile-character-links a{padding:8px 20px;font-size:.92rem}
       .mobile-socials{display:flex;align-items:center;justify-content:center;gap:4px;padding:5px 4px 0;border-top:1px solid var(--muted-border);margin-top:2px}
       .mobile-socials .social-btn{display:flex;align-items:center;justify-content:center;width:38px;height:34px;padding:0;font-size:16px}
     }
     @media (max-width:780px){.character-menu{display:none}}
+    @media (prefers-reduced-motion:reduce){
+      .site-header,.site-header .nav a,.site-header .character-menu-panel,.site-header .cta,.site-header .mobile-nav,.site-header .mobile-nav a{transition:none!important}
+    }
   </style>
 
   <div id="contact-panel" class="contact-panel" role="dialog" aria-modal="true" aria-hidden="true">
@@ -127,83 +134,61 @@ const base = import.meta.env.BASE_URL;
     <div class="contact-inner" role="document">
       <button id="contact-close" class="contact-close" aria-label="Close contact panel">✕</button>
       <div class="modal-top">
-        <div class="confetti" aria-hidden="true">
-          <span class="piece piece-1"></span>
-          <span class="piece piece-2"></span>
-          <span class="piece piece-3"></span>
-          <span class="piece piece-4"></span>
-          <span class="piece piece-5"></span>
-          <span class="piece piece-6"></span>
-          <span class="piece piece-7"></span>
-          <span class="piece piece-8"></span>
-        </div>
-        <img class="modal-cat" src="https://praxor.de/media/res/oraxor.png" alt="oraxor the cat" />
+        <div class="confetti" aria-hidden="true"></div>
+        <div class="shards" aria-hidden="true"></div>
+        <Image class="modal-cat" src="https://praxor.de/media/res/oraxor.png" alt="oraxor the cat" width={72} height={72} loading="lazy" decoding="async" />
       </div>
       <h2 class="modal-title">contact</h2>
-      <p class="modal-lead"> <em>
-        email: <a href="mailto:admin@praxor.de">admin@praxor.de</a><br>
-        discord: @<strong>trapstars</strong><br>
-      </em></p>
+      <p class="modal-lead">
+        <a class="contact-row" href="mailto:admin@praxor.de">email: <span class="contact-value">admin@praxor.de</span></a>
+        <button type="button" id="copy-discord" class="contact-row" data-copy="trapstars" aria-label="Copy discord username trapstars">discord: @<strong>trapstars</strong><span class="copy-hint" role="status" aria-live="polite"></span></button>
+      </p>
     </div>
   </div>
 
   <style>
     .contact-panel{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:60;pointer-events:none;opacity:0;transition:opacity .28s ease}
-    .contact-panel .contact-overlay{position:absolute;inset:0;background:rgba(6,4,18,0.6);backdrop-filter:blur(0px);-webkit-backdrop-filter:blur(0px);opacity:0;transition:backdrop-filter .36s ease, opacity .28s ease}
-    .contact-panel .contact-inner{position:relative;z-index:2;max-width:420px;width:calc(100% - 40px);background:var(--card);border:1px solid var(--muted-border);padding:18px;border-radius:12px;box-shadow:0 20px 60px rgba(4,2,10,0.6);transform:translateY(8px) scale(.98);opacity:0;transition:transform .36s cubic-bezier(.2,.9,.2,1),opacity .28s ease}
-    .contact-inner::before{content:"";position:absolute;inset:0;border-radius:12px;padding:1px;background:linear-gradient(90deg, rgba(104,34,179,0.18), rgba(104,34,179,0.06));pointer-events:none}
+    .contact-panel .contact-overlay{position:absolute;inset:0;background:rgba(6,4,18,0.6);opacity:0;transition:opacity .28s ease}
+    .contact-panel .contact-inner{position:relative;z-index:2;max-width:380px;width:calc(100% - 40px);background:radial-gradient(120% 80% at 50% 0%, rgba(104,34,179,0.32), transparent 70%), var(--card);border:1px solid rgba(139,92,214,0.35);padding:48px 22px 22px;border-radius:18px;box-shadow:0 24px 70px rgba(4,2,10,0.65), 0 0 0 1px rgba(104,34,179,0.12), 0 0 48px rgba(104,34,179,0.18);transform:translateY(24px) scale(.92);opacity:0;transition:transform .3s ease,opacity .2s ease}
+    .contact-inner::before{content:"";position:absolute;left:50%;top:0;width:96px;height:2px;transform:translateX(-50%);border-radius:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);pointer-events:none}
     .modal-top{position:absolute;left:50%;top:-36px;width:72px;height:72px;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:2}
     .modal-top .confetti{position:absolute;left:50%;top:50%;transform:translate(-50%,-10%);width:220px;height:140px;pointer-events:none;z-index:1}
-    .modal-top .confetti .piece{position:absolute;width:10px;height:10px;border-radius:2px;opacity:0;transform:translate(0,0) rotate(0deg);}
-    .modal-top .confetti .piece-1{left:50%;top:50%;--x:-80px;--y:-120px;background:#ff5e7e;--d:0s}
-    .modal-top .confetti .piece-2{left:50%;top:50%;--x:-40px;--y:-110px;background:#ffb470;--d:0s}
-    .modal-top .confetti .piece-3{left:50%;top:50%;--x:0px;--y:-120px;background:#ffd36b;--d:0s}
-    .modal-top .confetti .piece-4{left:50%;top:50%;--x:40px;--y:-110px;background:#7ee4a3;--d:0s}
-    .modal-top .confetti .piece-5{left:50%;top:50%;--x:80px;--y:-100px;background:#7ec9ff;--d:0s}
-    .modal-top .confetti .piece-6{left:50%;top:50%;--x:-60px;--y:-70px;background:#c58cff;--d:0s}
-    .modal-top .confetti .piece-7{left:50%;top:50%;--x:20px;--y:-60px;background:#ff8fcf;--d:0s}
-    .modal-top .confetti .piece-8{left:50%;top:50%;--x:60px;--y:-70px;background:#ffd2a6;--d:0s}
+    /* JS-created nodes lack Astro's scope attribute, so these need :global */
+    .modal-top .confetti :global(.piece){position:absolute;left:50%;top:50%;border-radius:2px;opacity:0}
+    .modal-top .shards{position:absolute;inset:0;pointer-events:none}
+    .modal-top .shards :global(.shard){position:absolute;will-change:transform,opacity}
 
     .modal-cat{position:relative;height:72px;width:72px;border-radius:0;object-fit:cover;display:block;opacity:1;will-change:transform,opacity;transform-origin:center}
 
     @keyframes cat-slide-in {
-      from { transform: translateX(-120vw) translateY(0) scale(.9); opacity:0 }
-      to { transform: translateX(-50%) translateY(0) scale(1); opacity:1 }
+      0% { transform: translate3d(-120vw,0,0) rotate(0deg); opacity:0; animation-timing-function:cubic-bezier(.1,.7,.2,1) }
+      8% { opacity:1 }
+      58% { transform: translate3d(calc(-50% + 44px),0,0) rotate(7deg); animation-timing-function:ease-in-out }
+      80% { transform: translate3d(calc(-50% - 9px),0,0) rotate(-3deg); animation-timing-function:ease-out }
+      100% { transform: translate3d(-50%,0,0) rotate(0deg); opacity:1 }
     }
 
-    .contact-panel.open .modal-top{animation:cat-slide-in .9s cubic-bezier(.16,.8,.2,1) forwards; animation-play-state:running}
+    .contact-panel.open .modal-top{animation:cat-slide-in 1.1s linear forwards}
+    .contact-panel:not(.open) .modal-cat{visibility:hidden}
 
-    @keyframes confetti-throw {
-      from { opacity:1; transform: translate(0,0) rotate(0deg) scale(1) }
-      to { opacity:0; transform: translate(var(--x), var(--y)) rotate(720deg) scale(.9) }
-    }
-    .contact-panel.open .modal-top .confetti .piece{animation:confetti-throw .9s cubic-bezier(.15,.8,.2,1) forwards; animation-delay: calc(var(--d) + 1s); animation-play-state:running}
+    .modal-title{margin:0 0 14px;color:var(--accent);text-align:center;font-size:1.6rem;font-weight:700;letter-spacing:.14em;text-transform:lowercase}
 
-    .modal-title{margin:8px 0 6px;color:var(--accent);text-align:center;font-size:1.4rem;padding-top:10px}
-
-    @keyframes cat-explode {
-      0% { opacity:1; transform:rotate(0deg) scale(1) }
-      50% { transform:rotate(45deg) scale(.96) }
-      100% { opacity:0; transform:rotate(1080deg) scale(.6) }
-    }
-    .contact-panel.closing .modal-cat{animation:cat-explode 3s cubic-bezier(.2,.9,.2,1) forwards; animation-play-state:running}
-
-    @keyframes top-fall {
-      0% { transform:translate3d(-50%,0,0) }
-      100% { transform:translate3d(-50%,120vh,0) }
-    }
-    .contact-panel.closing .modal-top{animation:top-fall 3s ease-in forwards; animation-play-state:running}
-
-    @keyframes confetti-explode {
-      from { opacity:1; transform: translate(0,0) rotate(0deg) scale(1) }
-      to { opacity:0; transform: translate(calc(var(--x) * 1.6), calc(var(--y) * 1.6)) rotate(1080deg) scale(.9) }
-    }
-    .contact-panel.closing .modal-top .confetti .piece{animation: none !important; opacity:0 !important; transform:none !important}
-    .modal-lead{margin:0 0 8px;color:var(--muted);font-style:italic;text-align:center;opacity:1}
+    .contact-panel.closing .modal-cat{visibility:hidden}
+    .modal-lead{margin:0;display:grid;gap:8px;color:var(--muted);font-style:italic;text-align:center;opacity:1}
+    .contact-row{position:relative;display:block;width:100%;box-sizing:border-box;padding:11px 14px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px solid var(--muted-border);color:inherit;font:inherit;font-style:italic;text-align:center;text-decoration:none;cursor:pointer;transition:border-color .2s ease,background .2s ease,transform .15s ease}
+    .contact-row:hover,.contact-row:focus-visible{border-color:var(--accent);background:rgba(104,34,179,0.12)}
+    .contact-row:active{transform:scale(.98)}
+    .contact-value{color:var(--accent)}
+    .copy-hint{position:absolute;right:10px;top:50%;transform:translateY(-50%) scale(.9);padding:2px 8px;border-radius:999px;background:var(--accent);color:#fff;font-size:.72rem;font-style:normal;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease}
+    .copy-hint.show{opacity:1;transform:translateY(-50%) scale(1)}
     .contact-panel.open{pointer-events:auto;opacity:1}
-    .contact-panel.open .contact-overlay{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);opacity:1}
-    .contact-panel.open .contact-inner{transform:translateY(0) scale(1);opacity:1}
-    .contact-close{position:absolute;right:14px;top:12px;background:transparent;border:0;color:var(--muted);font-size:1.1rem}
+    .contact-panel.open .contact-overlay{opacity:1;transition:opacity .35s ease}
+    .contact-panel.open .contact-inner{transform:translateY(0) scale(1);opacity:1;transition:transform .55s cubic-bezier(.2,1.25,.35,1) .1s,opacity .3s ease .1s}
+    /* Card and backdrop fade out after the cat's pieces have started flying. */
+    .contact-panel.closing .contact-inner{transform:translateY(14px) scale(.96);opacity:0;transition:transform .4s ease .5s,opacity .35s ease .5s}
+    .contact-panel.closing .contact-overlay{opacity:0;transition:opacity .45s ease .7s}
+    .contact-close{position:absolute;right:12px;top:12px;width:32px;height:32px;display:grid;place-items:center;padding:0;border-radius:50%;background:rgba(255,255,255,0.05);border:1px solid var(--muted-border);color:var(--muted);font-size:.95rem;cursor:pointer;transition:background .2s ease,color .2s ease,border-color .2s ease}
+    .contact-close:hover,.contact-close:focus-visible{background:rgba(104,34,179,0.25);border-color:var(--accent);color:#fff}
     .contact-panel h3{margin:6px 0 8px;color:var(--accent)}
     .contact-panel a{color:var(--accent)}
   </style>
@@ -367,7 +352,152 @@ const base = import.meta.env.BASE_URL;
             mobileCharacterToggle.setAttribute('aria-expanded', String(isOpen));
           });
         }
+        const confettiBox = panel.querySelector<HTMLElement>('.confetti');
+        const shardBox = panel.querySelector<HTMLElement>('.shards');
+        const colors = ['#ff5e7e','#ffb470','#ffd36b','#7ee4a3','#7ec9ff','#c58cff','#ff8fcf','#ffd2a6'];
+        const rand = (min: number, max: number) => min + Math.random() * (max - min);
+        const reduceMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        let confettiTimer: number | undefined;
+        type Particle = { el: HTMLElement; vx: number; vy: number; vr: number; life: number; drag: number; delay: number; born?: number };
+        const GRAVITY = 1500; // px/s^2
+        let particles: Particle[] = [];
+        let fxFrame = 0;
+        let fxResolvers: Array<() => void> = [];
+        const stopFx = function(){
+          if (fxFrame) window.cancelAnimationFrame(fxFrame);
+          fxFrame = 0;
+          particles = [];
+          fxResolvers.forEach((resolve) => resolve());
+          fxResolvers = [];
+        };
+        // Ballistic motion: x follows drag-damped velocity, y follows velocity plus gravity, so paths arc.
+        const launch = function(batch: Particle[]): Promise<void> {
+          const launchedAt = performance.now();
+          batch.forEach((p) => { p.born = launchedAt; });
+          particles.push(...batch);
+          const done = new Promise<void>((resolve) => fxResolvers.push(resolve));
+          if (fxFrame) return done;
+          const tick = function(now: number){
+            particles = particles.filter((p) => {
+              const age = (now - p.born!) / 1000 - p.delay;
+              if (age < 0) return true;
+              if (age >= p.life) { p.el.remove(); return false; }
+              const x = p.drag > 0 ? p.vx * (1 - Math.exp(-p.drag * age)) / p.drag : p.vx * age;
+              const y = p.vy * age + .5 * GRAVITY * age * age;
+              const fade = Math.min(1, (p.life - age) / (p.life * .3));
+              p.el.style.opacity = String(fade);
+              p.el.style.transform = `translate(${x}px,${y}px) rotate(${p.vr * age}deg)`;
+              return true;
+            });
+            if (particles.length) {
+              fxFrame = window.requestAnimationFrame(tick);
+            } else {
+              fxFrame = 0;
+              fxResolvers.forEach((resolve) => resolve());
+              fxResolvers = [];
+            }
+          };
+          fxFrame = window.requestAnimationFrame(tick);
+          return done;
+        };
+        const clearFx = function(){
+          if (confettiTimer) window.clearTimeout(confettiTimer);
+          confettiTimer = undefined;
+          stopFx();
+          if (confettiBox) confettiBox.replaceChildren();
+          if (shardBox) shardBox.replaceChildren();
+        };
+        // Runs after the cat finishes sliding in.
+        const burstConfetti = function(){
+          if (!confettiBox || reduceMotion()) return;
+          confettiBox.replaceChildren();
+          const count = Math.round(rand(40, 64));
+          const batch: Particle[] = [];
+          for (let i = 0; i < count; i += 1) {
+            const piece = document.createElement('span');
+            piece.className = 'piece';
+            const w = rand(6, 12);
+            piece.style.width = `${w}px`;
+            piece.style.height = `${Math.random() < .4 ? w : w * rand(.4, .7)}px`;
+            piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+            if (Math.random() < .25) piece.style.borderRadius = '50%';
+            confettiBox.appendChild(piece);
+            const angle = rand(-Math.PI * .92, -Math.PI * .08);
+            const speed = rand(450, 1100);
+            batch.push({
+              el: piece,
+              vx: Math.cos(angle) * speed,
+              vy: Math.sin(angle) * speed,
+              vr: rand(-900, 900),
+              life: rand(1.8, 2.8),
+              drag: 1.1,
+              delay: rand(0, .08)
+            });
+          }
+          void launch(batch);
+        };
+        const explodeCat = function(cat: HTMLImageElement): Promise<void> {
+          if (!shardBox || reduceMotion()) return Promise.resolve();
+          shardBox.replaceChildren();
+          const size = 72;
+          const n = 4;
+          const cell = size / n;
+          const src = cat.currentSrc || cat.src;
+          const batch: Particle[] = [];
+          for (let r = 0; r < n; r += 1) {
+            for (let c = 0; c < n; c += 1) {
+              const shard = document.createElement('span');
+              shard.className = 'shard';
+              shard.style.cssText = `left:${c * cell}px;top:${r * cell}px;width:${cell}px;height:${cell}px;background:url("${src}") ${-c * cell}px ${-r * cell}px / ${size}px ${size}px no-repeat`;
+              shardBox.appendChild(shard);
+              const dx = (c + .5) * cell - size / 2;
+              const dy = (r + .5) * cell - size / 2;
+              const len = Math.hypot(dx, dy) || 1;
+              const speed = rand(500, 1000);
+              batch.push({
+                el: shard,
+                vx: (dx / len) * speed + rand(-120, 120),
+                vy: (dy / len) * speed - rand(150, 450),
+                vr: rand(-720, 720),
+                life: rand(1.1, 1.6),
+                drag: 0,
+                delay: 0
+              });
+            }
+          }
+          return launch(batch);
+        };
+        const copyBtn = panel.querySelector<HTMLButtonElement>('#copy-discord');
+        const copyHint = copyBtn?.querySelector<HTMLElement>('.copy-hint');
+        let copyTimer: number | undefined;
+        copyBtn?.addEventListener('click', async function(){
+          const text = copyBtn.dataset.copy ?? '';
+          let ok = false;
+          try {
+            await navigator.clipboard.writeText(text);
+            ok = true;
+          } catch {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.cssText = 'position:fixed;opacity:0';
+            document.body.appendChild(ta);
+            ta.select();
+            ok = document.execCommand('copy');
+            ta.remove();
+          }
+          if (!copyHint) return;
+          copyHint.textContent = ok ? 'copied!' : 'copy failed';
+          copyHint.classList.add('show');
+          if (copyTimer) window.clearTimeout(copyTimer);
+          copyTimer = window.setTimeout(() => copyHint.classList.remove('show'), 1600);
+        });
+        const modalTop = panel.querySelector<HTMLElement>('.modal-top');
+        // Confetti fires when the cat finishes pulling in.
+        modalTop?.addEventListener('animationend', function(e){
+          if (e.target === modalTop && e.animationName.includes('cat-slide-in') && panel.classList.contains('open') && !panel.classList.contains('closing')) burstConfetti();
+        });
         function openPanel(){
+          clearFx();
           panel.classList.remove('closing');
           panel.classList.add('open');
           panel.setAttribute('aria-hidden','false');
@@ -376,11 +506,15 @@ const base = import.meta.env.BASE_URL;
           if(focusable) focusable.focus();
         }
         function closePanel(){
-          if (panel.classList.contains('closing')) return;
+          if (!panel.classList.contains('open') || panel.classList.contains('closing')) return;
           panel.classList.add('closing');
+          if (confettiTimer) window.clearTimeout(confettiTimer);
+          confettiTimer = undefined;
+          confettiBox?.replaceChildren();
 
-            const modalCat = panel.querySelector('.modal-cat');
+            const modalCat = panel.querySelector<HTMLImageElement>('.modal-cat');
             const finishClose = function(){
+              clearFx();
               panel.classList.remove('closing');
               panel.classList.remove('open');
               panel.setAttribute('aria-hidden','true');
@@ -389,12 +523,7 @@ const base = import.meta.env.BASE_URL;
             };
 
           if (modalCat) {
-            const handler = function(e: Event){
-              if (e.target !== modalCat) return;
-              modalCat.removeEventListener('animationend', handler);
-              finishClose();
-            };
-            modalCat.addEventListener('animationend', handler);
+            void explodeCat(modalCat).then(finishClose);
           } else {
             finishClose();
           }

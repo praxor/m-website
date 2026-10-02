@@ -1,3 +1,6 @@
+---
+import { Image } from 'astro:assets';
+---
 <!doctype html>
 <html lang="en">
   <head>
@@ -17,7 +20,7 @@
   <body>
     <main>
       <p class="surprise-label">i love and hate you all, from the bottom of my heart.</p>
-      <img src="/media/res/jumbos.png" alt="frienemies" />
+      <Image src="/media/res/jumbos.png" alt="frienemies" width={2001} height={2001} loading="eager" decoding="async" />
       <a href="/">go back home</a>
     </main>
   </body>

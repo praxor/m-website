@@ -1,0 +1,325 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import { fanartByNumber } from '../data/fanart';
+
+const piece = (number: number) => {
+  const image = fanartByNumber.get(number);
+  if (!image) throw new Error(`Missing fanart piece ${number}`);
+  return { ...image, alt: `Fanart piece ${number} by ${image.artist}` };
+};
+
+const concepts = [
+  {
+    number: '01',
+    title: 'Feature and side stack',
+    layout: 'feature',
+    motion: 'float',
+    tone: 'blue',
+    images: [piece(1), piece(4), piece(5)],
+  },
+  {
+    number: '02',
+    title: 'Staggered pair',
+    layout: 'diptych',
+    motion: 'light',
+    tone: 'cyan',
+    images: [piece(6), piece(9)],
+  },
+  {
+    number: '03',
+    title: 'Centered triptych',
+    layout: 'triptych',
+    motion: 'bounce',
+    tone: 'amber',
+    images: [piece(10), piece(11), piece(13)],
+  },
+  {
+    number: '04',
+    title: 'Uneven split',
+    layout: 'split',
+    motion: 'still',
+    tone: 'magenta',
+    images: [piece(14), piece(15)],
+  },
+  {
+    number: '05',
+    title: 'Balanced pair',
+    layout: 'balanced',
+    motion: 'light',
+    tone: 'violet',
+    images: [piece(16), piece(18)],
+  },
+  {
+    number: '06',
+    title: 'Wide and narrow',
+    layout: 'offset',
+    motion: 'float',
+    tone: 'charcoal',
+    images: [piece(19), piece(20)],
+  },
+  {
+    number: '07',
+    title: 'Open diptych',
+    layout: 'open',
+    motion: 'still',
+    tone: 'slate',
+    images: [piece(21), piece(22)],
+  },
+  {
+    number: '08',
+    title: 'Vertical stack',
+    layout: 'stack',
+    motion: 'bounce',
+    tone: 'red',
+    images: [piece(23), piece(24)],
+  },
+];
+---
+
+<Layout title="about collage review" description="eight fanart collage concepts.">
+  <main class="review-page">
+    <header class="review-header">
+      <p class="review-kicker">ABOUT PAGE</p>
+      <h1>Fanart collage review</h1>
+    </header>
+
+    <section class="concept-grid" aria-label="Eight fanart collage concepts">
+      {concepts.map((concept) => (
+        <article class="concept" data-tone={concept.tone}>
+          <header class="concept-heading">
+            <span class="concept-number">{concept.number}</span>
+            <h2>{concept.title}</h2>
+          </header>
+          <div class:list={['collage-stage', `layout-${concept.layout}`, `motion-${concept.motion}`]}>
+            {concept.images.map((image) => (
+              <figure class="art-piece">
+                <div class="art-frame">
+                  <Image src={image.src} alt={image.alt} width={image.width} height={image.height} loading="lazy" decoding="async" />
+                </div>
+                <figcaption>{image.artist}</figcaption>
+              </figure>
+            ))}
+          </div>
+        </article>
+      ))}
+    </section>
+
+    <a class="back-link" href="/about">back to about</a>
+  </main>
+</Layout>
+
+<style>
+  .review-page {
+    width: min(100% - 2rem, 1240px);
+    margin: 0 auto;
+    padding: 2.5rem 0 5rem;
+  }
+
+  .review-header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(177, 153, 255, 0.2);
+  }
+
+  .review-kicker {
+    margin: 0 0 0.5rem;
+    color: #a99af2;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .review-header h1 {
+    margin: 0;
+    color: #f3efff;
+    font-size: 2.5rem;
+    line-height: 1.1;
+  }
+
+  .concept-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  .concept {
+    --frame-color: #a5caff;
+    --light-color: rgba(115, 177, 255, 0.36);
+    --frame-width: 2px;
+    position: relative;
+    padding: 0.55rem;
+  }
+
+  .concept[data-tone="cyan"] { --frame-color: #65e4e5; --light-color: rgba(75, 237, 238, 0.36); }
+  .concept[data-tone="amber"] { --frame-color: #f2c77c; --light-color: rgba(242, 199, 124, 0.36); --frame-width: 3px; }
+  .concept[data-tone="magenta"] { --frame-color: #f4a3c7; --light-color: rgba(244, 163, 199, 0.36); }
+  .concept[data-tone="violet"] { --frame-color: #c0a4ff; --light-color: rgba(192, 164, 255, 0.36); --frame-width: 3px; }
+  .concept[data-tone="charcoal"] { --frame-color: #d1d0ca; --light-color: rgba(209, 208, 202, 0.3); }
+  .concept[data-tone="slate"] { --frame-color: #92d5d5; --light-color: rgba(146, 213, 213, 0.34); --frame-width: 3px; }
+  .concept[data-tone="red"] { --frame-color: #ffaaa1; --light-color: rgba(255, 115, 126, 0.36); --frame-width: 3px; }
+
+  .concept-heading {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    margin-bottom: 0.55rem;
+  }
+
+  .concept-number {
+    color: var(--frame-color);
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 0.8rem;
+  }
+
+  .concept-heading h2 {
+    margin: 0;
+    color: #f3efff;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .collage-stage {
+    position: relative;
+    display: grid;
+    gap: 0.85rem;
+    min-height: 18rem;
+    overflow: visible;
+    isolation: isolate;
+  }
+
+  .collage-stage::before {
+    position: absolute;
+    z-index: 0;
+    top: -8%;
+    left: 34%;
+    width: 5rem;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--light-color);
+    filter: blur(20px);
+    content: "";
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  .art-piece {
+    z-index: 1;
+    display: flex;
+    min-width: 0;
+    min-height: 0;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin: 0;
+  }
+
+  .art-frame {
+    display: grid;
+    min-width: 0;
+    min-height: 0;
+    flex: 1;
+    place-items: center;
+    overflow: visible;
+  }
+
+  .art-frame img {
+    display: block;
+    width: auto;
+    height: auto;
+    box-sizing: border-box;
+    max-width: 100%;
+    max-height: 100%;
+    border: var(--frame-width) solid var(--frame-color);
+    object-fit: contain;
+    object-position: center;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28);
+  }
+
+  .art-piece figcaption {
+    overflow: hidden;
+    color: #bfb6d1;
+    font-size: 0.68rem;
+    line-height: 1.2;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .layout-feature { grid-template-columns: 1.15fr 0.85fr; grid-template-rows: 1fr 1fr; }
+  .layout-feature .art-piece:first-child { grid-row: 1 / 3; }
+
+  .layout-diptych { grid-template-columns: 1fr 1fr; align-items: center; }
+  .layout-diptych .art-piece:first-child { height: 88%; transform: translateY(-0.3rem); }
+  .layout-diptych .art-piece:last-child { height: 88%; transform: translateY(0.3rem); }
+
+  .layout-triptych { grid-template-columns: 0.85fr 1.2fr 0.85fr; align-items: center; }
+  .layout-triptych .art-piece:first-child,
+  .layout-triptych .art-piece:last-child { height: 78%; }
+
+  .layout-split { grid-template-columns: 0.9fr 1.1fr; }
+  .layout-split .art-piece:first-child { height: 91%; align-self: start; }
+  .layout-split .art-piece:last-child { height: 91%; align-self: end; }
+
+  .layout-balanced { grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .layout-balanced .art-piece:first-child { height: 83%; align-self: start; }
+  .layout-balanced .art-piece:last-child { height: 83%; align-self: end; }
+
+  .layout-offset { grid-template-columns: 1.25fr 0.75fr; align-items: center; }
+  .layout-offset .art-piece:first-child { height: 90%; }
+  .layout-offset .art-piece:last-child { height: 76%; }
+
+  .layout-open { grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .layout-open .art-piece:first-child { height: 88%; align-self: end; }
+  .layout-open .art-piece:last-child { height: 88%; align-self: start; }
+
+  .layout-stack { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; }
+  .layout-stack .art-piece { width: 74%; justify-self: center; }
+
+  .motion-float .art-piece:nth-child(2) { animation: gentle-drift 6s ease-in-out infinite; }
+  .motion-bounce .art-piece:last-child { animation: gentle-bounce 4.8s ease-in-out infinite; }
+  .motion-light::before {
+    opacity: 1;
+    animation: light-drift 8s ease-in-out infinite alternate;
+  }
+  .motion-light .art-piece:first-child { justify-self: start; width: 92%; }
+  .motion-light .art-piece:last-child { justify-self: end; width: 92%; }
+
+  .back-link {
+    display: inline-block;
+    margin-top: 1.5rem;
+    color: #c9baff;
+    font-weight: 600;
+  }
+
+  .back-link:focus-visible { outline: 2px solid #c9baff; outline-offset: 4px; }
+
+  @keyframes gentle-drift {
+    50% { translate: 0 -4px; }
+  }
+
+  @keyframes gentle-bounce {
+    50% { translate: 0 -5px; }
+  }
+
+  @keyframes light-drift {
+    from { left: 34%; top: -8%; }
+    to { left: 54%; top: 64%; }
+  }
+
+  @media (max-width: 760px) {
+    .review-page { width: min(100% - 1.5rem, 560px); padding-top: 1.5rem; }
+    .review-header h1 { font-size: 2rem; }
+    .concept-grid { grid-template-columns: 1fr; gap: 0.9rem; }
+    .concept { padding: 0.8rem; }
+    .collage-stage { gap: 0.65rem; }
+    .layout-triptych { grid-template-columns: 1fr 1fr; }
+    .layout-triptych .art-piece:nth-child(2) { grid-column: 1 / 3; grid-row: 1; }
+    .layout-triptych .art-piece:first-child { grid-column: 1; grid-row: 2; }
+    .layout-triptych .art-piece:last-child { grid-column: 2; grid-row: 2; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .collage-stage::before,
+    .art-piece { animation: none !important; }
+  }
+</style>
