@@ -25,6 +25,12 @@
       "artist": "praxor",
       "src": "/musicplayer/music/stores/cfc.m4a",
       "duration": "1:45"
+    },
+    {
+      "title": "sleep number siesta",
+      "artist": "praxor",
+      "src": "/musicplayer/music/stores/sns.m4a",
+      "duration": "1:10"
     }
   ]
 }
