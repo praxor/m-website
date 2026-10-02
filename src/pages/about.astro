@@ -717,7 +717,11 @@ import { fanartOptions } from '../data/fanart';
   };
 
   let fanartResizeTimer: number | undefined;
+  let fanartLastWidth = window.innerWidth;
   window.addEventListener('resize', () => {
+    // Scrolling on mobile fires height-only resizes (address bar); ignore them.
+    if (window.innerWidth === fanartLastWidth) return;
+    fanartLastWidth = window.innerWidth;
     if (fanartResizeTimer !== undefined) window.clearTimeout(fanartResizeTimer);
     fanartResizeTimer = window.setTimeout(initializeFanartColumns, 120);
   });
