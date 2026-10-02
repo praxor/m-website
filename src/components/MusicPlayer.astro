@@ -44,7 +44,7 @@ import { Image } from 'astro:assets';
 </div>
 
 <style>
-	.music-player{position:fixed;left:50%;bottom:12px;z-index:200;width:min(720px,calc(100% - 28px));transform:translateX(-50%);background:var(--card);border:1px solid var(--muted-border);border-radius:9px;color:var(--text);overflow:visible;pointer-events:auto;isolation:isolate;transition:var(--theme-transition),background-color .22s ease,color .22s ease,border-color .22s ease}
+	.music-player{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));z-index:200;width:min(720px,calc(100% - 28px));transform:translateX(-50%);background:var(--card);border:1px solid var(--muted-border);border-radius:9px;color:var(--text);overflow:visible;pointer-events:auto;isolation:isolate;transition:var(--theme-transition),background-color .22s ease,color .22s ease,border-color .22s ease}
 	.music-player[hidden]{display:none}
 	.music-player.player-entering{animation:music-player-enter .58s cubic-bezier(.2,.9,.2,1) both}
 	@keyframes music-player-enter{from{opacity:0;transform:translate(-50%,24px) scale(.98)}to{opacity:1;transform:translate(-50%,0) scale(1)}}
@@ -78,6 +78,7 @@ import { Image } from 'astro:assets';
 	.music-volume input{width:58px}
 	.music-playlist{--playlist-max-height:min(260px,calc(100dvh - 120px));position:absolute;left:0;bottom:calc(100% + 8px);z-index:90;box-sizing:border-box;width:100%;max-height:var(--playlist-max-height);overflow-y:auto;border:1px solid var(--muted-border);border-radius:9px;background:var(--card);padding:4px;scrollbar-width:thin;scrollbar-color:var(--accent-dark) transparent;box-shadow:0 -10px 30px rgba(4,2,10,.28)}
 	.music-playlist:not([hidden]){animation:music-playlist-in .24s cubic-bezier(.2,.9,.2,1) both}
+	.music-playlist.playlist-settled:not(.playlist-closing){animation:none}
 	.music-playlist.playlist-closing{animation:music-playlist-out .18s ease both}
 	@keyframes music-playlist-in{from{opacity:0;transform:translateY(-7px);max-height:0}to{opacity:1;transform:translateY(0);max-height:var(--playlist-max-height)}}
 	@keyframes music-playlist-out{from{opacity:1;transform:translateY(0);max-height:var(--playlist-max-height)}to{opacity:0;transform:translateY(-5px);max-height:0}}
@@ -88,10 +89,12 @@ import { Image } from 'astro:assets';
 	.music-track small{color:var(--accent)}
 	.music-track-divider{height:15px;background:var(--muted-border)}
 	.music-track-details{display:flex;min-width:0;align-items:center;gap:6px;overflow:hidden}.music-track-details strong,.music-track-details em{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.music-track-details strong{color:var(--muted);font-size:.75rem;font-weight:500}.music-track-details em{font-style:normal;font-weight:600}.music-track-details b{color:var(--accent)}.music-track time{color:var(--muted);font-size:.68rem}
-	@media (max-width:600px){.music-player{bottom:8px;width:calc(100% - 16px)}.music-player-main{grid-template-columns:minmax(0,1fr) auto;gap:5px 6px;padding:7px 7px 4px}.music-track-info{grid-column:1;grid-row:1}.music-player-tools{grid-column:2;grid-row:1}.music-transport{grid-column:1 / -1;grid-row:2;justify-content:space-between;gap:2px}.music-control{width:30px;height:30px;flex-basis:30px}.music-volume input{width:62px}.music-player-timeline{padding:0 10px 6px}.music-playlist{--playlist-max-height:min(220px,calc(100dvh - 120px))}.music-track{grid-template-columns:18px 22px 1px minmax(0,1fr) auto;gap:5px;padding:5px 6px}}
+	@media (max-width:600px){.music-player{bottom:calc(8px + env(safe-area-inset-bottom));width:calc(100% - 16px)}.music-player-main{grid-template-columns:minmax(0,1fr) auto;gap:5px 6px;padding:7px 7px 4px}.music-track-info{grid-column:1;grid-row:1}.music-player-tools{grid-column:2;grid-row:1}.music-transport{grid-column:1 / -1;grid-row:2;justify-content:space-between;gap:2px}.music-control{width:30px;height:30px;flex-basis:30px}.music-volume input{width:62px}.music-player-timeline{padding:0 10px 6px}.music-playlist{--playlist-max-height:min(220px,calc(100dvh - 120px))}.music-track{grid-template-columns:18px 22px 1px minmax(0,1fr) auto;gap:5px;padding:5px 6px}}
 </style>
 
 <style is:global>
+	/* The view-transition-name on this wrapper makes it a stacking context; without a z-index, page cards (z-index:1) paint over the player. */
+	#music-player-shell{position:relative;z-index:200}
 	#persistent-music-player .music-track{width:100%;display:grid;grid-template-columns:18px 24px 1px minmax(0,1fr) auto;align-items:center;gap:7px;padding:6px 8px;border:1px solid transparent;border-radius:5px;background:transparent;color:var(--muted);font:inherit;font-size:.78rem;text-align:left;cursor:pointer}
 	#persistent-music-player .music-track:hover,#persistent-music-player .music-track:focus-visible,#persistent-music-player .music-track.active{background:var(--accent-10);border-color:var(--muted-border);color:var(--text)}
 	#persistent-music-player .music-track.active{border-color:var(--accent)}
@@ -658,6 +661,7 @@ import { Image } from 'astro:assets';
 		if (actionButton.dataset.action === 'playlist' && playlist && playlistToggle) {
 			const isOpen = !playlist.hidden;
 			if (isOpen) {
+				playlist.classList.remove('playlist-settled');
 				playlist.classList.add('playlist-closing');
 				playlist.addEventListener('animationend', () => {
 					playlist.hidden = true;
@@ -665,6 +669,7 @@ import { Image } from 'astro:assets';
 				}, { once: true });
 			} else {
 				playlist.hidden = false;
+				playlist.addEventListener('animationend', () => playlist.classList.add('playlist-settled'), { once: true });
 			}
 			playlistToggle.setAttribute('aria-expanded', String(!isOpen));
 		}
@@ -741,6 +746,7 @@ import { Image } from 'astro:assets';
 	});
 
 	void loadPlaylist();
+	showPlayer();
 	resetRollingCats();
 	rollingFrame = requestAnimationFrame(rollingAnimationLoop);
 	};
