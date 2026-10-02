@@ -75,6 +75,7 @@ import Layout from '../layouts/Layout.astro';
   let landingAt = 0;
   let totalPoints = 0;
   let dropFinalized = false;
+  let catActive = false;
   let animationFrame = 0;
   const slotCount = 7;
   const slotPoints = [100, 50, 25, 10, 25, 50, 100];
@@ -105,6 +106,7 @@ import Layout from '../layouts/Layout.astro';
 
   const createBoard = () => {
     if (!canvas) return;
+    spawnAt = 0;
     world = new planck.World(planck.Vec2(0, 10));
     const worldWidth = width / scale;
     const worldHeight = height / scale;
@@ -145,6 +147,7 @@ import Layout from '../layouts/Layout.astro';
   const spawnCat = (worldWidth: number) => {
     landingAt = 0;
     dropFinalized = false;
+    catActive = true;
     catBody = world.createDynamicBody({
       position: planck.Vec2(2 + Math.random() * (worldWidth - 4), .35),
       linearVelocity: planck.Vec2((Math.random() - .5) * 1.2, 0),
@@ -235,7 +238,7 @@ import Layout from '../layouts/Layout.astro';
     if (!world || !catBody) return;
     world.step(1 / 60, 8, 3);
     const now = performance.now();
-    if (catBody.getWorld()) {
+    if (catActive) {
       const position = catBody.getPosition();
       const velocity = catBody.getLinearVelocity();
       const worldHeight = height / scale;
@@ -258,6 +261,7 @@ import Layout from '../layouts/Layout.astro';
             dropFinalized = true;
           }
           world.destroyBody(catBody);
+          catActive = false;
           spawnAt = now + 700;
           landingAt = 0;
         }

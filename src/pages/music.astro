@@ -78,6 +78,7 @@ const base = import.meta.env.BASE_URL;
   const tree = document.querySelector<HTMLElement>('.music-tree');
   const treeToggle = document.querySelector<HTMLButtonElement>('#music-tree-toggle');
 
+  let playlistRequestId = 0;
   const formatDuration = (seconds: number) => `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, '0')}`;
   type EnrichedTrack = { title?: string; artist?: string; src?: string; duration?: string };
   const enrichTrack = async (track: { title?: string; artist?: string; src?: string; duration?: string }): Promise<EnrichedTrack> => {
@@ -98,6 +99,7 @@ const base = import.meta.env.BASE_URL;
 
   const openPlaylist = async (button: HTMLButtonElement) => {
     if (!workspaceTitle || !workspaceDescription || !workspaceCount || !workspaceTracks) return;
+    const requestId = ++playlistRequestId;
     playlistButtons.forEach((item) => item.classList.toggle('active', item === button));
     if (tree && window.matchMedia('(max-width: 600px)').matches) {
       tree.classList.add('collapsed');
@@ -111,6 +113,7 @@ const base = import.meta.env.BASE_URL;
       if (!response.ok) throw new Error(`Playlist request failed: ${response.status}`);
       const data = await response.json() as { description?: string; tracks?: Array<{ title?: string; artist?: string; src?: string; duration?: string }> };
       const tracks = await Promise.all((data.tracks || []).map(enrichTrack));
+      if (requestId !== playlistRequestId) return;
       workspaceDescription.textContent = data.description || 'a small pile of sounds.';
       workspaceCount.textContent = `${tracks.length} track${tracks.length === 1 ? '' : 's'}`;
       tracks.forEach((track, index) => {
@@ -125,6 +128,7 @@ const base = import.meta.env.BASE_URL;
         workspaceTracks.append(trackButton);
       });
     } catch {
+      if (requestId !== playlistRequestId) return;
       workspaceDescription.textContent = 'could not open this file.';
       workspaceCount.textContent = '';
     }

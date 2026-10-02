@@ -710,6 +710,12 @@ import { Image } from 'astro:assets';
 		else selectTrack(trackIndex);
 	});
 
+	document.addEventListener('click', (event) => {
+		// Mouse clicks (detail > 0) shouldn't leave buttons focused, or Space re-triggers them instead of play/pause.
+		const button = (event.target as HTMLElement).closest<HTMLButtonElement>('button');
+		if (button && event.detail > 0) requestAnimationFrame(() => button.blur());
+	});
+
 	document.addEventListener('keydown', (event) => {
 		if (!audio || currentTrack < 0 || event.ctrlKey || event.metaKey || event.altKey) return;
 		const target = event.target as HTMLElement;

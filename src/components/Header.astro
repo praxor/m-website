@@ -148,8 +148,8 @@ const base = import.meta.env.BASE_URL;
 
   <style>
     .contact-panel{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:60;pointer-events:none;opacity:0;transition:opacity .28s ease}
-    .contact-panel .contact-overlay{position:absolute;inset:0;background:rgba(6,4,18,0.6);opacity:0;transition:opacity .28s ease}
-    .contact-panel .contact-inner{position:relative;z-index:2;max-width:380px;width:calc(100% - 40px);background:radial-gradient(120% 80% at 50% 0%, rgba(104,34,179,0.32), transparent 70%), var(--card);border:1px solid rgba(139,92,214,0.35);padding:48px 22px 22px;border-radius:18px;box-shadow:0 24px 70px rgba(4,2,10,0.65), 0 0 0 1px rgba(104,34,179,0.12), 0 0 48px rgba(104,34,179,0.18);transform:translateY(24px) scale(.92);opacity:0;transition:transform .3s ease,opacity .2s ease}
+    .contact-panel .contact-overlay{position:absolute;inset:0;background:color-mix(in srgb,var(--bg) 72%,transparent);opacity:0;transition:opacity .28s ease}
+    .contact-panel .contact-inner{position:relative;z-index:2;max-width:380px;width:calc(100% - 40px);background:radial-gradient(120% 80% at 50% 0%, color-mix(in srgb,var(--accent) 32%,transparent), transparent 70%), var(--card);border:1px solid color-mix(in srgb,var(--accent) 45%,transparent);padding:48px 22px 22px;border-radius:18px;box-shadow:0 24px 70px rgba(0,0,0,0.65), 0 0 0 1px var(--accent-12), 0 0 48px color-mix(in srgb,var(--accent) 18%,transparent);transform:translateY(24px) scale(.92);opacity:0;transition:transform .3s ease,opacity .2s ease}
     .contact-inner::before{content:"";position:absolute;left:50%;top:0;width:96px;height:2px;transform:translateX(-50%);border-radius:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);pointer-events:none}
     .modal-top{position:absolute;left:50%;top:-36px;width:72px;height:72px;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:2}
     .modal-top .confetti{position:absolute;left:50%;top:50%;transform:translate(-50%,-10%);width:220px;height:140px;pointer-events:none;z-index:1}
@@ -176,10 +176,10 @@ const base = import.meta.env.BASE_URL;
     .contact-panel.closing .modal-cat{visibility:hidden}
     .modal-lead{margin:0;display:grid;gap:8px;color:var(--muted);font-style:italic;text-align:center;opacity:1}
     .contact-row{position:relative;display:block;width:100%;box-sizing:border-box;padding:11px 14px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px solid var(--muted-border);color:inherit;font:inherit;font-style:italic;text-align:center;text-decoration:none;cursor:pointer;transition:border-color .2s ease,background .2s ease,transform .15s ease}
-    .contact-row:hover,.contact-row:focus-visible{border-color:var(--accent);background:rgba(104,34,179,0.12)}
+    .contact-row:hover,.contact-row:focus-visible{border-color:var(--accent);background:var(--accent-12)}
     .contact-row:active{transform:scale(.98)}
     .contact-value{color:var(--accent)}
-    .copy-hint{position:absolute;right:10px;top:50%;transform:translateY(-50%) scale(.9);padding:2px 8px;border-radius:999px;background:var(--accent);color:#fff;font-size:.72rem;font-style:normal;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease}
+    .copy-hint{position:absolute;right:10px;top:50%;transform:translateY(-50%) scale(.9);padding:2px 8px;border-radius:999px;background:var(--accent);color:var(--accent-contrast);font-size:.72rem;font-style:normal;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease}
     .copy-hint.show{opacity:1;transform:translateY(-50%) scale(1)}
     .contact-panel.open{pointer-events:auto;opacity:1}
     .contact-panel.open .contact-overlay{opacity:1;transition:opacity .35s ease}
@@ -188,7 +188,7 @@ const base = import.meta.env.BASE_URL;
     .contact-panel.closing .contact-inner{transform:translateY(14px) scale(.96);opacity:0;transition:transform .4s ease .5s,opacity .35s ease .5s}
     .contact-panel.closing .contact-overlay{opacity:0;transition:opacity .45s ease .7s}
     .contact-close{position:absolute;right:12px;top:12px;width:32px;height:32px;display:grid;place-items:center;padding:0;border-radius:50%;background:rgba(255,255,255,0.05);border:1px solid var(--muted-border);color:var(--muted);font-size:.95rem;cursor:pointer;transition:background .2s ease,color .2s ease,border-color .2s ease}
-    .contact-close:hover,.contact-close:focus-visible{background:rgba(104,34,179,0.25);border-color:var(--accent);color:#fff}
+    .contact-close:hover,.contact-close:focus-visible{background:color-mix(in srgb,var(--accent) 25%,transparent);border-color:var(--accent);color:var(--text)}
     .contact-panel h3{margin:6px 0 8px;color:var(--accent)}
     .contact-panel a{color:var(--accent)}
   </style>

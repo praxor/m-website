@@ -4,10 +4,11 @@ import HomeHero from '../components/HomeHero.astro';
 import HomeFrame from '../components/HomeFrame.astro';
 import PostTypeIcon from '../components/PostTypeIcon.astro';
 import { getCollection } from 'astro:content';
+import { comparePostsByDateAndOrder } from '../data/posts';
 
 const base = import.meta.env.BASE_URL;
 const entries = await getCollection('posts', ({ data }) => !data.draft || !import.meta.env.PROD);
-const posts = entries.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const posts = entries.sort(comparePostsByDateAndOrder);
 const latestByType = new Map<string, string>();
 posts.forEach((post) => {
 	if (!latestByType.has(post.data.type)) latestByType.set(post.data.type, post.id);
@@ -103,7 +104,7 @@ const formatDate = (date: Date) => new Intl.DateTimeFormat('en-US', {
 	.post-card-footer{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:8px;color:var(--muted);font-size:.68rem}
 	.post-kind-icon{display:grid;place-items:center;width:26px;height:26px;border:1px solid var(--muted-border);color:var(--accent);font-size:1rem;line-height:1}
 	.post-card time{font-variant-numeric:tabular-nums}
-	#post-grid[hidden]{display:none}
+	#post-grid[hidden],.post-card[hidden],.empty-filter[hidden]{display:none}
 	.empty-feed{margin:20px 0;color:var(--muted);font-size:.9rem}
 	.empty-filter{grid-column:1/-1;margin:0;padding:24px 8px;color:var(--muted);font-size:.85rem}
 	@keyframes home-rise-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}

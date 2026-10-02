@@ -4,10 +4,11 @@ import HomeHero from '../../components/HomeHero.astro';
 import HomeFrame from '../../components/HomeFrame.astro';
 import PostTypeIcon from '../../components/PostTypeIcon.astro';
 import { getCollection, render } from 'astro:content';
+import { comparePostsByDateAndOrder } from '../../data/posts';
 
 export async function getStaticPaths() {
   const visiblePosts = await getCollection('posts', ({ data }) => !data.draft || !import.meta.env.PROD);
-  const sortedPosts = visiblePosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+  const sortedPosts = visiblePosts.sort(comparePostsByDateAndOrder);
   const latestByType = new Map<string, string>();
   sortedPosts.forEach((post) => {
     if (!latestByType.has(post.data.type)) latestByType.set(post.data.type, post.id);

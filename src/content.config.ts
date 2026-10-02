@@ -7,6 +7,7 @@ const posts = defineCollection({
 	schema: z.object({
 		title: z.string(),
 		date: z.coerce.date(),
+		order: z.number().int().min(1).max(100).optional(),
 		type: z.enum(['update', 'post']).default('update'),
 		description: z.string().optional(),
 		banner: z.string().optional(),
