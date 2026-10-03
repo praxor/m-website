@@ -73,7 +73,7 @@ const { items, title, label = 'artwork' } = Astro.props;
   .fanart-gallery[data-single] .gallery-step { visibility: hidden; }
   .fanart-gallery[data-single] .gallery-thumbnails,
   .fanart-gallery[data-single] .gallery-counter { display: none; }
-  .gallery-shell { box-sizing: border-box; display: grid; grid-template-rows: auto minmax(0,1fr) auto; gap: 1rem; width: min(100%,1280px); height: min(100dvh,1000px); padding: clamp(14px,3vw,32px); padding-top: calc(var(--gallery-nav-height) + clamp(14px,3vw,32px)); animation: gallery-enter .34s cubic-bezier(.2,.9,.2,1) both; }
+  .gallery-shell { box-sizing: border-box; display: grid; grid-template-rows: auto minmax(0,1fr) auto; gap: 1rem; width: min(100%,1280px); height: min(100dvh,1000px); padding: clamp(14px,3vw,32px); padding-top: calc(var(--gallery-nav-height) + 14px); animation: gallery-enter .34s cubic-bezier(.2,.9,.2,1) both; }
   .fanart-gallery.is-closing .gallery-shell { animation: gallery-exit .22s ease both; }
   .gallery-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
   .gallery-kicker { margin: 0 0 3px; color: var(--muted); font-size: .68rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
