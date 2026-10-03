@@ -128,7 +128,19 @@ export const characters: Character[] = [
     name: 'Pubbly',
     slug: 'pubbly',
     group: 'misc',
-    ...placeholder,
+    quote: '"..."',
+    image: '/media/ocs/pubbly.png',
+    info: '- age: unknown\n- race: Sprout\n- technical name: \'Pubbly\'\n- nickname: \'The Cuddler\'',
+    references: [
+      {
+        image: '',
+        caption: '',
+        alt: ''
+      }
+    ],
+    introduction: 'TBD',
+    backstory: 'TBD',
+    credits: 'praxor'
   },
   {
     name: 'High-Intelligence Business Noob',

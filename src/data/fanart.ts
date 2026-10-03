@@ -32,6 +32,7 @@ export const fanartOptions: FanartImage[] = [
   { number: 22, src: '/media/fanart/fanart22.png', width: 3072, height: 3072, artist: 'mcpattychon', caption: 'Evidence of mcpatty locking in.' },
   { number: 23, src: '/media/fanart/fanart23.png', width: 1024, height: 894, artist: 'null / roota / the_real_peter_griffin.', caption: 'I don\'t mean to glaze insanely, but SWEET MOTHER OF PEARL I was not expecting this from her.' },
   { number: 24, src: '/media/fanart/fanart24.png', width: 2048, height: 2048, artist: 'bibiipusheen.', caption: 'Chibi version of praxor!V2. Why did I get blushed twice in a row?' },
+  { number: 25, src: '/media/fanart/fanart25.png', width: 2048, height: 2048, artist: 'sillysatorugojo_', caption: 'He is justice. He is truth.' }
 ];
 
 export const fanartByNumber = new Map(fanartOptions.map((image) => [image.number, image]));
