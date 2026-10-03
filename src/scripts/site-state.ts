@@ -1,4 +1,4 @@
-import { achievements, type AchievementDefinition, type AchievementId } from '../data/achievements';
+import { achievements, type AchievementDefinition, type AchievementId, type AchievementReward } from '../data/achievements';
 import { DEFAULT_THEME, themes, type ThemeDefinition } from '../data/themes';
 
 export const STORAGE_KEY = 'praxor:site-state';
@@ -39,6 +39,12 @@ export type AchievementView = {
 	progress: number;
 	goal: number;
 	unit?: 'seconds';
+};
+
+export type AchievementUnlockDetail = {
+	id: AchievementId;
+	name: string;
+	rewards: AchievementReward[];
 };
 
 export const CHANGE_EVENT = 'site-state:change';
@@ -197,7 +203,13 @@ const announce = (id: AchievementId) => {
 	const state = entry(id);
 	if (state.notified) return;
 	state.notified = true;
-	emit(UNLOCK_EVENT, { id, name: achievements[id].name });
+	const themeRewards = themes.filter((theme) => theme.unlockedBy === id).map((theme) => ({
+		id: `theme:${theme.id}`,
+		name: `${theme.name} theme`,
+		description: `You unlocked the ${theme.name} theme.`,
+		themeId: theme.id,
+	}));
+	emit(UNLOCK_EVENT, { id, name: achievements[id].name, rewards: [...themeRewards, ...(definitionOf(id).rewards ?? [])] } satisfies AchievementUnlockDetail);
 };
 
 const syncDerived = (): boolean => {

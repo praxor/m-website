@@ -1,6 +1,7 @@
 export type AchievementDefinition = {
 	name: string;
 	description: string;
+	rewards?: readonly AchievementReward[];
 	/** Secret achievements show their name but not their condition until unlocked. */
 	secret: boolean;
 	/** Progress needed for single-step achievements. Defaults to 1. */
@@ -19,6 +20,14 @@ export type AchievementDefinition = {
 	pageSeconds?: { page: string; seconds: number };
 	/** Press-and-hold on an element marked data-hold-unlock; weekday is 0 (Sunday) to 6. */
 	hold?: { ms: number; weekday?: number };
+};
+
+export type AchievementReward = {
+	id: string;
+	name: string;
+	description: string;
+	/** Theme rewards include an ID so the shared theme preview can be shown. */
+	themeId?: string;
 };
 
 export const achievements = {

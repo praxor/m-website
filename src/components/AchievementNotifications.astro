@@ -1,0 +1,30 @@
+---
+import ThemePreview from './ThemePreview.astro';
+---
+
+<div class="sm-reward-stack" data-achievement-rewards aria-live="polite" aria-relevant="additions text"></div>
+<ThemePreview />
+
+<style is:global>
+  .sm-reward-stack{position:absolute;top:calc(var(--sm-top) + 44px);right:10px;display:flex;flex-direction:column;align-items:flex-end;gap:8px;pointer-events:none}
+  .sm-reward-toast{box-sizing:border-box;display:flex;flex-direction:column;gap:9px;width:min(340px,calc(100vw - 20px));padding:12px;border:1px solid var(--accent);border-radius:8px;background:var(--card);color:var(--text);box-shadow:0 12px 30px var(--shadow-strong),0 0 18px color-mix(in srgb,var(--accent) 22%,transparent);opacity:0;pointer-events:auto;transform:translateY(-8px) scale(.98);transition:opacity .24s ease,transform .24s cubic-bezier(.2,.9,.3,1)}
+  .sm-reward-toast[data-visible="true"]{opacity:1;transform:none}
+  .sm-reward-head{display:flex;align-items:center;gap:10px}
+  .sm-reward-kicker{flex:1;color:var(--accent);font-size:.64rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+  .sm-reward-dismiss{display:grid;place-items:center;flex:0 0 28px;width:28px;height:28px;padding:0;border:1px solid var(--muted-border);border-radius:50%;background:transparent;color:var(--text);cursor:pointer}
+  .sm-reward-dismiss:hover{border-color:var(--accent);color:var(--accent)}
+  .sm-reward-dismiss:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .sm-reward-achievement{font-size:.92rem;font-weight:800}
+  .sm-reward-list{display:flex;flex-direction:column;gap:8px}
+  .sm-reward-item{display:flex;flex-direction:column;gap:3px;padding-top:8px;border-top:1px solid var(--muted-border)}
+  .sm-reward-name{font-size:.8rem;font-weight:700}
+  .sm-reward-description{margin:0;color:var(--muted);font-size:.74rem;line-height:1.4}
+  .sm-reward-preview{margin-top:4px}
+  .sm-reward-preview .sm-mini-preview{min-height:92px;padding:7px;gap:5px}
+  .sm-reward-preview .sm-mini-header{padding-bottom:4px}
+  .sm-reward-preview .sm-mini-title{font-size:.68rem}
+  .sm-reward-preview .sm-mini-panel{min-height:16px}
+  .sm-reward-preview .sm-mini-nav{font-size:.4rem}
+  @media (prefers-reduced-motion:reduce){.sm-reward-toast{transition:none;transform:none}}
+  :root[data-reduced-motion="true"] .sm-reward-toast{transition:none;transform:none}
+</style>

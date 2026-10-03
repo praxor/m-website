@@ -256,7 +256,8 @@ a:focus{outline:3px solid var(--accent-12);outline-offset:3px}
 
 /* Site themes. Each palette applies at the root, so page-specific palettes on body still win unless Force Theme is on, where it reaches every element. */
 :root[data-site-theme="praxorian"],
-:root[data-force-theme="true"][data-site-theme="praxorian"] *{
+:root[data-force-theme="true"][data-site-theme="praxorian"] *,
+:root .settings-menu .sm-theme-profile[data-site-theme="praxorian"]{
   --bg: #0b0614 !important;
   --card: #130623 !important;
   --text: #f3f0ff !important;
@@ -285,7 +286,8 @@ a:focus{outline:3px solid var(--accent-12);outline-offset:3px}
   --plinko-label: var(--accent) !important;
 }
 :root[data-site-theme="berhian"],
-:root[data-force-theme="true"][data-site-theme="berhian"] *{
+:root[data-force-theme="true"][data-site-theme="berhian"] *,
+:root .settings-menu .sm-theme-profile[data-site-theme="berhian"]{
   --bg: #050e08 !important;
   --card: #0b1a10 !important;
   --text: #eef6e6 !important;
@@ -314,7 +316,8 @@ a:focus{outline:3px solid var(--accent-12);outline-offset:3px}
   --accent-2: #e0b83a !important;
 }
 :root[data-site-theme="toohi-ian"],
-:root[data-force-theme="true"][data-site-theme="toohi-ian"] *{
+:root[data-force-theme="true"][data-site-theme="toohi-ian"] *,
+:root .settings-menu .sm-theme-profile[data-site-theme="toohi-ian"]{
   --bg: #0b0a24 !important;
   --card: #17143d !important;
   --text: #f1eeff !important;
@@ -343,7 +346,8 @@ a:focus{outline:3px solid var(--accent-12);outline-offset:3px}
   --accent-3: #ff7ad9 !important;
 }
 :root[data-site-theme="macintoshing"],
-:root[data-force-theme="true"][data-site-theme="macintoshing"] *{
+:root[data-force-theme="true"][data-site-theme="macintoshing"] *,
+:root .settings-menu .sm-theme-profile[data-site-theme="macintoshing"]{
   --bg: #ffffff !important;
   --card: #f5f5f5 !important;
   --text: #000000 !important;
@@ -372,7 +376,8 @@ a:focus{outline:3px solid var(--accent-12);outline-offset:3px}
   --accent-2: #8ccaf0 !important;
 }
 :root[data-site-theme="true-fr"],
-:root[data-force-theme="true"][data-site-theme="true-fr"] *{
+:root[data-force-theme="true"][data-site-theme="true-fr"] *,
+:root .settings-menu .sm-theme-profile[data-site-theme="true-fr"]{
   --bg: #03070a !important;
   --card: #0a1215 !important;
   --text: #f3f1e2 !important;
@@ -402,7 +407,8 @@ a:focus{outline:3px solid var(--accent-12);outline-offset:3px}
 }
 
 :root[data-site-theme="praxor-pop"],
-:root[data-force-theme="true"][data-site-theme="praxor-pop"] *{
+:root[data-force-theme="true"][data-site-theme="praxor-pop"] *,
+:root .settings-menu .sm-theme-profile[data-site-theme="praxor-pop"]{
   --bg: #fff7fc !important;
   --card: #ffffff !important;
   --text: #2d2430 !important;
@@ -431,7 +437,8 @@ a:focus{outline:3px solid var(--accent-12);outline-offset:3px}
   --accent-3: #a9d8f5 !important;
 }
 :root[data-site-theme="cult"],
-:root[data-force-theme="true"][data-site-theme="cult"] *{
+:root[data-force-theme="true"][data-site-theme="cult"] *,
+:root .settings-menu .sm-theme-profile[data-site-theme="cult"]{
   --bg: #020812 !important;
   --card: #061326 !important;
   --text: #dcecff !important;
@@ -461,7 +468,8 @@ a:focus{outline:3px solid var(--accent-12);outline-offset:3px}
 }
 
 :root[data-site-theme="amoled"],
-:root[data-force-theme="true"][data-site-theme="amoled"] *{
+:root[data-force-theme="true"][data-site-theme="amoled"] *,
+:root .settings-menu .sm-theme-profile[data-site-theme="amoled"]{
   --bg: #000000 !important;
   --card: #050505 !important;
   --text: #f5f5f5 !important;

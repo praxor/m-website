@@ -455,6 +455,7 @@ const galleryItems = fanartOptions.map((art) => ({ src: art.src, alt: `Fanart pi
     });
   };
 
+  let fanartResizeTimer: number | undefined;
   let fanartLastWidth = window.innerWidth;
   window.addEventListener('resize', () => {
     // Scrolling on mobile fires height-only resizes (address bar); ignore them.

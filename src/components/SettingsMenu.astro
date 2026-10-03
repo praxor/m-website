@@ -1,4 +1,8 @@
-﻿<div class="settings-menu" data-settings-menu transition:persist="settings-menu" transition:animate="none">
+﻿---
+import AchievementNotifications from './AchievementNotifications.astro';
+---
+
+<div class="settings-menu" data-settings-menu transition:persist="settings-menu" transition:animate="none">
   <button id="settings-toggle" class="sm-toggle" type="button" aria-label="Settings and achievements" aria-haspopup="dialog" aria-expanded="false" aria-controls="settings-panel" title="settings & achievements">
     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
       <path d="M4 6h8M20 6h-2M4 12h2M14 12h6M4 18h10M20 18h-2" />
@@ -20,7 +24,17 @@
       <div id="sm-view-settings" class="sm-view" role="tabpanel" aria-labelledby="sm-tab-settings" tabindex="0">
         <fieldset class="sm-group">
           <legend>Site Theme</legend>
-          <div class="sm-themes" data-sm-themes></div>
+          <div class="sm-theme-carousel" data-sm-theme-carousel>
+            <div class="sm-carousel-controls">
+              <button class="sm-carousel-nav" type="button" data-sm-previous aria-label="Previous theme" title="Previous theme">&#8249;</button>
+              <span class="sm-carousel-position" data-sm-carousel-position aria-live="polite"></span>
+              <button class="sm-carousel-nav" type="button" data-sm-next aria-label="Next theme" title="Next theme">&#8250;</button>
+            </div>
+            <div class="sm-carousel-viewport" data-sm-carousel-viewport tabindex="0" aria-label="Theme previews">
+              <div class="sm-carousel-track" data-sm-themes role="list" aria-label="Theme choices"></div>
+            </div>
+            <div class="sm-carousel-dots" data-sm-carousel-dots role="group" aria-label="Theme preview positions"></div>
+          </div>
         </fieldset>
         <label class="sm-row">
           <span class="sm-row-text"><span class="sm-row-title">Force Theme</span><span class="sm-row-hint">Override page-specific themes with the selected theme.</span></span>
@@ -30,10 +44,10 @@
           <span class="sm-row-text"><span class="sm-row-title">Reduced Motion</span><span class="sm-row-hint">Minimize animations and movement.</span></span>
           <input class="sm-switch" type="checkbox" role="switch" data-setting="reducedMotion" />
         </label>
-        <div class="sm-danger-zone">
+        <div class="sm-danger-zone sm-theme-profile" data-site-theme="praxorian">
           <div class="sm-danger-title">Danger Zone</div>
           <div class="sm-row">
-            <span class="sm-row-text"><span class="sm-row-title">Reset Data</span><span class="sm-row-hint">Erase everything this website has saved in this browser. This cannot be undone.</span></span>
+            <span class="sm-row-text"><span class="sm-row-title">Reset Data</span><span class="sm-row-hint">Clear personalized data saved in this browser.</span></span>
             <button class="sm-danger" type="button" data-sm-reset>Reset Data</button>
           </div>
         </div>
@@ -47,22 +61,29 @@
 
     <div class="sm-confirm" data-sm-confirm data-open="false">
       <div class="sm-confirm-panel" role="alertdialog" aria-modal="true" aria-labelledby="sm-confirm-title" aria-describedby="sm-confirm-desc">
-        <div id="sm-confirm-title" class="sm-confirm-title" role="heading" aria-level="2">Reset all personalized site data?</div>
+        <div class="sm-confirm-head">
+          <div id="sm-confirm-title" class="sm-confirm-title" role="heading" aria-level="2">Reset your saved data?</div>
+          <button class="sm-confirm-close" type="button" data-sm-confirm-close aria-label="Close reset confirmation" title="Close">
+            <svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8" /></svg>
+          </button>
+        </div>
         <div id="sm-confirm-desc" class="sm-confirm-desc">
-          <div>This will erase your locally saved:</div>
-          <ul class="sm-confirm-list"><li>Settings</li><li>Theme preference</li><li>Force Theme and Reduced Motion preferences</li><li>Achievement progress</li><li>Unlocked achievement rewards, including achievement-only themes</li><li>Visited post/update tracking</li><li>Site activity/time tracking</li><li>Other locally stored personalized site data</li></ul>
-          <div>Your actual website content, posts, music files, images and other site content will NOT be deleted.</div>
-          <div class="sm-confirm-warn">This cannot be undone through the website. Are you sure?</div>
+          <div>This will erase personalized data that this website has saved in your browser, including your settings, preferences, achievement progress, and activity tracking.</div>
+          <div>This will NOT delete the website, posts, music, images, or other actual site content.</div>
+          <div class="sm-confirm-warn">This cannot be undone from the website.</div>
+          <div>Hold the button below to confirm.</div>
         </div>
         <div class="sm-confirm-actions">
-          <button class="sm-cancel" type="button" data-sm-cancel>Cancel</button>
-          <button class="sm-confirm-btn" type="button" data-sm-confirm-btn aria-disabled="true">Confirm Reset (5)</button>
+          <button class="sm-confirm-btn" type="button" data-sm-confirm-btn aria-label="Hold to confirm reset">
+            <span class="sm-confirm-progress" data-sm-confirm-progress aria-hidden="true"></span>
+            <span class="sm-confirm-label" data-sm-confirm-label>Hold to Confirm</span>
+          </button>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="sm-toasts" data-sm-toasts role="status" aria-live="polite"></div>
+  <AchievementNotifications />
 </div>
 
 <style is:global>
@@ -76,7 +97,7 @@
   .sm-toggle:focus-visible,.sm-tab:focus-visible,.sm-close:focus-visible,.sm-view:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   .sm-overlay{position:absolute;inset:0;box-sizing:border-box;display:grid;place-items:center;padding:12px;background:var(--overlay);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .22s ease,visibility .22s ease}
   .sm-overlay[data-open="true"]{opacity:1;visibility:visible;pointer-events:auto}
-  .sm-panel{box-sizing:border-box;width:min(680px,100%);max-height:min(720px,100%);display:flex;flex-direction:column;background:var(--card);color:var(--text);border:1px solid var(--muted-border);border-radius:10px;box-shadow:0 24px 70px var(--shadow-strong),0 0 0 1px var(--accent-12);transform:translateY(10px) scale(.97);transition:transform .25s cubic-bezier(.2,.9,.3,1)}
+  .sm-panel{box-sizing:border-box;width:min(680px,100%);min-width:0;max-height:min(720px,calc(100vh - 24px));max-height:min(720px,calc(100dvh - 24px));display:flex;flex-direction:column;background:var(--card);color:var(--text);border:1px solid var(--muted-border);border-radius:10px;box-shadow:0 24px 70px var(--shadow-strong),0 0 0 1px var(--accent-12);transform:translateY(10px) scale(.97);transition:transform .25s cubic-bezier(.2,.9,.3,1)}
   .sm-overlay[data-open="true"] .sm-panel{transform:none}
   .sm-head{display:flex;align-items:center;gap:14px;padding:10px 12px 0 18px;border-bottom:1px solid var(--muted-border)}
   .sm-title{margin:0;color:var(--accent);font-size:1rem;font-weight:700;letter-spacing:.14em;text-transform:lowercase}
@@ -86,18 +107,40 @@
   .sm-tab[aria-selected="true"]{border-bottom-color:var(--accent);color:var(--text)}
   .sm-close{width:32px;height:32px;margin-bottom:6px;padding:0;border:1px solid var(--muted-border);border-radius:50%;background:transparent;color:var(--muted);font-size:.85rem;cursor:pointer}
   .sm-close:hover{border-color:var(--accent);color:var(--text)}
-  .sm-view{box-sizing:border-box;display:flex;flex-direction:column;gap:16px;min-height:300px;padding:18px;overflow-y:auto}
+  .sm-view{box-sizing:border-box;display:flex;flex-direction:column;gap:16px;min-height:0;padding:18px;overflow-y:auto}
   .sm-view[hidden]{display:none}
   .sm-group{margin:0;padding:0;border:0;min-width:0}
   .sm-group legend{padding:0 0 8px;color:var(--accent);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
-  .sm-themes{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
-  .sm-theme{position:relative;display:block}
-  .sm-theme input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}
-  .sm-theme-card{display:flex;flex-direction:column;gap:7px;padding:8px;border:1px solid var(--muted-border);border-radius:8px;color:var(--muted);font-size:.82rem;font-weight:600;transition:background-color .18s ease,border-color .18s ease,color .18s ease}
-  .sm-theme-swatch{display:block;height:34px;border:1px solid rgba(128,128,128,.35);border-radius:5px}
-  .sm-theme input:hover+.sm-theme-card{background:var(--accent-10);color:var(--text)}
-  .sm-theme input:checked+.sm-theme-card{border-color:var(--accent);background:var(--accent-12);color:var(--text)}
-  .sm-theme input:focus-visible+.sm-theme-card{outline:2px solid var(--accent);outline-offset:2px}
+  .sm-theme-carousel{display:flex;flex-direction:column;gap:7px}
+  .sm-carousel-controls{display:grid;grid-template-columns:32px 1fr 32px;align-items:center;gap:8px}
+  .sm-carousel-position{color:var(--muted);font-size:.68rem;font-variant-numeric:tabular-nums;text-align:center}
+  .sm-carousel-nav{display:grid;place-items:center;width:32px;height:28px;padding:0;border:1px solid var(--muted-border);border-radius:6px;background:var(--card);color:var(--text);font-size:1.2rem;line-height:1;cursor:pointer}
+  .sm-carousel-nav:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
+  .sm-carousel-nav:disabled{opacity:.35;cursor:default}
+  .sm-carousel-viewport{overflow:hidden;padding:3px 0;touch-action:pan-y;user-select:none;cursor:grab}
+  .sm-carousel-viewport[data-dragging="true"]{cursor:grabbing}
+  .sm-carousel-viewport:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .sm-carousel-track{display:flex;align-items:stretch;gap:12px;width:100%;transition:transform .3s cubic-bezier(.2,.8,.2,1);will-change:transform}
+  .sm-theme-slide{position:relative;flex:0 0 min(82%,420px);min-width:0}
+  .sm-theme-choice{position:relative;display:flex;flex-direction:column;gap:8px;width:100%;height:100%;padding:9px;border:1px solid var(--accent);border-radius:8px;background:linear-gradient(145deg,var(--bg),var(--card) 65%,color-mix(in srgb,var(--card) 76%,var(--accent)));color:var(--text);font:inherit;text-align:left;cursor:pointer;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--accent) 12%,transparent);transition:background .18s ease,border-color .18s ease,box-shadow .18s ease}
+  .sm-theme-choice:hover{background:linear-gradient(145deg,color-mix(in srgb,var(--bg) 76%,var(--accent)),color-mix(in srgb,var(--card) 82%,var(--accent)));box-shadow:0 0 0 1px var(--accent),0 6px 16px color-mix(in srgb,var(--accent) 20%,transparent)}
+  .sm-theme-choice[aria-checked="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent),0 0 16px color-mix(in srgb,var(--accent) 28%,transparent)}
+  .sm-theme-choice:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+  .sm-theme-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:21px}
+  .sm-theme-name{font-size:.86rem;font-weight:800}
+  .sm-theme-selected{display:none;padding:3px 6px;border:1px solid var(--accent);border-radius:4px;color:var(--accent);font-size:.56rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+  .sm-theme-choice[aria-checked="true"] .sm-theme-selected{display:block}
+  .sm-theme-lock{position:absolute;inset:7px;z-index:2;display:grid;place-content:center;gap:7px;padding:12px;border:1px solid color-mix(in srgb,var(--accent) 55%,var(--muted-border));border-radius:6px;background:color-mix(in srgb,var(--bg) 82%,transparent);color:var(--text);text-align:center;backdrop-filter:blur(3px)}
+  .sm-theme-lock[hidden]{display:none}
+  .sm-theme-lock-label{display:flex;align-items:center;justify-content:center;gap:6px;color:var(--accent);font-size:.68rem;font-weight:900;letter-spacing:.1em}
+  .sm-theme-lock-help{font-size:.67rem;line-height:1.35}
+  .sm-carousel-dots{display:flex;justify-content:center;align-items:center;gap:1px;min-height:24px}
+  .sm-carousel-dot{position:relative;flex:0 0 22px;width:22px;height:22px;padding:0;border:0;border-radius:50%;background:transparent;cursor:pointer}
+  .sm-carousel-dot::before{position:absolute;top:8px;right:8px;bottom:8px;left:8px;border-radius:50%;background:var(--muted-border);content:"";transition:top .18s ease,right .18s ease,bottom .18s ease,left .18s ease,background-color .18s ease}
+  .sm-carousel-dot[aria-current="true"]::before{top:8px;right:3px;bottom:8px;left:3px;border-radius:5px;background:var(--accent)}
+  .sm-carousel-dot:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  :root[data-reduced-motion="true"] .sm-carousel-track,:root[data-reduced-motion="true"] .sm-carousel-dot{transition:none}
+  @media(prefers-reduced-motion:reduce){.sm-carousel-track,.sm-carousel-dot{transition:none}}
   .sm-row{display:flex;align-items:center;justify-content:space-between;gap:14px;cursor:pointer}
   .sm-row-text{display:flex;flex-direction:column;gap:2px;min-width:0}
   .sm-row-title{font-size:.92rem;font-weight:600}
@@ -120,36 +163,43 @@
   .sm-ach-bar i{display:block;height:100%;background:var(--accent)}
   .sm-ach-state{margin-left:auto;font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
   .sm-ach.is-unlocked .sm-ach-state{color:var(--accent)}
-  .sm-toasts{position:absolute;top:calc(var(--sm-top) + 44px);right:10px;display:flex;flex-direction:column;gap:8px;pointer-events:none}
-  .sm-toast{box-sizing:border-box;max-width:min(300px,calc(100vw - 20px));padding:10px 14px;border:1px solid var(--accent);border-radius:9px;background:var(--card);color:var(--text);box-shadow:0 12px 28px var(--shadow-soft);opacity:0;transform:translateY(-8px);transition:opacity .25s ease,transform .25s ease}
-  .sm-toast.is-visible{opacity:1;transform:none}
-  .sm-toast-label{display:block;color:var(--accent);font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
-  .sm-toast-name{display:block;margin-top:2px;font-size:.9rem;font-weight:700}
   @media (max-width:780px){.settings-menu{--sm-top:9px}}
   @media (max-width:520px){.sm-overlay{padding:8px}.sm-title{display:none}.sm-view{padding:14px}.sm-achievements{grid-template-columns:1fr}}
-  .sm-danger-zone{margin-top:auto;display:flex;flex-direction:column;gap:10px;padding-top:16px;border-top:2px dashed var(--danger)}
-  .sm-danger-title{color:var(--danger);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
-  .sm-danger,.sm-cancel,.sm-confirm-btn{flex:0 0 auto;padding:8px 14px;border-radius:8px;background:transparent;font:inherit;font-size:.82rem;font-weight:600;cursor:pointer;transition:background-color .18s ease,color .18s ease,border-color .18s ease}
-  .sm-danger{border:1px solid var(--danger);color:var(--danger)}
-  .sm-danger:hover,.sm-danger:focus-visible{background:color-mix(in srgb,var(--danger) 14%,transparent)}
-  .sm-cancel{border:1px solid var(--muted-border);color:var(--text)}
-  .sm-cancel:hover{background:var(--surface-hover);border-color:var(--accent)}
-  .sm-confirm-btn{border:1px solid var(--danger);background:var(--danger);color:#fff;font-weight:700}
-  .sm-confirm-btn[aria-disabled="true"]{opacity:.45;cursor:not-allowed}
-  .sm-danger:focus-visible,.sm-cancel:focus-visible,.sm-confirm-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-  .sm-confirm{position:absolute;inset:0;box-sizing:border-box;display:grid;place-items:center;padding:12px;background:var(--overlay);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .2s ease,visibility .2s ease}
+  .sm-danger-zone{margin-top:auto;display:flex;flex-direction:column;gap:10px;padding:14px;border:1px dashed var(--accent);border-top:2px dashed var(--accent);border-radius:8px;background:linear-gradient(135deg,color-mix(in srgb,var(--bg) 74%,var(--accent) 12%),var(--card));box-shadow:0 0 20px color-mix(in srgb,var(--accent) 12%,transparent),inset 0 0 18px color-mix(in srgb,var(--accent) 6%,transparent)}
+  .sm-danger-title{color:var(--accent);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+  .sm-danger,.sm-confirm-btn{flex:0 0 auto;padding:8px 14px;border-radius:8px;background:transparent;font:inherit;font-size:.82rem;font-weight:600;cursor:pointer;transition:background-color .18s ease,color .18s ease,border-color .18s ease}
+  .sm-danger{border:1px solid var(--accent);background:color-mix(in srgb,var(--card) 88%,var(--accent) 12%);color:var(--accent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--accent) 10%,transparent)}
+  .sm-danger:hover,.sm-danger:focus-visible{border-color:var(--accent);background:var(--accent);color:var(--accent-contrast)}
+  .sm-confirm-head{position:relative;display:flex;align-items:center;justify-content:center;min-height:30px;padding:0 34px}
+  .sm-confirm-close{position:absolute;top:0;right:0;display:grid;place-items:center;width:30px;height:30px;padding:0;border:0;border-radius:50%;background:transparent;color:#aaa;cursor:pointer;transition:background-color .16s ease,color .16s ease}
+  .sm-confirm-close:hover{background:rgba(255,255,255,.1);color:#fff}
+  .sm-confirm-close:focus-visible{outline:2px solid #fff;outline-offset:2px}
+  .sm-confirm-btn{position:relative;isolation:isolate;overflow:hidden;min-width:190px;min-height:46px;border:1px solid #fff;background:#fff;color:#000;font-weight:800;touch-action:none;-webkit-user-select:none;user-select:none}
+  .sm-confirm-btn:active{cursor:grabbing}
+  .sm-confirm-progress{position:absolute;inset:4px;z-index:-1;border-radius:4px;background:#aaa;opacity:.72;transform:scaleX(0);transform-origin:left center;transition:transform .18s ease-out}
+  .sm-confirm[data-holding="true"] .sm-confirm-progress{transition:none}
+  .sm-confirm-label{position:relative;pointer-events:none}
+  .sm-danger:focus-visible,.sm-confirm-btn:focus-visible{outline:2px solid #fff;outline-offset:3px}
+  .sm-confirm{position:absolute;inset:0;box-sizing:border-box;display:grid;place-items:center;padding:12px;background:rgba(0,0,0,.82);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .2s ease,visibility .2s ease}
   .sm-confirm[data-open="true"]{opacity:1;visibility:visible;pointer-events:auto}
-  .sm-confirm-panel{box-sizing:border-box;display:flex;flex-direction:column;gap:14px;width:min(460px,100%);max-height:100%;overflow-y:auto;padding:22px;background:var(--card);color:var(--text);border:1px solid var(--danger);border-radius:10px;box-shadow:0 24px 70px var(--shadow-strong)}
-  .sm-confirm-title{color:var(--danger);font-size:1.05rem;font-weight:700;text-align:center}
-  .sm-confirm-desc{display:flex;flex-direction:column;gap:10px;color:var(--muted);font-size:.86rem;line-height:1.5}
-  .sm-confirm-list{margin:0;padding-left:1.2rem}
-  .sm-confirm-warn{color:var(--text);font-weight:700}
-  .sm-confirm-actions{display:flex;justify-content:flex-end;gap:10px}
+  @property --sm-rainbow-angle{syntax:"<angle>";inherits:false;initial-value:0deg}
+  .sm-confirm-panel{--sm-shake-x:0px;--sm-shake-y:0px;--sm-shake-rotation:0deg;position:relative;box-sizing:border-box;display:flex;flex-direction:column;gap:16px;width:min(460px,100%);max-height:100%;overflow-y:auto;padding:22px;background:linear-gradient(#050505,#050505) padding-box,conic-gradient(from var(--sm-rainbow-angle,0deg),#ff3158 0deg,#ffb52e 52deg,#f5f13b 104deg,#38e889 156deg,#36c9ff 208deg,#536dfe 260deg,#ae69ff 312deg,#ff3158 360deg) border-box;color:#fff;border:2px solid transparent;border-radius:10px;box-shadow:0 0 7px rgba(255,255,255,.16),0 0 15px rgba(145,100,255,.12);animation:sm-rainbow-rotate 9s linear infinite;transform:translate(var(--sm-shake-x),var(--sm-shake-y)) rotate(var(--sm-shake-rotation));transition:transform .32s cubic-bezier(.2,.85,.35,1)}
+  .sm-confirm[data-holding="true"] .sm-confirm-panel{will-change:transform;transition:none}
+  .sm-confirm-panel[data-reduced-motion="true"]{animation:none;box-shadow:0 0 12px rgba(255,255,255,.2)}
+  .sm-confirm-title{color:#fff;font-size:1.05rem;font-weight:800;text-align:center}
+  .sm-confirm-desc{display:flex;flex-direction:column;gap:12px;color:#ddd;font-size:.88rem;line-height:1.55}
+  .sm-confirm-warn{color:#fff;font-weight:800}
+  .sm-confirm-actions{display:flex;justify-content:center;margin-top:4px}
+  @keyframes sm-rainbow-rotate{to{--sm-rainbow-angle:360deg}}
+  @media (prefers-reduced-motion:reduce){.sm-confirm-panel{animation:none;box-shadow:0 0 7px rgba(255,255,255,.16)}}
 </style>
 
 <script>
+  import { achievements } from '../data/achievements';
+  import { themes } from '../data/themes';
+  import { setupAchievementNotifications } from '../scripts/achievement-notifications';
   import {
-    CHANGE_EVENT, UNLOCK_EVENT, effectiveTheme, getAchievements, getAvailableThemes, getSettings, initSiteState,
+    CHANGE_EVENT, UNLOCK_EVENT, effectiveTheme, getAchievements, getSettings, initSiteState, isThemeAvailable,
     prefersReducedMotion, resetAllData, updateSettings,
   } from '../scripts/site-state';
   import { ACTIVITY_EVENT } from '../scripts/site-activity';
@@ -158,51 +208,129 @@
     const root = document.querySelector<HTMLElement>('[data-settings-menu]');
     if (!root || root.dataset.bound === 'true') return;
     root.dataset.bound = 'true';
-    initSiteState();
 
     const toggle = root.querySelector<HTMLButtonElement>('#settings-toggle')!;
     const overlay = root.querySelector<HTMLElement>('[data-sm-overlay]')!;
     const panel = root.querySelector<HTMLElement>('#settings-panel')!;
     const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-tab]'));
     const themeBox = root.querySelector<HTMLElement>('[data-sm-themes]')!;
+    const carouselViewport = root.querySelector<HTMLElement>('[data-sm-carousel-viewport]')!;
+    const carouselDots = root.querySelector<HTMLElement>('[data-sm-carousel-dots]')!;
+    const carouselPosition = root.querySelector<HTMLElement>('[data-sm-carousel-position]')!;
+    const previousThemeButton = root.querySelector<HTMLButtonElement>('[data-sm-previous]')!;
+    const nextThemeButton = root.querySelector<HTMLButtonElement>('[data-sm-next]')!;
+    const previewTemplate = root.querySelector<HTMLTemplateElement>('[data-sm-theme-preview-template]')!;
     const forceInput = root.querySelector<HTMLInputElement>('[data-setting="forceTheme"]')!;
     const motionInput = root.querySelector<HTMLInputElement>('[data-setting="reducedMotion"]')!;
     const list = root.querySelector<HTMLElement>('[data-sm-achievements]')!;
     const summary = root.querySelector<HTMLElement>('[data-sm-summary]')!;
-    const toasts = root.querySelector<HTMLElement>('[data-sm-toasts]')!;
     const achievementsView = root.querySelector<HTMLElement>('#sm-view-achievements')!;
+    const dangerZone = root.querySelector<HTMLElement>('.sm-danger-zone')!;
     const confirmBox = root.querySelector<HTMLElement>('[data-sm-confirm]')!;
     const resetButton = root.querySelector<HTMLButtonElement>('[data-sm-reset]')!;
-    const cancelButton = root.querySelector<HTMLButtonElement>('[data-sm-cancel]')!;
+    const confirmCloseButton = root.querySelector<HTMLButtonElement>('[data-sm-confirm-close]')!;
     const confirmButton = root.querySelector<HTMLButtonElement>('[data-sm-confirm-btn]')!;
 
-    const COUNTDOWN_MS = 5000;
-    let countdownTimer = 0;
-    let countdownEnd = 0;
+    const HOLD_DURATION_MS = 6700;
+    const confirmProgress = root.querySelector<HTMLElement>('[data-sm-confirm-progress]')!;
+    const confirmLabel = root.querySelector<HTMLElement>('[data-sm-confirm-label]')!;
+    let holdFrame = 0;
+    let holdStartedAt = 0;
+    let holdKind: 'pointer' | 'keyboard' | null = null;
+    let activePointerId: number | null = null;
+    let activeKey: string | null = null;
+    let resetStarted = false;
 
-    const stopCountdown = () => { window.clearInterval(countdownTimer); countdownTimer = 0; };
-    const updateCountdown = () => {
-      const left = Math.ceil((countdownEnd - performance.now()) / 1000);
-      if (left > 0) { confirmButton.textContent = `Confirm Reset (${left})`; return; }
-      stopCountdown();
-      confirmButton.setAttribute('aria-disabled', 'false');
-      confirmButton.textContent = 'CONFIRM RESET';
+    const clearHold = () => {
+      if (holdFrame) window.cancelAnimationFrame(holdFrame);
+      holdFrame = 0;
+      holdKind = null;
+      activePointerId = null;
+      activeKey = null;
+      confirmBox.removeAttribute('data-holding');
+      confirmProgress.style.transform = 'scaleX(0)';
+      confirmLabel.textContent = 'Hold to Confirm';
+      const panel = confirmBox.querySelector<HTMLElement>('.sm-confirm-panel')!;
+      panel.style.removeProperty('--sm-shake-x');
+      panel.style.removeProperty('--sm-shake-y');
+      panel.style.removeProperty('--sm-shake-rotation');
     };
-    const startCountdown = () => {
-      stopCountdown();
-      countdownEnd = performance.now() + COUNTDOWN_MS;
-      confirmButton.setAttribute('aria-disabled', 'true');
-      updateCountdown();
-      countdownTimer = window.setInterval(updateCountdown, 200);
+
+    const resetHold = () => {
+      resetStarted = false;
+      confirmButton.disabled = false;
+      clearHold();
+      confirmProgress.setAttribute('aria-valuenow', '0');
+    };
+
+    const completeReset = () => {
+      if (resetStarted) return;
+      resetStarted = true;
+      if (holdFrame) window.cancelAnimationFrame(holdFrame);
+      holdFrame = 0;
+      holdKind = null;
+      activePointerId = null;
+      activeKey = null;
+      confirmBox.removeAttribute('data-holding');
+      confirmLabel.textContent = 'Resetting...';
+      confirmButton.disabled = true;
+      resetAllData();
+      window.location.reload();
+    };
+
+    const updateHold = (now: number) => {
+      if (!holdKind) return false;
+      const progress = Math.min((now - holdStartedAt) / HOLD_DURATION_MS, 1);
+      confirmProgress.style.transform = `scaleX(${progress})`;
+      confirmProgress.setAttribute('aria-valuenow', String(Math.round(progress * 100)));
+      if (!prefersReducedMotion()) {
+        const intensity = progress * progress;
+        const amplitude = intensity * 14;
+        const elapsed = now - holdStartedAt;
+        const panel = confirmBox.querySelector<HTMLElement>('.sm-confirm-panel')!;
+        panel.style.setProperty('--sm-shake-x', `${Math.sin(elapsed / 24) * amplitude}px`);
+        panel.style.setProperty('--sm-shake-y', `${Math.cos(elapsed / 31) * amplitude * .72}px`);
+        panel.style.setProperty('--sm-shake-rotation', `${Math.sin(elapsed / 28) * intensity * 3.5}deg`);
+      }
+      if (progress >= 1) {
+        completeReset();
+        return true;
+      }
+      return false;
+    };
+
+    const animateHold = (now: number) => {
+      if (!holdKind) return;
+      if (updateHold(now)) return;
+      holdFrame = window.requestAnimationFrame(animateHold);
+    };
+
+    const startHold = (kind: 'pointer' | 'keyboard') => {
+      if (holdKind || resetStarted) return;
+      holdKind = kind;
+      holdStartedAt = performance.now();
+      confirmBox.dataset.holding = 'true';
+      confirmLabel.textContent = 'Keep holding...';
+      holdFrame = window.requestAnimationFrame(animateHold);
+    };
+
+    const finishHold = () => {
+      if (!updateHold(performance.now())) clearHold();
     };
 
     const isConfirmOpen = () => confirmBox.dataset.open === 'true';
     const setConfirmOpen = (open: boolean) => {
       if (open === isConfirmOpen()) return;
-      stopCountdown();
       confirmBox.dataset.open = String(open);
-      if (open) { startCountdown(); void confirmBox.offsetWidth; cancelButton.focus(); }
-      else resetButton.focus();
+      if (open) {
+        resetHold();
+        confirmBox.querySelector<HTMLElement>('.sm-confirm-panel')!.dataset.reducedMotion = String(prefersReducedMotion());
+        void confirmBox.offsetWidth;
+        confirmCloseButton.focus();
+      } else {
+        clearHold();
+        resetButton.focus();
+      }
     };
 
     // Background layers made inert while the modal is open.
@@ -217,6 +345,7 @@
       background().forEach((element) => { element.inert = open; });
       if (open) {
         render();
+        panel.querySelector<HTMLElement>('.sm-view:not([hidden])')!.scrollTop = 0;
         void overlay.offsetWidth;
         tabs.find((tab) => tab.getAttribute('aria-selected') === 'true')?.focus();
       } else {
@@ -229,42 +358,140 @@
         const selected = tab.dataset.tab === name;
         tab.setAttribute('aria-selected', String(selected));
         tab.tabIndex = selected ? 0 : -1;
-        root.querySelector<HTMLElement>(`#${tab.getAttribute('aria-controls')}`)!.hidden = !selected;
+        const view = root.querySelector<HTMLElement>(`#${tab.getAttribute('aria-controls')}`)!;
+        view.hidden = !selected;
+        if (selected) view.scrollTop = 0;
         if (selected && focus) tab.focus();
       });
       if (name === 'achievements') renderAchievements();
     };
 
     let themeKey = '';
+    let activeThemeIndex = 0;
+    let lastSelectedTheme = '';
+    let carouselOffset = 0;
+    let dragPointerId: number | null = null;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let dragBaseOffset = 0;
+    let dragDeltaX = 0;
+    let carouselDragging = false;
+    let suppressCardClickUntil = 0;
+
+    const layoutCarousel = (focusChoice = false) => {
+      const slides = Array.from(themeBox.querySelectorAll<HTMLElement>('[data-theme-slide]'));
+      if (!slides.length) return;
+      activeThemeIndex = Math.max(0, Math.min(activeThemeIndex, slides.length - 1));
+      const activeSlide = slides[activeThemeIndex];
+      carouselOffset = carouselViewport.clientWidth / 2 - (activeSlide.offsetLeft + activeSlide.offsetWidth / 2);
+      if (prefersReducedMotion()) themeBox.style.transition = 'none';
+      else themeBox.style.removeProperty('transition');
+      themeBox.style.transform = `translate3d(${carouselOffset}px,0,0)`;
+      themeBox.querySelectorAll<HTMLButtonElement>('[data-theme-choice]').forEach((choice, index) => {
+        choice.tabIndex = index === activeThemeIndex ? 0 : -1;
+      });
+      carouselDots.querySelectorAll<HTMLButtonElement>('[data-theme-dot]').forEach((dot, index) => {
+        dot.setAttribute('aria-current', String(index === activeThemeIndex));
+      });
+      carouselPosition.textContent = `${activeThemeIndex + 1} / ${slides.length}`;
+      previousThemeButton.disabled = activeThemeIndex === 0;
+      nextThemeButton.disabled = activeThemeIndex === slides.length - 1;
+      if (focusChoice) themeBox.querySelectorAll<HTMLButtonElement>('[data-theme-choice]')[activeThemeIndex].focus();
+    };
+
+    const setActiveTheme = (index: number, focusChoice = false) => {
+      activeThemeIndex = Math.max(0, Math.min(index, themes.length - 1));
+      layoutCarousel(focusChoice);
+    };
+
     const renderThemes = () => {
-      const available = getAvailableThemes();
-      const key = available.map((theme) => theme.id).join();
+      const key = themes.map((theme) => theme.id).join();
       if (key !== themeKey) {
         themeKey = key;
-        themeBox.replaceChildren(...available.map((theme) => {
-          const label = document.createElement('label');
-          label.className = 'sm-theme';
-          const input = document.createElement('input');
-          input.type = 'radio';
-          input.name = 'sm-theme';
-          input.value = theme.id;
-          input.addEventListener('change', () => updateSettings({ theme: theme.id }));
-          const card = document.createElement('span');
-          card.className = 'sm-theme-card';
-          const swatch = document.createElement('span');
-          swatch.className = 'sm-theme-swatch';
-          swatch.style.background = theme.swatch;
-          card.append(swatch, theme.name);
-          label.append(input, card);
-          return label;
-        }));
+        const slides = themes.map((theme, index) => {
+          const slide = document.createElement('div');
+          slide.className = 'sm-theme-slide';
+          slide.dataset.themeSlide = '';
+          slide.setAttribute('role', 'listitem');
+
+          const choice = document.createElement('button');
+          choice.type = 'button';
+          choice.className = 'sm-theme-choice sm-theme-profile';
+          choice.dataset.siteTheme = theme.id;
+          choice.dataset.themeChoice = '';
+          choice.setAttribute('aria-pressed', 'false');
+          choice.tabIndex = -1;
+          choice.addEventListener('click', () => {
+            if (!isThemeAvailable(theme.id)) return;
+            activeThemeIndex = index;
+            updateSettings({ theme: theme.id });
+          });
+
+          const meta = document.createElement('span');
+          meta.className = 'sm-theme-meta';
+          const name = document.createElement('strong');
+          name.className = 'sm-theme-name';
+          name.textContent = theme.name;
+          const selected = document.createElement('span');
+          selected.className = 'sm-theme-selected';
+          selected.textContent = 'Selected';
+          meta.append(name, selected);
+
+          const preview = previewTemplate.content.firstElementChild?.cloneNode(true) as HTMLElement;
+          preview.dataset.siteTheme = theme.id;
+          preview.style.setProperty('--sm-mini-swatch', theme.swatch);
+          preview.querySelector<HTMLElement>('[data-sm-mini-name]')!.textContent = theme.name;
+
+          const lock = document.createElement('span');
+          lock.className = 'sm-theme-lock';
+          lock.hidden = true;
+          const lockLabel = document.createElement('strong');
+          lockLabel.className = 'sm-theme-lock-label';
+          lockLabel.innerHTML = '<span aria-hidden="true">\u{1F512}\uFE0E</span> LOCKED';
+          const lockHelp = document.createElement('span');
+          lockHelp.className = 'sm-theme-lock-help';
+          lock.dataset.themeLock = '';
+          lock.append(lockLabel, lockHelp);
+          choice.append(meta, preview, lock);
+          slide.append(choice);
+
+          const dot = document.createElement('button');
+          dot.type = 'button';
+          dot.className = 'sm-carousel-dot';
+          dot.dataset.themeDot = '';
+          dot.setAttribute('aria-current', 'false');
+          dot.addEventListener('click', () => setActiveTheme(index));
+          carouselDots.append(dot);
+          return slide;
+        });
+        themeBox.replaceChildren(...slides);
       }
-      const current = effectiveTheme();
-      themeBox.querySelectorAll<HTMLInputElement>('input').forEach((input) => { input.checked = input.value === current; });
+
+      const selectedTheme = effectiveTheme();
+      if (selectedTheme !== lastSelectedTheme) {
+        lastSelectedTheme = selectedTheme;
+        const selectedIndex = themes.findIndex((theme) => theme.id === selectedTheme);
+        if (selectedIndex >= 0) activeThemeIndex = selectedIndex;
+      }
+      themes.forEach((theme, index) => {
+        const available = isThemeAvailable(theme.id);
+        const choice = themeBox.querySelectorAll<HTMLButtonElement>('[data-theme-choice]')[index];
+        const lock = choice.querySelector<HTMLElement>('[data-theme-lock]')!;
+        const dot = carouselDots.querySelectorAll<HTMLButtonElement>('[data-theme-dot]')[index];
+        const achievementName = theme.unlockedBy ? achievements[theme.unlockedBy].name : '';
+        choice.setAttribute('aria-pressed', String(theme.id === selectedTheme));
+        choice.setAttribute('aria-disabled', String(!available));
+        choice.setAttribute('aria-label', available ? `${theme.name} theme${theme.id === selectedTheme ? ', selected' : ''}` : `${theme.name} theme, locked. Unlock by completing ${achievementName}.`);
+        lock.hidden = available;
+        lock.querySelector<HTMLElement>('.sm-theme-lock-help')!.textContent = `Unlock by completing "${achievementName}".`;
+        dot.setAttribute('aria-label', `Show ${theme.name} theme preview${available ? '' : ', locked'}`);
+      });
+      layoutCarousel();
     };
 
     const renderSettings = () => {
       renderThemes();
+      dangerZone.dataset.siteTheme = effectiveTheme();
       forceInput.checked = getSettings().forceTheme;
       motionInput.checked = prefersReducedMotion();
     };
@@ -317,39 +544,119 @@
       if (!achievementsView.hidden) renderAchievements();
     };
 
-    const toastQueue: string[] = [];
-    let toastBusy = false;
-    const nextToast = () => {
-      const name = toastQueue.shift();
-      if (name === undefined) { toastBusy = false; return; }
-      toastBusy = true;
-      const toast = document.createElement('div');
-      toast.className = 'sm-toast';
-      const label = document.createElement('span');
-      label.className = 'sm-toast-label';
-      label.textContent = 'Achievement Unlocked!';
-      const title = document.createElement('span');
-      title.className = 'sm-toast-name';
-      title.textContent = name;
-      toast.append(label, title);
-      toasts.append(toast);
-      requestAnimationFrame(() => toast.classList.add('is-visible'));
-      window.setTimeout(() => {
-        toast.classList.remove('is-visible');
-        window.setTimeout(() => { toast.remove(); nextToast(); }, prefersReducedMotion() ? 0 : 300);
-      }, toastQueue.length > 0 ? 1800 : 4000);
+    const finishCarouselDrag = (event: PointerEvent, cancelled = false) => {
+      if (event.pointerId !== dragPointerId) return;
+      const wasDragging = carouselDragging;
+      const deltaX = dragDeltaX;
+      window.removeEventListener('pointermove', moveCarouselPointer);
+      window.removeEventListener('pointerup', endCarouselPointer);
+      window.removeEventListener('pointercancel', cancelCarouselPointer);
+      dragPointerId = null;
+      carouselDragging = false;
+      carouselViewport.removeAttribute('data-dragging');
+      if (!cancelled && wasDragging) {
+        suppressCardClickUntil = performance.now() + 450;
+        if (Math.abs(deltaX) >= 45) setActiveTheme(activeThemeIndex + (deltaX < 0 ? 1 : -1));
+        else layoutCarousel();
+      } else {
+        layoutCarousel();
+      }
     };
+
+    const moveCarouselPointer = (event: PointerEvent) => {
+      if (event.pointerId !== dragPointerId) return;
+      dragDeltaX = event.clientX - dragStartX;
+      const deltaY = event.clientY - dragStartY;
+      if (!carouselDragging && Math.abs(dragDeltaX) > 8 && Math.abs(dragDeltaX) > Math.abs(deltaY)) {
+        carouselDragging = true;
+        carouselViewport.dataset.dragging = 'true';
+        themeBox.style.transition = 'none';
+      }
+      if (carouselDragging) {
+        event.preventDefault();
+        themeBox.style.transform = `translate3d(${dragBaseOffset + dragDeltaX}px,0,0)`;
+      }
+    };
+
+    const endCarouselPointer = (event: PointerEvent) => finishCarouselDrag(event);
+    const cancelCarouselPointer = (event: PointerEvent) => finishCarouselDrag(event, true);
+
+    const cancelCarouselDrag = () => {
+      if (dragPointerId === null) return;
+      window.removeEventListener('pointermove', moveCarouselPointer);
+      window.removeEventListener('pointerup', endCarouselPointer);
+      window.removeEventListener('pointercancel', cancelCarouselPointer);
+      dragPointerId = null;
+      carouselDragging = false;
+      carouselViewport.removeAttribute('data-dragging');
+      layoutCarousel();
+    };
+
+    previousThemeButton.addEventListener('click', () => setActiveTheme(activeThemeIndex - 1));
+    nextThemeButton.addEventListener('click', () => setActiveTheme(activeThemeIndex + 1));
+    carouselViewport.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+        event.preventDefault();
+        setActiveTheme(activeThemeIndex + (event.key === 'ArrowRight' ? 1 : -1), true);
+      } else if (event.key === 'Home' || event.key === 'End') {
+        event.preventDefault();
+        setActiveTheme(event.key === 'Home' ? 0 : themes.length - 1, true);
+      }
+    });
+    carouselViewport.addEventListener('pointerdown', (event) => {
+      if (event.pointerType === 'mouse' && event.button !== 0) return;
+      dragPointerId = event.pointerId;
+      dragStartX = event.clientX;
+      dragStartY = event.clientY;
+      dragBaseOffset = carouselOffset;
+      dragDeltaX = 0;
+      carouselDragging = false;
+      window.addEventListener('pointermove', moveCarouselPointer);
+      window.addEventListener('pointerup', endCarouselPointer);
+      window.addEventListener('pointercancel', cancelCarouselPointer);
+    });
+    carouselViewport.addEventListener('click', (event) => {
+      if (performance.now() >= suppressCardClickUntil) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    }, true);
+    window.addEventListener('resize', () => layoutCarousel());
+    window.addEventListener('blur', cancelCarouselDrag);
 
     toggle.addEventListener('click', () => setOpen(!isOpen()));
     resetButton.addEventListener('click', () => setConfirmOpen(true));
-    cancelButton.addEventListener('click', () => setConfirmOpen(false));
+    confirmCloseButton.addEventListener('click', () => setConfirmOpen(false));
     confirmBox.addEventListener('pointerdown', (event) => { if (event.target === confirmBox) setConfirmOpen(false); });
-    confirmButton.addEventListener('click', () => {
-      if (confirmButton.getAttribute('aria-disabled') === 'true') return;
-      confirmButton.textContent = 'RESETTING\u2026';
-      resetAllData();
-      window.location.reload();
+    confirmButton.addEventListener('pointerdown', (event) => {
+      if (event.pointerType === 'mouse' && event.button !== 0) return;
+      event.preventDefault();
+      if (holdKind) return;
+      activePointerId = event.pointerId;
+      startHold('pointer');
+      try { confirmButton.setPointerCapture(event.pointerId); } catch { clearHold(); }
     });
+    confirmButton.addEventListener('pointerup', (event) => {
+      if (holdKind !== 'pointer' || event.pointerId !== activePointerId) return;
+      event.preventDefault();
+      finishHold();
+    });
+    confirmButton.addEventListener('pointercancel', () => { if (holdKind === 'pointer') clearHold(); });
+    confirmButton.addEventListener('lostpointercapture', () => { if (holdKind === 'pointer') clearHold(); });
+    confirmButton.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter' && event.code !== 'Space') return;
+      event.preventDefault();
+      if (event.repeat || holdKind) return;
+      activeKey = event.code || event.key;
+      startHold('keyboard');
+    });
+    confirmButton.addEventListener('keyup', (event) => {
+      if (holdKind !== 'keyboard' || (event.code || event.key) !== activeKey) return;
+      event.preventDefault();
+      finishHold();
+    });
+    confirmButton.addEventListener('click', (event) => event.preventDefault());
+    confirmButton.addEventListener('blur', () => { if (holdKind === 'keyboard') clearHold(); });
+    window.addEventListener('blur', clearHold);
     root.querySelector('[data-sm-close]')!.addEventListener('click', () => setOpen(false));
     overlay.addEventListener('pointerdown', (event) => { if (event.target === overlay) setOpen(false); });
     tabs.forEach((tab, index) => {
@@ -382,14 +689,13 @@
       else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
     });
     document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && isOpen() && !isConfirmOpen()) setOpen(false); });
-    document.addEventListener('astro:before-swap', () => setOpen(false));
+    document.addEventListener('astro:before-swap', () => { cancelCarouselDrag(); setOpen(false); });
 
     window.addEventListener(CHANGE_EVENT, render);
     window.addEventListener(ACTIVITY_EVENT, () => { if (isOpen() && !achievementsView.hidden) renderAchievements(); });
-    window.addEventListener(UNLOCK_EVENT, (event) => {
-      toastQueue.push((event as CustomEvent<{ name: string }>).detail.name);
-      if (!toastBusy) nextToast();
-    });
+    window.addEventListener(UNLOCK_EVENT, render);
+    setupAchievementNotifications(root);
+    initSiteState();
     render();
   };
 

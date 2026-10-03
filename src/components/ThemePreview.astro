@@ -1,0 +1,51 @@
+<template data-sm-theme-preview-template>
+  <div class="sm-mini-preview sm-theme-profile" data-sm-mini-preview aria-hidden="true">
+    <header class="sm-mini-header">
+      <strong class="sm-mini-brand" data-sm-mini-name>praxor.de</strong>
+      <nav class="sm-mini-nav"><span>home</span><span>art</span><span>updates</span></nav>
+      <span class="sm-mini-status"></span>
+    </header>
+    <div class="sm-mini-main">
+      <div class="sm-mini-copy">
+        <span class="sm-mini-kicker">LATEST</span>
+        <strong class="sm-mini-title">Recent<br />updates</strong>
+        <div class="sm-mini-lines"><i></i><i></i><i></i></div>
+      </div>
+      <div class="sm-mini-panels">
+        <div class="sm-mini-panel"><i></i><span></span><b></b></div>
+        <div class="sm-mini-panel"><i></i><span></span><b></b></div>
+      </div>
+    </div>
+    <footer class="sm-mini-footer">
+      <span class="sm-mini-button">Explore</span>
+      <span class="sm-mini-switch"><i></i></span>
+    </footer>
+  </div>
+</template>
+
+<style is:global>
+  .sm-mini-preview{position:relative;box-sizing:border-box;display:grid;grid-template-rows:auto 1fr auto;gap:8px;min-height:136px;padding:10px;overflow:hidden;border:1px solid var(--muted-border);border-radius:6px;background:linear-gradient(145deg,var(--bg),var(--card));color:var(--text);font-family:inherit}
+  .sm-mini-preview::before{position:absolute;top:0;left:0;right:0;height:3px;background:var(--sm-mini-swatch,var(--accent));content:""}
+  .sm-mini-header{display:flex;align-items:center;gap:8px;min-width:0;padding-bottom:6px;border-bottom:1px solid var(--muted-border)}
+  .sm-mini-brand{overflow:hidden;color:var(--accent);font-size:.62rem;font-weight:800;text-overflow:ellipsis;white-space:nowrap}
+  .sm-mini-nav{display:flex;flex:1;justify-content:flex-end;gap:7px;min-width:0;color:var(--muted);font-size:.48rem;text-transform:lowercase}
+  .sm-mini-status{flex:0 0 6px;width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 7px color-mix(in srgb,var(--accent) 45%,transparent)}
+  .sm-mini-main{display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:8px;min-height:0}
+  .sm-mini-copy{display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-width:0}
+  .sm-mini-kicker{color:var(--accent);font-size:.42rem;font-weight:800;letter-spacing:.08em}
+  .sm-mini-title{font-size:.78rem;font-weight:800;line-height:1.02}
+  .sm-mini-lines{display:flex;flex-direction:column;gap:3px;width:100%;margin-top:2px}
+  .sm-mini-lines i{display:block;width:92%;height:2px;border-radius:2px;background:var(--muted-border)}
+  .sm-mini-lines i:nth-child(2){width:75%;background:color-mix(in srgb,var(--accent) 40%,var(--muted-border))}
+  .sm-mini-lines i:nth-child(3){width:56%}
+  .sm-mini-panels{display:flex;flex-direction:column;gap:5px}
+  .sm-mini-panel{position:relative;display:grid;grid-template-columns:8px 1fr;align-items:center;gap:4px;min-height:23px;padding:4px;border:1px solid var(--muted-border);border-radius:4px;background:var(--card)}
+  .sm-mini-panel i{grid-row:span 2;width:7px;height:14px;border-radius:2px;background:var(--accent)}
+  .sm-mini-panel span,.sm-mini-panel b{display:block;height:2px;border-radius:2px;background:var(--muted-border)}
+  .sm-mini-panel span{width:80%;background:color-mix(in srgb,var(--accent) 44%,var(--muted-border))}
+  .sm-mini-panel b{width:56%}
+  .sm-mini-footer{display:flex;align-items:center;justify-content:space-between}
+  .sm-mini-button{padding:3px 8px;border:1px solid var(--accent);border-radius:3px;background:var(--accent);color:var(--accent-contrast);font-size:.48rem;font-weight:700}
+  .sm-mini-switch{position:relative;width:20px;height:10px;border:1px solid var(--accent);border-radius:8px;background:var(--accent-10)}
+  .sm-mini-switch i{position:absolute;top:1px;right:1px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+</style>
