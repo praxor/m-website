@@ -1,4 +1,4 @@
----
+﻿---
 const base = import.meta.env.BASE_URL;
 import { Image } from 'astro:assets';
 ---
@@ -55,7 +55,7 @@ import { Image } from 'astro:assets';
 	.rolling-cat{position:absolute;left:-50px;bottom:0;display:none;width:44px;height:44px}
 	.rolling-cat.spawned{display:block}
 	.rolling-cat img{display:block;width:44px;height:44px;object-fit:contain}
-	.music-control{display:grid;place-items:center;width:32px;height:32px;flex:0 0 32px;padding:0;border:1px solid var(--muted-border);border-radius:6px;background:rgba(0,0,0,.14);color:var(--muted);font:inherit;font-size:.68rem;line-height:1;cursor:pointer}
+	.music-control{display:grid;place-items:center;width:32px;height:32px;flex:0 0 32px;padding:0;border:1px solid var(--muted-border);border-radius:6px;background:var(--surface-inset);color:var(--muted);font:inherit;font-size:.68rem;line-height:1;cursor:pointer}
 	.music-control:hover,.music-control:focus-visible{background:var(--accent-10);color:var(--text)}
 	.music-play{background:var(--accent);color:var(--accent-contrast);font-size:.78rem}
 	.music-play:hover,.music-play:focus-visible{background:var(--accent-dark);color:var(--accent-contrast)}
@@ -76,7 +76,7 @@ import { Image } from 'astro:assets';
 	.music-player-tools{display:flex;align-items:center;gap:5px}
 	.music-volume{display:flex;align-items:center;gap:4px;color:var(--muted);font-size:.85rem}
 	.music-volume input{width:58px}
-	.music-playlist{--playlist-max-height:min(260px,calc(100dvh - 120px));position:absolute;left:0;bottom:calc(100% + 8px);z-index:90;box-sizing:border-box;width:100%;max-height:var(--playlist-max-height);overflow-y:auto;border:1px solid var(--muted-border);border-radius:9px;background:var(--card);padding:4px;scrollbar-width:thin;scrollbar-color:var(--accent-dark) transparent;box-shadow:0 -10px 30px rgba(4,2,10,.28)}
+	.music-playlist{--playlist-max-height:min(260px,calc(100dvh - 120px));position:absolute;left:0;bottom:calc(100% + 8px);z-index:90;box-sizing:border-box;width:100%;max-height:var(--playlist-max-height);overflow-y:auto;border:1px solid var(--muted-border);border-radius:9px;background:var(--card);padding:4px;scrollbar-width:thin;scrollbar-color:var(--accent-dark) transparent;box-shadow:0 -10px 30px var(--shadow-soft)}
 	.music-playlist:not([hidden]){animation:music-playlist-in .24s cubic-bezier(.2,.9,.2,1) both}
 	.music-playlist.playlist-settled:not(.playlist-closing){animation:none}
 	.music-playlist.playlist-closing{animation:music-playlist-out .18s ease both}
@@ -117,6 +117,7 @@ import { Image } from 'astro:assets';
 
 <script>
 	import { parseBlob } from 'music-metadata';
+	import { prefersReducedMotion, recordTrackPlay } from '../scripts/site-state';
 
 	const initializeMusicPlayer = () => {
 	const player = document.querySelector<HTMLElement>('#persistent-music-player');
@@ -312,6 +313,12 @@ import { Image } from 'astro:assets';
 		const playerAudio = audio;
 
 		if (!visualizer || !analyser || !audioContext || !playerAudio || playerAudio.paused) {
+			return;
+		}
+
+		if (prefersReducedMotion()) {
+			visualizerFrame = 0;
+			visualizer.getContext('2d')?.clearRect(0, 0, visualizer.width, visualizer.height);
 			return;
 		}
 
@@ -573,6 +580,10 @@ import { Image } from 'astro:assets';
 
 	const updateRollingPhysics = (deltaTime: number) => {
 		if (!audio) return;
+		if (prefersReducedMotion()) {
+			if (rollingCats?.classList.contains('is-active')) resetCatBodies();
+			return;
+		}
 		const currentTime = audio.currentTime;
 		if (audioIsSeeking) {
 			previousAudioTime = currentTime;
@@ -721,7 +732,12 @@ import { Image } from 'astro:assets';
 		}
 	});
 
-	audio?.addEventListener('play', () => { updatePlayButton(); void startVisualizer(); });
+	audio?.addEventListener('play', () => {
+		updatePlayButton();
+		void startVisualizer();
+		const playing = tracks[currentTrack]?.dataset.playerTitle;
+		if (playing) recordTrackPlay(playing);
+	});
 	audio?.addEventListener('pause', () => { updatePlayButton(); stopVisualizer(); });
 	audio?.addEventListener('seeking', () => { audioIsSeeking = true; });
 	audio?.addEventListener('seeked', () => { audioIsSeeking = false; synchronizeToAudioTime(audio.currentTime); });
@@ -742,6 +758,9 @@ import { Image } from 'astro:assets';
 	volume?.addEventListener('input', () => {
 		if (audio) audio.volume = Number(volume.value);
 		volume.style.setProperty('--fill', `${Number(volume.value) * 100}%`);
+	});
+	window.addEventListener('site-state:change', () => {
+		if (!prefersReducedMotion() && audio && !audio.paused && !visualizerFrame) void startVisualizer();
 	});
 	if (audio && volume) {
 		audio.volume = Number(volume.value);

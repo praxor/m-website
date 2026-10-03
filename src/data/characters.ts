@@ -2,6 +2,14 @@ export type CharacterReference = {
   image: string;
   caption: string;
   alt: string;
+  width?: number;
+  height?: number;
+  artist?: string;
+};
+
+export type CharacterInfoRow = {
+  label: string;
+  value: string;
 };
 
 export type Character = {
@@ -10,17 +18,23 @@ export type Character = {
   group: 'main' | 'misc';
   quote: string;
   image: string;
-  info: string;
+  info: CharacterInfoRow[];
   references: CharacterReference[];
   introduction: string;
   backstory: string;
   credits: string;
 };
 
+const placeholderInfo: CharacterInfoRow[] = [
+  { label: 'age', value: '[add age]' },
+  { label: 'race', value: '[add race]' },
+  { label: 'technical name', value: '[add technical name]' },
+];
+
 const placeholder = {
   quote: '[character quote]',
   image: '',
-  info: '- age: [add age]\n- race: [add race]\n- technical name: [add technical name]',
+  info: placeholderInfo,
   references: [
     {
       image: '',
@@ -40,7 +54,12 @@ export const characters: Character[] = [
     group: 'main',
     quote: '"hi. i axis."',
     image: '/media/ocs/axis.png',
-    info: '- age: ???\n- race: Geometry\n- technical name: Axis\n- nickname: \'The Beloved\'',
+    info: [
+      { label: 'age', value: '???' },
+      { label: 'race', value: 'Geometry' },
+      { label: 'technical name', value: 'Axis' },
+      { label: 'nickname', value: '\'The Beloved\'' },
+    ],
     references: [
       {
         image: '',
@@ -58,7 +77,12 @@ export const characters: Character[] = [
     group: 'main',
     quote: '"I\'ve got swag, not your dumbass!"',
     image: '/media/ocs/praxor-v1.png',
-    info: '- age: 17\n- race: Machine\n- technical name: Praxor\n- nickname: \'The Iconic\'',
+    info: [
+      { label: 'age', value: '17' },
+      { label: 'race', value: 'Machine' },
+      { label: 'technical name', value: 'Praxor' },
+      { label: 'nickname', value: '\'The Iconic\'' },
+    ],
     references: [
       {
         image: '',
@@ -76,7 +100,12 @@ export const characters: Character[] = [
     group: 'main',
     quote: '"...and I\'m the bad guy here, huh?"',
     image: '/media/ocs/praxor-v2.png',
-    info: '- age: 24\n- race: Machine...?\n- technical name: Praxor\n- nickname: \'The Swagger\'',
+    info: [
+      { label: 'age', value: '24' },
+      { label: 'race', value: 'Machine...?' },
+      { label: 'technical name', value: 'Praxor' },
+      { label: 'nickname', value: '\'The Swagger\'' },
+    ],
     references: [
       {
         image: '',
@@ -94,7 +123,12 @@ export const characters: Character[] = [
     group: 'main',
     quote: '"It\'s you."',
     image: '/media/ocs/praxor-irl.png',
-    info: '- age: 18 (as of writing this)\n- race: Human\n- technical name: \'Alex\'\n- nickname: \'The Sweetheart\', \'The Truth\'',
+    info: [
+      { label: 'age', value: '18 (as of writing this)' },
+      { label: 'race', value: 'Human' },
+      { label: 'technical name', value: '\'Alex\'' },
+      { label: 'nickname', value: '\'The Sweetheart\', \'The Truth\'' },
+    ],
     references: [
       {
         image: '',
@@ -130,7 +164,12 @@ export const characters: Character[] = [
     group: 'misc',
     quote: '"..."',
     image: '/media/ocs/pubbly.png',
-    info: '- age: unknown\n- race: Sprout\n- technical name: \'Pubbly\'\n- nickname: \'The Cuddler\'',
+    info: [
+      { label: 'age', value: 'unknown' },
+      { label: 'race', value: 'Sprout' },
+      { label: 'technical name', value: '\'Pubbly\'' },
+      { label: 'nickname', value: '\'The Cuddler\'' },
+    ],
     references: [
       {
         image: '',

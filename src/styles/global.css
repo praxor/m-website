@@ -1,4 +1,4 @@
-:root{
+﻿:root{
   --bg: #0b0614;
   --card: #130623;
   --text: #f3f0ff;
@@ -10,6 +10,21 @@
   --accent-12: rgba(104,34,179,0.12);
   --pattern-url: url('https://praxor.de/media/res/bricks.png');
   --muted-border: rgba(74,16,205,0.08);
+  --plinko-board: rgba(11,6,20,0.32);
+  --plinko-slot: #6822b3;
+  --plinko-peg: var(--accent);
+  --plinko-label: var(--accent);
+  --overlay: rgba(0,0,0,0.66);
+  --shadow-soft: rgba(4,2,10,0.4);
+  --shadow-strong: rgba(0,0,0,0.6);
+  --surface-hover: rgba(255,255,255,0.04);
+  --surface-inset: rgba(0,0,0,0.14);
+  --code-bg: #08060d;
+  --image-scrim: rgba(0,0,0,0.72);
+  --on-image: #ffffff;
+  --danger: #ff6b6b;
+  color-scheme: dark;
+  accent-color: var(--accent);
   --theme-transition: --bg .22s ease, --card .22s ease, --text .22s ease, --muted .22s ease, --accent .22s ease, --accent-contrast .22s ease, --accent-dark .22s ease, --accent-10 .22s ease, --accent-12 .22s ease, --muted-border .22s ease;
 }
 
@@ -134,7 +149,7 @@ html.is-loaded header, html.is-loaded .card, html.is-loaded .nav a, html.is-load
 .socials{
   margin-top:12px;
   padding:10px 14px;
-  background: rgba(0,0,0,0.5);
+  background: var(--surface-inset);
   border-radius:8px;
   display:flex;
   gap:10px;
@@ -149,29 +164,29 @@ html.is-loaded header, html.is-loaded .card, html.is-loaded .nav a, html.is-load
   width:44px;
   height:44px;
   border-radius:8px;
-  color:#fff;
+  color:var(--text);
   transition:background .18s ease,transform .14s cubic-bezier(.2,.9,.2,1),box-shadow .14s ease;
 }
 .social-btn svg{display:block;width:20px;height:20px;flex:0 0 20px;max-width:none;max-height:none}
 .social-btn svg path{fill:currentColor}
 .social-btn:hover,.social-btn:focus{
-  background:rgba(255,255,255,0.04);
+  background:var(--surface-hover);
   transform:translateY(-2px) scale(1.04);
-  box-shadow:0 8px 24px rgba(6,4,18,0.5), 0 0 18px rgba(104,34,179,0.06);
+  box-shadow:0 8px 24px var(--shadow-soft), 0 0 18px var(--accent-10);
 }
-.social-btn:focus{outline:none;box-shadow:0 0 0 4px rgba(104,34,179,0.12)}
+.social-btn:focus{outline:none;box-shadow:0 0 0 4px var(--accent-12)}
 
 .center-contents{text-align:center;display:flex;flex-direction:column;align-items:center;}
 
 .site-footer{position:relative;color:var(--muted);margin-top:48px}
-.site-footer .footer-fade{position:absolute;left:0;right:0;top:0;height:140px;background:linear-gradient(180deg,transparent,rgba(0,0,0,1));pointer-events:none}
+.site-footer .footer-fade{position:absolute;left:0;right:0;top:0;height:140px;background:linear-gradient(180deg,transparent,var(--bg));pointer-events:none}
 .site-footer .footer-inner{position:relative;padding:36px 20px 48px}
 .site-footer .footer-nav{display:flex;gap:28px;justify-content:center;max-width:1100px;margin:0 auto}
-.site-footer .footer-col h4{color:#fff;margin:0 0 8px;font-size:0.95rem}
+.site-footer .footer-col h4{color:var(--text);margin:0 0 8px;font-size:0.95rem}
 .site-footer .footer-col ul{list-style:none;margin:0;padding:0}
 .site-footer .footer-col li{margin:6px 0}
-.site-footer .footer-col a{color:#ddd;text-decoration:none;font-size:0.95rem}
-.site-footer .footer-col a:hover{color:#fff;text-decoration:underline}
+.site-footer .footer-col a{color:var(--muted);text-decoration:none;font-size:0.95rem}
+.site-footer .footer-col a:hover{color:var(--text);text-decoration:underline}
 
 @media (max-width:780px){
   .site-footer .footer-nav{flex-direction:column;align-items:center}
@@ -212,12 +227,12 @@ a:focus{outline:3px solid var(--accent-12);outline-offset:3px}
   font-weight:700;
   display:inline-flex;align-items:center;gap:8px;
   font-size:0.95rem;
-  border:1px solid rgba(0,0,0,0.08);
-  box-shadow:0 8px 20px rgba(104,34,179,0.10);
+  border:1px solid var(--muted-border);
+  box-shadow:0 8px 20px var(--accent-12);
   transition:transform .14s ease,box-shadow .18s ease,opacity .12s ease;
 }
-.cta:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(104,34,179,0.12)}
-.cta:active{transform:translateY(0);box-shadow:0 6px 14px rgba(0,0,0,0.2)}
+.cta:hover{transform:translateY(-2px);box-shadow:0 14px 30px var(--accent-12)}
+.cta:active{transform:translateY(0);box-shadow:0 6px 14px var(--shadow-soft)}
 .cta:focus{outline:3px solid var(--accent-12);outline-offset:3px}
 .menu-toggle{display:none;background:transparent;border:0;color:var(--muted);font-size:1.1rem}
 
@@ -238,3 +253,331 @@ a:focus{outline:3px solid var(--accent-12);outline-offset:3px}
   .wrap{padding:1rem 12px}
   .card{padding:1rem;border-radius:2px}
 }
+
+/* Site themes. Each palette applies at the root, so page-specific palettes on body still win unless Force Theme is on, where it reaches every element. */
+:root[data-site-theme="praxorian"],
+:root[data-force-theme="true"][data-site-theme="praxorian"] *{
+  --bg: #0b0614 !important;
+  --card: #130623 !important;
+  --text: #f3f0ff !important;
+  --muted: #bfb3f5 !important;
+  --accent: #6822b3 !important;
+  --accent-contrast: #ffffff !important;
+  --accent-dark: #541a93 !important;
+  --accent-10: rgba(104,34,179,0.06) !important;
+  --accent-12: rgba(104,34,179,0.12) !important;
+  --muted-border: rgba(74,16,205,0.08) !important;
+  --danger: #ff6b6b !important;
+  --pattern-url: url('https://praxor.de/media/res/bricks.png') !important;
+  --accent-2: #8a4fd6 !important;
+  --accent-3: #b99aff !important;
+  --overlay: rgba(0,0,0,0.66) !important;
+  --shadow-soft: rgba(4,2,10,0.4) !important;
+  --shadow-strong: rgba(0,0,0,0.6) !important;
+  --surface-hover: rgba(255,255,255,0.04) !important;
+  --surface-inset: rgba(0,0,0,0.14) !important;
+  --code-bg: #08060d !important;
+  --image-scrim: rgba(0,0,0,0.72) !important;
+  --on-image: #ffffff !important;
+  --plinko-board: rgba(11,6,20,0.32) !important;
+  --plinko-slot: #6822b3 !important;
+  --plinko-peg: var(--accent) !important;
+  --plinko-label: var(--accent) !important;
+}
+:root[data-site-theme="berhian"],
+:root[data-force-theme="true"][data-site-theme="berhian"] *{
+  --bg: #050e08 !important;
+  --card: #0b1a10 !important;
+  --text: #eef6e6 !important;
+  --muted: #a6c29b !important;
+  --accent: #2fa84f !important;
+  --accent-contrast: #04110a !important;
+  --accent-dark: #1f7a37 !important;
+  --accent-10: rgba(47,168,79,0.08) !important;
+  --accent-12: rgba(47,168,79,0.15) !important;
+  --muted-border: rgba(47,168,79,0.18) !important;
+  --danger: #ff6b6b !important;
+  --pattern-url: url('https://praxor.de/media/res/bricks.png') !important;
+  --accent-3: #7ed957 !important;
+  --overlay: rgba(0,0,0,0.66) !important;
+  --shadow-soft: rgba(0,6,2,0.45) !important;
+  --shadow-strong: rgba(0,0,0,0.6) !important;
+  --surface-hover: rgba(255,255,255,0.04) !important;
+  --surface-inset: rgba(0,0,0,0.14) !important;
+  --code-bg: #040c06 !important;
+  --image-scrim: rgba(0,0,0,0.72) !important;
+  --on-image: #ffffff !important;
+  --plinko-board: rgba(5,14,8,0.4) !important;
+  --plinko-slot: #2fa84f !important;
+  --plinko-peg: var(--accent) !important;
+  --plinko-label: #e0b83a !important;
+  --accent-2: #e0b83a !important;
+}
+:root[data-site-theme="toohi-ian"],
+:root[data-force-theme="true"][data-site-theme="toohi-ian"] *{
+  --bg: #0b0a24 !important;
+  --card: #17143d !important;
+  --text: #f1eeff !important;
+  --muted: #b9b3f2 !important;
+  --accent: #8b7bff !important;
+  --accent-contrast: #0b0a24 !important;
+  --accent-dark: #5a4be0 !important;
+  --accent-10: rgba(139,123,255,0.1) !important;
+  --accent-12: rgba(139,123,255,0.18) !important;
+  --muted-border: rgba(139,123,255,0.25) !important;
+  --danger: #ff6b8a !important;
+  --pattern-url: url('https://praxor.de/media/res/bricks.png') !important;
+  --overlay: rgba(0,0,0,0.66) !important;
+  --shadow-soft: rgba(4,2,30,0.45) !important;
+  --shadow-strong: rgba(0,0,0,0.6) !important;
+  --surface-hover: rgba(255,255,255,0.05) !important;
+  --surface-inset: rgba(0,0,0,0.16) !important;
+  --code-bg: #0a0920 !important;
+  --image-scrim: rgba(0,0,0,0.72) !important;
+  --on-image: #ffffff !important;
+  --plinko-board: rgba(11,10,36,0.4) !important;
+  --plinko-slot: #8b7bff !important;
+  --plinko-peg: var(--accent) !important;
+  --plinko-label: #5cd1ff !important;
+  --accent-2: #5cd1ff !important;
+  --accent-3: #ff7ad9 !important;
+}
+:root[data-site-theme="macintoshing"],
+:root[data-force-theme="true"][data-site-theme="macintoshing"] *{
+  --bg: #ffffff !important;
+  --card: #f5f5f5 !important;
+  --text: #000000 !important;
+  --muted: #333333 !important;
+  --accent: #1f78b8 !important;
+  --accent-contrast: #ffffff !important;
+  --accent-dark: #155a91 !important;
+  --accent-10: rgba(31,120,184,0.1) !important;
+  --accent-12: rgba(31,120,184,0.18) !important;
+  --muted-border: #cccccc !important;
+  --danger: #c62828 !important;
+  --pattern-url: url('https://praxor.de/media/res/bricks.png') !important;
+  --accent-3: #4aa8e8 !important;
+  --overlay: rgba(0,0,0,0.45) !important;
+  --shadow-soft: rgba(0,0,0,0.16) !important;
+  --shadow-strong: rgba(0,0,0,0.3) !important;
+  --surface-hover: rgba(0,0,0,0.05) !important;
+  --surface-inset: rgba(0,0,0,0.04) !important;
+  --code-bg: #ececec !important;
+  --image-scrim: rgba(0,0,0,0.72) !important;
+  --on-image: #ffffff !important;
+  --plinko-board: rgba(255,255,255,0.7) !important;
+  --plinko-slot: #1f78b8 !important;
+  --plinko-peg: var(--accent) !important;
+  --plinko-label: #155a91 !important;
+  --accent-2: #8ccaf0 !important;
+}
+:root[data-site-theme="true-fr"],
+:root[data-force-theme="true"][data-site-theme="true-fr"] *{
+  --bg: #03070a !important;
+  --card: #0a1215 !important;
+  --text: #f3f1e2 !important;
+  --muted: #9fbfb2 !important;
+  --accent: #2f8fe0 !important;
+  --accent-contrast: #03070a !important;
+  --accent-dark: #1c64a8 !important;
+  --accent-10: rgba(47,143,224,0.1) !important;
+  --accent-12: rgba(47,143,224,0.18) !important;
+  --muted-border: rgba(230,180,34,0.22) !important;
+  --danger: #ff6b6b !important;
+  --pattern-url: url('https://praxor.de/media/res/bricks.png') !important;
+  --overlay: rgba(0,0,0,0.7) !important;
+  --shadow-soft: rgba(0,4,6,0.5) !important;
+  --shadow-strong: rgba(0,0,0,0.65) !important;
+  --surface-hover: rgba(255,255,255,0.04) !important;
+  --surface-inset: rgba(0,0,0,0.16) !important;
+  --code-bg: #05090b !important;
+  --image-scrim: rgba(0,0,0,0.72) !important;
+  --on-image: #ffffff !important;
+  --plinko-board: rgba(3,7,10,0.45) !important;
+  --plinko-slot: #2f8fe0 !important;
+  --plinko-peg: var(--accent) !important;
+  --plinko-label: #e6b422 !important;
+  --accent-2: #e6b422 !important;
+  --accent-3: #2fbf71 !important;
+}
+
+:root[data-site-theme="praxor-pop"],
+:root[data-force-theme="true"][data-site-theme="praxor-pop"] *{
+  --bg: #fff7fc !important;
+  --card: #ffffff !important;
+  --text: #2d2430 !important;
+  --muted: #6f5b6d !important;
+  --accent: #b8457f !important;
+  --accent-contrast: #ffffff !important;
+  --accent-dark: #8f2f60 !important;
+  --accent-10: rgba(242,143,189,0.16) !important;
+  --accent-12: rgba(242,143,189,0.26) !important;
+  --muted-border: #e7cde0 !important;
+  --danger: #c2255c !important;
+  --pattern-url: url('https://praxor.de/media/res/bricks.png') !important;
+  --overlay: rgba(70,40,70,0.5) !important;
+  --shadow-soft: rgba(214,120,170,0.18) !important;
+  --shadow-strong: rgba(120,60,110,0.3) !important;
+  --surface-hover: rgba(242,143,189,0.14) !important;
+  --surface-inset: rgba(242,143,189,0.1) !important;
+  --code-bg: #fbeaf5 !important;
+  --image-scrim: rgba(0,0,0,0.72) !important;
+  --on-image: #ffffff !important;
+  --plinko-board: rgba(252,235,247,0.75) !important;
+  --plinko-slot: #d9608f !important;
+  --plinko-peg: var(--accent) !important;
+  --plinko-label: #8f2f60 !important;
+  --accent-2: #b9a1e8 !important;
+  --accent-3: #a9d8f5 !important;
+}
+:root[data-site-theme="cult"],
+:root[data-force-theme="true"][data-site-theme="cult"] *{
+  --bg: #020812 !important;
+  --card: #061326 !important;
+  --text: #dcecff !important;
+  --muted: #7895b8 !important;
+  --accent: #3872b1 !important;
+  --accent-contrast: #ffffff !important;
+  --accent-dark: #061c32 !important;
+  --accent-10: rgba(56,114,177,0.1) !important;
+  --accent-12: rgba(56,114,177,0.18) !important;
+  --muted-border: rgba(56,114,177,0.2) !important;
+  --danger: #ff6b6b !important;
+  --accent-2: #5aa0e0 !important;
+  --accent-3: #1b6caf !important;
+  --overlay: rgba(0,0,0,0.7) !important;
+  --shadow-soft: rgba(0,6,16,0.5) !important;
+  --shadow-strong: rgba(0,0,0,0.65) !important;
+  --surface-hover: rgba(255,255,255,0.04) !important;
+  --surface-inset: rgba(0,0,0,0.16) !important;
+  --code-bg: #030c18 !important;
+  --image-scrim: rgba(0,0,0,0.72) !important;
+  --on-image: #ffffff !important;
+  --pattern-url: url('https://praxor.de/media/res/bluebricks.png') !important;
+  --plinko-board: rgba(2,8,18,0.5) !important;
+  --plinko-slot: #3872b1 !important;
+  --plinko-peg: var(--accent) !important;
+  --plinko-label: #7895b8 !important;
+}
+
+:root[data-site-theme="amoled"],
+:root[data-force-theme="true"][data-site-theme="amoled"] *{
+  --bg: #000000 !important;
+  --card: #050505 !important;
+  --text: #f5f5f5 !important;
+  --muted: #a8a8a8 !important;
+  --accent: #f5f5f5 !important;
+  --accent-contrast: #000000 !important;
+  --accent-dark: #8c8c8c !important;
+  --accent-10: rgba(255,255,255,0.1) !important;
+  --accent-12: rgba(255,255,255,0.16) !important;
+  --muted-border: rgba(255,255,255,0.22) !important;
+  --danger: #ff6b6b !important;
+  --pattern-url: url('https://praxor.de/media/res/bricks.png') !important;
+  --accent-2: #bdbdbd !important;
+  --accent-3: #8c8c8c !important;
+  --overlay: rgba(0,0,0,0.85) !important;
+  --shadow-soft: rgba(0,0,0,0.6) !important;
+  --shadow-strong: rgba(0,0,0,0.8) !important;
+  --surface-hover: rgba(255,255,255,0.06) !important;
+  --surface-inset: rgba(255,255,255,0.03) !important;
+  --code-bg: #0a0a0a !important;
+  --image-scrim: rgba(0,0,0,0.72) !important;
+  --on-image: #ffffff !important;
+  --plinko-board: rgba(0,0,0,0.6) !important;
+  --plinko-slot: #f5f5f5 !important;
+  --plinko-peg: var(--accent) !important;
+  --plinko-label: #a8a8a8 !important;
+}
+/* Force Theme also replaces page-specific backgrounds and button colours. */
+:root[data-force-theme="true"] body{background-image:none}
+:root[data-force-theme="true"] body::before{background-image:var(--pattern-url)!important}
+:root[data-force-theme="true"] .cta{background:linear-gradient(180deg,var(--accent),var(--accent-dark));color:var(--accent-contrast);border-color:var(--muted-border);box-shadow:0 8px 20px var(--accent-12)}
+:root[data-force-theme="true"] .cult-link{color:transparent!important;background:transparent!important}
+
+/* Berhian */
+:is(:root[data-site-theme="berhian"] body:not(.cult-page), :root[data-site-theme="berhian"][data-force-theme="true"]) .site-header{border-bottom-color:color-mix(in srgb,var(--accent-2) 45%,transparent)}
+:is(:root[data-site-theme="berhian"] body:not(.cult-page), :root[data-site-theme="berhian"][data-force-theme="true"]) :is(.hero-kicker,.feed-kicker,.post-kind,.music-eyebrow,.sm-toast-label,.sm-group legend,.sm-title){color:var(--accent-2)}
+:is(:root[data-site-theme="berhian"] body:not(.cult-page), :root[data-site-theme="berhian"][data-force-theme="true"]) .nav a:hover{color:var(--accent-2)}
+:is(:root[data-site-theme="berhian"] body:not(.cult-page), :root[data-site-theme="berhian"][data-force-theme="true"]) .post-card.is-latest{border-color:var(--accent-2);box-shadow:inset 3px 0 0 var(--accent-2)}
+:is(:root[data-site-theme="berhian"] body:not(.cult-page), :root[data-site-theme="berhian"][data-force-theme="true"]) .cta,:is(:root[data-site-theme="berhian"] body:not(.cult-page), :root[data-site-theme="berhian"][data-force-theme="true"]) .music-play{box-shadow:0 8px 20px color-mix(in srgb,var(--accent-2) 18%,transparent)}
+
+/* Toohi-ian */
+:root[data-site-theme="toohi-ian"] body:not(.cult-page), :root[data-force-theme="true"][data-site-theme="toohi-ian"] body{background-image:linear-gradient(160deg,#0b0a24 0%,#1b1060 55%,#0d2b66 100%);background-attachment:fixed}
+:is(:root[data-site-theme="toohi-ian"] body:not(.cult-page), :root[data-site-theme="toohi-ian"][data-force-theme="true"]) :is(.site-header,.card,.home-shell,.post-card,.music-player,.sm-panel,.characters-main,.character-main,.pa-main,.music-frame,.character-choice,.plinko-frame,.plinko-score-panel,.cult-writing-space){background-image:linear-gradient(145deg,color-mix(in srgb,var(--accent) 24%,var(--card)),var(--card) 55%,color-mix(in srgb,var(--accent-2) 16%,var(--card)))}
+:is(:root[data-site-theme="toohi-ian"] body:not(.cult-page), :root[data-site-theme="toohi-ian"][data-force-theme="true"]) :is(.cta,.btn,.music-play){background-image:linear-gradient(135deg,var(--accent),var(--accent-2));color:var(--accent-contrast)}
+:is(:root[data-site-theme="toohi-ian"] body:not(.cult-page), :root[data-site-theme="toohi-ian"][data-force-theme="true"]) :is(h1,.sm-title){background-image:linear-gradient(90deg,var(--accent),var(--accent-2) 55%,var(--accent-3));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+:is(:root[data-site-theme="toohi-ian"] body:not(.cult-page), :root[data-site-theme="toohi-ian"][data-force-theme="true"]) :is(.hero-kicker,.feed-kicker,.post-kind,.music-eyebrow,.sm-toast-label,.sm-group legend,.sm-title){color:var(--accent-2)}
+:is(:root[data-site-theme="toohi-ian"] body:not(.cult-page), :root[data-site-theme="toohi-ian"][data-force-theme="true"]) .cult-link{color:transparent!important}
+.toohi-cats{display:none}
+@media (min-width:1000px) and (hover:hover) and (pointer:fine){
+  :is(:root[data-site-theme="toohi-ian"] body:not(.cult-page), :root[data-site-theme="toohi-ian"][data-force-theme="true"]) .toohi-cats{display:block;position:absolute;top:0;bottom:0;left:50%;width:min(1100px,100%);transform:translateX(-50%);pointer-events:none}
+  :is(:root[data-site-theme="toohi-ian"] body:not(.cult-page), :root[data-site-theme="toohi-ian"][data-force-theme="true"]) .toohi-cats img{position:absolute;bottom:3px;left:calc(40% + var(--i) * 5.5%);width:24px;height:24px;object-fit:contain;animation:toohi-bounce .9s ease-in-out infinite;animation-delay:calc(var(--i) * -.18s)}
+}
+@keyframes toohi-bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+
+/* Macintoshing: early-2000s light-blue "web 2.0 starter kit" look. */
+:root[data-site-theme="macintoshing"],:root[data-force-theme="true"][data-site-theme="macintoshing"]{color-scheme:light}
+:root[data-site-theme="macintoshing"] body:not(.cult-page), :root[data-force-theme="true"][data-site-theme="macintoshing"] body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif}
+:root[data-site-theme="macintoshing"] body:not(.cult-page)::before,:root[data-force-theme="true"][data-site-theme="macintoshing"] body::before{display:none}
+:is(:root[data-site-theme="macintoshing"] body:not(.cult-page), :root[data-site-theme="macintoshing"][data-force-theme="true"]) :is(.site-header,.card,.home-shell,.post-card,.music-player,.sm-panel,.characters-main,.character-main,.pa-main,.music-frame,.character-choice,.plinko-frame,.plinko-score-panel,.cult-writing-space){background-image:linear-gradient(#ffffff,#f1f1f1);border-color:#cccccc;border-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,0.12),inset 0 1px 0 #ffffff}
+:is(:root[data-site-theme="macintoshing"] body:not(.cult-page), :root[data-site-theme="macintoshing"][data-force-theme="true"]) .site-header{background-image:linear-gradient(#a6d8f5,#4aa8e8);border-bottom:1px solid #1f78b8;border-radius:0;box-shadow:0 1px 4px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.6)}
+:is(:root[data-site-theme="macintoshing"] body:not(.cult-page), :root[data-site-theme="macintoshing"][data-force-theme="true"]) .nav a{color:#000;text-shadow:0 1px 0 rgba(255,255,255,0.5)}
+:is(:root[data-site-theme="macintoshing"] body:not(.cult-page), :root[data-site-theme="macintoshing"][data-force-theme="true"]) .nav a:hover{background:rgba(255,255,255,0.4);color:#000}
+:is(:root[data-site-theme="macintoshing"] body:not(.cult-page), :root[data-site-theme="macintoshing"][data-force-theme="true"]) .site-header .social-btn,:is(:root[data-site-theme="macintoshing"] body:not(.cult-page), :root[data-site-theme="macintoshing"][data-force-theme="true"]) .menu-toggle,:is(:root[data-site-theme="macintoshing"] body:not(.cult-page), :root[data-site-theme="macintoshing"][data-force-theme="true"]) .sm-toggle{color:#000}
+:is(:root[data-site-theme="macintoshing"] body:not(.cult-page), :root[data-site-theme="macintoshing"][data-force-theme="true"]) .cult-link{color:transparent!important}
+:is(:root[data-site-theme="macintoshing"] body:not(.cult-page), :root[data-site-theme="macintoshing"][data-force-theme="true"]) :is(.cta,.btn,.music-play){background-image:linear-gradient(#5db6ee,#1f78b8);border:1px solid #1a5f94;border-radius:4px;color:#ffffff;text-shadow:0 -1px 0 rgba(0,0,0,0.3);box-shadow:inset 0 1px 0 rgba(255,255,255,0.4)}
+:is(:root[data-site-theme="macintoshing"] body:not(.cult-page), :root[data-site-theme="macintoshing"][data-force-theme="true"]) .music-control{background:linear-gradient(#ffffff,#e6e6e6);border-color:#bbbbbb;color:#333333}
+:is(:root[data-site-theme="macintoshing"] body:not(.cult-page), :root[data-site-theme="macintoshing"][data-force-theme="true"]) .music-play{color:#ffffff}
+
+/* True FR (blue, green, gold, black: Axis) */
+:root[data-site-theme="true-fr"] body:not(.cult-page), :root[data-force-theme="true"][data-site-theme="true-fr"] body{background-image:radial-gradient(900px 500px at 15% -10%,rgba(47,143,224,0.22),transparent 60%),radial-gradient(800px 500px at 100% 0,rgba(230,180,34,0.16),transparent 55%),radial-gradient(900px 600px at 50% 120%,rgba(47,191,113,0.16),transparent 60%);background-attachment:fixed}
+:is(:root[data-site-theme="true-fr"] body:not(.cult-page), :root[data-site-theme="true-fr"][data-force-theme="true"]) :is(.site-header,.card,.home-shell,.post-card,.music-player,.sm-panel,.characters-main,.character-main,.pa-main,.music-frame,.character-choice,.plinko-frame,.plinko-score-panel,.cult-writing-space){background-image:linear-gradient(135deg,rgba(47,143,224,0.14),rgba(47,191,113,0.08) 55%,rgba(230,180,34,0.12))}
+:is(:root[data-site-theme="true-fr"] body:not(.cult-page), :root[data-site-theme="true-fr"][data-force-theme="true"]) :is(.cta,.btn,.music-play){background-image:linear-gradient(135deg,var(--accent),var(--accent-3) 60%,var(--accent-2));color:var(--accent-contrast)}
+:is(:root[data-site-theme="true-fr"] body:not(.cult-page), :root[data-site-theme="true-fr"][data-force-theme="true"]) :is(h1,.sm-title){background-image:linear-gradient(90deg,var(--accent),var(--accent-3) 55%,var(--accent-2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+:is(:root[data-site-theme="true-fr"] body:not(.cult-page), :root[data-site-theme="true-fr"][data-force-theme="true"]) :is(.hero-kicker,.feed-kicker,.post-kind,.music-eyebrow,.sm-toast-label,.sm-group legend,.sm-title){color:var(--accent-2)}
+:is(:root[data-site-theme="true-fr"] body:not(.cult-page), :root[data-site-theme="true-fr"][data-force-theme="true"]) .cult-link{color:transparent!important}
+
+/* Salted Pop Rocks: cotton-candy light theme (pink, lavender, powder blue). */
+:root[data-site-theme="praxor-pop"],:root[data-force-theme="true"][data-site-theme="praxor-pop"]{color-scheme:light}
+:root[data-site-theme="praxor-pop"] body:not(.cult-page), :root[data-force-theme="true"][data-site-theme="praxor-pop"] body{background-image:radial-gradient(700px 420px at 0 0,rgba(255,214,234,0.65),transparent 60%),radial-gradient(700px 420px at 100% 0,rgba(185,161,232,0.28),transparent 60%),radial-gradient(900px 500px at 50% 115%,rgba(169,216,245,0.35),transparent 60%);background-attachment:fixed}
+:root[data-site-theme="praxor-pop"] body:not(.cult-page)::before,:root[data-force-theme="true"][data-site-theme="praxor-pop"] body::before{display:none}
+:is(:root[data-site-theme="praxor-pop"] body:not(.cult-page), :root[data-site-theme="praxor-pop"][data-force-theme="true"]) :is(.card,.home-shell,.post-card,.music-player,.sm-panel,.characters-main,.character-main,.pa-main,.music-frame,.character-choice,.plinko-frame,.plinko-score-panel,.cult-writing-space){background-image:linear-gradient(160deg,#ffffff 55%,#fdeef8);border-radius:14px;box-shadow:0 6px 18px rgba(214,120,170,0.14),inset 0 1px 0 #ffffff}
+:is(:root[data-site-theme="praxor-pop"] body:not(.cult-page), :root[data-site-theme="praxor-pop"][data-force-theme="true"]) .site-header{background-image:linear-gradient(180deg,#ffffff,#ffeef8);border-bottom:2px solid transparent;border-image:linear-gradient(90deg,#f6a5cb,#b9a1e8,#a9d8f5) 1;box-shadow:0 4px 14px rgba(185,161,232,0.22)}
+:is(:root[data-site-theme="praxor-pop"] body:not(.cult-page), :root[data-site-theme="praxor-pop"][data-force-theme="true"]) .nav a:hover{background:var(--accent-10);color:var(--text)}
+:is(:root[data-site-theme="praxor-pop"] body:not(.cult-page), :root[data-site-theme="praxor-pop"][data-force-theme="true"]) .site-header .social-btn{color:var(--text)}
+:is(:root[data-site-theme="praxor-pop"] body:not(.cult-page), :root[data-site-theme="praxor-pop"][data-force-theme="true"]) .site-header .social-btn:hover{background:var(--accent-10)}
+:is(:root[data-site-theme="praxor-pop"] body:not(.cult-page), :root[data-site-theme="praxor-pop"][data-force-theme="true"]) :is(.cta,.btn,.music-play){background-image:linear-gradient(180deg,#f9b4d6,#ec7fb2);border:1px solid #e06aa4;border-radius:999px;color:#4a1a38;text-shadow:0 1px 0 rgba(255,255,255,0.5);box-shadow:inset 0 1px 0 rgba(255,255,255,0.7),0 4px 10px rgba(236,127,178,0.3)}
+:is(:root[data-site-theme="praxor-pop"] body:not(.cult-page), :root[data-site-theme="praxor-pop"][data-force-theme="true"]) .music-control{background:linear-gradient(#ffffff,#fdeef8);border-color:var(--muted-border);color:var(--muted)}
+:is(:root[data-site-theme="praxor-pop"] body:not(.cult-page), :root[data-site-theme="praxor-pop"][data-force-theme="true"]) .music-play{color:#4a1a38}
+:is(:root[data-site-theme="praxor-pop"] body:not(.cult-page), :root[data-site-theme="praxor-pop"][data-force-theme="true"]) .sm-overlay{background:rgba(70,40,70,0.5)}
+:is(:root[data-site-theme="praxor-pop"] body:not(.cult-page), :root[data-site-theme="praxor-pop"][data-force-theme="true"]) :is(.hero-copy h1,.sm-title)::after{content:" \2726" / "";color:var(--accent-2);font-size:.6em;vertical-align:super}
+/* Cult: mirrors the cult page's own look, unlocked by the Cultbound achievement. */
+:root[data-site-theme="cult"] body:not(.cult-page), :root[data-force-theme="true"][data-site-theme="cult"] body{background-image:linear-gradient(rgba(2,8,18,0.96),rgba(2,8,18,0.98)),url('https://praxor.de/media/bluebricks.png');background-repeat:repeat;background-size:auto}
+:is(:root[data-site-theme="cult"] body:not(.cult-page), :root[data-site-theme="cult"][data-force-theme="true"]) :is(.cta,.btn,.music-play){background-image:linear-gradient(180deg,#1b6caf,#061c32);color:#ffffff;border-color:#3872b1;box-shadow:0 8px 20px rgba(8,57,107,0.35)}
+
+/* AMOLED: true black, modelled on the image gallery's look (white accent, hairline borders). */
+:root[data-site-theme="amoled"] body:not(.cult-page)::before,:root[data-force-theme="true"][data-site-theme="amoled"] body::before{display:none}
+:is(:root[data-site-theme="amoled"] body:not(.cult-page), :root[data-site-theme="amoled"][data-force-theme="true"]) :is(.update-body,.markdown-body) a{text-decoration:underline}
+/* Press-and-hold feedback for data-hold-unlock elements. */
+[data-hold-unlock]{position:relative;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;touch-action:manipulation}
+[data-hold-unlock]::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:4px;background:var(--accent);transform:scaleX(0);transform-origin:left;pointer-events:none}
+[data-hold-unlock].is-holding::after{animation:hold-fill var(--hold-ms,2500ms) linear forwards}
+@keyframes hold-fill{to{transform:scaleX(1)}}
+:root[data-reduced-motion="true"] [data-hold-unlock]::after{display:none}
+/* Reduced motion: snap animations/transitions rather than removing them so animationend/transitionend still fire. */
+:root[data-reduced-motion="true"] *,
+:root[data-reduced-motion="true"] *::before,
+:root[data-reduced-motion="true"] *::after{
+  animation-duration: 0.01ms !important;
+  animation-delay: 0s !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  transition-delay: 0s !important;
+  scroll-behavior: auto !important;
+}
+:root[data-reduced-motion="true"]::view-transition-group(*),
+:root[data-reduced-motion="true"]::view-transition-old(*),
+:root[data-reduced-motion="true"]::view-transition-new(*){animation: none !important}
+
+::selection{background:var(--accent);color:var(--accent-contrast)}

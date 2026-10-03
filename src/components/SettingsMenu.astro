@@ -1,0 +1,398 @@
+﻿<div class="settings-menu" data-settings-menu transition:persist="settings-menu" transition:animate="none">
+  <button id="settings-toggle" class="sm-toggle" type="button" aria-label="Settings and achievements" aria-haspopup="dialog" aria-expanded="false" aria-controls="settings-panel" title="settings & achievements">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
+      <path d="M4 6h8M20 6h-2M4 12h2M14 12h6M4 18h10M20 18h-2" />
+      <circle cx="15" cy="6" r="2.2" /><circle cx="9" cy="12" r="2.2" /><circle cx="17" cy="18" r="2.2" />
+    </svg>
+  </button>
+
+  <div class="sm-overlay" data-sm-overlay data-open="false">
+    <div id="settings-panel" class="sm-panel" role="dialog" aria-modal="true" aria-labelledby="sm-title">
+      <div class="sm-head">
+        <h2 id="sm-title" class="sm-title">menu</h2>
+        <div class="sm-tabs" role="tablist" aria-label="Menu sections">
+          <button id="sm-tab-settings" class="sm-tab" type="button" role="tab" aria-selected="true" aria-controls="sm-view-settings" data-tab="settings">Settings</button>
+          <button id="sm-tab-achievements" class="sm-tab" type="button" role="tab" aria-selected="false" aria-controls="sm-view-achievements" tabindex="-1" data-tab="achievements">Achievements</button>
+        </div>
+        <button class="sm-close" type="button" aria-label="Close menu" data-sm-close>&#10005;</button>
+      </div>
+
+      <div id="sm-view-settings" class="sm-view" role="tabpanel" aria-labelledby="sm-tab-settings" tabindex="0">
+        <fieldset class="sm-group">
+          <legend>Site Theme</legend>
+          <div class="sm-themes" data-sm-themes></div>
+        </fieldset>
+        <label class="sm-row">
+          <span class="sm-row-text"><span class="sm-row-title">Force Theme</span><span class="sm-row-hint">Override page-specific themes with the selected theme.</span></span>
+          <input class="sm-switch" type="checkbox" role="switch" data-setting="forceTheme" />
+        </label>
+        <label class="sm-row">
+          <span class="sm-row-text"><span class="sm-row-title">Reduced Motion</span><span class="sm-row-hint">Minimize animations and movement.</span></span>
+          <input class="sm-switch" type="checkbox" role="switch" data-setting="reducedMotion" />
+        </label>
+        <div class="sm-danger-zone">
+          <div class="sm-danger-title">Danger Zone</div>
+          <div class="sm-row">
+            <span class="sm-row-text"><span class="sm-row-title">Reset Data</span><span class="sm-row-hint">Erase everything this website has saved in this browser. This cannot be undone.</span></span>
+            <button class="sm-danger" type="button" data-sm-reset>Reset Data</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="sm-view-achievements" class="sm-view" role="tabpanel" aria-labelledby="sm-tab-achievements" tabindex="0" hidden>
+        <div class="sm-summary" data-sm-summary></div>
+        <ul class="sm-achievements" data-sm-achievements></ul>
+      </div>
+    </div>
+
+    <div class="sm-confirm" data-sm-confirm data-open="false">
+      <div class="sm-confirm-panel" role="alertdialog" aria-modal="true" aria-labelledby="sm-confirm-title" aria-describedby="sm-confirm-desc">
+        <div id="sm-confirm-title" class="sm-confirm-title" role="heading" aria-level="2">Reset all personalized site data?</div>
+        <div id="sm-confirm-desc" class="sm-confirm-desc">
+          <div>This will erase your locally saved:</div>
+          <ul class="sm-confirm-list"><li>Settings</li><li>Theme preference</li><li>Force Theme and Reduced Motion preferences</li><li>Achievement progress</li><li>Unlocked achievement rewards, including achievement-only themes</li><li>Visited post/update tracking</li><li>Site activity/time tracking</li><li>Other locally stored personalized site data</li></ul>
+          <div>Your actual website content, posts, music files, images and other site content will NOT be deleted.</div>
+          <div class="sm-confirm-warn">This cannot be undone through the website. Are you sure?</div>
+        </div>
+        <div class="sm-confirm-actions">
+          <button class="sm-cancel" type="button" data-sm-cancel>Cancel</button>
+          <button class="sm-confirm-btn" type="button" data-sm-confirm-btn aria-disabled="true">Confirm Reset (5)</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sm-toasts" data-sm-toasts role="status" aria-live="polite"></div>
+</div>
+
+<style is:global>
+  /* Same pattern as the music player shell: above all page layers, click-through except its children. */
+  .settings-menu{--sm-top:6px;position:fixed;inset:0;z-index:300;pointer-events:none;view-transition-name:settings-menu}
+  ::view-transition-group(settings-menu),::view-transition-old(settings-menu),::view-transition-new(settings-menu){animation:none;mix-blend-mode:normal}
+  ::view-transition-old(settings-menu),::view-transition-new(settings-menu){opacity:1}
+  html.sm-open{overflow:hidden}
+  .sm-toggle{position:absolute;top:var(--sm-top);right:10px;display:grid;place-items:center;width:34px;height:34px;padding:0;border:1px solid transparent;border-radius:8px;background:transparent;color:var(--muted);cursor:pointer;pointer-events:auto;transition:background-color .18s ease,color .18s ease,border-color .18s ease}
+  .sm-toggle:hover,.sm-toggle[aria-expanded="true"]{background:var(--accent-10);color:var(--text)}
+  .sm-toggle:focus-visible,.sm-tab:focus-visible,.sm-close:focus-visible,.sm-view:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .sm-overlay{position:absolute;inset:0;box-sizing:border-box;display:grid;place-items:center;padding:12px;background:var(--overlay);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .22s ease,visibility .22s ease}
+  .sm-overlay[data-open="true"]{opacity:1;visibility:visible;pointer-events:auto}
+  .sm-panel{box-sizing:border-box;width:min(680px,100%);max-height:min(720px,100%);display:flex;flex-direction:column;background:var(--card);color:var(--text);border:1px solid var(--muted-border);border-radius:10px;box-shadow:0 24px 70px var(--shadow-strong),0 0 0 1px var(--accent-12);transform:translateY(10px) scale(.97);transition:transform .25s cubic-bezier(.2,.9,.3,1)}
+  .sm-overlay[data-open="true"] .sm-panel{transform:none}
+  .sm-head{display:flex;align-items:center;gap:14px;padding:10px 12px 0 18px;border-bottom:1px solid var(--muted-border)}
+  .sm-title{margin:0;color:var(--accent);font-size:1rem;font-weight:700;letter-spacing:.14em;text-transform:lowercase}
+  .sm-tabs{display:flex;flex:1;gap:4px}
+  .sm-tab{padding:10px 12px;border:0;border-bottom:2px solid transparent;background:transparent;color:var(--muted);font:inherit;font-size:.88rem;font-weight:600;cursor:pointer}
+  .sm-tab:hover{color:var(--text)}
+  .sm-tab[aria-selected="true"]{border-bottom-color:var(--accent);color:var(--text)}
+  .sm-close{width:32px;height:32px;margin-bottom:6px;padding:0;border:1px solid var(--muted-border);border-radius:50%;background:transparent;color:var(--muted);font-size:.85rem;cursor:pointer}
+  .sm-close:hover{border-color:var(--accent);color:var(--text)}
+  .sm-view{box-sizing:border-box;display:flex;flex-direction:column;gap:16px;min-height:300px;padding:18px;overflow-y:auto}
+  .sm-view[hidden]{display:none}
+  .sm-group{margin:0;padding:0;border:0;min-width:0}
+  .sm-group legend{padding:0 0 8px;color:var(--accent);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+  .sm-themes{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
+  .sm-theme{position:relative;display:block}
+  .sm-theme input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}
+  .sm-theme-card{display:flex;flex-direction:column;gap:7px;padding:8px;border:1px solid var(--muted-border);border-radius:8px;color:var(--muted);font-size:.82rem;font-weight:600;transition:background-color .18s ease,border-color .18s ease,color .18s ease}
+  .sm-theme-swatch{display:block;height:34px;border:1px solid rgba(128,128,128,.35);border-radius:5px}
+  .sm-theme input:hover+.sm-theme-card{background:var(--accent-10);color:var(--text)}
+  .sm-theme input:checked+.sm-theme-card{border-color:var(--accent);background:var(--accent-12);color:var(--text)}
+  .sm-theme input:focus-visible+.sm-theme-card{outline:2px solid var(--accent);outline-offset:2px}
+  .sm-row{display:flex;align-items:center;justify-content:space-between;gap:14px;cursor:pointer}
+  .sm-row-text{display:flex;flex-direction:column;gap:2px;min-width:0}
+  .sm-row-title{font-size:.92rem;font-weight:600}
+  .sm-row-hint{color:var(--muted);font-size:.78rem;line-height:1.35}
+  .sm-switch{appearance:none;position:relative;flex:0 0 40px;width:40px;height:23px;margin:0;border:1px solid var(--muted-border);border-radius:999px;background:var(--accent-10);cursor:pointer;transition:background-color .18s ease,border-color .18s ease}
+  .sm-switch::after{content:"";position:absolute;top:2px;left:2px;width:17px;height:17px;border-radius:50%;background:var(--muted);transition:transform .18s ease,background-color .18s ease}
+  .sm-switch:checked{border-color:var(--accent);background:var(--accent)}
+  .sm-switch:checked::after{transform:translateX(17px);background:var(--accent-contrast)}
+  .sm-switch:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .sm-summary{color:var(--muted);font-size:.78rem}
+  .sm-achievements{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin:0;padding:0;list-style:none}
+  .sm-ach{position:relative;display:grid;grid-template-columns:30px minmax(0,1fr);align-content:start;gap:10px;padding:12px;border:1px solid var(--muted-border);border-radius:8px;opacity:.72}
+  .sm-ach.is-unlocked{border-color:var(--accent);background:var(--accent-12);opacity:1;box-shadow:inset 3px 0 0 var(--accent)}
+  .sm-ach-icon{display:grid;place-items:center;width:30px;height:30px;border:1px solid var(--muted-border);border-radius:50%;color:var(--muted);font-size:.85rem}
+  .sm-ach.is-unlocked .sm-ach-icon{border-color:var(--accent);background:var(--accent);color:var(--accent-contrast)}
+  .sm-ach-name{display:block;font-size:.92rem;font-weight:700}
+  .sm-ach-desc{display:block;margin-top:2px;color:var(--muted);font-size:.78rem;line-height:1.4}
+  .sm-ach-progress{display:flex;align-items:center;gap:8px;margin-top:8px;color:var(--muted);font-size:.72rem;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .sm-ach-bar{flex:1;height:4px;border-radius:2px;background:var(--muted-border);overflow:hidden}
+  .sm-ach-bar i{display:block;height:100%;background:var(--accent)}
+  .sm-ach-state{margin-left:auto;font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+  .sm-ach.is-unlocked .sm-ach-state{color:var(--accent)}
+  .sm-toasts{position:absolute;top:calc(var(--sm-top) + 44px);right:10px;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+  .sm-toast{box-sizing:border-box;max-width:min(300px,calc(100vw - 20px));padding:10px 14px;border:1px solid var(--accent);border-radius:9px;background:var(--card);color:var(--text);box-shadow:0 12px 28px var(--shadow-soft);opacity:0;transform:translateY(-8px);transition:opacity .25s ease,transform .25s ease}
+  .sm-toast.is-visible{opacity:1;transform:none}
+  .sm-toast-label{display:block;color:var(--accent);font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+  .sm-toast-name{display:block;margin-top:2px;font-size:.9rem;font-weight:700}
+  @media (max-width:780px){.settings-menu{--sm-top:9px}}
+  @media (max-width:520px){.sm-overlay{padding:8px}.sm-title{display:none}.sm-view{padding:14px}.sm-achievements{grid-template-columns:1fr}}
+  .sm-danger-zone{margin-top:auto;display:flex;flex-direction:column;gap:10px;padding-top:16px;border-top:2px dashed var(--danger)}
+  .sm-danger-title{color:var(--danger);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+  .sm-danger,.sm-cancel,.sm-confirm-btn{flex:0 0 auto;padding:8px 14px;border-radius:8px;background:transparent;font:inherit;font-size:.82rem;font-weight:600;cursor:pointer;transition:background-color .18s ease,color .18s ease,border-color .18s ease}
+  .sm-danger{border:1px solid var(--danger);color:var(--danger)}
+  .sm-danger:hover,.sm-danger:focus-visible{background:color-mix(in srgb,var(--danger) 14%,transparent)}
+  .sm-cancel{border:1px solid var(--muted-border);color:var(--text)}
+  .sm-cancel:hover{background:var(--surface-hover);border-color:var(--accent)}
+  .sm-confirm-btn{border:1px solid var(--danger);background:var(--danger);color:#fff;font-weight:700}
+  .sm-confirm-btn[aria-disabled="true"]{opacity:.45;cursor:not-allowed}
+  .sm-danger:focus-visible,.sm-cancel:focus-visible,.sm-confirm-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .sm-confirm{position:absolute;inset:0;box-sizing:border-box;display:grid;place-items:center;padding:12px;background:var(--overlay);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .2s ease,visibility .2s ease}
+  .sm-confirm[data-open="true"]{opacity:1;visibility:visible;pointer-events:auto}
+  .sm-confirm-panel{box-sizing:border-box;display:flex;flex-direction:column;gap:14px;width:min(460px,100%);max-height:100%;overflow-y:auto;padding:22px;background:var(--card);color:var(--text);border:1px solid var(--danger);border-radius:10px;box-shadow:0 24px 70px var(--shadow-strong)}
+  .sm-confirm-title{color:var(--danger);font-size:1.05rem;font-weight:700;text-align:center}
+  .sm-confirm-desc{display:flex;flex-direction:column;gap:10px;color:var(--muted);font-size:.86rem;line-height:1.5}
+  .sm-confirm-list{margin:0;padding-left:1.2rem}
+  .sm-confirm-warn{color:var(--text);font-weight:700}
+  .sm-confirm-actions{display:flex;justify-content:flex-end;gap:10px}
+</style>
+
+<script>
+  import {
+    CHANGE_EVENT, UNLOCK_EVENT, effectiveTheme, getAchievements, getAvailableThemes, getSettings, initSiteState,
+    prefersReducedMotion, resetAllData, updateSettings,
+  } from '../scripts/site-state';
+  import { ACTIVITY_EVENT } from '../scripts/site-activity';
+
+  const setupSettingsMenu = () => {
+    const root = document.querySelector<HTMLElement>('[data-settings-menu]');
+    if (!root || root.dataset.bound === 'true') return;
+    root.dataset.bound = 'true';
+    initSiteState();
+
+    const toggle = root.querySelector<HTMLButtonElement>('#settings-toggle')!;
+    const overlay = root.querySelector<HTMLElement>('[data-sm-overlay]')!;
+    const panel = root.querySelector<HTMLElement>('#settings-panel')!;
+    const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-tab]'));
+    const themeBox = root.querySelector<HTMLElement>('[data-sm-themes]')!;
+    const forceInput = root.querySelector<HTMLInputElement>('[data-setting="forceTheme"]')!;
+    const motionInput = root.querySelector<HTMLInputElement>('[data-setting="reducedMotion"]')!;
+    const list = root.querySelector<HTMLElement>('[data-sm-achievements]')!;
+    const summary = root.querySelector<HTMLElement>('[data-sm-summary]')!;
+    const toasts = root.querySelector<HTMLElement>('[data-sm-toasts]')!;
+    const achievementsView = root.querySelector<HTMLElement>('#sm-view-achievements')!;
+    const confirmBox = root.querySelector<HTMLElement>('[data-sm-confirm]')!;
+    const resetButton = root.querySelector<HTMLButtonElement>('[data-sm-reset]')!;
+    const cancelButton = root.querySelector<HTMLButtonElement>('[data-sm-cancel]')!;
+    const confirmButton = root.querySelector<HTMLButtonElement>('[data-sm-confirm-btn]')!;
+
+    const COUNTDOWN_MS = 5000;
+    let countdownTimer = 0;
+    let countdownEnd = 0;
+
+    const stopCountdown = () => { window.clearInterval(countdownTimer); countdownTimer = 0; };
+    const updateCountdown = () => {
+      const left = Math.ceil((countdownEnd - performance.now()) / 1000);
+      if (left > 0) { confirmButton.textContent = `Confirm Reset (${left})`; return; }
+      stopCountdown();
+      confirmButton.setAttribute('aria-disabled', 'false');
+      confirmButton.textContent = 'CONFIRM RESET';
+    };
+    const startCountdown = () => {
+      stopCountdown();
+      countdownEnd = performance.now() + COUNTDOWN_MS;
+      confirmButton.setAttribute('aria-disabled', 'true');
+      updateCountdown();
+      countdownTimer = window.setInterval(updateCountdown, 200);
+    };
+
+    const isConfirmOpen = () => confirmBox.dataset.open === 'true';
+    const setConfirmOpen = (open: boolean) => {
+      if (open === isConfirmOpen()) return;
+      stopCountdown();
+      confirmBox.dataset.open = String(open);
+      if (open) { startCountdown(); void confirmBox.offsetWidth; cancelButton.focus(); }
+      else resetButton.focus();
+    };
+
+    // Background layers made inert while the modal is open.
+    const background = () => document.querySelectorAll<HTMLElement>('.page-shell, #music-player-shell');
+    const isOpen = () => overlay.dataset.open === 'true';
+    const setOpen = (open: boolean) => {
+      if (open === isOpen()) return;
+      if (!open) setConfirmOpen(false);
+      overlay.dataset.open = String(open);
+      toggle.setAttribute('aria-expanded', String(open));
+      document.documentElement.classList.toggle('sm-open', open);
+      background().forEach((element) => { element.inert = open; });
+      if (open) {
+        render();
+        void overlay.offsetWidth;
+        tabs.find((tab) => tab.getAttribute('aria-selected') === 'true')?.focus();
+      } else {
+        toggle.focus();
+      }
+    };
+
+    const showTab = (name: string, focus = false) => {
+      tabs.forEach((tab) => {
+        const selected = tab.dataset.tab === name;
+        tab.setAttribute('aria-selected', String(selected));
+        tab.tabIndex = selected ? 0 : -1;
+        root.querySelector<HTMLElement>(`#${tab.getAttribute('aria-controls')}`)!.hidden = !selected;
+        if (selected && focus) tab.focus();
+      });
+      if (name === 'achievements') renderAchievements();
+    };
+
+    let themeKey = '';
+    const renderThemes = () => {
+      const available = getAvailableThemes();
+      const key = available.map((theme) => theme.id).join();
+      if (key !== themeKey) {
+        themeKey = key;
+        themeBox.replaceChildren(...available.map((theme) => {
+          const label = document.createElement('label');
+          label.className = 'sm-theme';
+          const input = document.createElement('input');
+          input.type = 'radio';
+          input.name = 'sm-theme';
+          input.value = theme.id;
+          input.addEventListener('change', () => updateSettings({ theme: theme.id }));
+          const card = document.createElement('span');
+          card.className = 'sm-theme-card';
+          const swatch = document.createElement('span');
+          swatch.className = 'sm-theme-swatch';
+          swatch.style.background = theme.swatch;
+          card.append(swatch, theme.name);
+          label.append(input, card);
+          return label;
+        }));
+      }
+      const current = effectiveTheme();
+      themeBox.querySelectorAll<HTMLInputElement>('input').forEach((input) => { input.checked = input.value === current; });
+    };
+
+    const renderSettings = () => {
+      renderThemes();
+      forceInput.checked = getSettings().forceTheme;
+      motionInput.checked = prefersReducedMotion();
+    };
+
+    const renderAchievements = () => {
+      const visible = getAchievements();
+      summary.textContent = `${visible.filter((item) => item.unlocked).length} / ${visible.length} unlocked`;
+      list.replaceChildren(...visible.map((item) => {
+        const li = document.createElement('li');
+        li.className = `sm-ach${item.unlocked ? ' is-unlocked' : ''}`;
+        const icon = document.createElement('span');
+        icon.className = 'sm-ach-icon';
+        icon.setAttribute('aria-hidden', 'true');
+        icon.textContent = item.unlocked ? '\u2713' : '\u{1F512}\uFE0E';
+        const body = document.createElement('div');
+        const name = document.createElement('span');
+        name.className = 'sm-ach-name';
+        name.textContent = item.name;
+        const desc = document.createElement('span');
+        desc.className = 'sm-ach-desc';
+        desc.textContent = item.secret && !item.unlocked ? '???' : item.description;
+        const progress = document.createElement('div');
+        progress.className = 'sm-ach-progress';
+        const bar = document.createElement('div');
+        bar.className = 'sm-ach-bar';
+        bar.setAttribute('role', 'progressbar');
+        bar.setAttribute('aria-label', `${item.name} progress`);
+        bar.setAttribute('aria-valuemin', '0');
+        bar.setAttribute('aria-valuemax', String(item.goal));
+        bar.setAttribute('aria-valuenow', String(item.progress));
+        const fill = document.createElement('i');
+        fill.style.width = `${(item.progress / item.goal) * 100}%`;
+        bar.append(fill);
+        const count = document.createElement('span');
+        count.textContent = `${item.progress} / ${item.goal}${item.unit ? ` ${item.unit}` : ''}`;
+        const state = document.createElement('span');
+        state.className = 'sm-ach-state';
+        state.textContent = item.unlocked ? 'Unlocked' : 'Locked';
+        // Progress would leak a secret's condition, so only show it once unlocked.
+        if (item.secret && !item.unlocked) progress.append(state);
+        else progress.append(bar, count, state);
+        body.append(name, desc, progress);
+        li.append(icon, body);
+        return li;
+      }));
+    };
+
+    const render = () => {
+      renderSettings();
+      if (!achievementsView.hidden) renderAchievements();
+    };
+
+    const toastQueue: string[] = [];
+    let toastBusy = false;
+    const nextToast = () => {
+      const name = toastQueue.shift();
+      if (name === undefined) { toastBusy = false; return; }
+      toastBusy = true;
+      const toast = document.createElement('div');
+      toast.className = 'sm-toast';
+      const label = document.createElement('span');
+      label.className = 'sm-toast-label';
+      label.textContent = 'Achievement Unlocked!';
+      const title = document.createElement('span');
+      title.className = 'sm-toast-name';
+      title.textContent = name;
+      toast.append(label, title);
+      toasts.append(toast);
+      requestAnimationFrame(() => toast.classList.add('is-visible'));
+      window.setTimeout(() => {
+        toast.classList.remove('is-visible');
+        window.setTimeout(() => { toast.remove(); nextToast(); }, prefersReducedMotion() ? 0 : 300);
+      }, toastQueue.length > 0 ? 1800 : 4000);
+    };
+
+    toggle.addEventListener('click', () => setOpen(!isOpen()));
+    resetButton.addEventListener('click', () => setConfirmOpen(true));
+    cancelButton.addEventListener('click', () => setConfirmOpen(false));
+    confirmBox.addEventListener('pointerdown', (event) => { if (event.target === confirmBox) setConfirmOpen(false); });
+    confirmButton.addEventListener('click', () => {
+      if (confirmButton.getAttribute('aria-disabled') === 'true') return;
+      confirmButton.textContent = 'RESETTING\u2026';
+      resetAllData();
+      window.location.reload();
+    });
+    root.querySelector('[data-sm-close]')!.addEventListener('click', () => setOpen(false));
+    overlay.addEventListener('pointerdown', (event) => { if (event.target === overlay) setOpen(false); });
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => showTab(tab.dataset.tab!));
+      tab.addEventListener('keydown', (event) => {
+        const step = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
+        if (event.key === 'Home' || event.key === 'End') {
+          event.preventDefault();
+          showTab(tabs[event.key === 'Home' ? 0 : tabs.length - 1].dataset.tab!, true);
+        } else if (step) {
+          event.preventDefault();
+          showTab(tabs[(index + step + tabs.length) % tabs.length].dataset.tab!, true);
+        }
+      });
+    });
+    forceInput.addEventListener('change', () => updateSettings({ forceTheme: forceInput.checked }));
+    motionInput.addEventListener('change', () => updateSettings({ reducedMotion: motionInput.checked }));
+
+    // Keep keystrokes (space, letters) from reaching the music player's global shortcuts.
+    overlay.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') { if (isConfirmOpen()) { event.stopPropagation(); setConfirmOpen(false); } else setOpen(false); return; }
+      event.stopPropagation();
+      if (event.key !== 'Tab') return;
+      const trapRoot = isConfirmOpen() ? confirmBox : panel;
+      const focusable = Array.from(trapRoot.querySelectorAll<HTMLElement>('button, input, [tabindex="0"]'))
+        .filter((element) => !element.closest('[hidden]') && element.tabIndex >= 0);
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    });
+    document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && isOpen() && !isConfirmOpen()) setOpen(false); });
+    document.addEventListener('astro:before-swap', () => setOpen(false));
+
+    window.addEventListener(CHANGE_EVENT, render);
+    window.addEventListener(ACTIVITY_EVENT, () => { if (isOpen() && !achievementsView.hidden) renderAchievements(); });
+    window.addEventListener(UNLOCK_EVENT, (event) => {
+      toastQueue.push((event as CustomEvent<{ name: string }>).detail.name);
+      if (!toastBusy) nextToast();
+    });
+    render();
+  };
+
+  setupSettingsMenu();
+  document.addEventListener('astro:page-load', setupSettingsMenu);
+</script>

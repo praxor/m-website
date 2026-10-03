@@ -1,0 +1,81 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import ImageGallery from '../components/ImageGallery.astro';
+import { fanartByNumber } from '../data/fanart';
+
+const art = fanartByNumber.get(1)!;
+const galleryItems = [{ src: art.src, alt: 'Heian-era praxor design', width: art.width, height: art.height, caption: art.caption ?? '', credit: art.artist }];
+const steps = [
+  { title: 'minecraft skins', text: 'Where most of my OCs originated. I put my representation through many designs here.' },
+  { title: 'studying forms', text: 'Practically studying the other forms I could put myself in, like Axis himself.' },
+  { title: 'the praxor cat', text: 'The elusive design you may see all over the website.' },
+  { title: 'roblox', text: 'What I use now, cause I suck at pixel art.' },
+];
+---
+<Layout title="pre-axis" description="the designs that came before axis.">
+  <main class="pa-main">
+    <a class="pa-back" href="/characters">← back to characters</a>
+
+    <section class="pa-hero">
+      <div class="pa-copy">
+        <p class="pa-kicker">FILE 00 · BEFORE AXIS</p>
+        <h1>pre-<span>axis</span></h1>
+        <p class="pa-lead">Before Axis's creation, I was practically studying my other forms that I could put myself in, like Axis himself for example. When making my earlier Minecraft skins (that's how most of my OCs originated, now I use Roblox cause I suck at pixel art) I had put my representation through many designs, including the <i>elusive</i> praxor cat that you may see all over the website.</p>
+      </div>
+      <figure class="pa-figure">
+        <div class="pa-frame" role="button" tabindex="0" aria-haspopup="dialog" aria-label="View early design larger" data-art-index="0">
+          <span class="pa-corner tl" aria-hidden="true"></span><span class="pa-corner tr" aria-hidden="true"></span><span class="pa-corner bl" aria-hidden="true"></span><span class="pa-corner br" aria-hidden="true"></span>
+          <Image src={art.src} alt="Heian-era praxor design" width={art.width} height={art.height} loading="eager" decoding="async" />
+        </div>
+        <figcaption>{art.caption} <span>art by {art.artist}</span></figcaption>
+      </figure>
+    </section>
+
+    <section class="pa-timeline" aria-labelledby="pa-timeline-title">
+      <h2 id="pa-timeline-title">how it went</h2>
+      <ol>
+        {steps.map((step, index) => (
+          <li>
+            <span class="pa-step-number">{String(index + 1).padStart(2, '0')}</span>
+            <h3>{step.title}</h3>
+            <p>{step.text}</p>
+          </li>
+        ))}
+      </ol>
+    </section>
+  </main>
+  <ImageGallery title="pre-axis" label="image" items={galleryItems} />
+</Layout>
+
+<style>
+  .pa-main{box-sizing:border-box;width:100%;max-width:1100px;margin:clamp(1.25rem,3vw,2.5rem) auto;padding:clamp(1.25rem,3vw,2.5rem);background:radial-gradient(ellipse at 85% 0%,var(--accent-12),transparent 45%),var(--card);border:1px solid var(--muted-border);border-radius:2px;box-shadow:inset 0 1px 0 var(--accent-12)}
+  .pa-back{display:inline-block;margin-bottom:1.5rem;color:var(--muted);font-size:.9rem}
+  .pa-hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(240px,.9fr);gap:clamp(1.5rem,5vw,4rem);align-items:center}
+  .pa-kicker{margin:0 0 1rem;color:var(--muted);font-size:.72rem;font-weight:700;letter-spacing:.16em}
+  .pa-copy h1{margin:0 0 1.2rem;color:var(--text);font-size:clamp(3rem,8vw,5.5rem);font-weight:700;line-height:.95;letter-spacing:-.02em;text-transform:lowercase}
+  .pa-copy h1 span{color:var(--accent);text-decoration:line-through;text-decoration-thickness:.06em}
+  .pa-lead{margin:0;max-width:46ch;color:var(--muted);line-height:1.8;overflow-wrap:anywhere}
+  .pa-figure{margin:0;min-width:0}
+  .pa-frame{position:relative;display:grid;place-items:center;aspect-ratio:4/3;padding:14px;background:var(--accent-10);cursor:zoom-in;transform:rotate(1.5deg);transition:transform .25s ease}
+  .pa-frame:hover,.pa-frame:focus-visible{transform:rotate(0)}
+  .pa-frame:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+  .pa-frame img{width:100%;height:100%;object-fit:contain}
+  .pa-corner{position:absolute;width:18px;height:18px;border:2px solid var(--accent);pointer-events:none}
+  .pa-corner.tl{top:0;left:0;border-right:0;border-bottom:0}.pa-corner.tr{top:0;right:0;border-left:0;border-bottom:0}
+  .pa-corner.bl{bottom:0;left:0;border-right:0;border-top:0}.pa-corner.br{bottom:0;right:0;border-left:0;border-top:0}
+  .pa-figure figcaption{margin-top:.9rem;color:var(--muted);font-size:.9rem;font-style:italic;text-align:center}
+  .pa-figure figcaption span{display:block;margin-top:.15rem;font-size:.72rem;font-style:normal;opacity:.8}
+  .pa-timeline{margin-top:clamp(2rem,5vw,3.5rem);padding-top:1.5rem;border-top:1px solid var(--muted-border)}
+  .pa-timeline h2{margin:0 0 1.2rem;color:var(--accent);font-size:1rem;letter-spacing:.14em;text-transform:lowercase}
+  .pa-timeline ol{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:0;padding:0;list-style:none}
+  .pa-timeline li{padding:1rem;background:var(--accent-10);border:1px solid var(--muted-border);border-radius:2px;transition:transform .2s ease,border-color .2s ease}
+  .pa-timeline li:hover{transform:translateY(-4px);border-color:var(--accent)}
+  .pa-step-number{color:var(--accent);font-size:.72rem;font-weight:700;letter-spacing:.12em}
+  .pa-timeline h3{margin:.5rem 0 .4rem;color:var(--text);font-size:1rem;text-transform:lowercase}
+  .pa-timeline p{margin:0;color:var(--muted);font-size:.88rem;line-height:1.6;overflow-wrap:anywhere}
+  @media (max-width:900px){.pa-timeline ol{grid-template-columns:1fr 1fr}}
+  @media (max-width:760px){.pa-main{margin:1rem 12px;padding:1rem 12px}.pa-hero{grid-template-columns:1fr}.pa-frame{transform:none}}
+  @media (max-width:480px){.pa-timeline ol{grid-template-columns:1fr}}
+  @media (prefers-reduced-motion:reduce){.pa-frame,.pa-timeline li{transition:none}}
+</style>

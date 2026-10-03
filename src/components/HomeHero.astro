@@ -1,4 +1,4 @@
----
+﻿---
 import { Image } from 'astro:assets';
 ---
 
@@ -23,7 +23,7 @@ import { Image } from 'astro:assets';
   .hero-lead{margin:9px 0 0;color:var(--muted);font-size:1rem}
   .cat-stage{display:grid;place-items:center;height:158px;overflow:visible;perspective:850px;perspective-origin:50% 48%}
   .cat-trigger{display:grid;place-items:center;width:154px;height:154px;padding:0;border:0;background:transparent;cursor:pointer;transform-style:preserve-3d;animation:cat-float 2.8s ease-in-out infinite}
-  .bouncy-cat{display:block;width:100%;height:100%;object-fit:contain;transform:rotate(-13deg) rotateX(var(--cat-tilt-x,0deg)) rotateY(var(--cat-tilt-y,0deg)) translateZ(22px);filter:drop-shadow(0 13px 10px rgba(0,0,0,.3));transition:transform .24s cubic-bezier(.2,.9,.3,1);will-change:transform}
+  .bouncy-cat{display:block;width:100%;height:100%;object-fit:contain;transform:rotate(-13deg) rotateX(var(--cat-tilt-x,0deg)) rotateY(var(--cat-tilt-y,0deg)) translateZ(22px);filter:drop-shadow(0 13px 10px var(--shadow-soft));transition:transform .24s cubic-bezier(.2,.9,.3,1);will-change:transform}
   .cat-trigger:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
   @keyframes cat-float{0%,100%{translate:0 0}50%{translate:0 -11px}}
   @keyframes hero-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
@@ -49,19 +49,20 @@ import { Image } from 'astro:assets';
 </style>
 
 <script>
+  import { prefersReducedMotion, unlockAchievement } from '../scripts/site-state';
+
   const initializeCatParallax = () => {
     const stage = document.querySelector<HTMLElement>('[data-cat-stage]');
     const trigger = stage?.querySelector<HTMLButtonElement>('.cat-trigger');
     if (!stage || !trigger || stage.dataset.parallaxInitialized === 'true') return;
     stage.dataset.parallaxInitialized = 'true';
 
-    const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
     const resetTilt = () => {
       stage.style.setProperty('--cat-tilt-x', '0deg');
       stage.style.setProperty('--cat-tilt-y', '0deg');
     };
     stage.addEventListener('pointermove', (event) => {
-      if (motionPreference.matches || event.pointerType === 'touch') return;
+      if (prefersReducedMotion() || event.pointerType === 'touch') return;
       const bounds = stage.getBoundingClientRect();
       const horizontal = Math.max(-1, Math.min(1, ((event.clientX - bounds.left) / bounds.width - .5) * 2));
       const vertical = Math.max(-1, Math.min(1, ((event.clientY - bounds.top) / bounds.height - .5) * 2));
@@ -69,8 +70,8 @@ import { Image } from 'astro:assets';
       stage.style.setProperty('--cat-tilt-y', `${horizontal * 11}deg`);
     });
     stage.addEventListener('pointerleave', resetTilt);
-    motionPreference.addEventListener('change', (event) => { if (event.matches) resetTilt(); });
     trigger.addEventListener('click', () => {
+      unlockAchievement('nightcoreBeLike');
       window.location.href = 'https://praxor.de/media/paxogroove.mp4';
     });
   };

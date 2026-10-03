@@ -1,8 +1,8 @@
----
+﻿---
 import Layout from '../layouts/Layout.astro';
 ---
 <Layout title="cult" description="buddy found the cult page." bodyClass="cult-page">
-    <main class="cult-main">
+    <main class="cult-main" data-unlock-on-view="cultbound">
       <section class="cult-hero" aria-labelledby="cult-title">
         <p class="cult-kicker">so you want in, huh?</p>
         <div class="cult-title-band">
@@ -19,13 +19,13 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <style>
-  :global(.cult-page){--bg:#020812;--card:#061326;--text:#dcecff;--muted:#7895b8;--accent:#3872b1;--accent-dark:#061c32;--accent-10:rgba(56,114,177,.1);--accent-12:rgba(56,114,177,.18);--muted-border:rgba(56,114,177,.2);background-color:var(--bg);background-image:linear-gradient(rgba(2,8,18,.96),rgba(2,8,18,.98)),url('https://praxor.de/media/bluebricks.png');background-repeat:repeat;background-size:auto;position:relative}
+  :global(.cult-page){--bg:#020812;--card:#061326;--text:#dcecff;--muted:#7895b8;--accent:#3872b1;--accent-dark:#061c32;--accent-10:rgba(56,114,177,.1);--accent-12:rgba(56,114,177,.18);--muted-border:rgba(56,114,177,.2);--overlay:rgba(0,0,0,.7);--shadow-soft:rgba(0,6,16,.5);--shadow-strong:rgba(0,0,0,.65);--surface-hover:rgba(255,255,255,.04);--surface-inset:rgba(0,0,0,.16);--code-bg:#030c18;background-color:var(--bg);background-image:linear-gradient(rgba(2,8,18,.96),rgba(2,8,18,.98)),url('https://praxor.de/media/bluebricks.png');background-repeat:repeat;background-size:auto;position:relative}
   :global(.cult-page::before){background-image:url('https://praxor.de/media/res/bluebricks.png');opacity:.04}
   :global(.cult-page .site-header){background:var(--card);border-color:var(--muted-border)}
   :global(.cult-page .cta){background:linear-gradient(180deg,#1b6caf,#061c32);color:#fff;border-color:#3872b1;box-shadow:0 8px 20px rgba(8,57,107,.35)}
   :global(.cult-page .cta:hover){background:linear-gradient(180deg,#2585d3,#092842);box-shadow:0 14px 30px rgba(8,57,107,.5)}
-  :global(.cult-page .cult-link){color:var(--accent)!important;background:transparent;box-shadow:none}
-  :global(.cult-page .mobile-nav .cult-link){color:var(--accent)!important}
+  :global(.cult-page .cult-link){color:transparent!important;background:transparent;box-shadow:none}
+  :global(.cult-page .mobile-nav .cult-link){color:transparent!important}
   /* No z-index on main: a stacking context here would paint over the fixed music player. */
   .cult-main{min-height:calc(100vh - 76px);display:grid;place-items:center;padding:clamp(3rem,8vw,6rem) 20px 9rem;box-sizing:border-box;position:relative}
   .cult-hero{position:relative;display:flex;flex-direction:column;align-items:center;width:min(100%,640px);text-align:center}

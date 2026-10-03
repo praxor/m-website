@@ -1,4 +1,4 @@
----
+﻿---
 import Layout from '../../layouts/Layout.astro';
 import HomeHero from '../../components/HomeHero.astro';
 import HomeFrame from '../../components/HomeFrame.astro';
@@ -40,7 +40,7 @@ const imageSrc = post.data.image
     <HomeFrame>
       <section class="dispatch-feed update-reader" slot="feed" aria-labelledby="update-title">
         <a class="update-back" href={`${base}#dispatch-title`}>back to recent updates</a>
-        <article class:list={['update-article', { 'is-latest': isLatest }]}>
+        <article class:list={['update-article', { 'is-latest': isLatest }]} data-post-id={post.id}>
           <header class="update-header">
             <p class="update-kind">{isLatest ? 'NEW ' : ''}{typeLabel}</p>
             <h2 id="update-title">{post.data.title}</h2>
@@ -81,7 +81,7 @@ const imageSrc = post.data.image
   .update-header h2{margin:0;color:var(--text);font-size:clamp(1.35rem,3vw,2rem);line-height:1.15;letter-spacing:0;overflow-wrap:anywhere}
   .update-header time{display:block;margin-top:10px;color:var(--muted);font-size:.76rem}
   .update-divider{width:34px;height:2px;margin:18px 0;background:var(--accent)}
-  .update-cover{display:grid;place-items:center;min-height:100px;max-height:min(58vh,560px);margin:0 0 13px;overflow:hidden;background:rgba(0,0,0,.18)}
+  .update-cover{display:grid;place-items:center;min-height:100px;max-height:min(58vh,560px);margin:0 0 13px;overflow:hidden;background:var(--surface-inset)}
   .update-cover img{display:block;width:100%;height:auto;max-height:min(58vh,560px);object-fit:contain}
   .update-description{margin:0;color:var(--muted);font-size:.87rem;line-height:1.6}
   .markdown-divider{margin:20px 0}
@@ -93,9 +93,9 @@ const imageSrc = post.data.image
   .update-body :global(ul),.update-body :global(ol){padding-left:1.3rem}
   .update-body :global(img){display:block;width:auto;height:auto;max-width:100%;max-height:min(72vh,720px);margin:20px auto;object-fit:contain}
   .update-body :global(figure){max-width:100%;margin:20px 0}
-  .update-body :global(pre){box-sizing:border-box;max-width:100%;overflow-x:auto;margin:18px 0;padding:14px;border:1px solid var(--muted-border);background:#08060d;color:var(--text);font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;font-size:.8rem;line-height:1.6;white-space:pre}
+  .update-body :global(pre){box-sizing:border-box;max-width:100%;overflow-x:auto;margin:18px 0;padding:14px;border:1px solid var(--muted-border);background:var(--code-bg);color:var(--text);font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;font-size:.8rem;line-height:1.6;white-space:pre}
   .update-body :global(pre code){padding:0;background:transparent;color:inherit;font-size:inherit;white-space:pre}
-  .update-body :global(:not(pre) > code){padding:2px 4px;background:rgba(0,0,0,.24);font-size:.86em}
+  .update-body :global(:not(pre) > code){padding:2px 4px;background:var(--code-bg);font-size:.86em}
   .update-body :global(blockquote){margin:16px 0;padding-left:14px;border-left:2px solid var(--accent);color:var(--muted)}
   .update-body :global(table){display:block;max-width:100%;overflow-x:auto;border-collapse:collapse}
   .update-body :global(th),.update-body :global(td){padding:7px 10px;border:1px solid var(--muted-border);text-align:left}

@@ -1,4 +1,4 @@
----
+﻿---
 import { characters } from '../data/characters';
 import { Image } from 'astro:assets';
 const base = import.meta.env.BASE_URL;
@@ -69,23 +69,26 @@ const base = import.meta.env.BASE_URL;
       </a>
     </div>
   </nav>
+  <div class="toohi-cats" aria-hidden="true">
+    {[0, 1, 2, 3, 4].map((index) => <img src="https://praxor.de/media/res/oraxor.png" alt="" width="24" height="24" loading="lazy" decoding="async" style={`--i:${index}`} />)}
+  </div>
   <style>
     .site-header{position:sticky;top:0;z-index:40;background:var(--card);border-bottom:1px solid var(--muted-border);transition:var(--theme-transition),background-color .22s ease,color .22s ease,border-color .22s ease}
     .site-header .container{max-width:1100px;margin:0 auto;padding:6px 16px;display:flex;align-items:center;gap:10px}
-    .logo{display:inline-block;text-decoration:none}
-    .logo img{height:28px;width:auto;border-radius:0;display:block}
+    .logo{display:inline-block;text-decoration:none;touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+    .logo img{height:28px;width:auto;border-radius:0;display:block;-webkit-user-drag:none;-webkit-touch-callout:none}
     .logo.secret-ready img{animation:secret-cat-spin .32s linear infinite}
     @keyframes secret-cat-spin{to{transform:rotate(360deg)}}
     .nav{display:flex;gap:6px;margin-left:2px}
     .nav a{color:var(--muted);text-decoration:none;padding:4px 6px;border-radius:7px;font-weight:600;transition:color .22s ease,background-color .22s ease}
-    .nav a:hover{background:rgba(255,255,255,0.02);color:var(--text)}
+    .nav a:hover{background:var(--surface-hover);color:var(--text)}
     .character-menu{position:relative;display:flex;align-items:center}
     .character-chevron{display:inline-block;width:6px;height:6px;margin:0 0 3px 6px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg);transition:transform .18s ease}
     .character-menu:hover .character-chevron,.character-menu:focus-within .character-chevron{transform:rotate(225deg)}
-    .character-menu-panel{position:absolute;top:calc(100% + 10px);left:0;min-width:170px;padding:6px;background:var(--card);border:1px solid var(--muted-border);border-radius:8px;box-shadow:0 16px 34px rgba(4,2,10,.4);opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .18s ease,transform .18s ease,visibility .18s ease}
+    .character-menu-panel{position:absolute;top:calc(100% + 10px);left:0;min-width:170px;padding:6px;background:var(--card);border:1px solid var(--muted-border);border-radius:8px;box-shadow:0 16px 34px var(--shadow-soft);opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .18s ease,transform .18s ease,visibility .18s ease}
     .character-menu:hover .character-menu-panel,.character-menu:focus-within .character-menu-panel{opacity:1;visibility:visible;transform:translateY(0)}
     .character-menu-panel a{display:block;white-space:nowrap}
-    .cult-link{color:var(--card)!important}
+    .cult-link{color:transparent!important}
     .nav .cult-link{transition-duration:.12s}
     .actions{margin-left:auto;display:flex;align-items:center;gap:4px}
     .cta{padding:7px 10px;border-radius:8px;font-size:.88rem}
@@ -110,8 +113,8 @@ const base = import.meta.env.BASE_URL;
       .mobile-nav{position:absolute;top:100%;left:0;right:0;box-sizing:border-box;display:flex;flex-direction:column;gap:2px;max-height:0;padding:0 12px;background:var(--card);border-top:1px solid transparent;opacity:0;overflow:hidden;transform:translateY(-8px);transition:max-height .32s ease,padding .32s ease,opacity .24s ease,transform .32s ease,border-color .32s ease;visibility:hidden}
       .mobile-nav.open{max-height:min(80vh,720px);padding:8px 12px 4px;border-top-color:var(--muted-border);opacity:1;overflow-y:auto;transform:translateY(0);visibility:visible}
       .mobile-nav a{display:block;color:var(--muted);text-decoration:none;padding:11px 10px;border-radius:8px;font-weight:600}
-      .mobile-nav a:hover,.mobile-nav a:focus{background:rgba(255,255,255,0.04);color:var(--text)}
-      .mobile-nav .cult-link{color:var(--card)!important}
+      .mobile-nav a:hover,.mobile-nav a:focus{background:var(--surface-hover);color:var(--text)}
+      .mobile-nav .cult-link{color:transparent!important}
       .mobile-character-row{display:flex;align-items:center;gap:4px}
       .mobile-character-row>a{flex:1}
       .mobile-character-toggle{width:38px;height:38px;border:0;border-radius:7px;background:transparent;color:var(--muted);font:inherit;font-size:1rem;cursor:pointer;transition:background .18s ease,transform .24s ease}
@@ -124,6 +127,8 @@ const base = import.meta.env.BASE_URL;
       .mobile-socials .social-btn{display:flex;align-items:center;justify-content:center;width:38px;height:34px;padding:0;font-size:16px}
     }
     @media (max-width:780px){.character-menu{display:none}}
+    /* Reserve room for the fixed settings button at the viewport's top-right. */
+    @media (max-width:1220px){.site-header .container{padding-right:54px}}
     @media (prefers-reduced-motion:reduce){
       .site-header,.site-header .nav a,.site-header .character-menu-panel,.site-header .cta,.site-header .mobile-nav,.site-header .mobile-nav a{transition:none!important}
     }
@@ -149,7 +154,7 @@ const base = import.meta.env.BASE_URL;
   <style>
     .contact-panel{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:60;pointer-events:none;opacity:0;transition:opacity .28s ease}
     .contact-panel .contact-overlay{position:absolute;inset:0;background:color-mix(in srgb,var(--bg) 72%,transparent);opacity:0;transition:opacity .28s ease}
-    .contact-panel .contact-inner{position:relative;z-index:2;max-width:380px;width:calc(100% - 40px);background:radial-gradient(120% 80% at 50% 0%, color-mix(in srgb,var(--accent) 32%,transparent), transparent 70%), var(--card);border:1px solid color-mix(in srgb,var(--accent) 45%,transparent);padding:48px 22px 22px;border-radius:18px;box-shadow:0 24px 70px rgba(0,0,0,0.65), 0 0 0 1px var(--accent-12), 0 0 48px color-mix(in srgb,var(--accent) 18%,transparent);transform:translateY(24px) scale(.92);opacity:0;transition:transform .3s ease,opacity .2s ease}
+    .contact-panel .contact-inner{position:relative;z-index:2;max-width:380px;width:calc(100% - 40px);background:radial-gradient(120% 80% at 50% 0%, color-mix(in srgb,var(--accent) 32%,transparent), transparent 70%), var(--card);border:1px solid color-mix(in srgb,var(--accent) 45%,transparent);padding:48px 22px 22px;border-radius:18px;box-shadow:0 24px 70px var(--shadow-strong), 0 0 0 1px var(--accent-12), 0 0 48px color-mix(in srgb,var(--accent) 18%,transparent);transform:translateY(24px) scale(.92);opacity:0;transition:transform .3s ease,opacity .2s ease}
     .contact-inner::before{content:"";position:absolute;left:50%;top:0;width:96px;height:2px;transform:translateX(-50%);border-radius:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);pointer-events:none}
     .modal-top{position:absolute;left:50%;top:-36px;width:72px;height:72px;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:2}
     .modal-top .confetti{position:absolute;left:50%;top:50%;transform:translate(-50%,-10%);width:220px;height:140px;pointer-events:none;z-index:1}
@@ -175,7 +180,7 @@ const base = import.meta.env.BASE_URL;
 
     .contact-panel.closing .modal-cat{visibility:hidden}
     .modal-lead{margin:0;display:grid;gap:8px;color:var(--muted);font-style:italic;text-align:center;opacity:1}
-    .contact-row{position:relative;display:block;width:100%;box-sizing:border-box;padding:11px 14px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px solid var(--muted-border);color:inherit;font:inherit;font-style:italic;text-align:center;text-decoration:none;cursor:pointer;transition:border-color .2s ease,background .2s ease,transform .15s ease}
+    .contact-row{position:relative;display:block;width:100%;box-sizing:border-box;padding:11px 14px;border-radius:10px;background:var(--surface-hover);border:1px solid var(--muted-border);color:inherit;font:inherit;font-style:italic;text-align:center;text-decoration:none;cursor:pointer;transition:border-color .2s ease,background .2s ease,transform .15s ease}
     .contact-row:hover,.contact-row:focus-visible{border-color:var(--accent);background:var(--accent-12)}
     .contact-row:active{transform:scale(.98)}
     .contact-value{color:var(--accent)}
@@ -187,13 +192,14 @@ const base = import.meta.env.BASE_URL;
     /* Card and backdrop fade out after the cat's pieces have started flying. */
     .contact-panel.closing .contact-inner{transform:translateY(14px) scale(.96);opacity:0;transition:transform .4s ease .5s,opacity .35s ease .5s}
     .contact-panel.closing .contact-overlay{opacity:0;transition:opacity .45s ease .7s}
-    .contact-close{position:absolute;right:12px;top:12px;width:32px;height:32px;display:grid;place-items:center;padding:0;border-radius:50%;background:rgba(255,255,255,0.05);border:1px solid var(--muted-border);color:var(--muted);font-size:.95rem;cursor:pointer;transition:background .2s ease,color .2s ease,border-color .2s ease}
+    .contact-close{position:absolute;right:12px;top:12px;width:32px;height:32px;display:grid;place-items:center;padding:0;border-radius:50%;background:var(--surface-hover);border:1px solid var(--muted-border);color:var(--muted);font-size:.95rem;cursor:pointer;transition:background .2s ease,color .2s ease,border-color .2s ease}
     .contact-close:hover,.contact-close:focus-visible{background:color-mix(in srgb,var(--accent) 25%,transparent);border-color:var(--accent);color:var(--text)}
     .contact-panel h3{margin:6px 0 8px;color:var(--accent)}
     .contact-panel a{color:var(--accent)}
   </style>
 
   <script>
+    import { prefersReducedMotion } from '../scripts/site-state';
     (function(){
       const sizeSocialIcons = function(){
         document.querySelectorAll<SVGElement>('.social-btn svg').forEach((icon)=>{
@@ -207,6 +213,7 @@ const base = import.meta.env.BASE_URL;
       const cultUrl = new URL('cult', document.baseURI).href;
       let secretLogoTimer: number | undefined;
       let secretLogoReady = false;
+      let logoHoldCompleted = false;
       let rumbleContext: AudioContext | undefined;
       let rumbleGain: GainNode | undefined;
       let rumbleOscillators: OscillatorNode[] = [];
@@ -294,14 +301,17 @@ const base = import.meta.env.BASE_URL;
         logo?.classList.remove('secret-ready');
         stopRumble();
       };
-      logo?.addEventListener('pointerdown', function(){
+      logo?.addEventListener('pointerdown', function(event: PointerEvent){
+        logoHoldCompleted = false;
         if (!window.matchMedia('(max-width: 780px)').matches) return;
+        // Capture keeps the hold alive through small finger drift.
+        try { logo.setPointerCapture(event.pointerId); } catch { /* unsupported */ }
         secretLogoReady = false;
         secretLogoTimer = window.setTimeout(() => {
           secretLogoReady = true;
           logo?.classList.add('secret-ready');
           shakeStartedAt = performance.now();
-          shakeFrame = window.requestAnimationFrame(rampSecretShake);
+          if (!prefersReducedMotion()) shakeFrame = window.requestAnimationFrame(rampSecretShake);
           void startRumble();
         }, 700);
       });
@@ -313,9 +323,20 @@ const base = import.meta.env.BASE_URL;
         event.preventDefault();
         cancelSecretLogo();
         secretLogoReady = false;
+        logoHoldCompleted = true;
         if (window.matchMedia('(max-width: 780px)').matches) {
           window.location.href = cultUrl;
         }
+      });
+      // The release after a completed hold would otherwise also follow the logo's own link.
+      logo?.addEventListener('click', function(event){
+        if (!logoHoldCompleted) return;
+        logoHoldCompleted = false;
+        event.preventDefault();
+      });
+      logo?.addEventListener('dragstart', function(event){ event.preventDefault(); });
+      logo?.addEventListener('contextmenu', function(event){
+        if (window.matchMedia('(pointer: coarse)').matches) event.preventDefault();
       });
       logo?.addEventListener('pointercancel', cancelSecretLogo);
       logo?.addEventListener('pointerleave', cancelSecretLogo);
@@ -356,7 +377,7 @@ const base = import.meta.env.BASE_URL;
         const shardBox = panel.querySelector<HTMLElement>('.shards');
         const colors = ['#ff5e7e','#ffb470','#ffd36b','#7ee4a3','#7ec9ff','#c58cff','#ff8fcf','#ffd2a6'];
         const rand = (min: number, max: number) => min + Math.random() * (max - min);
-        const reduceMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const reduceMotion = prefersReducedMotion;
         let confettiTimer: number | undefined;
         type Particle = { el: HTMLElement; vx: number; vy: number; vr: number; life: number; drag: number; delay: number; born?: number };
         const GRAVITY = 1500; // px/s^2
