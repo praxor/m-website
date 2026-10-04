@@ -119,11 +119,6 @@ export const achievements = {
 		description: 'Click on the flying praxor with a trail in the credits.',
 		secret: true,
 	},
-	creditsCompletionPlaceholder: {
-		name: 'Credits Completion (Placeholder)',
-		description: 'Placeholder for the future credits achievement that disables the flying Praxor cameo.',
-		secret: true,
-	},
 	futureMysterySettingUnlock: {
 		name: '???',
 		description: '???',

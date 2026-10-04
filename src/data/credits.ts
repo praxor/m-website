@@ -52,7 +52,6 @@ export const creditsSections: CreditSectionData[] = [
     durationMs: 5000,
     entries: [
       { role: 'Original Artwork', name: 'Praxor' },
-      { role: 'Contributors' },
       { role: 'Commissions' },
     ],
   },
@@ -116,7 +115,6 @@ export const creditsSequence: CreditsSequenceItem[] = [
   { type: 'section', id: 'content' },
   { type: 'section', id: 'testing' },
   { type: 'section', id: 'special-thanks' },
-  { type: 'history', durationMs: 2000 },
   { type: 'section', id: 'ending' },
 ];
 

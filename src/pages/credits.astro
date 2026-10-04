@@ -23,7 +23,7 @@ const displaySections = creditsSections.map((section) => {
   if (section.id === 'art-graphics') {
     return {
       ...section,
-      entries: section.entries.map((entry) => entry.role === 'Contributors' ? { ...entry, name: contributors.join(' · ') } : entry),
+      entries: section.entries.map((entry) => entry.role === 'Commissions' ? { ...entry, name: contributors.join(' · ') } : entry),
     };
   }
   return section;
@@ -64,8 +64,8 @@ for (const item of creditsSequence) {
                 <p class="credits-kicker">CHARACTERS</p>
                 <h2>{scene.character.name}</h2>
                 <dl>
-                  <div><dt>Character Creation</dt><dd>{scene.character.name}</dd></div>
-                  <div><dt>Character Design</dt><dd>{scene.character.name}</dd></div>
+                  <div><dt>Character Creation</dt><dd>{scene.character.creation ?? scene.character.credits}</dd></div>
+                  <div><dt>Character Design</dt><dd>{scene.character.design ?? scene.character.credits}</dd></div>
                 </dl>
               </div>
             </article>
@@ -78,7 +78,7 @@ for (const item of creditsSequence) {
     </div>
     <button class="credits-flying-praxor" type="button" data-flying-praxor aria-label="Flying Praxor with a trail" title="Flying Praxor" aria-hidden="true" disabled hidden>
       <span class="flying-praxor-trail" aria-hidden="true"></span>
-      <img src="/media/res/praxor2.png" alt="" loading="eager" decoding="async" />
+      <img src="/media/res/oraxor.png" data-theme-cat="" data-theme-cat-default-src="media/res/oraxor.png" alt="" loading="eager" decoding="async" />
     </button>
     <button class="credits-audio-prompt" type="button" data-credits-audio-start hidden>Play Oyasumi</button>
     <nav class="credits-controls" data-credits-controls data-visible="false" aria-label="Credits controls">
@@ -116,8 +116,8 @@ for (const item of creditsSequence) {
   .credits-flying-praxor{position:absolute;top:50%;left:0;z-index:4;display:grid;place-items:center;width:clamp(88px,13vw,154px);aspect-ratio:1;padding:0;border:0;background:transparent;color:#fff;opacity:0;visibility:hidden;pointer-events:none;transform:translate(-160%,-50%);-webkit-tap-highlight-color:transparent}
   .credits-flying-praxor[hidden]{display:none}
   .credits-flying-praxor img{position:relative;z-index:1;display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 4px rgba(255,255,255,.8))}
-  .flying-praxor-trail{position:absolute;top:38%;right:62%;width:min(48vw,560px);height:26%;border-radius:50%;background:linear-gradient(90deg,transparent 0%,rgba(69,193,255,.1) 18%,rgba(69,193,255,.75) 72%,rgba(255,255,255,.95) 100%);filter:blur(9px);transform:rotate(-8deg);transform-origin:right center;pointer-events:none}
-  .flying-praxor-trail::after{position:absolute;top:55%;right:0;width:84%;height:3px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.9));content:"";transform:rotate(4deg)}
+  .flying-praxor-trail{position:absolute;top:50%;left:50%;width:0;height:26%;border-radius:50%;background:linear-gradient(270deg,transparent 0%,rgba(69,193,255,.1) 18%,rgba(69,193,255,.75) 72%,rgba(255,255,255,.95) 100%);filter:blur(9px);transform:translateY(-50%);transform-origin:left center;pointer-events:none}
+  .flying-praxor-trail::after{position:absolute;top:50%;left:0;width:84%;height:3px;background:linear-gradient(270deg,transparent,rgba(255,255,255,.9));content:"";transform:translateY(-50%)}
   .credits-controls{position:absolute;top:max(16px,env(safe-area-inset-top));right:max(16px,env(safe-area-inset-right));z-index:3;display:flex;gap:8px;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .18s ease,visibility .18s ease}
   .credits-controls[data-visible="true"],.credits-controls:focus-within{opacity:1;visibility:visible;pointer-events:auto}
   .credits-controls button,.credits-audio-prompt,.credits-return{display:grid;place-items:center;min-width:42px;height:42px;padding:0 13px;border:1px solid rgba(255,255,255,.38);border-radius:999px;background:rgba(0,0,0,.7);color:#fff;font:inherit;font-size:.78rem;cursor:pointer;-webkit-tap-highlight-color:transparent}
@@ -130,7 +130,7 @@ for (const item of creditsSequence) {
   .credits-return{position:absolute;left:50%;bottom:max(28px,env(safe-area-inset-bottom));z-index:3;transform:translateX(-50%);opacity:0;transition:opacity .7s ease}
   .credits-return[data-visible="true"]{opacity:1}
   .credits-audio-prompt[hidden],.credits-return[hidden]{display:none!important}
-  @media(max-width:600px){.character-credit{grid-template-columns:minmax(0,.78fr) minmax(0,1.22fr);gap:14px;width:100%;padding:22px}.character-credit-art img{width:100%;height:min(42vh,360px)}.character-credit-copy h2{font-size:1.5rem}.character-credit-copy dt{font-size:.68rem}.character-credit-copy dd{font-size:.84rem}.history-image{padding:14vh 18px}.oraxor-finale img{width:min(70vw,340px);height:min(48vh,360px)}.credits-flying-praxor{width:clamp(82px,23vw,118px)}.flying-praxor-trail{width:55vw;filter:blur(7px)}}
+  @media(max-width:600px){.character-credit{grid-template-columns:minmax(0,.78fr) minmax(0,1.22fr);gap:14px;width:100%;padding:22px}.character-credit-art img{width:100%;height:min(42vh,360px)}.character-credit-copy h2{font-size:1.5rem}.character-credit-copy dt{font-size:.68rem}.character-credit-copy dd{font-size:.84rem}.history-image{padding:14vh 18px}.oraxor-finale img{width:min(70vw,340px);height:min(48vh,360px)}.credits-flying-praxor{width:clamp(82px,23vw,118px)}.flying-praxor-trail{filter:blur(7px)}}
   .credits-viewport{position:absolute;inset:0;overflow:hidden;overscroll-behavior:contain}
   .credits-roll{position:absolute;top:0;left:0;display:flex;width:100%;flex-direction:column;will-change:transform;transform:translate3d(0,100vh,0)}
   .credits-block{box-sizing:border-box;display:grid;place-items:center;width:100%;min-height:68vh;padding:36px 6vw}

@@ -1,8 +1,7 @@
-import { loadMusicPlaylist } from './music-library';
+﻿import { loadMusicPlaylist } from './music-library';
 import { CHANGE_EVENT, getAchievements, prefersReducedMotion, recordArtworkView, unlockAchievement, type AchievementId } from './site-state';
 
 const FLYING_PRAXOR_ACHIEVEMENT: AchievementId = 'creditsFlyingPraxor';
-const CREDITS_COMPLETION_PLACEHOLDER: AchievementId = 'creditsCompletionPlaceholder';
 const SCROLL_DURATION_MS = 78_000;
 const ENDING_FADE_MS = 5_000;
 const MUSIC_FADE_START_MS = 77_000;
@@ -109,7 +108,7 @@ export const initializeCreditsSequence = (baseUrl: string) => {
     revealControls();
   };
 
-  const isFlybySuppressed = () => getAchievements().some((achievement) => achievement.id === CREDITS_COMPLETION_PLACEHOLDER && achievement.unlocked);
+  const isFlybySuppressed = () => getAchievements().some((achievement) => achievement.id === FLYING_PRAXOR_ACHIEVEMENT && achievement.unlocked);
 
   const showFlyingPraxor = () => {
     if (isFlybySuppressed() || signal.aborted || isLeaving) return;
@@ -134,13 +133,23 @@ export const initializeCreditsSequence = (baseUrl: string) => {
     flyingPraxor.style.pointerEvents = 'auto';
     flyingPraxor.dataset.visible = 'true';
     flyingPraxor.setAttribute('aria-hidden', 'false');
-    if (trail) trail.style.transform = fromLeft ? 'rotate(-8deg)' : 'rotate(-8deg) scaleX(-1)';
+    const setTrail = (vx: number, vy: number) => {
+      if (!trail) return;
+      const speed = Math.hypot(vx, vy);
+      trail.style.width = `${clamp(speed * .35, 0, 520)}px`;
+      trail.style.opacity = String(clamp(speed / 900, 0, 1));
+      trail.style.transform = `translateY(-50%) rotate(${Math.atan2(-vy, -vx)}rad)`;
+    };
+    setTrail(0, 0);
     if (reducedMotion) {
       flyingPraxor.style.opacity = '1';
       flyingPraxor.style.transform = `translate3d(${targetX}px,${targetY}px,0)`;
       flybyTimer = window.setTimeout(hideFlyingPraxor, FLYBY_DURATION_MS);
       return;
     }
+    let lastX = startX;
+    let lastY = targetY;
+    let lastT = startedAt;
     const stepFlyby = (timestamp: number) => {
       if (signal.aborted || isFlybySuppressed()) return hideFlyingPraxor();
       const elapsed = timestamp - startedAt;
@@ -157,8 +166,13 @@ export const initializeCreditsSequence = (baseUrl: string) => {
         y += (bounds.height + spriteHeight - targetY) * progress * progress;
         opacity = 1 - clamp((progress - .68) / .32, 0, 1);
       }
+      const dt = Math.max(timestamp - lastT, 1) / 1000;
+      setTrail((x - lastX) / dt, (y - lastY) / dt);
+      lastX = x;
+      lastY = y;
+      lastT = timestamp;
       flyingPraxor.style.opacity = String(opacity);
-      flyingPraxor.style.transform = `translate3d(${x}px,${y}px,0) rotate(${direction * (elapsed < enterDuration + holdDuration ? -5 : 8)}deg)`;
+      flyingPraxor.style.transform = `translate3d(${x}px,${y}px,0)`;
       if (elapsed >= FLYBY_DURATION_MS) return hideFlyingPraxor();
       flybyFrame = requestAnimationFrame(stepFlyby);
     };
@@ -252,12 +266,7 @@ export const initializeCreditsSequence = (baseUrl: string) => {
   screen.addEventListener('click', (event) => {
     const target = event.target as Element;
     const creditsArtwork = target.closest<HTMLElement>('[data-credits-art]');
-    if (creditsArtwork) {
-      recordArtworkView('credits', creditsArtwork.dataset.creditsArt || '');
-      return;
-    }
-    if (target.closest('[data-credits-controls], [data-credits-audio-start], [data-credits-return], [data-flying-praxor]')) return;
-    leaveCredits();
+    if (creditsArtwork) recordArtworkView('credits', creditsArtwork.dataset.creditsArt || '');
   }, { signal });
   flyingPraxor.addEventListener('click', (event) => {
     event.preventDefault();
@@ -291,52 +300,4 @@ export const initializeCreditsSequence = (baseUrl: string) => {
   flybyTimer = window.setTimeout(showFlyingPraxor, randomBetween(24_000, 52_000));
   void startCreditsMusic();
   updatePresentation(presentationStartedAt);
-
-  screen.addEventListener('pointermove', handleActivity, { passive: true, signal });
-  screen.addEventListener('touchmove', handleActivity, { passive: true, signal });
-  screen.addEventListener('touchstart', revealControls, { passive: true, signal });
-  document.addEventListener('keydown', (event) => {
-    handleActivity();
-    if (event.key === 'Escape') {
-      event.preventDefault();
-      leaveCredits();
-    }
-  }, { capture: true, signal });
-  screen.addEventListener('click', (event) => {
-    const target = event.target as Element;
-    const creditsArtwork = target.closest<HTMLElement>('[data-credits-art]');
-    if (creditsArtwork) {
-      recordArtworkView('credits', creditsArtwork.dataset.creditsArt || '');
-      return;
-    }
-    if (target.closest('[data-credits-controls], [data-credits-audio-start], [data-credits-return], [data-flying-praxor]')) return;
-    leaveCredits();
-  }, { signal });
-  flyingPraxor.addEventListener('click', (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    unlockAchievement(FLYING_PRAXOR_ACHIEVEMENT);
-  }, { signal });
-  window.addEventListener(CHANGE_EVENT, () => {
-    if (isFlybySuppressed()) hideFlyingPraxor();
-  }, { signal });
-  closeButton.addEventListener('click', leaveCredits, { signal });
-  muteButton.addEventListener('click', () => {
-    creditsAudio.muted = !creditsAudio.muted;
-    muteButton.setAttribute('aria-pressed', String(creditsAudio.muted));
-    muteButton.setAttribute('aria-label', creditsAudio.muted ? 'Unmute credits audio' : 'Mute credits audio');
-    muteButton.title = creditsAudio.muted ? 'Unmute credits audio' : 'Mute credits audio';
-    muteMark.style.display = creditsAudio.muted ? 'block' : 'none';
-    revealControls();
-  }, { signal });
-  startAudioButton.addEventListener('click', () => { revealControls(); void startCreditsMusic(); }, { signal });
-  returnButton.addEventListener('click', () => {
-    cleanup();
-    window.location.assign(baseUrl);
-  }, { signal });
-  window.addEventListener('astro:before-swap', cleanup, { once: true, signal });
-
-  controlsTimer = window.setTimeout(revealControls, 900);
-  void startCreditsMusic();
-  void playTimeline();
 };
