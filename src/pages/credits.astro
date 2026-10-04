@@ -1,0 +1,159 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CreditSection from '../components/CreditSection.astro';
+import { creditsSections, creditsSequence, historyImages, type CreditSectionData } from '../data/credits';
+import { characters, type Character } from '../data/characters';
+import { fanartOptions } from '../data/fanart';
+import packageMetadata from '../../package.json';
+
+type RuntimeScene =
+  | { type: 'section'; id: string; section: CreditSectionData }
+  | { type: 'character'; id: string; side: 'left' | 'right'; character: Character }
+  | { type: 'oraxor'; id: string }
+  | { type: 'history'; id: string; src: string; index: number };
+
+const libraryEntries = Object.entries({
+  ...(packageMetadata.dependencies ?? {}),
+})
+  .sort(([first], [second]) => first.localeCompare(second))
+  .map(([name, version]) => ({ role: 'Library', name: `${name} ${version}` }));
+const contributors = [...new Set(fanartOptions.map((art) => art.artist))].sort((first, second) => first.localeCompare(second));
+const displaySections = creditsSections.map((section) => {
+  if (section.id === 'website') return { ...section, entries: [...section.entries, ...libraryEntries] };
+  if (section.id === 'art-graphics') {
+    return {
+      ...section,
+      entries: section.entries.map((entry) => entry.role === 'Contributors' ? { ...entry, name: contributors.join(' · ') } : entry),
+    };
+  }
+  return section;
+});
+const sectionById = new Map(displaySections.map((section) => [section.id, section]));
+const featuredCharacters = characters.filter((character) => character.image);
+const timeline: RuntimeScene[] = [];
+
+for (const item of creditsSequence) {
+  if (item.type === 'section') {
+    const section = sectionById.get(item.id);
+    if (section) timeline.push({ type: 'section', id: item.id, section });
+  } else if (item.type === 'characters') {
+    featuredCharacters.forEach((character, index) => timeline.push({
+      type: 'character',
+      id: `character-${character.slug}`,
+      side: index % 2 === 0 ? 'left' : 'right',
+      character,
+    }));
+  } else if (item.type === 'oraxor') timeline.push({ type: 'oraxor', id: 'oraxor-finale' });
+  else if (item.type === 'history') {
+    historyImages.forEach((src, index) => timeline.push({ type: 'history', id: `history-${index + 1}`, src, index: index + 1 }));
+  }
+}
+---
+
+<Layout title="credits" description="The Praxor Website credits." bodyClass="credits-page">
+  <main class="credits-screen" data-credits-screen aria-label="Website credits">
+    <div class="credits-stage credits-viewport" data-credits-viewport>
+      <div class="credits-roll" data-credits-roll>
+      {timeline.map((scene) => (
+        <section class="credits-block" data-credit-block data-scene-id={scene.id} data-scene-kind={scene.type} data-credits-ending={scene.id === 'ending' ? '' : undefined}>
+          {scene.type === 'section' && <CreditSection section={scene.section} />}
+          {scene.type === 'character' && (
+            <article class="character-credit" data-side={scene.side}>
+              <figure class="character-credit-art credits-reveal" data-credit-art><img src={scene.character.image} alt={scene.character.name} loading="lazy" decoding="async" /></figure>
+              <div class="character-credit-copy">
+                <p class="credits-kicker">CHARACTERS</p>
+                <h2>{scene.character.name}</h2>
+                <dl>
+                  <div><dt>Character Creation</dt><dd>{scene.character.name}</dd></div>
+                  <div><dt>Character Design</dt><dd>{scene.character.name}</dd></div>
+                </dl>
+              </div>
+            </article>
+          )}
+          {scene.type === 'oraxor' && <figure class="oraxor-finale credits-reveal" data-credit-art><img src="/media/res/oraxor.png" data-theme-cat="" data-theme-cat-default-src="media/res/oraxor.png" alt="Oraxor the cat" loading="lazy" decoding="async" /></figure>}
+          {scene.type === 'history' && <figure class="history-image credits-reveal" data-credit-art><img src={scene.src} data-credits-art={scene.src} alt={`Website history image ${scene.index}. Tap to view this picture.`} loading="lazy" decoding="async" /></figure>}
+        </section>
+      ))}
+      </div>
+    </div>
+    <button class="credits-flying-praxor" type="button" data-flying-praxor aria-label="Flying Praxor with a trail" title="Flying Praxor" aria-hidden="true" disabled hidden>
+      <span class="flying-praxor-trail" aria-hidden="true"></span>
+      <img src="/media/res/praxor2.png" alt="" loading="eager" decoding="async" />
+    </button>
+    <button class="credits-audio-prompt" type="button" data-credits-audio-start hidden>Play Oyasumi</button>
+    <nav class="credits-controls" data-credits-controls data-visible="false" aria-label="Credits controls">
+      <button type="button" data-credits-mute aria-label="Mute credits audio" aria-pressed="false" title="Mute credits audio">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10v4h4l5 4V6l-5 4H4z"/><path data-mute-mark d="m17 9 5 6m0-6-5 6"/></svg>
+      </button>
+      <button type="button" data-credits-close aria-label="Close credits" title="Close credits">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 6 12 12M18 6 6 18"/></svg>
+      </button>
+    </nav>
+    <button class="credits-return" type="button" data-credits-return hidden>Return to website</button>
+    <audio data-credits-audio preload="none"></audio>
+  </main>
+</Layout>
+
+<style is:global>
+  body.credits-page{overflow:hidden;background:#000}
+  .credits-screen{position:fixed;inset:0;z-index:250;overflow:hidden;background:#000;color:#fff;font-family:"IBM Plex Sans",sans-serif}
+  .credits-stage{position:absolute;inset:0;overflow:hidden;background:#000}
+  .credits-kicker{margin:0;color:#aaa;font-size:.76rem;font-weight:700;letter-spacing:.18em}
+  .character-credit{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:center;gap:clamp(20px,6vw,96px);box-sizing:border-box;width:min(1000px,90vw);height:100%;padding:40px}
+  .character-credit[data-side="right"] .character-credit-art{grid-column:2;grid-row:1}
+  .character-credit[data-side="right"] .character-credit-copy{grid-column:1;grid-row:1;text-align:right}
+  .character-credit-art{display:grid;place-items:center;min-width:0;margin:0}
+  .character-credit-art img{display:block;width:min(100%,420px);height:min(58vh,520px);object-fit:contain;opacity:1;filter:drop-shadow(0 12px 30px rgba(255,255,255,.08))}
+  .character-credit-copy{display:grid;gap:1rem;min-width:0}
+  .character-credit-copy h2{margin:0;color:#fff;font-size:clamp(1.7rem,4vw,3.2rem);font-weight:500;overflow-wrap:anywhere}
+  .character-credit-copy dl{display:grid;gap:.8rem;margin:0}
+  .character-credit-copy dl div{display:grid;gap:.2rem}
+  .character-credit-copy dt{color:#aaa;font-size:.76rem}
+  .character-credit-copy dd{margin:0;color:#fff;font-size:1rem}
+  .oraxor-finale,.history-image{display:grid;place-items:center;box-sizing:border-box;width:100%;height:100%;margin:0;padding:7vh 8vw}
+  .oraxor-finale img{display:block;width:min(44vw,420px);height:min(55vh,420px);object-fit:contain}
+  .history-image img{display:block;width:auto;height:auto;max-width:100%;max-height:100%;object-fit:contain;cursor:pointer}
+  .credits-flying-praxor{position:absolute;top:50%;left:0;z-index:4;display:grid;place-items:center;width:clamp(88px,13vw,154px);aspect-ratio:1;padding:0;border:0;background:transparent;color:#fff;opacity:0;visibility:hidden;pointer-events:none;transform:translate(-160%,-50%);-webkit-tap-highlight-color:transparent}
+  .credits-flying-praxor[hidden]{display:none}
+  .credits-flying-praxor img{position:relative;z-index:1;display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 4px rgba(255,255,255,.8))}
+  .flying-praxor-trail{position:absolute;top:38%;right:62%;width:min(48vw,560px);height:26%;border-radius:50%;background:linear-gradient(90deg,transparent 0%,rgba(69,193,255,.1) 18%,rgba(69,193,255,.75) 72%,rgba(255,255,255,.95) 100%);filter:blur(9px);transform:rotate(-8deg);transform-origin:right center;pointer-events:none}
+  .flying-praxor-trail::after{position:absolute;top:55%;right:0;width:84%;height:3px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.9));content:"";transform:rotate(4deg)}
+  .credits-controls{position:absolute;top:max(16px,env(safe-area-inset-top));right:max(16px,env(safe-area-inset-right));z-index:3;display:flex;gap:8px;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .18s ease,visibility .18s ease}
+  .credits-controls[data-visible="true"],.credits-controls:focus-within{opacity:1;visibility:visible;pointer-events:auto}
+  .credits-controls button,.credits-audio-prompt,.credits-return{display:grid;place-items:center;min-width:42px;height:42px;padding:0 13px;border:1px solid rgba(255,255,255,.38);border-radius:999px;background:rgba(0,0,0,.7);color:#fff;font:inherit;font-size:.78rem;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .credits-controls button{width:42px;padding:0}
+  .credits-controls button:hover,.credits-controls button:focus-visible{border-color:#fff;background:rgba(255,255,255,.12)}
+  .credits-controls button:focus-visible,.credits-audio-prompt:focus-visible,.credits-return:focus-visible{outline:2px solid #fff;outline-offset:3px}
+  .credits-controls svg{display:block;width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  .credits-controls [data-mute-mark]{display:none}
+  .credits-audio-prompt{position:absolute;left:50%;bottom:max(28px,env(safe-area-inset-bottom));z-index:3;transform:translateX(-50%)}
+  .credits-return{position:absolute;left:50%;bottom:max(28px,env(safe-area-inset-bottom));z-index:3;transform:translateX(-50%);opacity:0;transition:opacity .7s ease}
+  .credits-return[data-visible="true"]{opacity:1}
+  .credits-audio-prompt[hidden],.credits-return[hidden]{display:none!important}
+  @media(max-width:600px){.character-credit{grid-template-columns:minmax(0,.78fr) minmax(0,1.22fr);gap:14px;width:100%;padding:22px}.character-credit-art img{width:100%;height:min(42vh,360px)}.character-credit-copy h2{font-size:1.5rem}.character-credit-copy dt{font-size:.68rem}.character-credit-copy dd{font-size:.84rem}.history-image{padding:14vh 18px}.oraxor-finale img{width:min(70vw,340px);height:min(48vh,360px)}.credits-flying-praxor{width:clamp(82px,23vw,118px)}.flying-praxor-trail{width:55vw;filter:blur(7px)}}
+  .credits-viewport{position:absolute;inset:0;overflow:hidden;overscroll-behavior:contain}
+  .credits-roll{position:absolute;top:0;left:0;display:flex;width:100%;flex-direction:column;will-change:transform;transform:translate3d(0,100vh,0)}
+  .credits-block{box-sizing:border-box;display:grid;place-items:center;width:100%;min-height:68vh;padding:36px 6vw}
+  .credits-block[data-scene-id="opening-title"],.credits-block[data-scene-id="ending"]{min-height:100vh}
+  .credits-block[data-scene-id="ending"]{transition:opacity .12s linear}
+  .credits-roll .credit-section{box-sizing:border-box;display:grid;align-content:center;width:100%;min-height:68vh;padding:8vh 24px}
+  .credits-roll .credit-section[data-credit-section="opening-title"],.credits-roll .credit-section[data-credit-section="ending"]{min-height:100vh}
+  .character-credit{height:auto}
+  .credits-reveal{opacity:0;filter:blur(8px);transform:translateY(24px) scale(.96);transition:opacity .8s ease,filter .8s ease,transform .8s cubic-bezier(.2,.8,.2,1)}
+  .credits-reveal.is-visible{opacity:1;filter:none;transform:none}
+  .character-credit-art img,.oraxor-finale img,.history-image img{animation:none;opacity:1}
+  .oraxor-finale,.history-image{height:auto;min-height:54vh}
+  .oraxor-finale img{width:min(44vw,420px);height:min(55vh,420px)}
+  .history-image img{max-width:min(84vw,1000px);max-height:64vh;cursor:pointer}
+  .credits-flying-praxor{top:0;left:0;visibility:hidden;transform:translate3d(-200px,-200px,0);opacity:0;animation:none!important;transition:none!important}
+  .credits-flying-praxor[data-visible="true"]{visibility:visible;pointer-events:auto}
+  .credits-flying-praxor[hidden]{display:none!important}
+  :root[data-reduced-motion="true"] .credits-reveal,:root[data-reduced-motion="true"] .credits-screen,:root[data-reduced-motion="true"] .credits-block[data-credits-ending]{transition:none}
+  @media(prefers-reduced-motion:reduce){.credits-reveal,.credits-controls,.credits-return,.credits-block[data-credits-ending]{transition:none}.credits-flying-praxor{transition:none!important}}
+</style>
+
+<script>
+  import { initializeCreditsSequence } from '../scripts/credits-sequence';
+  initializeCreditsSequence(import.meta.env.BASE_URL);
+  document.addEventListener('astro:page-load', () => initializeCreditsSequence(import.meta.env.BASE_URL));
+</script>

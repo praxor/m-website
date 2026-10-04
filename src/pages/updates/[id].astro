@@ -9,17 +9,14 @@ import { comparePostsByDateAndOrder } from '../../data/posts';
 export async function getStaticPaths() {
   const visiblePosts = await getCollection('posts', ({ data }) => !data.draft || !import.meta.env.PROD);
   const sortedPosts = visiblePosts.sort(comparePostsByDateAndOrder);
-  const latestByType = new Map<string, string>();
-  sortedPosts.forEach((post) => {
-    if (!latestByType.has(post.data.type)) latestByType.set(post.data.type, post.id);
-  });
   return sortedPosts.map((post) => ({
     params: { id: post.id },
-    props: { post, isLatest: latestByType.get(post.data.type) === post.id },
+    props: { post },
   }));
 }
 
-const { post, isLatest } = Astro.props;
+const { post } = Astro.props;
+const isMajor = post.data.type === 'major';
 const { Content } = await render(post);
 const base = import.meta.env.BASE_URL;
 const formatDate = (date: Date) => new Intl.DateTimeFormat('en-US', {
@@ -28,7 +25,8 @@ const formatDate = (date: Date) => new Intl.DateTimeFormat('en-US', {
   year: 'numeric',
   timeZone: 'UTC',
 }).format(date);
-const typeLabel = post.data.type === 'update' ? 'UPDATE' : 'POST';
+const postTypeLabels = { update: 'UPDATE', major: 'MAJOR UPDATE', post: 'POST' } as const;
+const typeLabel = postTypeLabels[post.data.type];
 const imageSrc = post.data.image
   ? (/^(https?:|data:)/.test(post.data.image) ? post.data.image : `${base}${post.data.image.replace(/^\/+/, '')}`)
   : undefined;
@@ -39,10 +37,13 @@ const imageSrc = post.data.image
     <HomeHero />
     <HomeFrame>
       <section class="dispatch-feed update-reader" slot="feed" aria-labelledby="update-title">
-        <a class="update-back" href={`${base}#dispatch-title`}>back to recent updates</a>
-        <article class:list={['update-article', { 'is-latest': isLatest }]} data-post-id={post.id}>
+        <a class="update-back" href={`${base}#dispatch-title`} data-update-back aria-label="Back to recent updates">
+          <svg class="update-back-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.5 3.5 6 8l4.5 4.5M6.25 8h7" /></svg>
+          <span>back</span>
+        </a>
+        <article class:list={['update-article', { 'is-major': isMajor }]} data-post-id={post.id}>
           <header class="update-header">
-            <p class="update-kind">{isLatest ? 'NEW ' : ''}{typeLabel}</p>
+            <p class="update-kind">{typeLabel}</p>
             <h2 id="update-title">{post.data.title}</h2>
             <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
           </header>
@@ -62,20 +63,44 @@ const imageSrc = post.data.image
 </Layout>
 
 <script>
+  const updateBackLink = () => {
+    const backLink = document.querySelector<HTMLAnchorElement>('[data-update-back]');
+    if (!backLink || backLink.dataset.initialized === 'true') return;
+    backLink.dataset.initialized = 'true';
+
+    const params = new URLSearchParams(window.location.search);
+    const filter = params.get('feed');
+    const validFilters = ['all', 'update', 'major', 'post'];
+    const hasFeedReturn = params.get('feedReturn') === '1' && filter !== null && validFilters.includes(filter);
+    const destination = new URL(import.meta.env.BASE_URL, window.location.href);
+    if (filter && validFilters.includes(filter)) destination.searchParams.set('feed', filter);
+    destination.hash = 'dispatch-title';
+    backLink.href = `${destination.pathname}${destination.search}${destination.hash}`;
+
+    if (hasFeedReturn && typeof window.history.state?.index === 'number' && window.history.state.index > 0) {
+      backLink.addEventListener('click', (event) => {
+        event.preventDefault();
+        window.history.back();
+      });
+    }
+  };
+
   const resetPostScroll = () => {
     if (document.querySelector('.update-reader')) window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
   };
-  document.addEventListener('astro:page-load', resetPostScroll);
+  document.addEventListener('astro:page-load', () => { updateBackLink(); resetPostScroll(); });
+  updateBackLink();
   resetPostScroll();
 </script>
 
 <style>
   .home-page{box-sizing:border-box;width:min(1100px,calc(100% - 32px));margin:0 auto;padding-bottom:132px}
-  .update-reader{padding-top:12px}
-  .update-back{display:inline-block;margin:0 0 14px;color:var(--muted);font-size:.76rem;text-decoration:none}
+  .update-reader{padding:12px clamp(14px,2.5vw,28px) 28px}
+  .update-back{display:inline-flex;align-items:center;gap:5px;margin:0 0 14px;color:var(--muted);font-size:.76rem;text-decoration:none}
+  .update-back-icon{display:block;width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
   .update-back:hover,.update-back:focus-visible{color:var(--text);text-decoration:underline;text-underline-offset:3px}
   .update-article{position:relative;min-width:0;padding-bottom:24px}
-  .update-article.is-latest{box-shadow:inset 2px 0 0 var(--accent);padding-left:12px}
+  .update-article.is-major{box-shadow:inset 2px 0 0 var(--accent);padding:0 12px 24px}
   .update-header{position:relative;max-width:100%}
   .update-kind{margin:0 0 10px;color:var(--accent);font-size:.7rem;font-weight:700;letter-spacing:.12em}
   .update-header h2{margin:0;color:var(--text);font-size:clamp(1.35rem,3vw,2rem);line-height:1.15;letter-spacing:0;overflow-wrap:anywhere}
@@ -101,5 +126,5 @@ const imageSrc = post.data.image
   .update-body :global(th),.update-body :global(td){padding:7px 10px;border:1px solid var(--muted-border);text-align:left}
   .update-footer{display:flex;align-items:center;gap:8px;margin-top:28px;padding-top:14px;border-top:1px solid var(--muted-border);color:var(--muted);font-size:.7rem;letter-spacing:.08em}
   .update-footer .post-kind-icon{display:grid;place-items:center;width:26px;height:26px;border:1px solid var(--muted-border);color:var(--accent)}
-  @media(max-width:600px){.update-reader{padding-top:12px}.update-cover{min-height:60px}.update-footer{margin-top:20px}}
+  @media(max-width:600px){.update-reader{padding-right:14px;padding-left:14px}.update-cover{min-height:60px}.update-footer{margin-top:20px}}
 </style>

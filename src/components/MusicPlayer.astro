@@ -36,8 +36,8 @@ import { Image } from 'astro:assets';
 </aside>
 
 <div id="rolling-cats" class="rolling-cats" aria-hidden="true">
-	<div class="rolling-cat-line">
-		{Array.from({ length: 28 }, () => <span class="rolling-cat"><Image src="https://praxor.de/media/res/oraxor.png" alt="" width={44} height={44} loading="lazy" decoding="async" /></span>)}
+		<div class="rolling-cat-line">
+			{Array.from({ length: 28 }, () => <span class="rolling-cat"><Image src="https://praxor.de/media/res/oraxor.png" alt="" width={44} height={44} loading="lazy" decoding="async" data-theme-cat="" data-theme-cat-default-src="media/res/oraxor.png" /></span>)}
 	</div>
 </div>
 
@@ -116,7 +116,7 @@ import { Image } from 'astro:assets';
 </style>
 
 <script>
-	import { parseBlob } from 'music-metadata';
+	import { loadMusicPlaylist, type MusicPlaylist } from '../scripts/music-library';
 	import { prefersReducedMotion, recordTrackPlay } from '../scripts/site-state';
 
 	const initializeMusicPlayer = () => {
@@ -224,7 +224,6 @@ import { Image } from 'astro:assets';
 	const cancelCatAnimations = (element: HTMLElement) => {
 		(element as HTMLElement & { getAnimations: () => Animation[] }).getAnimations().forEach((animation) => animation.cancel());
 	};
-	type EnrichedTrack = { title?: string; artist?: string; src?: string; duration?: string };
 	const createShuffleOrder = () => {
 		shuffleOrder = Array.from({ length: tracks.length }, (_, index) => index);
 		for (let index = shuffleOrder.length - 1; index > 0; index -= 1) {
@@ -239,26 +238,10 @@ import { Image } from 'astro:assets';
 		}
 	};
 
-	const enrichTrack = async (track: { title?: string; artist?: string; src?: string; duration?: string }): Promise<EnrichedTrack> => {
-		if (!track.src) return track;
-		try {
-			const response = await fetch(track.src);
-			const metadata = await parseBlob(await response.blob());
-			return {
-				...track,
-				title: metadata.common.title || track.title,
-				artist: metadata.common.artist || track.artist,
-				duration: track.duration || (metadata.format.duration ? formatTime(metadata.format.duration) : undefined),
-			};
-		} catch {
-			return track;
-		}
-	};
-
-	const renderPlaylist = async (playlistData: { tracks?: Array<{ title?: string; artist?: string; src?: string; duration?: string }> }) => {
+	const renderPlaylist = (playlistData: MusicPlaylist) => {
 		if (!playlist) return;
 		playlist.replaceChildren();
-		const tracksData = await Promise.all((playlistData.tracks || []).map(enrichTrack));
+		const tracksData = playlistData.tracks || [];
 		tracksData.forEach((track, index) => {
 			const button = document.createElement('button');
 			button.className = 'music-track';
@@ -288,9 +271,8 @@ import { Image } from 'astro:assets';
 				pendingTrack = trackIndex;
 				pendingAutoplay = autoplay;
 			}
-			const response = await fetch(url, { cache: 'no-store' });
-			if (!response.ok) throw new Error(`Playlist request failed: ${response.status}`);
-			await renderPlaylist(await response.json());
+			const playlistData = await loadMusicPlaylist(url);
+			renderPlaylist(playlistData);
 		} catch (error) {
 			console.error('Unable to load music playlist.', error);
 		}

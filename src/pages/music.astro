@@ -6,7 +6,7 @@ const base = import.meta.env.BASE_URL;
   <main class="music-main">
     <section class="music-frame" aria-labelledby="music-title">
       <header class="music-heading">
-        <h1 id="music-title">music</h1>
+        <h1 id="music-title"><svg class="music-title-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg><span>music</span></h1>
         <p class="music-note">so we've got my music on my phone then some BULLSHIT!!!!!!!!!!!!!!!</p>
       </header>
       <button id="music-tree-toggle" class="music-tree-toggle" type="button" aria-label="Toggle playlist folders" aria-expanded="false">‹</button>
@@ -64,7 +64,7 @@ const base = import.meta.env.BASE_URL;
 </Layout>
 
 <script>
-  import { parseBlob } from 'music-metadata';
+  import { loadMusicPlaylist } from '../scripts/music-library';
 
   const initializeMusicPage = () => {
   const musicMain = document.querySelector<HTMLElement>('.music-main');
@@ -79,24 +79,6 @@ const base = import.meta.env.BASE_URL;
   const treeToggle = document.querySelector<HTMLButtonElement>('#music-tree-toggle');
 
   let playlistRequestId = 0;
-  const formatDuration = (seconds: number) => `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, '0')}`;
-  type EnrichedTrack = { title?: string; artist?: string; src?: string; duration?: string };
-  const enrichTrack = async (track: { title?: string; artist?: string; src?: string; duration?: string }): Promise<EnrichedTrack> => {
-    if (!track.src) return track;
-    try {
-      const response = await fetch(track.src);
-      const metadata = await parseBlob(await response.blob());
-      return {
-        ...track,
-        title: metadata.common.title || track.title,
-        artist: metadata.common.artist || track.artist,
-        duration: track.duration || (metadata.format.duration ? formatDuration(metadata.format.duration) : undefined),
-      };
-    } catch {
-      return track;
-    }
-  };
-
   const openPlaylist = async (button: HTMLButtonElement) => {
     if (!workspaceTitle || !workspaceDescription || !workspaceCount || !workspaceTracks) return;
     const requestId = ++playlistRequestId;
@@ -109,10 +91,8 @@ const base = import.meta.env.BASE_URL;
     workspaceTitle.textContent = button.dataset.playlistName || 'playlist';
     workspaceDescription.textContent = 'opening file...';
     try {
-      const response = await fetch(button.dataset.playlistUrl || '', { cache: 'no-store' });
-      if (!response.ok) throw new Error(`Playlist request failed: ${response.status}`);
-      const data = await response.json() as { description?: string; tracks?: Array<{ title?: string; artist?: string; src?: string; duration?: string }> };
-      const tracks = await Promise.all((data.tracks || []).map(enrichTrack));
+      const data = await loadMusicPlaylist(button.dataset.playlistUrl || '');
+      const tracks = data.tracks || [];
       if (requestId !== playlistRequestId) return;
       workspaceDescription.textContent = data.description || 'a small pile of sounds.';
       workspaceCount.textContent = `${tracks.length} track${tracks.length === 1 ? '' : 's'}`;
@@ -161,7 +141,8 @@ const base = import.meta.env.BASE_URL;
   .music-frame{position:relative;padding:clamp(1rem,2.4vw,1.75rem);border:1px solid var(--muted-border);border-radius:2px;background:var(--card);box-shadow:inset 0 1px 0 var(--accent-12);animation:music-frame-in .5s cubic-bezier(.2,.9,.2,1) both}
   @keyframes music-frame-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
   .music-heading{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;margin:0 0 1.25rem;padding-bottom:.75rem;border-bottom:1px solid var(--muted-border)}
-  .music-heading h1{margin:0;color:var(--accent);font-size:1.15rem;line-height:1;letter-spacing:.04em}
+  .music-heading h1{display:flex;align-items:center;gap:.45rem;margin:0;color:var(--accent);font-size:1.15rem;line-height:1;letter-spacing:.04em}
+  .music-title-icon{display:block;width:17px;height:17px;flex:0 0 17px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
   .music-note{margin:0;color:var(--muted);font-size:.78rem;text-align:right}
   .music-tree-toggle{display:none}.music-browser{display:grid;grid-template-columns:30% 70%;min-height:330px;border:1px solid var(--muted-border);border-radius:2px;overflow:hidden}.music-tree{padding:14px 10px;background:var(--surface-inset);border-right:1px solid var(--muted-border)}.tree-root{display:flex;gap:8px;align-items:center;padding:8px;color:var(--accent);font-size:.85rem}.music-folder{margin-left:14px;padding:2px 0}.music-folder summary{display:flex;align-items:center;gap:7px;padding:9px 8px;color:var(--muted);cursor:pointer;list-style:none;font-size:.83rem}.music-folder summary::-webkit-details-marker{display:none}.music-folder summary:hover{color:var(--text)}
   .music-folder summary::-webkit-details-marker{display:none}

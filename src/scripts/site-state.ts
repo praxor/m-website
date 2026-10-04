@@ -1,15 +1,19 @@
 import { achievements, type AchievementDefinition, type AchievementId, type AchievementReward } from '../data/achievements';
 import { DEFAULT_THEME, themes, type ThemeDefinition } from '../data/themes';
+import { PLINKO_STATE_EVENT, type PlinkoStateDetail } from './plinko-events';
 
 export const STORAGE_KEY = 'praxor:site-state';
 /** Every localStorage key holding personalised data; register new ones here so Reset Data clears them. */
 const RESETTABLE_KEYS: string[] = [STORAGE_KEY];
 export const registerResettableKey = (key: string) => { if (!RESETTABLE_KEYS.includes(key)) RESETTABLE_KEYS.push(key); };
-const VERSION = 2;
+const VERSION = 5;
+
+export type ArtworkCollection = 'praxor-v1' | 'praxor-v2' | 'credits';
 
 export type Settings = {
 	theme: string;
 	forceTheme: boolean;
+	plinkoExtremeMode: boolean;
 	/** null = follow the browser's prefers-reduced-motion. */
 	reducedMotion: boolean | null;
 };
@@ -24,8 +28,10 @@ export type AchievementState = {
 
 export type SiteState = {
 	version: number;
+	flashingWarningAcknowledged: boolean;
 	settings: Settings;
 	achievements: Record<string, AchievementState>;
+	artworkViews: Record<ArtworkCollection, string[]>;
 	visitedPosts: string[];
 	activity: { totalActiveSeconds: number };
 };
@@ -38,6 +44,9 @@ export type AchievementView = {
 	unlocked: boolean;
 	progress: number;
 	goal: number;
+	progressVisible: boolean;
+	goalVisible: boolean;
+	hint?: string;
 	unit?: 'seconds';
 };
 
@@ -50,11 +59,13 @@ export type AchievementUnlockDetail = {
 export const CHANGE_EVENT = 'site-state:change';
 export const UNLOCK_EVENT = 'site-state:unlock';
 
-const defaultSettings = (): Settings => ({ theme: DEFAULT_THEME, forceTheme: false, reducedMotion: null });
+const defaultSettings = (): Settings => ({ theme: DEFAULT_THEME, forceTheme: false, reducedMotion: null, plinkoExtremeMode: false });
 const defaultState = (): SiteState => ({
 	version: VERSION,
+	flashingWarningAcknowledged: false,
 	settings: defaultSettings(),
 	achievements: {},
+	artworkViews: { 'praxor-v1': [], 'praxor-v2': [], credits: [] },
 	visitedPosts: [],
 	activity: { totalActiveSeconds: 0 },
 });
@@ -63,22 +74,36 @@ const isRecord = (value: unknown): value is Record<string, unknown> => typeof va
 
 // Add a step here when VERSION is bumped.
 const migrate = (raw: Record<string, unknown>): Record<string, unknown> => {
-	const version = typeof raw.version === 'number' ? raw.version : 1;
+	let data = raw;
+	let version = typeof raw.version === 'number' ? raw.version : 1;
 	if (version < 2 && isRecord(raw.settings)) {
 		// v1 had system/light/dark; light maps to the closest new theme.
-		return { ...raw, version: 2, settings: { ...raw.settings, theme: raw.settings.theme === 'light' ? 'macintoshing' : DEFAULT_THEME } };
+		data = { ...raw, version: 2, settings: { ...raw.settings, theme: raw.settings.theme === 'light' ? 'macintoshing' : DEFAULT_THEME } };
+		version = 2;
 	}
-	return raw;
+	if (version < 3) {
+		data = { ...data, version: 3, flashingWarningAcknowledged: false };
+		version = 3;
+	}
+	if (version < 4) {
+		const settings = isRecord(data.settings) ? data.settings : {};
+		data = { ...data, version: 4, settings: { ...settings, plinkoExtremeMode: false } };
+		version = 4;
+	}
+	if (version < 5) data = { ...data, version: 5, artworkViews: {} };
+	return data;
 };
 
 const sanitize = (raw: unknown): SiteState => {
 	const state = defaultState();
 	if (!isRecord(raw)) return state;
 	const data = migrate(raw);
+	state.flashingWarningAcknowledged = data.flashingWarningAcknowledged === true;
 	if (isRecord(data.settings)) {
-		const { theme, forceTheme, reducedMotion } = data.settings;
+		const { theme, forceTheme, reducedMotion, plinkoExtremeMode } = data.settings;
 		if (typeof theme === 'string' && themes.some((item) => item.id === theme)) state.settings.theme = theme;
 		if (typeof forceTheme === 'boolean') state.settings.forceTheme = forceTheme;
+			if (typeof plinkoExtremeMode === 'boolean') state.settings.plinkoExtremeMode = plinkoExtremeMode;
 		if (typeof reducedMotion === 'boolean') state.settings.reducedMotion = reducedMotion;
 	}
 	if (isRecord(data.achievements)) {
@@ -90,6 +115,12 @@ const sanitize = (raw: unknown): SiteState => {
 				...(entry.notified === true ? { notified: true } : {}),
 				...(typeof entry.unlockedAt === 'number' ? { unlockedAt: entry.unlockedAt } : {}),
 			};
+		}
+	}
+	if (isRecord(data.artworkViews)) {
+		for (const collection of ['praxor-v1', 'praxor-v2', 'credits'] as const) {
+			const saved = data.artworkViews[collection];
+			if (Array.isArray(saved)) state.artworkViews[collection] = [...new Set(saved.filter((id): id is string => typeof id === 'string'))];
 		}
 	}
 	if (Array.isArray(data.visitedPosts)) {
@@ -131,11 +162,14 @@ const save = () => {
 	emit(CHANGE_EVENT);
 };
 
-const entry = (id: string): AchievementState => (getState().achievements[id] ??= { unlocked: false, progress: 0 });
 const definitionOf = (id: AchievementId): AchievementDefinition => achievements[id];
 const goalOf = (definition: AchievementDefinition, total = 1): number =>
 	definition.derived ? Math.max(total, 1)
-		: definition.goal ?? definition.activeSeconds ?? definition.inactiveSeconds ?? definition.pageSeconds?.seconds ?? 1;
+		: definition.progress?.maximum ?? definition.goal ?? definition.activeSeconds ?? definition.inactiveSeconds ?? definition.pageSeconds?.seconds ?? 1;
+const entry = (id: AchievementId): AchievementState => (getState().achievements[id] ??= {
+	unlocked: false,
+	progress: definitionOf(id).progress?.initial ?? 0,
+});
 
 // Themes
 
@@ -163,6 +197,13 @@ export const resetAllData = () => {
 };
 
 export const getSettings = (): Readonly<Settings> => getState().settings;
+
+export const acknowledgeFlashingWarning = () => {
+	if (getState().flashingWarningAcknowledged) return;
+	getState().flashingWarningAcknowledged = true;
+	document.documentElement.dataset.warningRequired = 'false';
+	save();
+};
 
 export const updateSettings = (patch: Partial<Settings>) => {
 	const next = sanitize({ version: VERSION, settings: { ...getState().settings, ...patch } }).settings;
@@ -242,6 +283,47 @@ export const unlockAchievement = (id: AchievementId) => {
 	return true;
 };
 
+/** Updates persisted current progress and unlocks through the standard pipeline at the goal. */
+export const updateAchievementProgress = (id: AchievementId, current: number) => {
+	if (!Number.isFinite(current)) return false;
+	const state = entry(id);
+	if (state.unlocked) return false;
+	const goal = goalOf(definitionOf(id));
+	const progress = Math.min(goal, Math.max(0, current));
+	if (state.progress === progress) return progress >= goal ? unlockAchievement(id) : false;
+	state.progress = progress;
+	if (progress >= goal) unlockAchievement(id);
+	else save();
+	return true;
+};
+
+const artworkAchievement: Record<ArtworkCollection, AchievementId> = {
+	'praxor-v1': 'v1Connoisseur',
+	'praxor-v2': 'v2Connoisseur',
+	credits: 'creditsArtwork',
+};
+
+export const recordArtworkView = (collection: ArtworkCollection, artworkId: string) => {
+	const normalizedId = artworkId.trim();
+	if (!normalizedId) return false;
+	const views = getState().artworkViews[collection];
+	if (views.includes(normalizedId)) return false;
+	views.push(normalizedId);
+	updateAchievementProgress(artworkAchievement[collection], views.length);
+	return true;
+};
+
+const persistedProgress = (id: AchievementId) => getAchievements().find((item) => item.id === id)?.progress ?? 0;
+
+const recordPlinkoScore = (detail: PlinkoStateDetail) => {
+	if (detail.reason !== 'score' || !Number.isFinite(detail.pointsEarned) || detail.pointsEarned <= 0) return;
+	const cumulative = (id: AchievementId) => persistedProgress(id) + detail.pointsEarned;
+	for (const id of ['plinkoNewBeginnings', 'plinkoNotSoNewBeginnings', 'plinkoMasterfulBeginnings', 'iLovePlinko'] as const) {
+		updateAchievementProgress(id, cumulative(id));
+	}
+	if (detail.extremeMode) updateAchievementProgress('plinkoExtremeExaminer', cumulative('plinkoExtremeExaminer'));
+};
+
 export const recordPostVisit = (postId: string) => {
 	const state = getState();
 	if (!state.visitedPosts.includes(postId)) state.visitedPosts.push(postId);
@@ -263,7 +345,7 @@ const progressOf = (id: AchievementId, definition: AchievementDefinition, goal: 
 	if (definition.activeSeconds) return Math.floor(getState().activity.totalActiveSeconds);
 	if (definition.inactiveSeconds) return Math.floor(live.inactiveSeconds);
 	if (definition.pageSeconds) return live.pageKey === definition.pageSeconds.page ? Math.floor(live.pageSeconds) : 0;
-	return saved?.progress ?? 0;
+	return saved?.progress ?? definition.progress?.initial ?? 0;
 };
 
 export const getAchievements = (): AchievementView[] => {
@@ -271,14 +353,24 @@ export const getAchievements = (): AchievementView[] => {
 	return (Object.keys(achievements) as AchievementId[]).map((id) => {
 		const definition = definitionOf(id);
 		const goal = goalOf(definition, total);
+		const saved = getState().achievements[id];
+		const unlocked = saved?.unlocked === true;
+		const progress = Math.min(progressOf(id, definition, goal), goal);
+		const hidden = definition.secret && !unlocked;
+		const hasMeaningfulProgress = goal > 1 || progress > 0 || definition.progress !== undefined
+			|| definition.derived !== undefined || definition.activeSeconds !== undefined
+			|| definition.inactiveSeconds !== undefined || definition.pageSeconds !== undefined;
 		return {
 			id,
 			name: definition.name,
 			description: definition.description,
 			secret: definition.secret,
-			unlocked: getState().achievements[id]?.unlocked === true,
-			progress: Math.min(progressOf(id, definition, goal), goal),
+			unlocked,
+			progress,
 			goal,
+			progressVisible: !hidden || (definition.progress?.showWhenHidden ?? hasMeaningfulProgress),
+			goalVisible: !hidden || definition.progress?.revealMaximumWhenHidden === true,
+			hint: definition.hint,
 			unit: definition.unit,
 		};
 	});
@@ -312,6 +404,11 @@ export const initSiteState = () => {
 	document.addEventListener('astro:before-swap', (event) => applySettings((event as Event & { newDocument: Document }).newDocument.documentElement));
 	document.addEventListener('astro:after-swap', () => applySettings());
 	document.addEventListener('astro:page-load', trackPageView);
+	window.addEventListener('site-artwork:view', (event) => {
+		const detail = (event as CustomEvent<{ collection?: ArtworkCollection; src?: string }>).detail;
+		if (detail?.collection && detail.src) recordArtworkView(detail.collection, detail.src);
+	});
+	window.addEventListener(PLINKO_STATE_EVENT, (event) => recordPlinkoScore((event as CustomEvent<PlinkoStateDetail>).detail));
 	window.addEventListener('storage', (event) => {
 		if (event.key !== STORAGE_KEY) return;
 		cache = read();

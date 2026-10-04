@@ -1,5 +1,7 @@
 ---
 import { ClientRouter } from 'astro:transitions';
+import AnnouncementStrip from '../components/AnnouncementStrip.astro';
+import FirstLoadWarning from '../components/FirstLoadWarning.astro';
 import Header from '../components/Header.astro';
 import MusicPlayer from '../components/MusicPlayer.astro';
 import SettingsMenu from '../components/SettingsMenu.astro';
@@ -40,11 +42,13 @@ const postIds = JSON.stringify(await getVisiblePostIds()).replace(/</g, '\\u003c
     <meta property="twitter:image" content={image} />
     <script is:inline define:vars={{ key: STORAGE_KEY, themes, fallback: DEFAULT_THEME }}>
       // Applies saved theme/motion settings before first paint to avoid a flash.
-      (function(){try{var d=JSON.parse(localStorage.getItem(key))||{};var s=d.settings||{};var a=d.achievements||{};var r=document.documentElement;var t=themes.filter(function(x){return x.id===s.theme&&(!x.unlockedBy||(a[x.unlockedBy]&&a[x.unlockedBy].unlocked===true));})[0];r.dataset.siteTheme=t?t.id:fallback;r.dataset.forceTheme=String(s.forceTheme===true);r.dataset.reducedMotion=String(typeof s.reducedMotion==='boolean'?s.reducedMotion:matchMedia('(prefers-reduced-motion: reduce)').matches);}catch(e){}})();
+      (function(){try{var d=JSON.parse(localStorage.getItem(key))||{};var s=d.settings||{};var a=d.achievements||{};var r=document.documentElement;var t=themes.filter(function(x){return x.id===s.theme&&(!x.unlockedBy||(a[x.unlockedBy]&&a[x.unlockedBy].unlocked===true));})[0];r.dataset.siteTheme=t?t.id:fallback;r.dataset.forceTheme=String(s.forceTheme===true);r.dataset.reducedMotion=String(typeof s.reducedMotion==='boolean'?s.reducedMotion:matchMedia('(prefers-reduced-motion: reduce)').matches);r.dataset.warningRequired=String(d.flashingWarningAcknowledged!==true);}catch(e){document.documentElement.dataset.warningRequired='true';}})();
     </script>
     <ClientRouter />
   </head>
   <body class={bodyClass}>
+    <AnnouncementStrip />
+    <FirstLoadWarning />
     <div class="page-shell">
       <Header />
       <slot />
@@ -59,9 +63,11 @@ const postIds = JSON.stringify(await getVisiblePostIds()).replace(/</g, '\\u003c
   import { initSiteState } from '../scripts/site-state';
   import { initSiteActivity } from '../scripts/site-activity';
   import { initHoldTriggers } from '../scripts/site-hold';
+  import { initializeThemeCats } from '../scripts/theme-cats';
   initSiteState();
   initSiteActivity();
   initHoldTriggers();
+  initializeThemeCats(import.meta.env.BASE_URL);
   const themeProperties = ['--bg', '--card', '--text', '--muted', '--accent', '--accent-contrast', '--accent-dark', '--accent-10', '--accent-12', '--muted-border'];
   const persistentThemeSurfaces = () => document.querySelectorAll<HTMLElement>('.site-header, #persistent-music-player');
   const capturePersistentTheme = () => {

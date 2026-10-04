@@ -1,0 +1,125 @@
+---
+type AnnouncementType = 'important' | 'info';
+
+const announcement: {
+  noContent?: boolean;
+  type: AnnouncementType;
+  title: string;
+  message: string;
+} = {
+  noContent: false,
+  type: 'info',
+  title: 'Praxor Website 9.3.0',
+  message: 'A new update is on the way.',
+};
+
+const typeLabels: Record<AnnouncementType, string> = {
+  important: 'Important',
+  info: 'Info',
+};
+---
+
+{!announcement.noContent && (
+  <aside
+    class="announcement-strip"
+    data-announcement-strip
+    data-visible="false"
+    data-type={announcement.type}
+    aria-label={`${typeLabels[announcement.type]}: ${announcement.title}`}
+    inert
+    transition:persist="global-announcement-strip"
+    transition:animate="none"
+  >
+    <div class="announcement-clip">
+      <div class="announcement-line">
+        <span class="announcement-type">{typeLabels[announcement.type]}</span>
+        <div class="announcement-viewport" aria-hidden="true">
+          <div class="announcement-track">
+            {[0, 1].map(() => (
+              <span class="announcement-copy">
+                <strong>{announcement.title}</strong>
+                <span>{announcement.message}</span>
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+      <span class="announcement-sr-only">{typeLabels[announcement.type]}: {announcement.title}. {announcement.message}</span>
+    </div>
+  </aside>
+)}
+
+<style is:global>
+  .announcement-strip{position:relative;z-index:2;display:grid;grid-template-rows:0fr;width:100%;overflow:hidden;visibility:hidden;background-color:#54b6e4!important;color:#000!important;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace!important;transition:grid-template-rows .24s ease,visibility 0s linear .24s}
+  .announcement-strip[data-type="important"]{background-color:#f3ce45!important}
+  .announcement-strip[data-type="info"]{background-color:#54b6e4!important}
+  .announcement-strip[data-visible="true"]{grid-template-rows:1fr;visibility:visible;transition-delay:0s}
+  .announcement-clip{box-sizing:border-box;min-height:0;height:25px;overflow:hidden;border-bottom:1px solid rgba(0,0,0,.25)}
+  .announcement-line{display:flex;align-items:center;gap:12px;height:24px;padding:0 12px}
+  .announcement-type{flex:0 0 auto;padding-right:11px;border-right:1px solid rgba(0,0,0,.32);font-size:9px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+  .announcement-viewport{flex:1;min-width:0;height:24px;overflow:hidden}
+  .announcement-track{display:flex;width:max-content;height:24px;transform:translateX(0)}
+  .announcement-strip[data-visible="true"] .announcement-track{animation:announcement-marquee var(--announcement-duration,28s) linear infinite}
+  .announcement-copy{display:flex;flex:0 0 auto;align-items:center;gap:12px;height:24px;padding-right:72px;color:#000!important;font:600 11px/1 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace!important;white-space:nowrap}
+  .announcement-copy>*{color:#000!important;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace!important}
+  .announcement-type{font-size:9px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+  .announcement-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  @keyframes announcement-marquee{to{transform:translateX(var(--announcement-loop-offset,-50%))}}
+  :root[data-reduced-motion="true"] .announcement-track{animation:none!important;transform:none}
+  @media(prefers-reduced-motion:reduce){.announcement-strip{transition:none}.announcement-strip[data-visible="true"] .announcement-track{animation:none!important;transform:none}.announcement-viewport{overflow-x:auto}}
+</style>
+
+<script>
+  const initializeAnnouncement = () => {
+    const strip = document.querySelector<HTMLElement>('[data-announcement-strip]');
+    if (!strip || strip.dataset.initialized === 'true') return;
+    strip.dataset.initialized = 'true';
+    const viewport = strip.querySelector<HTMLElement>('.announcement-viewport');
+    const track = strip.querySelector<HTMLElement>('.announcement-track');
+    const firstCopy = track?.firstElementChild as HTMLElement | null;
+    const fillMarqueeTrack = () => {
+      if (!viewport || !track || !firstCopy) return;
+      const copyWidth = firstCopy.getBoundingClientRect().width;
+      if (!copyWidth) return;
+      const targetCopies = Math.max(2, Math.ceil(viewport.clientWidth / copyWidth) + 1);
+      while (track.children.length < targetCopies) track.append(firstCopy.cloneNode(true));
+      while (track.children.length > targetCopies) track.lastElementChild?.remove();
+      track.style.setProperty('--announcement-loop-offset', `${-copyWidth}px`);
+      track.style.setProperty('--announcement-duration', `${Math.max(6, copyWidth / 34)}s`);
+    };
+    fillMarqueeTrack();
+    if (viewport && 'ResizeObserver' in window) new ResizeObserver(fillMarqueeTrack).observe(viewport);
+    window.addEventListener('resize', fillMarqueeTrack, { passive: true });
+
+    const revealAfterInitialAnimations = async () => {
+      if (strip.dataset.visible === 'true') return;
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+      let stableFrames = 0;
+      while (stableFrames < 2) {
+        const initialAnimations: Promise<unknown>[] = [];
+        for (const animation of document.getAnimations()) {
+          const timing = animation.effect?.getComputedTiming();
+          if (animation.playState === 'finished' || animation.playState === 'paused' || !timing || timing.iterations === Infinity || !Number.isFinite(timing.endTime)) continue;
+          initialAnimations.push(animation.finished.catch(() => undefined));
+        }
+        if (initialAnimations.length) {
+          stableFrames = 0;
+          await Promise.all(initialAnimations);
+          continue;
+        }
+        await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+        stableFrames += 1;
+      }
+      strip.inert = false;
+      strip.dataset.visible = 'true';
+    };
+
+    if (document.documentElement.classList.contains('is-loaded')) {
+      void revealAfterInitialAnimations();
+    } else {
+      document.addEventListener('astro:page-load', revealAfterInitialAnimations, { once: true });
+    }
+  };
+
+  initializeAnnouncement();
+</script>

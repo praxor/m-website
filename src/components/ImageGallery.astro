@@ -1,4 +1,6 @@
 ﻿---
+import type { ArtworkCollection } from '../scripts/site-state';
+
 export interface GalleryItem {
   src: string;
   alt: string;
@@ -12,11 +14,12 @@ interface Props {
   items: GalleryItem[];
   title: string;
   label?: string;
+  achievementCollection?: ArtworkCollection;
 }
 
-const { items, title, label = 'artwork' } = Astro.props;
+const { items, title, label = 'artwork', achievementCollection } = Astro.props;
 ---
-<dialog id="fanart-gallery" class="fanart-gallery" aria-labelledby="gallery-title" data-single={items.length < 2 ? '' : undefined}>
+<dialog id="fanart-gallery" class="fanart-gallery" aria-labelledby="gallery-title" data-single={items.length < 2 ? '' : undefined} data-achievement-collection={achievementCollection}>
   <div class="gallery-shell">
     <header class="gallery-toolbar">
       <div>
@@ -182,6 +185,11 @@ const { items, title, label = 'artwork' } = Astro.props;
       artistCredit.textContent = thumbnail.dataset.galleryArtist || '';
       counter.textContent = `${String(activeIndex + 1).padStart(2, '0')} / ${String(thumbnails.length).padStart(2, '0')}`;
       thumbnails.forEach((item, itemIndex) => item.setAttribute('aria-current', String(itemIndex === activeIndex)));
+      if (dialog.open && dialog.dataset.achievementCollection) {
+        window.dispatchEvent(new CustomEvent('site-artwork:view', {
+          detail: { collection: dialog.dataset.achievementCollection, src: thumbnail.dataset.gallerySrc || '' },
+        }));
+      }
       if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         void featureImage.offsetWidth;
         featureImage.classList.add('is-changing');

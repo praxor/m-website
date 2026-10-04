@@ -2,9 +2,10 @@
 import Layout from '../../layouts/Layout.astro';
 import { Image } from 'astro:assets';
 import { characters } from '../../data/characters';
+import { getCharacterArtwork } from '../../data/character-artwork';
+import CharacterStory from '../../components/CharacterStory.astro';
 import { marked } from 'marked';
 import ImageGallery from '../../components/ImageGallery.astro';
-import { fanartOptions } from '../../data/fanart';
 
 export function getStaticPaths() {
   return characters.map((character) => ({
@@ -15,13 +16,9 @@ export function getStaticPaths() {
 
 const { character } = Astro.props;
 const renderMarkdown = (value: string) => marked.parse(value);
-const mainArt = character.image ? [{ src: character.image, alt: character.name, width: 800, height: 800, caption: character.name, credit: character.credits }] : [];
-const fanartForCharacter = fanartOptions
-  .filter((art) => art.cSlug === character.slug)
-  .sort((a, b) => a.number - b.number)
-  .map((art) => ({ src: art.src, alt: `Fanart piece ${art.number} by ${art.artist}`, width: art.width, height: art.height, caption: art.caption ?? '', credit: art.artist }));
-const references = [...character.references.filter((ref) => ref.image).map((ref) => ({ src: ref.image, alt: ref.alt || character.name, width: ref.width ?? 800, height: ref.height ?? 800, caption: ref.caption, credit: ref.artist || character.credits })), ...fanartForCharacter];
-const galleryItems = [...mainArt, ...references];
+const galleryItems = getCharacterArtwork(character);
+const mainArtCount = character.image ? 1 : 0;
+const references = galleryItems.slice(mainArtCount);
 ---
 <Layout title={character.name}>
     <main class="character-main" data-track-page={`character-${character.slug}`}>
@@ -38,7 +35,7 @@ const galleryItems = [...mainArt, ...references];
                 <h2>references</h2>
                 <div class="reference-carousel">
                   {references.map((ref, index) => (
-                    <figure class="reference-item" role="button" tabindex="0" aria-haspopup="dialog" aria-label={`View reference ${index + 1} larger`} data-art-index={mainArt.length + index}>
+                      <figure class="reference-item" role="button" tabindex="0" aria-haspopup="dialog" aria-label={`View reference ${index + 1} larger`} data-art-index={mainArtCount + index}>
                       <img src={ref.src} alt={ref.alt} width={ref.width} height={ref.height} loading="lazy" decoding="async" />
                       {ref.caption && <figcaption>{ref.caption}</figcaption>}
                     </figure>
@@ -48,20 +45,30 @@ const galleryItems = [...mainArt, ...references];
             )}
             <section class="bio-section credits"><h2>credits · {character.credits}</h2></section>
           </div>
-          <aside class="character-infobox" aria-label={`${character.name} info`}>
-            <h2 class="infobox-title">{character.name}</h2>
-            <div class="character-detail-portrait" {...(character.image ? { role: 'button', tabindex: 0, 'aria-haspopup': 'dialog', 'aria-label': `View ${character.name} larger`, 'data-art-index': 0 } : {})} {...(character.slug === 'praxor-v1' ? { 'data-hold-unlock': 'bestDayEver' } : {})}>
-              {character.image ? <Image src={character.image} alt={character.name} width={800} height={800} loading="lazy" decoding="async" /> : <span>portrait slot</span>}
-            </div>
-            <p class="character-quote">{character.quote}</p>
-            <dl class="infobox-body">
-              {character.info.map((row) => <div class="infobox-row"><dt>{row.label}</dt><dd>{row.value}</dd></div>)}
-            </dl>
-          </aside>
+          <div class="character-sidebar">
+            <aside class="character-infobox" aria-label={`${character.name} info`}>
+              <h2 class="infobox-title">
+                {character.nameImage ? (
+                  <>
+                    <span data-name-image-fallback>{character.name}</span>
+                    <img class="infobox-name-image" data-name-image src={character.nameImage} alt={character.name} hidden />
+                  </>
+                ) : character.name}
+              </h2>
+              <div class="character-detail-portrait" {...(character.image ? { role: 'button', tabindex: 0, 'aria-haspopup': 'dialog', 'aria-label': `View ${character.name} larger`, 'data-art-index': 0 } : {})} {...(character.slug === 'praxor-v1' ? { 'data-hold-unlock': 'bestDayEver' } : {})}>
+                {character.image ? <Image src={character.image} alt={character.name} width={800} height={800} loading="lazy" decoding="async" /> : <span>portrait slot</span>}
+              </div>
+              <p class="character-quote">{character.quote}</p>
+              <dl class="infobox-body">
+                {character.info.map((row) => <div class="infobox-row"><dt>{row.label}</dt><dd>{row.value}</dd></div>)}
+              </dl>
+            </aside>
+            {character.chapters && character.chapters.length > 0 && <CharacterStory chapters={character.chapters} />}
+          </div>
         </div>
       </article>
     </main>
-    {galleryItems.length > 0 && <ImageGallery title="characters" label="image" items={galleryItems} />}
+    {galleryItems.length > 0 && <ImageGallery title="characters" label="image" items={galleryItems} achievementCollection={character.slug === 'praxor-v1' ? 'praxor-v1' : character.slug === 'praxor-v2' ? 'praxor-v2' : undefined} />}
 </Layout>
 
 <style>
@@ -74,6 +81,7 @@ const galleryItems = [...mainArt, ...references];
   .character-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(240px,320px);gap:clamp(1.5rem,4vw,2.5rem);align-items:start}
   .character-content{display:grid;grid-template-columns:minmax(0,1fr);gap:1.6rem;min-width:0}
   .character-content>*{min-width:0}
+  .character-sidebar{display:grid;align-content:start;gap:1rem;min-width:0}
   .character-infobox,.infobox-body{overflow-wrap:anywhere}
   .markdown-body{overflow-wrap:anywhere}
   .bio-section h2{margin:0 0 .7rem;padding-bottom:.35rem;border-bottom:1px solid var(--muted-border);color:var(--accent);font-size:1rem;text-transform:lowercase}
@@ -81,6 +89,8 @@ const galleryItems = [...mainArt, ...references];
   .credits h2{margin:0;padding:0;border:0;color:var(--muted);font-size:.78rem;font-weight:500;letter-spacing:.04em}
   .character-infobox{box-sizing:border-box;padding:.75rem;background:var(--accent-10);border:1px solid var(--muted-border);border-radius:2px}
   .infobox-title{margin:0 0 .75rem;color:var(--accent);font-size:1rem;text-align:center}
+  .infobox-name-image{display:block;width:auto;max-width:100%;height:auto;max-height:40px;margin:0 auto;object-fit:contain}
+  .infobox-name-image[hidden]{display:none}
   .character-detail-portrait{display:grid;place-items:center;aspect-ratio:1;width:100%;border:1px solid var(--muted-border);color:var(--muted);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase}
   .character-detail-portrait img{width:100%;height:100%;object-fit:contain}.character-detail-portrait[role="button"]{cursor:zoom-in}
   .infobox-body{margin:.75rem 0 0;font-size:.9rem;line-height:1.5;color:var(--muted)}
@@ -93,5 +103,35 @@ const galleryItems = [...mainArt, ...references];
   .reference-item figcaption{position:absolute;inset:auto 0 0;padding:.4rem;background:var(--image-scrim);color:var(--on-image);font-size:.72rem;line-height:1.3;text-align:center;opacity:0;transition:opacity .18s ease}
   .reference-item:hover figcaption,.reference-item:focus-visible figcaption{opacity:1}
   .reference-item:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
-  @media (max-width:760px){.character-main{margin:1rem 12px;padding:1rem 12px}.character-layout{grid-template-columns:1fr}.character-infobox{order:-1}}
+  @media (max-width:760px){.character-main{margin:1rem 12px;padding:1rem 12px}.character-layout{grid-template-columns:1fr}.character-sidebar{order:-1}}
 </style>
+
+<script>
+  const initializeNameImages = () => {
+    document.querySelectorAll<HTMLImageElement>('[data-name-image]').forEach((image) => {
+      if (image.dataset.initialized === 'true') return;
+      image.dataset.initialized = 'true';
+      const fallback = image.parentElement?.querySelector<HTMLElement>('[data-name-image-fallback]');
+      if (!fallback) return;
+
+      const showFallback = () => {
+        image.hidden = true;
+        fallback.hidden = false;
+      };
+      const showImage = () => {
+        if (image.naturalWidth === 0) return showFallback();
+        image.hidden = false;
+        fallback.hidden = true;
+      };
+
+      if (image.complete) showImage();
+      else {
+        image.addEventListener('load', showImage, { once: true });
+        image.addEventListener('error', showFallback, { once: true });
+      }
+    });
+  };
+
+  document.addEventListener('astro:page-load', initializeNameImages);
+  initializeNameImages();
+</script>

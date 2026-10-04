@@ -12,8 +12,16 @@ export type CharacterInfoRow = {
   value: string;
 };
 
+export type CharacterChapter = {
+  number: number;
+  title: string;
+  date: string;
+  content: string;
+};
+
 export type Character = {
   name: string;
+  nameImage?: string;
   slug: string;
   group: 'main' | 'misc';
   quote: string;
@@ -23,6 +31,7 @@ export type Character = {
   introduction: string;
   backstory: string;
   credits: string;
+  chapters?: CharacterChapter[];
 };
 
 const placeholderInfo: CharacterInfoRow[] = [
@@ -50,6 +59,9 @@ const placeholder = {
 export const characters: Character[] = [
   {
     name: 'Axis',
+    chapters: [
+      { number: 1, title: 'Story module test', date: '2026-10-03', content: 'This short chapter verifies the reusable story section.' },
+    ],
     slug: 'axis',
     group: 'main',
     quote: '"hi. i axis."',

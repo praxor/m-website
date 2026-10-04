@@ -9,10 +9,7 @@ import { comparePostsByDateAndOrder } from '../data/posts';
 const base = import.meta.env.BASE_URL;
 const entries = await getCollection('posts', ({ data }) => !data.draft || !import.meta.env.PROD);
 const posts = entries.sort(comparePostsByDateAndOrder);
-const latestByType = new Map<string, string>();
-posts.forEach((post) => {
-	if (!latestByType.has(post.data.type)) latestByType.set(post.data.type, post.id);
-});
+const postTypeLabels = { update: 'UPDATE', major: 'MAJOR UPDATE', post: 'POST' } as const;
 const formatDate = (date: Date) => new Intl.DateTimeFormat('en-US', {
 	month: 'long',
 	day: 'numeric',
@@ -26,7 +23,7 @@ const formatDate = (date: Date) => new Intl.DateTimeFormat('en-US', {
 		<HomeHero />
 
 		<HomeFrame>
-				<section class="dispatch-feed" slot="feed" aria-labelledby="dispatch-title">
+				<section class="dispatch-feed" slot="feed" aria-labelledby="dispatch-title" data-recent-feed>
 					<div class="feed-heading">
 						<div>
 							<p class="feed-kicker">information</p>
@@ -36,25 +33,26 @@ const formatDate = (date: Date) => new Intl.DateTimeFormat('en-US', {
 							<div class="feed-tabs" role="tablist" aria-label="Filter recent updates">
 								<button id="feed-tab-all" class="feed-tab" type="button" role="tab" aria-selected="true" aria-controls="post-grid" tabindex="0" data-post-filter="all">all</button>
 								<button id="feed-tab-updates" class="feed-tab" type="button" role="tab" aria-selected="false" aria-controls="post-grid" tabindex="-1" data-post-filter="update">updates</button>
+								<button id="feed-tab-major" class="feed-tab" type="button" role="tab" aria-selected="false" aria-controls="post-grid" tabindex="-1" data-post-filter="major">major</button>
 								<button id="feed-tab-posts" class="feed-tab" type="button" role="tab" aria-selected="false" aria-controls="post-grid" tabindex="-1" data-post-filter="post">posts</button>
 							</div>
-							<span class="post-count" data-post-count>{posts.length} {posts.length === 1 ? 'post' : 'posts'}</span>
+							<span class="post-count" data-post-count>{posts.length} {posts.length === 1 ? 'item' : 'items'}</span>
 						</div>
 					</div>
 
 					{posts.length > 0 ? (
 						<div id="post-grid" class="post-grid" role="tabpanel" aria-labelledby="feed-tab-all" tabindex="0">
 							{posts.map((post) => {
-								const isLatest = latestByType.get(post.data.type) === post.id;
-								const typeLabel = post.data.type === 'update' ? 'UPDATE' : 'POST';
+								const isMajor = post.data.type === 'major';
+								const typeLabel = postTypeLabels[post.data.type];
 								const bannerSrc = post.data.banner
 									? (/^(https?:|data:)/.test(post.data.banner) ? post.data.banner : `${base}${post.data.banner.replace(/^\/+/, '')}`)
 									: undefined;
 								return (
-									<a class:list={['post-card', { 'is-latest': isLatest }]} href={`${base}updates/${post.id}/`} data-post-type={post.data.type}>
+									<a class:list={['post-card', { 'is-major': isMajor }]} href={`${base}updates/${post.id}/`} data-post-href={`${base}updates/${post.id}/`} data-post-type={post.data.type}>
 										{bannerSrc && <span class="post-card-banner" aria-hidden="true"><img src={bannerSrc} alt="" loading="lazy" decoding="async" /></span>}
 										<span class="post-card-copy">
-											<span class="post-kind">{isLatest ? 'NEW ' : ''}{typeLabel}</span>
+											<span class="post-kind">{typeLabel}</span>
 											<strong class="post-card-title">{post.data.title}</strong>
 											{post.data.description && <span class="post-card-description">{post.data.description}</span>}
 										</span>
@@ -94,7 +92,7 @@ const formatDate = (date: Date) => new Intl.DateTimeFormat('en-US', {
 	.post-card:nth-child(1){animation-delay:.34s}.post-card:nth-child(2){animation-delay:.42s}.post-card:nth-child(3){animation-delay:.5s}.post-card:nth-child(4){animation-delay:.58s}.post-card:nth-child(5){animation-delay:.66s}.post-card:nth-child(6){animation-delay:.74s}
 	.post-card:hover{transform:translateY(-3px);border-color:var(--accent);background-color:var(--accent-10)}
 	.post-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
-	.post-card.is-latest{border-color:var(--accent);box-shadow:inset 3px 0 0 var(--accent)}
+	.post-card.is-major{border-color:var(--accent);box-shadow:inset 3px 0 0 var(--accent)}
 	.post-card-banner{position:absolute;z-index:-1;inset:0 0 0 auto;width:48%;opacity:.27;mask-image:linear-gradient(90deg,transparent 0%,#000 58%)}
 	.post-card-banner img{display:block;width:100%;height:100%;object-fit:cover;object-position:center right;filter:grayscale(1)}
 	.post-card-copy{position:relative;z-index:1;display:grid;align-content:start;gap:8px;max-width:82%}
@@ -123,43 +121,81 @@ const formatDate = (date: Date) => new Intl.DateTimeFormat('en-US', {
 </style>
 
 <script>
-	if (Math.random() < 0.01) {
+	import { unlockAchievement } from '../scripts/site-state';
+
+	if (Math.random() < 0.001) {
+		unlockAchievement('surpriseSurprise');
 		window.location.replace('/surprise/');
 	}
 
-	const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-post-filter]'));
-	const postGrid = document.querySelector<HTMLElement>('#post-grid');
-	const postCards = postGrid ? Array.from(postGrid.querySelectorAll<HTMLElement>('.post-card')) : [];
-	const emptyFilterMessage = postGrid?.querySelector<HTMLElement>('[data-empty-filter]');
-	const postCount = document.querySelector<HTMLElement>('[data-post-count]');
-	const filterPosts = (filter: string, focusTab = false) => {
-		const selectedTab = tabs.find((tab) => tab.dataset.postFilter === filter);
-		if (!selectedTab) return;
-		tabs.forEach((tab) => {
-			const selected = tab === selectedTab;
-			tab.setAttribute('aria-selected', String(selected));
-			tab.tabIndex = selected ? 0 : -1;
+	const initializeFeed = () => {
+		const feed = document.querySelector<HTMLElement>('[data-recent-feed]');
+		if (!feed || feed.dataset.initialized === 'true') return;
+		feed.dataset.initialized = 'true';
+
+		const tabs = Array.from(feed.querySelectorAll<HTMLButtonElement>('[data-post-filter]'));
+		const postGrid = feed.querySelector<HTMLElement>('#post-grid');
+		const postCards: HTMLAnchorElement[] = postGrid ? Array.from(postGrid.querySelectorAll<HTMLAnchorElement>('.post-card')) : [];
+		const emptyFilterMessage = postGrid?.querySelector<HTMLElement>('[data-empty-filter]');
+		const postCount = feed.querySelector<HTMLElement>('[data-post-count]');
+		const filters = new Set(tabs.map((tab) => tab.dataset.postFilter || ''));
+
+		const updateFeedUrl = (filter: string) => {
+			const url = new URL(window.location.href);
+			if (filter === 'all') url.searchParams.delete('feed');
+			else url.searchParams.set('feed', filter);
+			window.history.replaceState(window.history.state, '', url);
+		};
+
+		const updatePostLinks = (filter: string) => {
+			postCards.forEach((card) => {
+				const route = card.dataset.postHref;
+				if (!route) return;
+				const url = new URL(route, document.baseURI);
+				url.searchParams.set('feed', filter);
+				url.searchParams.set('feedReturn', '1');
+				card.href = `${url.pathname}${url.search}${url.hash}`;
+			});
+		};
+
+		const filterPosts = (filter: string, focusTab = false) => {
+			const selectedTab = tabs.find((tab) => tab.dataset.postFilter === filter);
+			if (!selectedTab) return;
+			tabs.forEach((tab) => {
+				const selected = tab === selectedTab;
+				tab.setAttribute('aria-selected', String(selected));
+				tab.tabIndex = selected ? 0 : -1;
+			});
+			if (postGrid) postGrid.setAttribute('aria-labelledby', selectedTab.id);
+			postCards.forEach((card) => {
+				card.hidden = filter !== 'all' && card.dataset.postType !== filter;
+			});
+			const visibleCount = postCards.filter((card) => !card.hidden).length;
+			if (emptyFilterMessage) emptyFilterMessage.hidden = visibleCount > 0;
+			if (postCount) postCount.textContent = `${visibleCount} ${visibleCount === 1 ? 'item' : 'items'}`;
+			updateFeedUrl(filter);
+			updatePostLinks(filter);
+			if (focusTab) selectedTab.focus();
+		};
+
+		tabs.forEach((tab, index) => {
+			tab.addEventListener('click', () => filterPosts(tab.dataset.postFilter || 'all'));
+			tab.addEventListener('keydown', (event) => {
+				let nextIndex = index;
+				if (event.key === 'ArrowRight') nextIndex = (index + 1) % tabs.length;
+				else if (event.key === 'ArrowLeft') nextIndex = (index - 1 + tabs.length) % tabs.length;
+				else if (event.key === 'Home') nextIndex = 0;
+				else if (event.key === 'End') nextIndex = tabs.length - 1;
+				else return;
+				event.preventDefault();
+				filterPosts(tabs[nextIndex].dataset.postFilter || 'all', true);
+			});
 		});
-		if (postGrid) postGrid.setAttribute('aria-labelledby', selectedTab.id);
-		postCards.forEach((card) => {
-			card.hidden = filter !== 'all' && card.dataset.postType !== filter;
-		});
-		const visibleCount = postCards.filter((card) => !card.hidden).length;
-		if (emptyFilterMessage) emptyFilterMessage.hidden = visibleCount > 0;
-		if (postCount) postCount.textContent = `${visibleCount} ${visibleCount === 1 ? 'post' : 'posts'}`;
-		if (focusTab) selectedTab.focus();
+
+		const requestedFilter = new URLSearchParams(window.location.search).get('feed') || 'all';
+		filterPosts(filters.has(requestedFilter) ? requestedFilter : 'all');
 	};
-	tabs.forEach((tab, index) => {
-		tab.addEventListener('click', () => filterPosts(tab.dataset.postFilter || 'all'));
-		tab.addEventListener('keydown', (event) => {
-			let nextIndex = index;
-			if (event.key === 'ArrowRight') nextIndex = (index + 1) % tabs.length;
-			else if (event.key === 'ArrowLeft') nextIndex = (index - 1 + tabs.length) % tabs.length;
-			else if (event.key === 'Home') nextIndex = 0;
-			else if (event.key === 'End') nextIndex = tabs.length - 1;
-			else return;
-			event.preventDefault();
-			filterPosts(tabs[nextIndex].dataset.postFilter || 'all', true);
-		});
-	});
+
+	document.addEventListener('astro:page-load', initializeFeed);
+	initializeFeed();
 </script>

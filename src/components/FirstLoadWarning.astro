@@ -1,0 +1,230 @@
+---
+---
+
+<aside
+  class="first-load-warning"
+  data-first-load-warning
+  role="alertdialog"
+  aria-modal="true"
+  aria-label="Flashing lights warning"
+  aria-describedby="flashing-warning-copy flashing-warning-hold-hint"
+>
+  <div class="flashing-warning-dialog">
+    <div id="flashing-warning-copy" class="flashing-warning-copy">Warning: This page may contain flashing lights. Please turn on Reduced Motion in settings if you fear you might be triggered.</div>
+    <button class="flashing-warning-confirm" type="button" data-warning-confirm>
+      <span class="flashing-warning-progress" aria-hidden="true"></span>
+      <span class="flashing-warning-label">Confirm</span>
+    </button>
+    <div id="flashing-warning-hold-hint" class="flashing-warning-hold-hint">(tap and hold)</div>
+  </div>
+</aside>
+
+<style is:global>
+  .first-load-warning {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: none;
+    place-items: center;
+    box-sizing: border-box;
+    padding: 16px;
+    background: rgba(0, 0, 0, .62);
+  }
+
+  html[data-warning-required="true"] .first-load-warning {
+    display: grid;
+  }
+
+  html.first-load-warning-open {
+    overflow: hidden;
+  }
+
+  .flashing-warning-dialog {
+    display: grid;
+    justify-items: center;
+    gap: 16px;
+    box-sizing: border-box;
+    width: min(360px, 100%);
+    padding: 22px;
+    border: 1px solid #777;
+    border-radius: 7px;
+    background: #4a4a4a;
+    color: #d0d0d0;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, .38);
+    text-align: center;
+  }
+
+  .flashing-warning-copy {
+    font-size: .9rem;
+    line-height: 1.5;
+  }
+
+  .flashing-warning-confirm {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    min-width: 120px;
+    min-height: 40px;
+    padding: 8px 20px;
+    border: 1px solid #f4f4f4;
+    border-radius: 4px;
+    background: #f4f4f4;
+    color: #292929;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    touch-action: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .flashing-warning-confirm:focus-visible {
+    outline: 2px solid #d0d0d0;
+    outline-offset: 3px;
+  }
+
+  .flashing-warning-confirm[data-holding="true"] {
+    cursor: grabbing;
+  }
+
+  .flashing-warning-progress {
+    position: absolute;
+    right: 4px;
+    bottom: 3px;
+    left: 4px;
+    z-index: -1;
+    height: 2px;
+    border-radius: 1px;
+    background: #8b8b8b;
+    transform: scaleX(var(--hold-progress, 0));
+    transform-origin: left center;
+  }
+
+  .flashing-warning-label {
+    position: relative;
+    pointer-events: none;
+  }
+
+  .flashing-warning-hold-hint {
+    margin-top: -10px;
+    color: #bcbcbc;
+    font-size: .74rem;
+  }
+
+  :root[data-reduced-motion="true"] .flashing-warning-progress {
+    transition: none;
+  }
+</style>
+
+<script>
+  import { acknowledgeFlashingWarning, prefersReducedMotion } from '../scripts/site-state';
+
+  const root = document.querySelector<HTMLElement>('[data-first-load-warning]');
+  const confirmButton = root?.querySelector<HTMLButtonElement>('[data-warning-confirm]');
+
+  if (root && confirmButton && document.documentElement.dataset.warningRequired === 'true') {
+    const HOLD_DURATION_MS = 500;
+    const previousInert = new Map<HTMLElement, boolean>();
+    let holdFrame = 0;
+    let holdStartedAt = 0;
+    let holdKind: 'pointer' | 'keyboard' | null = null;
+    let activePointerId: number | null = null;
+    let activeKey: string | null = null;
+
+    for (const child of Array.from(document.body.children)) {
+      if (!(child instanceof HTMLElement) || child === root) continue;
+      previousInert.set(child, child.inert);
+      child.inert = true;
+    }
+    document.documentElement.classList.add('first-load-warning-open');
+
+    const cancelHold = () => {
+      if (holdFrame) window.cancelAnimationFrame(holdFrame);
+      holdFrame = 0;
+      holdKind = null;
+      activePointerId = null;
+      activeKey = null;
+      confirmButton.removeAttribute('data-holding');
+      confirmButton.style.setProperty('--hold-progress', '0');
+    };
+
+    const dismiss = () => {
+      cancelHold();
+      acknowledgeFlashingWarning();
+      root.setAttribute('aria-hidden', 'true');
+      root.hidden = true;
+      document.documentElement.classList.remove('first-load-warning-open');
+      previousInert.forEach((wasInert, element) => { element.inert = wasInert; });
+      document.querySelector<HTMLButtonElement>('#settings-toggle')?.focus({ preventScroll: true });
+    };
+
+    const updateHold = (now: number) => {
+      if (!holdKind) return;
+      const progress = Math.min((now - holdStartedAt) / HOLD_DURATION_MS, 1);
+      const visibleProgress = prefersReducedMotion() ? Math.floor(progress * 4) / 4 : progress;
+      confirmButton.style.setProperty('--hold-progress', String(visibleProgress));
+      if (progress >= 1) {
+        dismiss();
+        return;
+      }
+      holdFrame = window.requestAnimationFrame(updateHold);
+    };
+
+    const startHold = (kind: 'pointer' | 'keyboard') => {
+      if (holdKind) return;
+      holdKind = kind;
+      holdStartedAt = performance.now();
+      confirmButton.dataset.holding = 'true';
+      holdFrame = window.requestAnimationFrame(updateHold);
+    };
+
+    const finishHold = () => {
+      if (holdKind) updateHold(performance.now());
+    };
+
+    confirmButton.addEventListener('pointerdown', (event) => {
+      if (!event.isPrimary || event.button !== 0 || holdKind) return;
+      event.preventDefault();
+      activePointerId = event.pointerId;
+      startHold('pointer');
+      try {
+        confirmButton.setPointerCapture(event.pointerId);
+      } catch {
+        cancelHold();
+      }
+    });
+    confirmButton.addEventListener('pointerup', (event) => {
+      if (holdKind !== 'pointer' || event.pointerId !== activePointerId) return;
+      event.preventDefault();
+      finishHold();
+      if (holdKind === 'pointer') cancelHold();
+    });
+    confirmButton.addEventListener('pointercancel', () => { if (holdKind === 'pointer') cancelHold(); });
+    confirmButton.addEventListener('lostpointercapture', () => { if (holdKind === 'pointer') cancelHold(); });
+    confirmButton.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter' && event.code !== 'Space') return;
+      event.preventDefault();
+      if (event.repeat || holdKind) return;
+      activeKey = event.code || event.key;
+      startHold('keyboard');
+    });
+    confirmButton.addEventListener('keyup', (event) => {
+      if (holdKind !== 'keyboard' || (event.code || event.key) !== activeKey) return;
+      event.preventDefault();
+      finishHold();
+      if (holdKind === 'keyboard') cancelHold();
+    });
+    confirmButton.addEventListener('click', (event) => event.preventDefault());
+    confirmButton.addEventListener('contextmenu', (event) => event.preventDefault());
+    confirmButton.addEventListener('blur', () => { if (holdKind === 'keyboard') cancelHold(); });
+    confirmButton.addEventListener('keydown', (event) => {
+      if (event.key === 'Tab') {
+        event.preventDefault();
+        confirmButton.focus();
+      }
+    });
+    window.addEventListener('blur', cancelHold);
+    requestAnimationFrame(() => confirmButton.focus({ preventScroll: true }));
+  }
+</script>

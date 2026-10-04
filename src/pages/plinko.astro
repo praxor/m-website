@@ -1,22 +1,27 @@
 ﻿---
 import Layout from '../layouts/Layout.astro';
+const base = import.meta.env.BASE_URL;
 ---
 <Layout title="plinko" bodyClass="plinko-page">
-    <main class="plinko-main">
+    <main class="plinko-main" data-plinko-main>
       <div class="plinko-stage">
       <section class="plinko-frame" aria-labelledby="plinko-title">
         <div class="plinko-heading">
           <h1 id="plinko-title">plinko</h1>
-          <button id="plinko-reset" type="button">reset</button>
+          <button id="plinko-reset" type="button" aria-label="Reset Plinko" title="Reset Plinko">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 11a8 8 0 0 1 14.8-4L20 10M20 4v6h-6M21 13a8 8 0 0 1-14.8 4L4 14M4 20v-6h6" /></svg>
+          </button>
         </div>
         <div class="plinko-board">
-          <canvas id="plinko-canvas" aria-label="Plinko board with oraxor the cat">your browser does not support canvas.</canvas>
+          <canvas id="plinko-canvas" data-theme-cat data-theme-cat-src={`${base}media/res/oraxor.png`} data-theme-cat-default-src="media/res/oraxor.png" aria-label="Plinko board with oraxor the cat">your browser does not support canvas.</canvas>
         </div>
       </section>
       <aside id="plinko-score-panel" class="plinko-score-panel" aria-label="Plinko points" aria-live="polite" hidden>
-        <h2>points</h2>
-        <p><span>total</span><strong id="plinko-total">0</strong></p>
-        <p><span>last drop</span><strong id="plinko-last-drop">--</strong></p>
+        <div class="plinko-score-heading">
+          <h2>points</h2>
+          <svg class="plinko-score-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m12 2.5 2.8 5.7 6.3.9-4.6 4.5 1.1 6.3-5.6-3-5.6 3 1.1-6.3L3 9.1l6.3-.9L12 2.5z" /></svg>
+        </div>
+        <p><span>total</span><span class="plinko-total-values"><strong id="plinko-total">0</strong><span id="plinko-earned" class="plinko-earned" aria-hidden="true"></span></span></p>
       </aside>
       </div>
     </main>
@@ -30,42 +35,60 @@ import Layout from '../layouts/Layout.astro';
   .plinko-frame::before{content:"";position:absolute;top:0;left:12%;right:12%;height:1px;background:var(--accent);opacity:.65;box-shadow:0 0 18px var(--accent);pointer-events:none}
   .plinko-heading{display:flex;align-items:center;justify-content:space-between;padding:.75rem 1rem;border-bottom:1px solid var(--muted-border)}
   .plinko-main h1{margin:0;color:var(--accent);font-size:1.15rem;line-height:1;letter-spacing:.04em}
-  #plinko-reset{padding:.4rem .7rem;border:1px solid var(--muted-border);border-radius:6px;background:transparent;color:var(--text);font:inherit;cursor:pointer;transition:transform 140ms ease,background-color 140ms ease,border-color 140ms ease,color 140ms ease,box-shadow 140ms ease}
+  #plinko-reset{display:grid;place-items:center;flex:0 0 36px;width:36px;height:36px;padding:0;border:1px solid var(--muted-border);border-radius:6px;background:transparent;color:var(--text);cursor:pointer;transition:transform 140ms ease,background-color 140ms ease,border-color 140ms ease,color 140ms ease,box-shadow 140ms ease}
+  #plinko-reset svg{display:block;width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
   #plinko-reset:hover{transform:translateY(-2px);border-color:var(--accent);background:var(--accent-10);color:var(--accent);box-shadow:0 3px 12px var(--accent-12)}
   #plinko-reset:active{transform:translateY(0) scale(.96);box-shadow:0 0 4px var(--accent-12)}
   #plinko-reset:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   @media (prefers-reduced-motion:reduce){#plinko-reset{transition:none}#plinko-reset:hover,#plinko-reset:active{transform:none}}
   .plinko-score-panel{box-sizing:border-box;display:flex;flex:0 0 158px;flex-direction:column;gap:.65rem;align-self:flex-end;margin-bottom:.85rem;padding:.85rem;border:1px solid var(--muted-border);border-radius:2px;background:var(--card);box-shadow:inset 0 1px 0 var(--accent-12);animation:plinko-score-in 240ms ease-out both}
   .plinko-score-panel[hidden]{display:none}
-  .plinko-score-panel h2{margin:0 0 .2rem;color:var(--accent);font-size:.8rem;font-weight:700;text-transform:uppercase}
+  .plinko-score-heading{display:flex;align-items:center;justify-content:space-between;gap:.5rem}
+  .plinko-score-panel h2{margin:0;color:var(--accent);font-size:.8rem;font-weight:700;text-transform:uppercase}
+  .plinko-score-icon{display:block;width:15px;height:15px;fill:none;stroke:var(--accent);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
   .plinko-score-panel p{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin:0;color:var(--muted);font-size:.78rem}
   .plinko-score-panel strong{display:inline-block;color:var(--text);font-size:.95rem;font-variant-numeric:tabular-nums;transform-origin:center}
+  .plinko-total-values{display:flex;align-items:center;justify-content:flex-end;gap:.45rem;min-width:0}
+  .plinko-earned{color:var(--accent);font-size:.75rem;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .plinko-earned:empty{display:none}
   @keyframes plinko-score-in{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}
   .plinko-board{display:flex;flex:1;min-height:0;margin:.65rem;border:1px solid var(--muted-border);border-radius:2px;background:radial-gradient(circle at 50% 0%,var(--accent-10),transparent 44%),var(--plinko-board);box-shadow:inset 0 0 0 1px var(--surface-hover)}
   #plinko-canvas{display:block;width:100%;min-height:0;flex:1;background:transparent}
   @media (max-width:1000px){.plinko-stage{flex-direction:column;align-items:center}.plinko-score-panel{width:min(84vw,780px);flex-basis:auto;align-self:center;margin:0;flex-direction:row;align-items:center;justify-content:space-between}}
   @media (max-width:780px){.plinko-main{width:100%;min-height:calc(100vh - 60px);padding:1.5rem 12px 1rem;overflow-x:hidden}.plinko-frame{width:calc(100vw - 24px);max-width:420px;min-width:280px;height:min(68vh,580px);aspect-ratio:auto}}
   @media (max-width:480px){.plinko-heading{padding-left:1rem;padding-right:1rem}.plinko-board{margin:.5rem}.plinko-score-panel{width:calc(100vw - 24px);max-width:420px}}
+  .plinko-main[data-extreme-mode="true"] .plinko-stage{flex-direction:column;align-items:center}
+  .plinko-main[data-extreme-mode="true"] .plinko-frame{width:min(96vw,1100px);aspect-ratio:1}
+  .plinko-main[data-extreme-mode="true"] .plinko-score-panel{width:min(96vw,1100px);flex-basis:auto;align-self:center;margin:0;flex-direction:row;align-items:center;justify-content:space-between}
+  @media (max-width:1000px){.plinko-main[data-extreme-mode="true"] .plinko-frame{width:min(96vw,900px)}}
+  @media (max-width:780px){.plinko-main[data-extreme-mode="true"] .plinko-frame{width:calc(100vw - 24px);max-width:900px;min-width:280px;height:min(90vh,760px);aspect-ratio:auto}}
   @media (prefers-reduced-motion:reduce){.plinko-score-panel{animation:none}}
 </style>
 
 <script>
   import * as planck from 'planck';
+  import { CHANGE_EVENT, getSettings } from '../scripts/site-state';
+  import { PLINKO_STATE_EVENT, type PlinkoStateDetail, type PlinkoStateReason } from '../scripts/plinko-events';
 
   let initializedCanvas: HTMLCanvasElement | null = null;
 
   const initializePlinko = () => {
   const canvas = document.querySelector<HTMLCanvasElement>('#plinko-canvas');
+  const plinkoMain = document.querySelector<HTMLElement>('[data-plinko-main]');
   const resetButton = document.querySelector<HTMLButtonElement>('#plinko-reset');
   const scorePanel = document.querySelector<HTMLElement>('#plinko-score-panel');
   const totalDisplay = document.querySelector<HTMLElement>('#plinko-total');
-  const lastDropDisplay = document.querySelector<HTMLElement>('#plinko-last-drop');
+  const earnedDisplay = document.querySelector<HTMLElement>('#plinko-earned');
   if (!canvas || canvas === initializedCanvas) return;
   initializedCanvas = canvas;
+  let extremeMode = getSettings().plinkoExtremeMode;
+  if (plinkoMain) plinkoMain.dataset.extremeMode = String(extremeMode);
   const context = canvas?.getContext('2d');
   const cat = new Image();
   cat.crossOrigin = 'anonymous';
-  cat.src = 'https://praxor.de/media/res/oraxor.png';
+  const initialCat = { src: canvas.dataset.themeCatSrc || '', filter: canvas.dataset.themeCatFilter || 'none' };
+  let catFilter = initialCat.filter;
+  cat.src = initialCat.src;
   let world: planck.World;
   let catBody: planck.Body;
   let width = 0;
@@ -74,11 +97,36 @@ import Layout from '../layouts/Layout.astro';
   let spawnAt = 0;
   let landingAt = 0;
   let totalPoints = 0;
+  type ScoreZone = { points: number; width: number; alpha: number; special: boolean };
+  let scoreZones: ScoreZone[] = [];
+  let earnedAnimation: Animation | null = null;
+  let scoreNumberAnimation: Animation | null = null;
+  let earnedClearTimer = 0;
   let dropFinalized = false;
   let catActive = false;
   let animationFrame = 0;
-  const slotCount = 7;
   const slotPoints = [100, 50, 25, 10, 25, 50, 100];
+  const slotAlpha = [.18, .10, .15, .08, .15, .10, .18];
+  const getScoreZones = (worldWidth: number): ScoreZone[] => {
+    const availableWidth = worldWidth - .4;
+    if (!extremeMode) {
+      const width = availableWidth / slotPoints.length;
+      return slotPoints.map((points, index) => ({ points, width, alpha: slotAlpha[index], special: false }));
+    }
+
+    const normalPoints = [100, 50, 25, 10, 10, 25, 50, 100];
+    const normalAlpha = [.18, .10, .15, .08, .08, .15, .10, .18];
+    const normalWidth = availableWidth / 9.5;
+    const normalZones = normalPoints.map((points, index) => ({ points, width: normalWidth, alpha: normalAlpha[index], special: false }));
+    const specialZone = (points: number): ScoreZone => ({ points, width: normalWidth / 2, alpha: .36, special: true });
+    return [specialZone(250), ...normalZones.slice(0, 4), specialZone(500), ...normalZones.slice(4), specialZone(250)];
+  };
+
+  const publishPlinkoState = (reason: PlinkoStateReason, pointsEarned = 0) => {
+    window.dispatchEvent(new CustomEvent<PlinkoStateDetail>(PLINKO_STATE_EVENT, {
+      detail: { reason, totalPoints, extremeMode, pointsEarned },
+    }));
+  };
 
   // Read each frame so the canvas follows theme changes, including in-flight colour transitions.
   const readColors = () => {
@@ -89,7 +137,8 @@ import Layout from '../layouts/Layout.astro';
   const compactBoard = window.matchMedia('(max-width: 780px)').matches;
   const animateScoreNumber = (element: HTMLElement | null) => {
     if (!element || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    element.animate([
+    scoreNumberAnimation?.cancel();
+    scoreNumberAnimation = element.animate([
       { transform: 'translateY(0) scale(1)' },
       { transform: 'translateY(-3px) scale(1.2)', offset: .4 },
       { transform: 'translateY(0) scale(1)' },
@@ -105,28 +154,29 @@ import Layout from '../layouts/Layout.astro';
     canvas.width = Math.round(bounds.width * ratio);
     canvas.height = Math.round(bounds.height * ratio);
     context.setTransform(ratio, 0, 0, ratio, 0, 0);
-    scale = width / 12;
+    scale = width / (extremeMode ? 24 : 12);
     createBoard();
   };
 
   const createBoard = () => {
     if (!canvas) return;
     spawnAt = 0;
-    world = new planck.World(planck.Vec2(0, 10));
+    world = new planck.World(planck.Vec2(0, extremeMode ? 9.5 : 10));
     const worldWidth = width / scale;
     const worldHeight = height / scale;
     const pegGap = compactBoard ? .62 : .78;
     const pegRadius = .085;
     const slotHeight = .65;
-    const slotWidth = (worldWidth - .4) / slotCount;
+    scoreZones = getScoreZones(worldWidth);
 
     const walls = world.createBody();
     walls.createFixture(planck.Edge(planck.Vec2(.2, 0), planck.Vec2(.2, worldHeight)), { restitution: .55 });
     walls.createFixture(planck.Edge(planck.Vec2(worldWidth - .2, 0), planck.Vec2(worldWidth - .2, worldHeight)), { restitution: .55 });
     walls.createFixture(planck.Edge(planck.Vec2(.2, worldHeight - .15), planck.Vec2(worldWidth - .2, worldHeight - .15)), { restitution: .35 });
-    for (let slot = 1; slot < slotCount; slot += 1) {
-      const x = .2 + slot * slotWidth;
-      walls.createFixture(planck.Edge(planck.Vec2(x, worldHeight - .15), planck.Vec2(x, worldHeight - slotHeight)), { restitution: .35 });
+    let boundaryX = .2;
+    for (const zone of scoreZones.slice(0, -1)) {
+      boundaryX += zone.width;
+      walls.createFixture(planck.Edge(planck.Vec2(boundaryX, worldHeight - .15), planck.Vec2(boundaryX, worldHeight - slotHeight)), { restitution: .35 });
     }
 
     const addPegSection = (startY: number, rows: number) => {
@@ -158,7 +208,32 @@ import Layout from '../layouts/Layout.astro';
       linearVelocity: planck.Vec2((Math.random() - .5) * 1.2, 0),
       angularVelocity: (Math.random() - .5) * 2,
     });
-    catBody.createFixture(planck.Circle(.28), { density: 1, friction: .18, restitution: .7 });
+    catBody.createFixture(planck.Circle(extremeMode ? .2 : .28), { density: 1, friction: .18, restitution: .7 });
+  };
+
+  const clearEarnedPoints = () => {
+    if (earnedClearTimer) window.clearTimeout(earnedClearTimer);
+    earnedClearTimer = 0;
+    earnedAnimation?.cancel();
+    earnedAnimation = null;
+    scoreNumberAnimation?.cancel();
+    scoreNumberAnimation = null;
+    if (earnedDisplay) earnedDisplay.textContent = '';
+  };
+
+  const showEarnedPoints = (points: number) => {
+    clearEarnedPoints();
+    if (!earnedDisplay) return;
+    earnedDisplay.textContent = `+${points}`;
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      earnedAnimation = earnedDisplay.animate([
+        { opacity: 0, transform: 'translateY(5px) scale(.94)', offset: 0 },
+        { opacity: 1, transform: 'translateY(0) scale(1)', offset: .18 },
+        { opacity: 1, transform: 'translateY(0) scale(1)', offset: .72 },
+        { opacity: 0, transform: 'translateY(-5px) scale(.98)', offset: 1 },
+      ], { duration: 1050, easing: 'ease-out' });
+    }
+    earnedClearTimer = window.setTimeout(clearEarnedPoints, 1050);
   };
 
   const resetSimulation = () => {
@@ -166,10 +241,11 @@ import Layout from '../layouts/Layout.astro';
     landingAt = 0;
     totalPoints = 0;
     if (totalDisplay) totalDisplay.textContent = '0';
-    if (lastDropDisplay) lastDropDisplay.textContent = '--';
+    clearEarnedPoints();
     if (scorePanel) scorePanel.hidden = true;
     createBoard();
     drawBoard();
+    publishPlinkoState('reset');
   };
 
   const drawBoard = () => {
@@ -194,33 +270,34 @@ import Layout from '../layouts/Layout.astro';
     context.globalAlpha = 1;
 
     const worldWidth = width / scale;
-    const slotWidth = (worldWidth - .4) / slotCount;
     const slotTop = height - .65 * scale;
-    const slotAlpha = [.18, .10, .15, .08, .15, .10, .18];
-    for (let slot = 0; slot < slotCount; slot += 1) {
-      context.fillStyle = colors.slot;
-      context.globalAlpha = slotAlpha[slot];
-      context.fillRect((.2 + slot * slotWidth) * scale, slotTop, slotWidth * scale, .65 * scale);
-    }
-    context.strokeStyle = colors.peg;
-    context.lineWidth = 1;
-    context.globalAlpha = .42;
-    for (let slot = 0; slot <= slotCount; slot += 1) {
-      const x = (.2 + slot * slotWidth) * scale;
-      context.beginPath();
-      context.moveTo(x, height);
-      context.lineTo(x, slotTop);
-      context.stroke();
-    }
-    context.globalAlpha = 1;
     context.fillStyle = colors.label;
     context.font = '600 11px sans-serif';
     context.textAlign = 'center';
     context.textBaseline = 'middle';
-    for (let slot = 0; slot < slotCount; slot += 1) {
-      const centerX = (.2 + (slot + .5) * slotWidth) * scale;
-      context.fillText(String(slotPoints[slot]), centerX, slotTop - 8);
+    let zoneX = .2;
+    for (const zone of scoreZones) {
+      context.fillStyle = colors.slot;
+      context.globalAlpha = zone.alpha;
+      context.fillRect(zoneX * scale, slotTop, zone.width * scale, .65 * scale);
+      context.globalAlpha = 1;
+      context.fillStyle = colors.label;
+      context.fillText(String(zone.points), (zoneX + zone.width / 2) * scale, slotTop - 8);
+      zoneX += zone.width;
     }
+    context.strokeStyle = colors.peg;
+    context.lineWidth = 1;
+    context.globalAlpha = .42;
+    let dividerX = .2;
+    for (let divider = 0; divider <= scoreZones.length; divider += 1) {
+      const x = dividerX * scale;
+      context.beginPath();
+      context.moveTo(x, height);
+      context.lineTo(x, slotTop);
+      context.stroke();
+      if (divider < scoreZones.length) dividerX += scoreZones[divider].width;
+    }
+    context.globalAlpha = 1;
 
     const position = catBody.getPosition();
     const size = .72 * scale;
@@ -228,9 +305,17 @@ import Layout from '../layouts/Layout.astro';
     context.translate(position.x * scale, position.y * scale);
     context.rotate(catBody.getAngle());
     if (cat.complete && cat.naturalWidth > 0) {
+      context.filter = catFilter;
       context.drawImage(cat, -size / 2, -size / 2, size, size);
     }
     context.restore();
+  };
+
+  const updateThemeCat = () => {
+    const nextCat = { src: canvas.dataset.themeCatSrc || '', filter: canvas.dataset.themeCatFilter || 'none' };
+    catFilter = nextCat.filter;
+    if (cat.src !== nextCat.src) cat.src = nextCat.src;
+    else drawBoard();
   };
 
   const animate = () => {
@@ -247,16 +332,24 @@ import Layout from '../layouts/Layout.astro';
         landingAt = landingAt || now;
         if (now - landingAt >= 400) {
           const worldWidth = width / scale;
-          const slotWidth = (worldWidth - .4) / slotCount;
-          const slot = Math.min(slotCount - 1, Math.max(0, Math.floor((position.x - .2) / slotWidth)));
-          const points = slotPoints[slot];
+          const scoringX = Math.max(.2, Math.min(worldWidth - .2, position.x));
+          let zoneStart = .2;
+          let landedZone = scoreZones[scoreZones.length - 1];
+          for (const zone of scoreZones) {
+            if (scoringX < zoneStart + zone.width) {
+              landedZone = zone;
+              break;
+            }
+            zoneStart += zone.width;
+          }
+          const points = landedZone.points;
           if (!dropFinalized) {
             totalPoints += points;
             if (totalDisplay) totalDisplay.textContent = String(totalPoints);
-            if (lastDropDisplay) lastDropDisplay.textContent = `+${points}`;
+            showEarnedPoints(points);
             animateScoreNumber(totalDisplay);
-            animateScoreNumber(lastDropDisplay);
             if (scorePanel) scorePanel.hidden = false;
+            publishPlinkoState('score', points);
             dropFinalized = true;
           }
           world.destroyBody(catBody);
@@ -275,14 +368,29 @@ import Layout from '../layouts/Layout.astro';
     animationFrame = requestAnimationFrame(animate);
   };
 
+  const handleSettingsChange = () => {
+    const nextExtremeMode = getSettings().plinkoExtremeMode;
+    if (nextExtremeMode === extremeMode) return;
+    extremeMode = nextExtremeMode;
+    if (plinkoMain) plinkoMain.dataset.extremeMode = String(extremeMode);
+    resizeCanvas();
+    publishPlinkoState('mode-change');
+  };
+
   cat.addEventListener('load', drawBoard);
+  window.addEventListener('theme-cats:change', updateThemeCat);
   resetButton?.addEventListener('click', resetSimulation);
   window.addEventListener('resize', resizeCanvas);
+  window.addEventListener(CHANGE_EVENT, handleSettingsChange);
   resizeCanvas();
   animationFrame = requestAnimationFrame(animate);
+  publishPlinkoState('ready');
   document.addEventListener('astro:before-swap', () => {
+    clearEarnedPoints();
     cancelAnimationFrame(animationFrame);
     window.removeEventListener('resize', resizeCanvas);
+    window.removeEventListener('theme-cats:change', updateThemeCat);
+    window.removeEventListener(CHANGE_EVENT, handleSettingsChange);
     resetButton?.removeEventListener('click', resetSimulation);
     cat.removeEventListener('load', drawBoard);
     if (initializedCanvas === canvas) initializedCanvas = null;

@@ -20,4 +20,4 @@ To remove a playlist, delete its JSON file and remove its matching button from s
 
 The player itself currently opens all.json by default. To change its default playlist, edit data-playlist-url in src/components/MusicPlayer.astro.
 
-Playlist manifests are fetched with cache disabled, so edits appear after refreshing the page.
+Playlist manifests share a page-session cache and are revalidated by the browser. Refresh after editing playlist files.
