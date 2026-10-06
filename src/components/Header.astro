@@ -224,7 +224,7 @@ const base = import.meta.env.BASE_URL;
       sizeSocialIcons();
       document.addEventListener('astro:page-load', sizeSocialIcons);
       const logo = document.querySelector<HTMLAnchorElement>('.logo');
-      const cultUrl = new URL('cult', document.baseURI).href;
+      const cultUrl = `${import.meta.env.BASE_URL.replace(/\/?$/, '/')}cult`;
       let secretLogoTimer: number | undefined;
       let secretLogoReady = false;
       let logoHoldCompleted = false;
