@@ -235,6 +235,31 @@ export const characters: Character[] = [
     group: 'misc',
     ...placeholder,
   },
+  {
+    name: 'Mr. Cake',
+    slug: 'mrcake',
+    group: 'misc',
+    quote: '\"Yum!\"',
+    image: '/media/ocs/mrcake.png',
+    info: [
+      { label: 'age', value: 'unknown' },
+      { label: 'race', value: 'Cake' },
+      { label: 'technical name', value: '\'Mister Cake\'' },
+      { label: 'nickname', value: '\'The Scrumptious\'' },
+    ],
+    references: [
+      {
+        image: '',
+        caption: '',
+        alt: ''
+      }
+    ],
+    introduction: 'He\'s... a slice of cake... God...\nAside from the fact he\'s a clear piece of cake, he\'s quite literally packing with the muscle. Nothing much is known about him (at the moment at least), but his vanilla ice cream frosting and cake flesh that\'s nothing short of white and delicacy.',
+    backstory: 'I wasn\'t lying. He\'s just... cake...',
+    credits: 'praxor',
+    creation: 'praxor',
+    design: 'praxor',
+  },
 ];
 
 export const mainCharacters = characters.filter((character) => character.group === 'main');
