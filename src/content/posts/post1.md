@@ -7,7 +7,7 @@ description: My first blog post on this website, kinda shy...
 # banner: /media/path/to/banner.png
 image: /media/postres/pinku.png
 imageAlt: This is just a render from 2025, but I thought it'd fit nice here.
-draft: true
+draft: false
 ---
 
 # Progress Report on 9.4
