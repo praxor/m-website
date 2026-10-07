@@ -90,7 +90,7 @@ export const achievements = {
 		secret: true,
 	},
 	nightcoreBeLike: {
-		name: 'Nightcore be like:',
+		name: 'say hello to paxo',
 		description: 'Click the cat on the home page. Hope you enjoy!',
 		secret: true,
 	},

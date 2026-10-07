@@ -295,11 +295,7 @@ const galleryItems = fanartOptions.map((art) => ({ src: art.src, alt: `Fanart pi
 <script>
   import { prefersReducedMotion } from '../scripts/site-state';
 
-  const creditsLaunch = document.querySelector<HTMLButtonElement>('[data-credits-launch]');
-  const creditsConfirm = document.querySelector<HTMLDialogElement>('[data-credits-confirm]');
-  const creditsCancel = document.querySelector<HTMLButtonElement>('[data-credits-cancel]');
-  const creditsStart = document.querySelector<HTMLButtonElement>('[data-credits-start]');
-
+  let creditsConfirm: HTMLDialogElement | null = null;
   let creditsDialogAnimation: Animation | null = null;
   let creditsDialogAction: (() => void) | null = null;
   let creditsDialogCloseId = 0;
@@ -326,21 +322,35 @@ const galleryItems = fanartOptions.map((art) => ({ src: art.src, alt: `Fanart pi
     void creditsDialogAnimation.finished.then(() => finishCreditsDialogClose(closeId), () => {});
   };
 
-  creditsLaunch?.addEventListener('click', () => {
-    creditsConfirm?.showModal();
-    if (creditsConfirm?.open && !prefersReducedMotion()) creditsConfirm.animate([
-      { opacity: 0, transform: 'translateY(6px) scale(.985)' },
-      { opacity: 1, transform: 'translateY(0) scale(1)' },
-    ], { duration: 220, easing: 'ease-out' });
-  });
-  creditsCancel?.addEventListener('click', () => closeCreditsDialog());
-  creditsConfirm?.addEventListener('cancel', (event) => {
-    event.preventDefault();
-    closeCreditsDialog();
-  });
-  creditsStart?.addEventListener('click', () => {
-    closeCreditsDialog(() => window.location.assign(`${import.meta.env.BASE_URL}credits/`));
-  });
+  const initializeCreditsDialog = () => {
+    const creditsLaunch = document.querySelector<HTMLButtonElement>('[data-credits-launch]');
+    const dialog = document.querySelector<HTMLDialogElement>('[data-credits-confirm]');
+    const creditsCancel = document.querySelector<HTMLButtonElement>('[data-credits-cancel]');
+    const creditsStart = document.querySelector<HTMLButtonElement>('[data-credits-start]');
+    if (!dialog || dialog.dataset.initialized === 'true') return;
+    dialog.dataset.initialized = 'true';
+    creditsConfirm = dialog;
+    creditsDialogAnimation = null;
+    creditsDialogAction = null;
+
+    creditsLaunch?.addEventListener('click', () => {
+      dialog.showModal();
+      if (dialog.open && !prefersReducedMotion()) dialog.animate([
+        { opacity: 0, transform: 'translateY(6px) scale(.985)' },
+        { opacity: 1, transform: 'translateY(0) scale(1)' },
+      ], { duration: 220, easing: 'ease-out' });
+    });
+    creditsCancel?.addEventListener('click', () => closeCreditsDialog());
+    dialog.addEventListener('cancel', (event) => {
+      event.preventDefault();
+      closeCreditsDialog();
+    });
+    creditsStart?.addEventListener('click', () => {
+      closeCreditsDialog(() => window.location.assign(`${import.meta.env.BASE_URL}credits/`));
+    });
+  };
+  document.addEventListener('astro:page-load', initializeCreditsDialog);
+  initializeCreditsDialog();
 
   const setBorderFromImage = (image: HTMLImageElement): void => {
     if (!image.complete || !image.naturalWidth) return;

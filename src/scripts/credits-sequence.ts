@@ -1,5 +1,6 @@
 ﻿import { loadMusicPlaylist } from './music-library';
-import { CHANGE_EVENT, getAchievements, prefersReducedMotion, recordArtworkView, unlockAchievement, type AchievementId } from './site-state';
+import type { AchievementId } from '../data/achievements';
+import { CHANGE_EVENT, getAchievements, prefersReducedMotion, recordArtworkView, unlockAchievement } from './site-state';
 
 const FLYING_PRAXOR_ACHIEVEMENT: AchievementId = 'creditsFlyingPraxor';
 const SCROLL_DURATION_MS = 78_000;
@@ -73,7 +74,7 @@ export const initializeCreditsSequence = (baseUrl: string) => {
     if (presentationFrame) cancelAnimationFrame(presentationFrame);
     artworkObserver?.disconnect();
     hideFlyingPraxor();
-    screenAnimation?.cancel();
+    if (!isLeaving) screenAnimation?.cancel();
     creditsAudio.pause();
     creditsAudio.volume = AUDIO_VOLUME;
     creditsAudio.removeAttribute('src');
@@ -287,7 +288,7 @@ export const initializeCreditsSequence = (baseUrl: string) => {
   }, { signal });
   startAudioButton.addEventListener('click', () => { revealControls(); void startCreditsMusic(); }, { signal });
   returnButton.addEventListener('click', leaveCredits, { signal });
-  window.addEventListener('astro:before-swap', cleanup, { once: true, signal });
+  document.addEventListener('astro:before-swap', cleanup, { once: true, signal });
 
   if (!reducedMotion) {
     screenAnimation = screen.animate([

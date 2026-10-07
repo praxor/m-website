@@ -35,7 +35,7 @@ const base = import.meta.env.BASE_URL;
   .site-index li{opacity:0;animation:frame-in .36s ease both}
   .site-index li:nth-child(1){animation-delay:.3s}.site-index li:nth-child(2){animation-delay:.36s}.site-index li:nth-child(3){animation-delay:.42s}.site-index li:nth-child(4){animation-delay:.48s}.site-index li:nth-child(5){animation-delay:.54s}.site-index li:nth-child(6){animation-delay:.6s}
   .site-index a{display:grid;gap:2px;padding:8px 7px;border-left:2px solid transparent;color:var(--text);text-decoration:none}
-  .site-index a:hover,.site-index a:focus-visible{border-left-color:var(--accent);background:var(--accent-10)}
+  .site-index a:focus-visible{border-left-color:var(--accent);background:var(--accent-10)}
   .site-index a strong{font-size:.82rem;font-weight:650}
   .site-index a span{color:var(--muted);font-size:.72rem;line-height:1.35}
   @keyframes frame-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
