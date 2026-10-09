@@ -79,11 +79,14 @@ import AchievementNotifications from "./AchievementNotifications.astro";
             <p class="sm-info-intro">Site stats</p>
             <dl class="sm-info-stats" data-info-stats></dl>
           </div>
-          <div class="sm-info-stage" data-info-stage aria-hidden="true">
-            <span class="sm-info-shadow" data-info-shadow></span>
+          <div class="sm-info-stage" data-info-stage>
+            <span class="sm-info-shadow" data-info-shadow aria-hidden="true"></span>
             <img
               class="sm-info-praxor"
               data-info-praxor
+              role="button"
+              tabindex="0"
+              aria-label="Settings-xor"
               src="/media/res/oraxor.png"
               alt=""
               width="120"
@@ -711,8 +714,12 @@ import AchievementNotifications from "./AchievementNotifications.astro";
   .sm-info-stage {
     position: relative;
     display: grid;
-    place-items: end center;
-    height: 72px;
+    place-items: center end;
+    box-sizing: border-box;
+    padding-right: 12px;
+    min-height: 72px;
+    height: auto;
+    align-self: stretch;
     overflow: hidden;
   }
   .sm-info-praxor {
@@ -722,12 +729,20 @@ import AchievementNotifications from "./AchievementNotifications.astro";
     width: 64px;
     height: 64px;
     object-fit: contain;
-    transform: translateY(0);
+    transform-origin: center center;
+    animation: none;
+    transition: none;
+    will-change: transform;
+    cursor: pointer;
+  }
+  .sm-info-praxor:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
   }
   .sm-info-shadow {
     position: absolute;
-    bottom: 6px;
-    left: 50%;
+    right: 25px;
+    top: calc(50% + 55px);
     width: 96px;
     height: 15px;
     border-radius: 50%;
@@ -738,8 +753,31 @@ import AchievementNotifications from "./AchievementNotifications.astro";
       rgba(0, 0, 0, 0) 78%
     );
     filter: blur(1px);
-    transform: translateX(-50%) scale(1);
+    transform: scale(1);
     opacity: 0.3;
+    animation: sm-info-shadow-bounce 1.65s ease-in-out infinite;
+  }
+  @keyframes sm-info-shadow-bounce {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 0.3;
+    }
+    48%,
+    54% {
+      transform: scale(0.62);
+      opacity: 0.13;
+    }
+  }
+  :root[data-reduced-motion="true"] .sm-info-praxor,
+  :root[data-reduced-motion="true"] .sm-info-shadow {
+    animation: none !important;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sm-info-praxor,
+    .sm-info-shadow {
+      animation: none !important;
+    }
   }
   .settings-menu .sm-switch::after,
   .settings-menu .sm-carousel-dot::before,
@@ -1298,7 +1336,7 @@ import AchievementNotifications from "./AchievementNotifications.astro";
       padding-left: 14px;
     }
     .sm-info-stage {
-      height: 58px;
+      min-height: 58px;
     }
     .sm-info-praxor {
       width: 46px;
@@ -1611,7 +1649,8 @@ import AchievementNotifications from "./AchievementNotifications.astro";
     min-width: 0;
   }
   .sm-info-stage {
-    height: 158px;
+    min-height: 158px;
+    height: auto;
     align-self: stretch;
   }
   .sm-info-praxor {
@@ -1619,7 +1658,7 @@ import AchievementNotifications from "./AchievementNotifications.astro";
     height: 124px;
   }
   .sm-info-shadow {
-    bottom: 7px;
+    top: calc(50% + 55px);
     width: 98px;
     height: 16px;
     background: radial-gradient(
@@ -1638,13 +1677,14 @@ import AchievementNotifications from "./AchievementNotifications.astro";
       max-height: min(490px, calc(100dvh - 80px));
     }
     .sm-info-stage {
-      height: 118px;
+      min-height: 118px;
     }
     .sm-info-praxor {
       width: 86px;
       height: 86px;
     }
     .sm-info-shadow {
+      top: calc(50% + 36px);
       width: 70px;
       height: 12px;
     }
@@ -1669,7 +1709,7 @@ import AchievementNotifications from "./AchievementNotifications.astro";
     initSiteState,
     isThemeAvailable,
     prefersReducedMotion,
-    recordSettingsClick,
+    recordSettingsCatClick,
     resetAllData,
     updateSettings,
   } from "../scripts/site-state";
@@ -1745,8 +1785,153 @@ import AchievementNotifications from "./AchievementNotifications.astro";
     )!;
     const infoPraxor =
       root.querySelector<HTMLImageElement>("[data-info-praxor]")!;
-    const infoShadow = root.querySelector<HTMLElement>("[data-info-shadow]")!;
     const infoStats = root.querySelector<HTMLElement>("[data-info-stats]")!;
+    const infoStage = root.querySelector<HTMLElement>("[data-info-stage]")!;
+    const CAT_BOUNCE_MS = 1050;
+    const CAT_FLIGHT_MS = 730;
+    let catMotionReduced = prefersReducedMotion();
+    let catMotionFrame = 0;
+    let catBounceStartedAt = 0;
+    let catBounceActive = false;
+    const catMotionLifetime = new AbortController();
+    let catMotionObserver: MutationObserver | undefined;
+    const stopCatBounce = () => {
+      if (catMotionFrame) window.cancelAnimationFrame(catMotionFrame);
+      catMotionFrame = 0;
+      catBounceActive = false;
+      infoPraxor.style.removeProperty("transform");
+    };
+    const smoothstep = (value: number) => value * value * (3 - 2 * value);
+    const updateCatBounce = (now: number) => {
+      catMotionFrame = 0;
+      if (!root.isConnected) {
+        stopCatBounce();
+        catMotionObserver?.disconnect();
+        catMotionLifetime.abort();
+        return;
+      }
+      if (!catBounceActive || catMotionReduced || overlay.dataset.open !== "true") {
+        stopCatBounce();
+        return;
+      }
+      if (document.hidden) return;
+
+      const elapsed = now - catBounceStartedAt;
+      if (elapsed >= CAT_BOUNCE_MS) {
+        stopCatBounce();
+        return;
+      }
+
+      const stageHeight = infoStage.clientHeight;
+      const catHeight = infoPraxor.offsetHeight;
+      const availableLift = Math.max(0, (stageHeight - catHeight) / 2 - 4);
+      const jumpHeight = Math.min(catHeight * 2.5, availableLift);
+      let verticalOffset = 0;
+      let rotation = 0;
+      let scaleX = 1;
+      let scaleY = 1;
+
+      if (elapsed < CAT_FLIGHT_MS) {
+        const anticipationMs = 70;
+        const anticipation = elapsed < anticipationMs
+          ? Math.sin((elapsed / anticipationMs) * Math.PI)
+          : 0;
+        const flightProgress = Math.max(
+          0,
+          (elapsed - anticipationMs) / (CAT_FLIGHT_MS - anticipationMs),
+        );
+        const ascentPortion = 0.4;
+        const arc = elapsed < anticipationMs
+          ? 0
+          : flightProgress < ascentPortion
+            ? smoothstep(flightProgress / ascentPortion)
+            : 1 - smoothstep((flightProgress - ascentPortion) / (1 - ascentPortion));
+        verticalOffset = -jumpHeight * arc;
+        scaleX += anticipation * 0.08 - arc * 0.025;
+        scaleY -= anticipation * 0.12;
+      } else {
+        const landingProgress = (elapsed - CAT_FLIGHT_MS) / (CAT_BOUNCE_MS - CAT_FLIGHT_MS);
+        const envelope = 1 - smoothstep(landingProgress);
+        const wave = Math.sin(landingProgress * Math.PI * 8);
+        const squash = Math.exp(-landingProgress * 24);
+        rotation = wave * envelope * 10;
+        scaleX = 1 + squash * 0.18 + Math.abs(wave) * envelope * 0.05;
+        scaleY = 1 - squash * 0.22 - Math.abs(wave) * envelope * 0.08;
+        verticalOffset = -Math.abs(wave) * envelope * 2;
+      }
+
+      infoPraxor.style.transform = `translate3d(0, ${verticalOffset.toFixed(3)}px, 0) rotate(${rotation.toFixed(3)}deg) scale(${scaleX.toFixed(4)}, ${scaleY.toFixed(4)})`;
+      catMotionFrame = window.requestAnimationFrame(updateCatBounce);
+    };
+    const scheduleCatBounce = () => {
+      if (catBounceActive && !document.hidden && !catMotionReduced && !catMotionFrame) {
+        catMotionFrame = window.requestAnimationFrame(updateCatBounce);
+      }
+    };
+    const startCatBounce = () => {
+      stopCatBounce();
+      if (catMotionReduced || document.hidden) return;
+      catBounceActive = true;
+      catBounceStartedAt = performance.now();
+      scheduleCatBounce();
+    };
+    const cleanupCatBounce = () => {
+      stopCatBounce();
+      catMotionObserver?.disconnect();
+      catMotionLifetime.abort();
+    };
+    document.addEventListener(
+      "visibilitychange",
+      () => {
+        if (document.hidden) {
+          if (catMotionFrame) window.cancelAnimationFrame(catMotionFrame);
+          catMotionFrame = 0;
+        } else scheduleCatBounce();
+      },
+      { signal: catMotionLifetime.signal },
+    );
+    window.addEventListener(
+      CHANGE_EVENT,
+      () => {
+        catMotionReduced = prefersReducedMotion();
+        if (catMotionReduced) stopCatBounce();
+      },
+      { signal: catMotionLifetime.signal },
+    );
+    catMotionObserver = new MutationObserver(() => {
+      if (!root.isConnected) cleanupCatBounce();
+    });
+    if (root.parentElement) {
+      catMotionObserver.observe(root.parentElement, { childList: true });
+    }
+    const settingsCatAudio = new Audio("/media/mewmewmew.wav");
+    settingsCatAudio.preload = "auto";
+    settingsCatAudio.volume = 0.22;
+    settingsCatAudio.preservesPitch = false;
+    const activateSettingsCat = () => {
+      recordSettingsCatClick();
+      settingsCatAudio.playbackRate = 0.94 + Math.random() * 0.12;
+      settingsCatAudio.currentTime = 0;
+      void settingsCatAudio.play().catch(() => undefined);
+      if (!prefersReducedMotion()) {
+        infoPraxor.animate(
+          [
+            { scale: "1 1" },
+            { scale: "1.16 0.7", offset: 0.42 },
+            { scale: "0.94 1.08", offset: 0.72 },
+            { scale: "1 1" },
+          ],
+          { duration: 260, easing: "cubic-bezier(0.2, 0.8, 0.3, 1)" },
+        );
+      }
+    };
+
+    infoPraxor.addEventListener("click", activateSettingsCat);
+    infoPraxor.addEventListener("keydown", (event) => {
+      if ((event.key !== "Enter" && event.key !== " ") || event.repeat) return;
+      event.preventDefault();
+      activateSettingsCat();
+    });
 
     const HOLD_DURATION_MS = 6700;
     const confirmProgress = root.querySelector<HTMLElement>(
@@ -1761,8 +1946,6 @@ import AchievementNotifications from "./AchievementNotifications.astro";
     let activePointerId: number | null = null;
     let activeKey: string | null = null;
     let resetStarted = false;
-    let infoFrame = 0;
-    let infoAnimationStartedAt = 0;
     let activeAchievementCategory = "site";
 
     const clearHold = () => {
@@ -1881,6 +2064,8 @@ import AchievementNotifications from "./AchievementNotifications.astro";
     const setOpen = (open: boolean) => {
       if (open === isOpen()) return;
       if (!open) setConfirmOpen(false);
+      if (open) startCatBounce();
+      else stopCatBounce();
       overlay.dataset.open = String(open);
       toggle.setAttribute("aria-expanded", String(open));
       document.documentElement.classList.toggle("sm-open", open);
@@ -1896,10 +2081,7 @@ import AchievementNotifications from "./AchievementNotifications.astro";
         tabs
           .find((tab) => tab.getAttribute("aria-selected") === "true")
           ?.focus();
-      } else {
-        stopInfoAnimation();
-        toggle.focus();
-      }
+      } else toggle.focus();
     };
 
     const animateTabPanel = (view: HTMLElement, direction: number) => {
@@ -1939,7 +2121,6 @@ import AchievementNotifications from "./AchievementNotifications.astro";
         showSettingsSubtab("fun");
         renderSettings();
       }
-      updateInfoAnimation();
     };
 
     const showSettingsSubtab = (
@@ -1992,63 +2173,6 @@ import AchievementNotifications from "./AchievementNotifications.astro";
       });
       renderAchievements();
       if (changed) animateTabPanel(list, nextIndex > previousIndex ? 1 : -1);
-    };
-
-    const stopInfoAnimation = () => {
-      if (infoFrame) window.cancelAnimationFrame(infoFrame);
-      infoFrame = 0;
-      infoAnimationStartedAt = 0;
-      infoPraxor.style.transform = "translateY(0)";
-      infoShadow.style.transform = "translateX(-50%) scale(1)";
-      infoShadow.style.opacity = ".6";
-    };
-
-    const animateInfoPraxor = (timestamp: number) => {
-      infoFrame = 0;
-      if (!isOpen() || infoView.hidden || prefersReducedMotion()) {
-        stopInfoAnimation();
-        return;
-      }
-      const cycleDuration = 1650;
-      const impactDuration = 45;
-      const ascentDuration = 650;
-      const peakHoldDuration = 45;
-      const descentDuration =
-        cycleDuration - impactDuration - ascentDuration - peakHoldDuration;
-      const elapsed = (timestamp - infoAnimationStartedAt) % cycleDuration;
-      let lift = 0;
-      let impact = 0;
-      if (elapsed < impactDuration) {
-        impact = Math.sin((Math.PI * elapsed) / impactDuration);
-      } else if (elapsed < impactDuration + ascentDuration) {
-        const progress = (elapsed - impactDuration) / ascentDuration;
-        lift = 48 * (1 - (1 - progress) ** 3);
-      } else if (elapsed < impactDuration + ascentDuration + peakHoldDuration) {
-        lift = 48;
-      } else {
-        const progress =
-          (elapsed - impactDuration - ascentDuration - peakHoldDuration) /
-          descentDuration;
-        const easedFall = progress * progress * (3 - 2 * progress);
-        lift = 48 * (1 - easedFall);
-      }
-      const scaleX = 1 + impact * 0.24;
-      const scaleY = 1 - impact * 0.2;
-      infoPraxor.style.transform = `translateY(${-lift}px) scale(${scaleX},${scaleY})`;
-      infoShadow.style.transform = `translateX(-50%) scale(${1 - lift / 120 + impact * 0.32})`;
-      infoShadow.style.opacity = String(0.34 - lift / 220 + impact * 0.46);
-      infoFrame = window.requestAnimationFrame(animateInfoPraxor);
-    };
-
-    const updateInfoAnimation = () => {
-      if (!isOpen() || infoView.hidden || prefersReducedMotion()) {
-        stopInfoAnimation();
-        return;
-      }
-      if (!infoFrame) {
-        infoAnimationStartedAt = performance.now();
-        infoFrame = window.requestAnimationFrame(animateInfoPraxor);
-      }
     };
 
     let themeKey = "";
@@ -2474,10 +2598,7 @@ import AchievementNotifications from "./AchievementNotifications.astro";
     window.addEventListener("resize", () => layoutCarousel());
     window.addEventListener("blur", cancelCarouselDrag);
 
-    toggle.addEventListener("click", () => {
-      recordSettingsClick();
-      setOpen(!isOpen());
-    });
+    toggle.addEventListener("click", () => setOpen(!isOpen()));
     resetButton.addEventListener("click", () => setConfirmOpen(true));
     confirmCloseButton.addEventListener("click", () => setConfirmOpen(false));
     confirmBox.addEventListener("pointerdown", (event) => {
@@ -2643,12 +2764,10 @@ import AchievementNotifications from "./AchievementNotifications.astro";
     document.addEventListener("astro:before-swap", () => {
       cancelCarouselDrag();
       setOpen(false);
-      stopInfoAnimation();
     });
 
     window.addEventListener(CHANGE_EVENT, () => {
       render();
-      updateInfoAnimation();
     });
     window.addEventListener(ACTIVITY_EVENT, () => {
       if (isOpen() && !infoView.hidden) renderInfoStats();
@@ -2656,7 +2775,6 @@ import AchievementNotifications from "./AchievementNotifications.astro";
     });
     window.addEventListener(UNLOCK_EVENT, () => {
       render();
-      updateInfoAnimation();
     });
     setupAchievementNotifications(root);
     initSiteState();

@@ -343,7 +343,7 @@ export const recordMusicListenSeconds = (seconds: number) => {
 };
 
 export const recordSongClick = () => incrementUsageStat('songsPlayed');
-export const recordSettingsClick = () => incrementUsageStat('settingsClicks');
+export const recordSettingsCatClick = () => incrementUsageStat('settingsClicks');
 export const recordCatsAccumulated = () => incrementUsageStat('catsAccumulated');
 export const recordCatsExploded = () => incrementUsageStat('catsExploded');
 export const recordCreditsWatched = () => incrementUsageStat('timesWatchedCredits');
