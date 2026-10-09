@@ -81,6 +81,22 @@
     padding-bottom: 6px;
     border-bottom: 1px solid var(--muted-border);
   }
+  .sm-theme-profile[data-site-theme="rainbow"] .sm-mini-preview::before {
+    display: none;
+  }
+  .sm-theme-profile[data-site-theme="rainbow"] .sm-mini-header {
+    position: relative;
+    border-bottom-color: transparent;
+  }
+  .sm-theme-profile[data-site-theme="rainbow"] .sm-mini-header::after {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    background: var(--rainbow-rule);
+    content: "";
+  }
   .sm-mini-brand {
     overflow: hidden;
     color: var(--accent);

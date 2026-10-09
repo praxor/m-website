@@ -5,6 +5,8 @@ import { historyImages } from './credits';
 export type AchievementDefinition = {
 	name: string;
 	description: string;
+	category?: 'site' | 'characters' | 'plinko' | 'stats';
+	showProgress?: boolean;
 	hint?: string;
 	rewards?: readonly AchievementReward[];
 	progress?: AchievementProgressDefinition;
@@ -24,6 +26,8 @@ export type AchievementDefinition = {
 	inactiveSeconds?: number;
 	/** Visible time on one page (marked with data-track-page) in a single visit. */
 	pageSeconds?: { page: string; seconds: number };
+	/** Character slug whose chapters must all be opened. */
+	chapterCharacter?: string;
 	/** Press-and-hold on an element marked data-hold-unlock; weekday is 0 (Sunday) to 6. */
 	hold?: { ms: number; weekday?: number };
 };
@@ -56,6 +60,47 @@ export const achievements = {
 	reader: {
 		name: 'Reader',
 		description: 'Click on any post / update for the first time',
+		secret: false,
+	},
+	visitor: {
+		name: 'Visitor',
+		description: 'Visit my website 10 times.',
+		secret: false,
+		goal: 10,
+	},
+	recursiveStats67: {
+		name: 'I like that number.',
+		description: 'Gain at least 67 on all recursive stats.',
+		category: 'stats',
+		showProgress: false,
+		secret: false,
+	},
+	axisChapters: {
+		name: 'Morte e Axis',
+		description: "Read all of Axis's chapters.",
+		category: 'characters',
+		chapterCharacter: 'axis',
+		secret: false,
+	},
+	v1Chapters: {
+		name: 'If Swagger was a word, then who is he?',
+		description: "Read all of praxor!V1's chapters.",
+		category: 'characters',
+		chapterCharacter: 'praxor-v1',
+		secret: false,
+	},
+	v2Chapters: {
+		name: 'The Devil in Disguise',
+		description: "Read all of praxor!V2's chapters.",
+		category: 'characters',
+		chapterCharacter: 'praxor-v2',
+		secret: false,
+	},
+	irlChapters: {
+		name: "It's... me?",
+		description: "Read all of praxor!IRL's chapters.",
+		category: 'characters',
+		chapterCharacter: 'praxor-irl',
 		secret: false,
 	},
 	premiumReader: {
@@ -133,12 +178,14 @@ export const achievements = {
 		name: 'V1 Connoisseur',
 		description: 'View all praxor!V1 artwork.',
 		secret: false,
+		category: 'characters',
 		progress: { maximum: characterArtworkGoal('praxor-v1') },
 	},
 	v2Connoisseur: {
 		name: 'V2 Connoisseur',
 		description: 'View all praxor!V2 artwork.',
 		secret: false,
+		category: 'characters',
 		progress: { maximum: characterArtworkGoal('praxor-v2') },
 	},
 	creditsArtwork: {
@@ -159,31 +206,49 @@ export const achievements = {
 		name: 'Plinko: New Beginnings.',
 		description: 'Achieve 100 cumulative points in Plinko.',
 		secret: false,
+		category: 'plinko',
 		progress: { maximum: 100 },
 	},
 	plinkoNotSoNewBeginnings: {
 		name: 'Plinko: Not-so New Beginnings.',
 		description: 'Achieve 500 cumulative points in Plinko.',
 		secret: false,
+		category: 'plinko',
 		progress: { maximum: 500 },
 	},
 	plinkoMasterfulBeginnings: {
 		name: 'Plinko: Masterful Beginnings.',
 		description: 'Achieve 2,500 cumulative points in Plinko.',
 		secret: false,
+		category: 'plinko',
 		progress: { maximum: 2500 },
 	},
 	iLovePlinko: {
 		name: 'ILOVEPLINKO',
 		description: 'Achieve 5,000 cumulative points in Plinko.',
 		secret: true,
+		category: 'plinko',
 		progress: { maximum: 5000, showWhenHidden: true },
 	},
 	plinkoExtremeExaminer: {
 		name: 'Sisyphean Plinko Examiner Decadence',
 		description: 'Achieve 10,000 cumulative points in Plinko while Plinko Extreme Mode is enabled.',
 		secret: true,
+		category: 'plinko',
 		progress: { maximum: 10000, showWhenHidden: true },
+	},
+	plinkoExtreme500: {
+		name: 'I ACTUALLY GOT IT- I ACTUALLY GOT IT!!',
+		description: 'Land in the 500 slot in Plinko Extreme Mode.',
+		category: 'plinko',
+		secret: false,
+	},
+	plinko500HatTrick: {
+		name: '500 Hat Trick',
+		description: 'Land in the 500 slot 3 times in a row in Plinko Extreme Mode.',
+		category: 'plinko',
+		secret: false,
+		progress: { maximum: 3 },
 	},
 } as const satisfies Record<string, AchievementDefinition>;
 

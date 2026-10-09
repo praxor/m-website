@@ -4,9 +4,10 @@ import type { CharacterChapter } from "../data/characters";
 
 interface Props {
   chapters: CharacterChapter[];
+  characterSlug: string;
 }
 
-const { chapters } = Astro.props as Props;
+const { chapters, characterSlug } = Astro.props as Props;
 const formatChapterDate = (date: string) => {
   const parsed = new Date(`${date}T00:00:00Z`);
   return Number.isNaN(parsed.valueOf())
@@ -19,7 +20,11 @@ const formatChapterDate = (date: string) => {
 };
 ---
 
-<section class="character-story" aria-labelledby="character-story-title">
+<section
+  class="character-story"
+  aria-labelledby="character-story-title"
+  data-character-slug={characterSlug}
+>
   <h2 id="character-story-title">story</h2>
   <div class="story-chapters">
     {chapters.map((chapter) => (
@@ -244,6 +249,8 @@ const formatChapterDate = (date: string) => {
 </style>
 
 <script>
+  import { recordChapterView } from "../scripts/site-state";
+
   const initializeCharacterStory = () => {
     document
       .querySelectorAll<HTMLElement>(".character-story")
@@ -271,10 +278,12 @@ const formatChapterDate = (date: string) => {
           .forEach((button) => {
             button.addEventListener("click", () => {
               const chapterNumber = button.dataset.storyOpen || "";
+              const characterSlug = story.dataset.characterSlug || "";
               const template = story.querySelector<HTMLTemplateElement>(
                 `template[data-story-chapter="${chapterNumber}"]`,
               );
               if (!template) return;
+              recordChapterView(characterSlug, Number(chapterNumber));
               number.textContent = `CH${chapterNumber}`;
               title.textContent =
                 button.querySelector<HTMLElement>(".story-entry-title")

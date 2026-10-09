@@ -1,6 +1,6 @@
 ﻿import { loadMusicPlaylist } from './music-library';
 import type { AchievementId } from '../data/achievements';
-import { CHANGE_EVENT, getAchievements, prefersReducedMotion, recordArtworkView, unlockAchievement } from './site-state';
+import { CHANGE_EVENT, getAchievements, prefersReducedMotion, recordArtworkView, recordCreditsWatched, unlockAchievement } from './site-state';
 
 const FLYING_PRAXOR_ACHIEVEMENT: AchievementId = 'creditsFlyingPraxor';
 const SCROLL_DURATION_MS = 78_000;
@@ -44,6 +44,7 @@ export const initializeCreditsSequence = (baseUrl: string) => {
   let isEnding = false;
   let isLeaving = false;
   let isCleaningUp = false;
+  let creditsCompletionCounted = false;
   let audioStartTask: Promise<boolean> | null = null;
 
   const revealControls = () => {
@@ -215,6 +216,10 @@ export const initializeCreditsSequence = (baseUrl: string) => {
 
     const endingProgress = reducedMotion ? Number(elapsed >= SCROLL_DURATION_MS) : clamp((elapsed - (SCROLL_DURATION_MS - ENDING_FADE_MS)) / ENDING_FADE_MS, 0, 1);
     ending.style.opacity = String(1 - endingProgress);
+    if (elapsed >= SCROLL_DURATION_MS && !creditsCompletionCounted) {
+      creditsCompletionCounted = true;
+      recordCreditsWatched();
+    }
     if (elapsed >= MUSIC_FADE_START_MS) {
       isEnding = true;
       startAudioButton.hidden = true;

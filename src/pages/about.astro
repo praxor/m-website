@@ -303,7 +303,7 @@ const galleryItems = fanartOptions.map((art) => ({
     width: 100%;
     flex: none;
     flex-direction: column;
-    gap: 0;
+    gap: 4px;
   }
   .fanart-strip-item {
     display: block;
@@ -325,10 +325,9 @@ const galleryItems = fanartOptions.map((art) => ({
     inset: 0;
     width: 100%;
     height: 100%;
-    border: 2px solid var(--art-border-color, #b6a5e8);
-    box-sizing: border-box;
+    outline: 1px solid var(--art-border-color, #b6a5e8);
+    outline-offset: -1px;
     object-fit: contain;
-    box-shadow: 0 10px 25px var(--shadow-soft);
     transition: filter 0.18s ease;
   }
 

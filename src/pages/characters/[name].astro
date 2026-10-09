@@ -139,7 +139,10 @@ const references = galleryItems.slice(mainArtCount);
             </dl>
           </aside>
           {character.chapters && character.chapters.length > 0 && (
-            <CharacterStory chapters={character.chapters} />
+            <CharacterStory
+              chapters={character.chapters}
+              characterSlug={character.slug}
+            />
           )}
         </div>
       </div>

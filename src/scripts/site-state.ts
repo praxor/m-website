@@ -1,4 +1,5 @@
 import { achievements, type AchievementDefinition, type AchievementId, type AchievementReward } from '../data/achievements';
+import { characters } from '../data/characters';
 import { DEFAULT_THEME, themes, type ThemeDefinition } from '../data/themes';
 import { PLINKO_STATE_EVENT, type PlinkoStateDetail } from './plinko-events';
 
@@ -6,7 +7,8 @@ export const STORAGE_KEY = 'praxor:site-state';
 /** Every localStorage key holding personalised data; register new ones here so Reset Data clears them. */
 const RESETTABLE_KEYS: string[] = [STORAGE_KEY];
 export const registerResettableKey = (key: string) => { if (!RESETTABLE_KEYS.includes(key)) RESETTABLE_KEYS.push(key); };
-const VERSION = 5;
+const VERSION = 7;
+const VISIT_SESSION_KEY = 'praxor:site-visit-counted';
 
 export type ArtworkCollection = 'praxor-v1' | 'praxor-v2' | 'credits';
 
@@ -32,7 +34,10 @@ export type SiteState = {
 	settings: Settings;
 	achievements: Record<string, AchievementState>;
 	artworkViews: Record<ArtworkCollection, string[]>;
+	chapterViews: Record<string, string[]>;
 	visitedPosts: string[];
+	siteVisits: number;
+	stats: UsageStats;
 	activity: { totalActiveSeconds: number };
 };
 
@@ -46,6 +51,7 @@ export type AchievementView = {
 	goal: number;
 	progressVisible: boolean;
 	goalVisible: boolean;
+	category: 'site' | 'characters' | 'plinko' | 'stats';
 	hint?: string;
 	unit?: 'seconds';
 };
@@ -56,17 +62,59 @@ export type AchievementUnlockDetail = {
 	rewards: AchievementReward[];
 };
 
+type UsageStats = {
+	activeSeconds: number;
+	idleSeconds: number;
+	postsClicked: number;
+	pagesVisited: number;
+	musicListenedSeconds: number;
+	songsPlayed: number;
+	plinkoRoundsPlayed: number;
+	plinkoResets: number;
+	plinkoRoundsPlayedInPEM: number;
+	highestPlinkoScore: number;
+	totalPlinkoScore: number;
+	settingsClicks: number;
+	catsAccumulated: number;
+	catsExploded: number;
+	timesWatchedCredits: number;
+	pageSeconds: Record<string, number>;
+	characterSeconds: Record<string, number>;
+};
+
 export const CHANGE_EVENT = 'site-state:change';
 export const UNLOCK_EVENT = 'site-state:unlock';
 
 const defaultSettings = (): Settings => ({ theme: DEFAULT_THEME, forceTheme: false, reducedMotion: null, plinkoExtremeMode: false });
+const defaultUsageStats = (): UsageStats => ({
+	activeSeconds: 0,
+	idleSeconds: 0,
+	postsClicked: 0,
+	pagesVisited: 0,
+	musicListenedSeconds: 0,
+	songsPlayed: 0,
+	plinkoRoundsPlayed: 0,
+	plinkoResets: 0,
+	plinkoRoundsPlayedInPEM: 0,
+	highestPlinkoScore: 0,
+	totalPlinkoScore: 0,
+	settingsClicks: 0,
+	catsAccumulated: 0,
+	catsExploded: 0,
+	timesWatchedCredits: 0,
+	pageSeconds: {},
+	characterSeconds: {},
+});
 const defaultState = (): SiteState => ({
 	version: VERSION,
 	flashingWarningAcknowledged: false,
 	settings: defaultSettings(),
 	achievements: {},
 	artworkViews: { 'praxor-v1': [], 'praxor-v2': [], credits: [] },
+	chapterViews: {},
 	visitedPosts: [],
+	siteVisits: 0,
+	stats: defaultUsageStats(),
 	activity: { totalActiveSeconds: 0 },
 });
 
@@ -91,6 +139,8 @@ const migrate = (raw: Record<string, unknown>): Record<string, unknown> => {
 		version = 4;
 	}
 	if (version < 5) data = { ...data, version: 5, artworkViews: {} };
+	if (version < 6) data = { ...data, version: 6, chapterViews: {}, siteVisits: 0 };
+	if (version < 7) data = { ...data, version: 7, stats: {} };
 	return data;
 };
 
@@ -123,8 +173,26 @@ const sanitize = (raw: unknown): SiteState => {
 			if (Array.isArray(saved)) state.artworkViews[collection] = [...new Set(saved.filter((id): id is string => typeof id === 'string'))];
 		}
 	}
+	if (isRecord(data.chapterViews)) {
+		for (const [slug, saved] of Object.entries(data.chapterViews)) {
+			if (Array.isArray(saved)) state.chapterViews[slug] = [...new Set(saved.filter((id): id is string => typeof id === 'string'))];
+		}
+	}
 	if (Array.isArray(data.visitedPosts)) {
 		state.visitedPosts = [...new Set(data.visitedPosts.filter((id): id is string => typeof id === 'string'))];
+	}
+	if (typeof data.siteVisits === 'number' && Number.isFinite(data.siteVisits)) state.siteVisits = Math.max(0, Math.floor(data.siteVisits));
+	if (isRecord(data.stats)) {
+		for (const key of Object.keys(defaultUsageStats()) as (keyof UsageStats)[]) {
+			const saved = data.stats[key];
+			if (key === 'pageSeconds' || key === 'characterSeconds') {
+				if (isRecord(saved)) {
+					state.stats[key] = Object.fromEntries(Object.entries(saved).filter(([, value]) => typeof value === 'number' && Number.isFinite(value) && value >= 0)) as Record<string, number>;
+				}
+			} else if (typeof saved === 'number' && Number.isFinite(saved)) {
+				state.stats[key] = Math.max(0, saved);
+			}
+		}
 	}
 	if (isRecord(data.activity) && typeof data.activity.totalActiveSeconds === 'number' && Number.isFinite(data.activity.totalActiveSeconds)) {
 		state.activity.totalActiveSeconds = Math.max(0, data.activity.totalActiveSeconds);
@@ -164,7 +232,8 @@ const save = () => {
 
 const definitionOf = (id: AchievementId): AchievementDefinition => achievements[id];
 const goalOf = (definition: AchievementDefinition, total = 1): number =>
-	definition.derived ? Math.max(total, 1)
+	definition.chapterCharacter ? Math.max(characters.find((character) => character.slug === definition.chapterCharacter)?.chapters?.length ?? 0, 1)
+		: definition.derived ? Math.max(total, 1)
 		: definition.progress?.maximum ?? definition.goal ?? definition.activeSeconds ?? definition.inactiveSeconds ?? definition.pageSeconds?.seconds ?? 1;
 const entry = (id: AchievementId): AchievementState => (getState().achievements[id] ??= {
 	unlocked: false,
@@ -191,6 +260,7 @@ export const resetAllData = () => {
 	cache = defaultState();
 	try {
 		for (const key of RESETTABLE_KEYS) window.localStorage.removeItem(key);
+		window.sessionStorage.removeItem(VISIT_SESSION_KEY);
 	} catch {
 		// Storage unavailable: nothing to erase.
 	}
@@ -225,6 +295,58 @@ export const applySettings = (root: HTMLElement = document.documentElement) => {
 
 export const getTotalActiveSeconds = () => getState().activity.totalActiveSeconds;
 export const setTotalActiveSeconds = (seconds: number) => { getState().activity.totalActiveSeconds = seconds; };
+
+export const getUsageStats = () => {
+	const stats = getState().stats;
+	const favorite = (times: Record<string, number>) => Object.entries(times).sort((first, second) => second[1] - first[1])[0]?.[0] ?? '';
+	const favoritePagePath = favorite(stats.pageSeconds);
+	const favoriteCharacterSlug = favorite(stats.characterSeconds);
+	const favoriteCharacter = characters.find((character) => character.slug === favoriteCharacterSlug)?.name ?? '';
+	const favoritePage = favoritePagePath === '/' ? 'Home' : favoritePagePath.split('/').filter(Boolean).map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(' / ');
+	return {
+		...stats,
+		siteVisits: getState().siteVisits,
+		favoritePage: favoritePage || '—',
+		favoriteCharacter: favoriteCharacter || '—',
+	};
+};
+
+const incrementUsageStat = (key: keyof Omit<UsageStats, 'pageSeconds' | 'characterSeconds'>, amount = 1) => {
+	getState().stats[key] += amount;
+	save();
+};
+
+export const recordTimeSample = (pathname: string, seconds: number, active: boolean) => {
+	if (!Number.isFinite(seconds) || seconds <= 0) return;
+	const state = getState();
+	const segments = pathname.split('/').filter(Boolean);
+	state.stats[active ? 'activeSeconds' : 'idleSeconds'] += seconds;
+	if (segments.length <= 1) {
+		const pagePath = segments.length ? `/${segments[0]}` : '/';
+		state.stats.pageSeconds[pagePath] = (state.stats.pageSeconds[pagePath] ?? 0) + seconds;
+	} else if (segments[0] === 'characters' && segments.length === 2 && characters.some((character) => character.slug === segments[1])) {
+		const slug = segments[1];
+		state.stats.characterSeconds[slug] = (state.stats.characterSeconds[slug] ?? 0) + seconds;
+	}
+};
+
+let lastMusicListenFlush = 0;
+
+export const recordMusicListenSeconds = (seconds: number) => {
+	if (!Number.isFinite(seconds) || seconds <= 0) return;
+	getState().stats.musicListenedSeconds += seconds;
+	const now = Date.now();
+	if (now - lastMusicListenFlush >= 5000) {
+		lastMusicListenFlush = now;
+		flushState();
+	}
+};
+
+export const recordSongClick = () => incrementUsageStat('songsPlayed');
+export const recordSettingsClick = () => incrementUsageStat('settingsClicks');
+export const recordCatsAccumulated = () => incrementUsageStat('catsAccumulated');
+export const recordCatsExploded = () => incrementUsageStat('catsExploded');
+export const recordCreditsWatched = () => incrementUsageStat('timesWatchedCredits');
 
 const live = { inactiveSeconds: 0, pageKey: '', pageSeconds: 0 };
 export const setLiveActivity = (values: Partial<typeof live>) => Object.assign(live, values);
@@ -316,12 +438,66 @@ export const recordArtworkView = (collection: ArtworkCollection, artworkId: stri
 const persistedProgress = (id: AchievementId) => getAchievements().find((item) => item.id === id)?.progress ?? 0;
 
 const recordPlinkoScore = (detail: PlinkoStateDetail) => {
-	if (detail.reason !== 'score' || !Number.isFinite(detail.pointsEarned) || detail.pointsEarned <= 0) return;
+	if (detail.reason === 'reset') {
+		incrementUsageStat('plinkoResets');
+		updateAchievementProgress('plinko500HatTrick', 0);
+		return;
+	}
+	if (detail.reason === 'mode-change' && !detail.extremeMode) {
+		updateAchievementProgress('plinko500HatTrick', 0);
+		return;
+	}
+	if (detail.reason !== 'score') return;
+	if (!Number.isFinite(detail.pointsEarned) || detail.pointsEarned <= 0) return;
+	const stats = getState().stats;
+	stats.plinkoRoundsPlayed += 1;
+	if (detail.extremeMode) stats.plinkoRoundsPlayedInPEM += 1;
+	stats.totalPlinkoScore += detail.pointsEarned;
+	stats.highestPlinkoScore = Math.max(stats.highestPlinkoScore, detail.totalPoints);
+	save();
+	if (detail.extremeMode && detail.pointsEarned === 500) {
+		unlockAchievement('plinkoExtreme500');
+		updateAchievementProgress('plinko500HatTrick', persistedProgress('plinko500HatTrick') + 1);
+	} else {
+		updateAchievementProgress('plinko500HatTrick', 0);
+	}
 	const cumulative = (id: AchievementId) => persistedProgress(id) + detail.pointsEarned;
 	for (const id of ['plinkoNewBeginnings', 'plinkoNotSoNewBeginnings', 'plinkoMasterfulBeginnings', 'iLovePlinko'] as const) {
 		updateAchievementProgress(id, cumulative(id));
 	}
 	if (detail.extremeMode) updateAchievementProgress('plinkoExtremeExaminer', cumulative('plinkoExtremeExaminer'));
+};
+
+const chapterAchievement: Record<string, AchievementId> = {
+	axis: 'axisChapters',
+	'praxor-v1': 'v1Chapters',
+	'praxor-v2': 'v2Chapters',
+	'praxor-irl': 'irlChapters',
+};
+
+export const recordChapterView = (characterSlug: string, chapterNumber: number) => {
+	const character = characters.find((item) => item.slug === characterSlug);
+	if (!character?.chapters?.some((chapter) => chapter.number === chapterNumber)) return false;
+	const views = (getState().chapterViews[characterSlug] ??= []);
+	const chapterId = String(chapterNumber);
+	if (views.includes(chapterId)) return false;
+	views.push(chapterId);
+	const achievement = chapterAchievement[characterSlug];
+	if (achievement) updateAchievementProgress(achievement, views.length);
+	else save();
+	return true;
+};
+
+const recordSiteVisit = () => {
+	try {
+		if (window.sessionStorage.getItem(VISIT_SESSION_KEY)) return;
+		window.sessionStorage.setItem(VISIT_SESSION_KEY, 'true');
+	} catch {
+		// Continue counting visits if session storage is unavailable.
+	}
+	const state = getState();
+	state.siteVisits += 1;
+	updateAchievementProgress('visitor', state.siteVisits);
 };
 
 export const recordPostVisit = (postId: string) => {
@@ -345,6 +521,8 @@ const progressOf = (id: AchievementId, definition: AchievementDefinition, goal: 
 	if (definition.activeSeconds) return Math.floor(getState().activity.totalActiveSeconds);
 	if (definition.inactiveSeconds) return Math.floor(live.inactiveSeconds);
 	if (definition.pageSeconds) return live.pageKey === definition.pageSeconds.page ? Math.floor(live.pageSeconds) : 0;
+	if (definition.chapterCharacter) return getState().chapterViews[definition.chapterCharacter]?.length ?? 0;
+	if (id === 'visitor') return getState().siteVisits;
 	return saved?.progress ?? definition.progress?.initial ?? 0;
 };
 
@@ -359,7 +537,8 @@ export const getAchievements = (): AchievementView[] => {
 		const hidden = definition.secret && !unlocked;
 		const hasMeaningfulProgress = goal > 1 || progress > 0 || definition.progress !== undefined
 			|| definition.derived !== undefined || definition.activeSeconds !== undefined
-			|| definition.inactiveSeconds !== undefined || definition.pageSeconds !== undefined;
+			|| definition.inactiveSeconds !== undefined || definition.pageSeconds !== undefined
+			|| definition.chapterCharacter !== undefined;
 		return {
 			id,
 			name: definition.name,
@@ -368,7 +547,8 @@ export const getAchievements = (): AchievementView[] => {
 			unlocked,
 			progress,
 			goal,
-			progressVisible: !hidden || (definition.progress?.showWhenHidden ?? hasMeaningfulProgress),
+			category: definition.category ?? 'site',
+			progressVisible: definition.showProgress !== false && (!hidden || (definition.progress?.showWhenHidden ?? hasMeaningfulProgress)),
 			goalVisible: !hidden || definition.progress?.revealMaximumWhenHidden === true,
 			hint: definition.hint,
 			unit: definition.unit,
@@ -378,12 +558,20 @@ export const getAchievements = (): AchievementView[] => {
 
 // Declarative page hooks: pages mark themselves instead of calling storage code.
 const trackPageView = () => {
+	const pageLocation = `${window.location.pathname}${window.location.search}`;
 	const postId = document.querySelector<HTMLElement>('[data-post-id]')?.dataset.postId;
+	if (pageLocation !== lastTrackedPageLocation) {
+		lastTrackedPageLocation = pageLocation;
+		getState().stats.pagesVisited += 1;
+		save();
+	}
 	if (postId) recordPostVisit(postId);
 	else if (syncDerived()) save();
 	const unlockId = document.querySelector<HTMLElement>('[data-unlock-on-view]')?.dataset.unlockOnView;
 	if (unlockId && unlockId in achievements) unlockAchievement(unlockId as AchievementId);
 };
+
+let lastTrackedPageLocation = '';
 
 /** Unlocks every achievement through the normal pipeline; gated themes follow from their achievements. */
 export const unlockEverything = () => {
@@ -409,6 +597,9 @@ export const initSiteState = () => {
 		if (detail?.collection && detail.src) recordArtworkView(detail.collection, detail.src);
 	});
 	window.addEventListener(PLINKO_STATE_EVENT, (event) => recordPlinkoScore((event as CustomEvent<PlinkoStateDetail>).detail));
+	document.addEventListener('click', (event) => {
+		if ((event.target as Element).closest('[data-post-href]')) incrementUsageStat('postsClicked');
+	});
 	window.addEventListener('storage', (event) => {
 		if (event.key !== STORAGE_KEY) return;
 		cache = read();
@@ -416,5 +607,6 @@ export const initSiteState = () => {
 		emit(CHANGE_EVENT);
 	});
 	(window as unknown as Record<string, unknown>).iReallyReallyREALLYHateHavingFun = () => { unlockEverything(); };
+	recordSiteVisit();
 	trackPageView();
 };

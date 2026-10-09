@@ -283,6 +283,7 @@ const base = import.meta.env.BASE_URL;
       border-bottom: 1px solid var(--muted-border);
       transition:
         var(--theme-transition),
+        top 0.24s ease,
         background-color 0.22s ease,
         color 0.22s ease,
         border-color 0.22s ease;
@@ -1037,7 +1038,7 @@ const base = import.meta.env.BASE_URL;
   </style>
 
   <script>
-    import { prefersReducedMotion } from "../scripts/site-state";
+    import { prefersReducedMotion, recordCatsExploded } from "../scripts/site-state";
     (function () {
       const sizeSocialIcons = function () {
         document
@@ -1441,6 +1442,7 @@ const base = import.meta.env.BASE_URL;
             panel.classList.contains("closing")
           )
             return;
+          recordCatsExploded();
           panel.classList.add("closing");
           if (confettiTimer) window.clearTimeout(confettiTimer);
           confettiTimer = undefined;

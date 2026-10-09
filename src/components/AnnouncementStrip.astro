@@ -7,10 +7,10 @@ const announcement: {
   title: string;
   message: string;
 } = {
-  noContent: true,
-  type: "info",
-  title: "Praxor Website 9.3.0",
-  message: "A new update is on the way.",
+  noContent: false,
+  type: "important",
+  title: "WATCH OUT FOR BUGS!",
+  message: "This is an experimental build of the website. Watch out.",
 };
 
 const typeLabels: Record<AnnouncementType, string> = {
@@ -55,10 +55,11 @@ const typeLabels: Record<AnnouncementType, string> = {
 <style is:global>
   /* Component styles: announcement strip */
   .announcement-strip {
-    position: relative;
+    position: sticky;
+    top: 0;
     z-index: 2;
     display: grid;
-    grid-template-rows: 0fr;
+    grid-template-rows: minmax(0, 0fr);
     width: 100%;
     overflow: hidden;
     visibility: hidden;
@@ -67,8 +68,8 @@ const typeLabels: Record<AnnouncementType, string> = {
     font-family:
       ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       monospace !important;
-    transition:
-      grid-template-rows 0.24s ease,
+      transition:
+        grid-template-rows 0.24s ease,
       visibility 0s linear 0.24s;
   }
   .announcement-strip[data-type="important"] {
@@ -78,7 +79,7 @@ const typeLabels: Record<AnnouncementType, string> = {
     background-color: #54b6e4 !important;
   }
   .announcement-strip[data-visible="true"] {
-    grid-template-rows: 1fr;
+    grid-template-rows: minmax(0, 1fr);
     visibility: visible;
     transition-delay: 0s;
   }
@@ -190,7 +191,16 @@ const typeLabels: Record<AnnouncementType, string> = {
     const strip = document.querySelector<HTMLElement>(
       "[data-announcement-strip]",
     );
-    if (!strip || strip.dataset.initialized === "true") return;
+    if (!strip) return;
+    const syncHeaderOffset = () => {
+      if (strip.dataset.visible === "true")
+        document.documentElement.dataset.announcementVisible = "true";
+      else delete document.documentElement.dataset.announcementVisible;
+    };
+    syncHeaderOffset();
+    document.addEventListener("astro:after-swap", syncHeaderOffset);
+    document.addEventListener("astro:page-load", syncHeaderOffset);
+    if (strip.dataset.initialized === "true") return;
     strip.dataset.initialized = "true";
     const viewport = strip.querySelector<HTMLElement>(".announcement-viewport");
     const track = strip.querySelector<HTMLElement>(".announcement-track");
@@ -218,46 +228,22 @@ const typeLabels: Record<AnnouncementType, string> = {
       new ResizeObserver(fillMarqueeTrack).observe(viewport);
     window.addEventListener("resize", fillMarqueeTrack, { passive: true });
 
-    const revealAfterInitialAnimations = async () => {
+    const revealAfterPageLoad = () => {
       if (strip.dataset.visible === "true") return;
-      await new Promise<void>((resolve) =>
-        requestAnimationFrame(() => resolve()),
-      );
-      let stableFrames = 0;
-      while (stableFrames < 2) {
-        const initialAnimations: Promise<unknown>[] = [];
-        for (const animation of document.getAnimations()) {
-          const timing = animation.effect?.getComputedTiming();
-          if (
-            animation.playState === "finished" ||
-            animation.playState === "paused" ||
-            !timing ||
-            timing.iterations === Infinity ||
-            !Number.isFinite(timing.endTime)
-          )
-            continue;
-          initialAnimations.push(animation.finished.catch(() => undefined));
-        }
-        if (initialAnimations.length) {
-          stableFrames = 0;
-          await Promise.all(initialAnimations);
-          continue;
-        }
-        await new Promise<void>((resolve) =>
-          requestAnimationFrame(() => resolve()),
-        );
-        stableFrames += 1;
-      }
-      strip.inert = false;
-      strip.dataset.visible = "true";
+      requestAnimationFrame(() => {
+        if (!strip.isConnected || strip.dataset.visible === "true") return;
+        strip.inert = false;
+        strip.dataset.visible = "true";
+        syncHeaderOffset();
+      });
     };
 
     if (document.documentElement.classList.contains("is-loaded")) {
-      void revealAfterInitialAnimations();
+      revealAfterPageLoad();
     } else {
       document.addEventListener(
         "astro:page-load",
-        revealAfterInitialAnimations,
+        revealAfterPageLoad,
         { once: true },
       );
     }

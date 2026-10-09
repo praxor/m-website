@@ -1,11 +1,12 @@
 import { achievements, type AchievementId } from '../data/achievements';
-import { flushState, getTotalActiveSeconds, setLiveActivity, setTotalActiveSeconds, unlockAchievement } from './site-state';
+import { flushState, getTotalActiveSeconds, recordCatsAccumulated, recordTimeSample, setLiveActivity, setTotalActiveSeconds, unlockAchievement } from './site-state';
 
 export const ACTIVITY_EVENT = 'site-activity:tick';
 
 const TICK_MS = 1000;
 // A longer gap between ticks means the device slept or the page was frozen, so it isn't credited.
 const MAX_GAP_MS = 3000;
+const ACTIVE_WINDOW_MS = 10000;
 const FLUSH_EVERY_MS = 10000;
 const INTERACTION_EVENTS = ['pointerdown', 'keydown', 'wheel', 'touchstart', 'touchmove', 'scroll'] as const;
 
@@ -18,6 +19,7 @@ let pointerY = -1;
 let pageKey = '';
 let pageMs = 0;
 let inactiveMs = 0;
+let catRollElapsedMs = 0;
 let controller: AbortController | null = null;
 
 const isVisible = () => document.visibilityState === 'visible';
@@ -61,6 +63,12 @@ const tick = () => {
 	} else {
 		setTotalActiveSeconds(getTotalActiveSeconds() + gap / 1000);
 		pageMs += gap;
+		recordTimeSample(window.location.pathname, gap / 1000, now - lastInteraction <= ACTIVE_WINDOW_MS);
+		catRollElapsedMs += gap;
+		while (catRollElapsedMs >= 10000) {
+			catRollElapsedMs -= 10000;
+			if (Math.random() < 0.02) recordCatsAccumulated();
+		}
 	}
 	inactiveMs = now - lastInteraction;
 	evaluate();

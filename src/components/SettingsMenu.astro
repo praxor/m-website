@@ -76,69 +76,8 @@ import AchievementNotifications from "./AchievementNotifications.astro";
       >
         <div class="sm-info-layout">
           <div class="sm-info-controls">
-            <p class="sm-info-intro">Music player shortcuts</p>
-            <ul class="sm-shortcuts">
-              <li>
-                <span class="sm-shortcut-keys">
-                  <kbd>Space</kbd>
-                  <span>/</span>
-                  <kbd>K</kbd>
-                </span>
-                <span>Play or pause</span>
-              </li>
-              <li>
-                <span class="sm-shortcut-keys">
-                  <kbd>J</kbd>
-                  <span>/</span>
-                  <kbd>L</kbd>
-                </span>
-                <span>Seek 10 seconds</span>
-              </li>
-              <li>
-                <span class="sm-shortcut-keys">
-                  <kbd>←</kbd>
-                  <span>/</span>
-                  <kbd>→</kbd>
-                </span>
-                <span>Seek 5 seconds</span>
-              </li>
-              <li>
-                <span class="sm-shortcut-keys">
-                  <kbd>↑</kbd>
-                  <span>/</span>
-                  <kbd>↓</kbd>
-                </span>
-                <span>Adjust volume</span>
-              </li>
-              <li>
-                <span class="sm-shortcut-keys">
-                  <kbd>M</kbd>
-                </span>
-                <span>Mute</span>
-              </li>
-              <li>
-                <span class="sm-shortcut-keys">
-                  <kbd>N</kbd>
-                  <span>/</span>
-                  <kbd>P</kbd>
-                </span>
-                <span>Next or previous</span>
-              </li>
-              <li>
-                <span class="sm-shortcut-keys">
-                  <kbd>S</kbd>
-                  <span>/</span>
-                  <kbd>R</kbd>
-                </span>
-                <span>Shuffle or repeat</span>
-              </li>
-              <li>
-                <span class="sm-shortcut-keys">
-                  <kbd>0-9</kbd>
-                </span>
-                <span>Seek to a percentage</span>
-              </li>
-            </ul>
+            <p class="sm-info-intro">Site stats</p>
+            <dl class="sm-info-stats" data-info-stats></dl>
           </div>
           <div class="sm-info-stage" data-info-stage aria-hidden="true">
             <span class="sm-info-shadow" data-info-shadow></span>
@@ -163,8 +102,62 @@ import AchievementNotifications from "./AchievementNotifications.astro";
         tabindex="0"
         hidden
       >
+        <div
+          class="sm-achievement-tabs"
+          role="tablist"
+          aria-label="Achievement categories"
+          data-achievement-tabs
+        >
+          <button
+            id="sm-achievement-tab-site"
+            class="sm-achievement-tab"
+            type="button"
+            role="tab"
+            aria-selected="true"
+            aria-controls="sm-achievements-list"
+            data-achievement-category="site"
+            tabindex="0"
+          >Site</button>
+          <button
+            id="sm-achievement-tab-characters"
+            class="sm-achievement-tab"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            aria-controls="sm-achievements-list"
+            data-achievement-category="characters"
+            tabindex="-1"
+          >Characters</button>
+          <button
+            id="sm-achievement-tab-plinko"
+            class="sm-achievement-tab"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            aria-controls="sm-achievements-list"
+            data-achievement-category="plinko"
+            tabindex="-1"
+          >Plinko</button>
+          <button
+            id="sm-achievement-tab-stats"
+            class="sm-achievement-tab"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            aria-controls="sm-achievements-list"
+            data-achievement-category="stats"
+            tabindex="-1"
+          >Stats</button>
+        </div>
         <div class="sm-summary" data-sm-summary></div>
-        <ul class="sm-achievements" data-sm-achievements></ul>
+        <ul
+          id="sm-achievements-list"
+          class="sm-achievements"
+          data-sm-achievements
+          role="tabpanel"
+          aria-labelledby="sm-achievement-tab-site"
+          tabindex="0"
+        ></ul>
       </div>
 
       <div
@@ -619,9 +612,6 @@ import AchievementNotifications from "./AchievementNotifications.astro";
   .sm-settings-view {
     gap: 12px;
   }
-  .sm-view:not([hidden]) {
-    animation: sm-view-enter 0.2s cubic-bezier(0.2, 0.8, 0.2, 1) both;
-  }
   .sm-view[hidden] {
     display: none;
   }
@@ -637,16 +627,6 @@ import AchievementNotifications from "./AchievementNotifications.astro";
   }
   .sm-view:not([hidden]) > :nth-child(4) {
     animation-delay: 0.075s;
-  }
-  @keyframes sm-view-enter {
-    from {
-      opacity: 0;
-      transform: translateY(5px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
   }
   @keyframes sm-row-enter {
     from {
@@ -698,45 +678,35 @@ import AchievementNotifications from "./AchievementNotifications.astro";
     display: none;
   }
   .sm-info-intro {
-    margin: 0;
+    margin: 0 0 5px;
     color: var(--muted);
     font-size: 0.76rem;
   }
-  .sm-shortcuts {
+  .sm-info-stats {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 5px 14px;
+    gap: 0;
     margin: 0;
     padding: 0;
-    list-style: none;
-  }
-  .sm-shortcuts li {
-    display: grid;
-    grid-template-columns: minmax(90px, auto) minmax(0, 1fr);
-    align-items: center;
-    gap: 7px;
-    color: var(--muted);
     font-size: 0.68rem;
   }
-  .sm-shortcut-keys {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    white-space: nowrap;
+  .sm-info-stat {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, auto);
+    align-items: start;
+    gap: 8px;
+    padding: 3px 0;
+    border-bottom: 1px solid var(--muted-border);
   }
-  .sm-shortcut-keys > span {
+  .sm-info-stat dt {
     color: var(--muted);
-    font-size: 0.64rem;
   }
-  .sm-shortcuts kbd {
-    justify-self: start;
-    padding: 2px 4px;
-    border: 1px solid var(--muted-border);
-    border-radius: 3px;
+  .sm-info-stat dd {
+    max-width: 150px;
+    margin: 0;
     color: var(--text);
-    font: inherit;
-    font-size: 0.64rem;
-    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    overflow-wrap: anywhere;
   }
   .sm-info-stage {
     position: relative;
@@ -1163,8 +1133,43 @@ import AchievementNotifications from "./AchievementNotifications.astro";
     outline-offset: 2px;
   }
   .sm-summary {
+    flex: 0 0 auto;
     color: var(--muted);
     font-size: 0.78rem;
+  }
+  .sm-achievement-tabs {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    min-height: 34px;
+    gap: 2px;
+    overflow-x: auto;
+    border-bottom: 1px solid var(--muted-border);
+    scrollbar-width: thin;
+  }
+  .sm-achievement-tab {
+    flex: 0 0 auto;
+    padding: 8px 10px;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .sm-achievement-tab:hover {
+    color: var(--text);
+  }
+  .sm-achievement-tab[aria-selected="true"] {
+    border-bottom-color: var(--accent);
+    color: var(--text);
+  }
+  .sm-achievement-tab:focus-visible,
+  #sm-achievements-list:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
   }
   .sm-achievements {
     display: grid;
@@ -1291,9 +1296,6 @@ import AchievementNotifications from "./AchievementNotifications.astro";
     .sm-theme-group {
       padding-right: 14px;
       padding-left: 14px;
-    }
-    .sm-shortcuts {
-      grid-template-columns: 1fr;
     }
     .sm-info-stage {
       height: 58px;
@@ -1570,7 +1572,6 @@ import AchievementNotifications from "./AchievementNotifications.astro";
       .sm-carousel-dot::before,
       .sm-switch,
       .sm-switch::after,
-      .sm-shortcuts kbd,
       .sm-danger,
       .sm-ach,
       .sm-ach-icon,
@@ -1647,17 +1648,8 @@ import AchievementNotifications from "./AchievementNotifications.astro";
       width: 70px;
       height: 12px;
     }
-    .sm-shortcuts li {
-      grid-template-columns: minmax(76px, auto) minmax(0, 1fr);
-      gap: 5px;
-      font-size: 0.62rem;
-    }
-    .sm-shortcut-keys {
-      gap: 2px;
-    }
-    .sm-shortcuts kbd {
-      padding: 2px 3px;
-      font-size: 0.58rem;
+    .sm-info-stat dd {
+      max-width: 98px;
     }
   }
 </style>
@@ -1673,9 +1665,11 @@ import AchievementNotifications from "./AchievementNotifications.astro";
     effectiveTheme,
     getAchievements,
     getSettings,
+    getUsageStats,
     initSiteState,
     isThemeAvailable,
     prefersReducedMotion,
+    recordSettingsClick,
     resetAllData,
     updateSettings,
   } from "../scripts/site-state";
@@ -1732,6 +1726,9 @@ import AchievementNotifications from "./AchievementNotifications.astro";
       '[data-setting="plinkoExtremeMode"]',
     )!;
     const list = root.querySelector<HTMLElement>("[data-sm-achievements]")!;
+    const achievementTabs = Array.from(
+      root.querySelectorAll<HTMLButtonElement>("[data-achievement-category]"),
+    );
     const summary = root.querySelector<HTMLElement>("[data-sm-summary]")!;
     const achievementsView = root.querySelector<HTMLElement>(
       "#sm-view-achievements",
@@ -1749,6 +1746,7 @@ import AchievementNotifications from "./AchievementNotifications.astro";
     const infoPraxor =
       root.querySelector<HTMLImageElement>("[data-info-praxor]")!;
     const infoShadow = root.querySelector<HTMLElement>("[data-info-shadow]")!;
+    const infoStats = root.querySelector<HTMLElement>("[data-info-stats]")!;
 
     const HOLD_DURATION_MS = 6700;
     const confirmProgress = root.querySelector<HTMLElement>(
@@ -1765,6 +1763,7 @@ import AchievementNotifications from "./AchievementNotifications.astro";
     let resetStarted = false;
     let infoFrame = 0;
     let infoAnimationStartedAt = 0;
+    let activeAchievementCategory = "site";
 
     const clearHold = () => {
       if (holdFrame) window.cancelAnimationFrame(holdFrame);
@@ -1903,7 +1902,24 @@ import AchievementNotifications from "./AchievementNotifications.astro";
       }
     };
 
+    const animateTabPanel = (view: HTMLElement, direction: number) => {
+      if (prefersReducedMotion()) return;
+      view.animate(
+        [
+          { opacity: 0, transform: `translateX(${direction * 14}px)` },
+          { opacity: 1, transform: "translateX(0)" },
+        ],
+        { duration: 220, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)" },
+      );
+    };
+
     const showTab = (name: string, focus = false) => {
+      const previousIndex = tabs.findIndex(
+        (tab) => tab.getAttribute("aria-selected") === "true",
+      );
+      const nextIndex = tabs.findIndex((tab) => tab.dataset.tab === name);
+      const changed = previousIndex >= 0 && nextIndex !== previousIndex;
+      const direction = nextIndex > previousIndex ? 1 : -1;
       tabs.forEach((tab) => {
         const selected = tab.dataset.tab === name;
         tab.setAttribute("aria-selected", String(selected));
@@ -1912,7 +1928,10 @@ import AchievementNotifications from "./AchievementNotifications.astro";
           `#${tab.getAttribute("aria-controls")}`,
         )!;
         view.hidden = !selected;
-        if (selected) view.scrollTop = 0;
+        if (selected) {
+          view.scrollTop = 0;
+          if (changed) animateTabPanel(view, direction);
+        }
         if (selected && focus) tab.focus();
       });
       if (name === "achievements") renderAchievements();
@@ -1927,13 +1946,23 @@ import AchievementNotifications from "./AchievementNotifications.astro";
       name: "fun" | "accessibility",
       focus = false,
     ) => {
+      const previousIndex = settingsSubtabs.findIndex(
+        (tab) => tab.getAttribute("aria-selected") === "true",
+      );
+      const nextIndex = settingsSubtabs.findIndex(
+        (tab) => tab.dataset.settingsSubtab === name,
+      );
+      const changed = previousIndex >= 0 && nextIndex !== previousIndex;
       settingsSubtabs.forEach((tab) => {
         const selected = tab.dataset.settingsSubtab === name;
         tab.setAttribute("aria-selected", String(selected));
         tab.tabIndex = selected ? 0 : -1;
         const view =
           name === "fun" ? settingsFunView : settingsAccessibilityView;
-        if (tab.dataset.settingsSubtab === name) view.hidden = false;
+        if (tab.dataset.settingsSubtab === name) {
+          view.hidden = false;
+          if (changed) animateTabPanel(view, nextIndex > previousIndex ? 1 : -1);
+        }
         else
           (name === "fun"
             ? settingsAccessibilityView
@@ -1941,6 +1970,28 @@ import AchievementNotifications from "./AchievementNotifications.astro";
           ).hidden = true;
         if (selected && focus) tab.focus();
       });
+    };
+
+    const showAchievementCategory = (category: string, focus = false) => {
+      const previousIndex = achievementTabs.findIndex(
+        (tab) => tab.getAttribute("aria-selected") === "true",
+      );
+      const nextIndex = achievementTabs.findIndex(
+        (tab) => tab.dataset.achievementCategory === category,
+      );
+      const changed = previousIndex >= 0 && nextIndex !== previousIndex;
+      activeAchievementCategory = category;
+      achievementTabs.forEach((tab) => {
+        const selected = tab.dataset.achievementCategory === category;
+        tab.setAttribute("aria-selected", String(selected));
+        tab.tabIndex = selected ? 0 : -1;
+        if (selected) {
+          list.setAttribute("aria-labelledby", tab.id);
+          if (focus) tab.focus();
+        }
+      });
+      renderAchievements();
+      if (changed) animateTabPanel(list, nextIndex > previousIndex ? 1 : -1);
     };
 
     const stopInfoAnimation = () => {
@@ -2198,8 +2249,56 @@ import AchievementNotifications from "./AchievementNotifications.astro";
       plinkoExtremeInput.checked = getSettings().plinkoExtremeMode;
     };
 
+    const renderInfoStats = () => {
+      const stats = getUsageStats();
+      const formatTime = (seconds: number) => {
+        const total = Math.floor(seconds);
+        const hours = Math.floor(total / 3600);
+        const minutes = Math.floor((total % 3600) / 60);
+        const remainder = total % 60;
+        return hours
+          ? `${hours}h ${minutes}m`
+          : minutes
+            ? `${minutes}m ${remainder}s`
+            : `${remainder}s`;
+      };
+      const rows: [string, string][] = [
+        ["Time on website", formatTime(stats.activeSeconds)],
+        ["Time on website (Idle)", formatTime(stats.idleSeconds)],
+        ["Posts clicked", stats.postsClicked.toLocaleString()],
+        ["Pages visited", stats.pagesVisited.toLocaleString()],
+        ["Minutes of music listened", `${(stats.musicListenedSeconds / 60).toFixed(1)} min`],
+        ["Songs played", stats.songsPlayed.toLocaleString()],
+        ["Times visited", stats.siteVisits.toLocaleString()],
+        ["Plinko rounds played", stats.plinkoRoundsPlayed.toLocaleString()],
+        ["Plinko resets", stats.plinkoResets.toLocaleString()],
+        ["Plinko rounds played in PEM", stats.plinkoRoundsPlayedInPEM.toLocaleString()],
+        ["Highest Plinko score", stats.highestPlinkoScore.toLocaleString()],
+        ["Total Plinko score", stats.totalPlinkoScore.toLocaleString()],
+        ["Favorite page", stats.favoritePage],
+        ["Favorite character", stats.favoriteCharacter],
+        ["Times clicked on Settings-xor", stats.settingsClicks.toLocaleString()],
+        ["Cats exploded", stats.catsExploded.toLocaleString()],
+        ["Times watched credits", stats.timesWatchedCredits.toLocaleString()],
+      ];
+      infoStats.replaceChildren(
+        ...rows.map(([label, value]) => {
+          const row = document.createElement("div");
+          row.className = "sm-info-stat";
+          const name = document.createElement("dt");
+          name.textContent = label;
+          const count = document.createElement("dd");
+          count.textContent = value;
+          row.append(name, count);
+          return row;
+        }),
+      );
+    };
+
     const renderAchievements = () => {
-      const visible = getAchievements();
+      const visible = getAchievements().filter(
+        (item) => item.category === activeAchievementCategory,
+      );
       summary.textContent = `${visible.filter((item) => item.unlocked).length} / ${visible.length} unlocked`;
       list.replaceChildren(
         ...visible.map((item) => {
@@ -2258,6 +2357,7 @@ import AchievementNotifications from "./AchievementNotifications.astro";
 
     const render = () => {
       renderSettings();
+      renderInfoStats();
       if (!achievementsView.hidden) renderAchievements();
     };
 
@@ -2374,7 +2474,10 @@ import AchievementNotifications from "./AchievementNotifications.astro";
     window.addEventListener("resize", () => layoutCarousel());
     window.addEventListener("blur", cancelCarouselDrag);
 
-    toggle.addEventListener("click", () => setOpen(!isOpen()));
+    toggle.addEventListener("click", () => {
+      recordSettingsClick();
+      setOpen(!isOpen());
+    });
     resetButton.addEventListener("click", () => setConfirmOpen(true));
     confirmCloseButton.addEventListener("click", () => setConfirmOpen(false));
     confirmBox.addEventListener("pointerdown", (event) => {
@@ -2473,6 +2576,29 @@ import AchievementNotifications from "./AchievementNotifications.astro";
         );
       });
     });
+    achievementTabs.forEach((tab, index) => {
+      tab.addEventListener("click", () =>
+        showAchievementCategory(tab.dataset.achievementCategory!),
+      );
+      tab.addEventListener("keydown", (event) => {
+        if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key))
+          return;
+        event.preventDefault();
+        const nextIndex =
+          event.key === "Home"
+            ? 0
+            : event.key === "End"
+              ? achievementTabs.length - 1
+              : (index +
+                  (event.key === "ArrowRight" ? 1 : -1) +
+                  achievementTabs.length) %
+                achievementTabs.length;
+        showAchievementCategory(
+          achievementTabs[nextIndex].dataset.achievementCategory!,
+          true,
+        );
+      });
+    });
     forceInput.addEventListener("change", () =>
       updateSettings({ forceTheme: forceInput.checked }),
     );
@@ -2525,6 +2651,7 @@ import AchievementNotifications from "./AchievementNotifications.astro";
       updateInfoAnimation();
     });
     window.addEventListener(ACTIVITY_EVENT, () => {
+      if (isOpen() && !infoView.hidden) renderInfoStats();
       if (isOpen() && !achievementsView.hidden) renderAchievements();
     });
     window.addEventListener(UNLOCK_EVENT, () => {
