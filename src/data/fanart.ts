@@ -34,7 +34,8 @@ export const fanartOptions: FanartImage[] = [
   { number: 22, src: '/media/fanart/fanart22.png', width: 2048, height: 2048, artist: 'sillysatorugojo_', caption: 'He is justice. He is truth.', cSlug: 'pubbly' },
   { number: 23, src: '/media/fanart/fanart23.jpg', width: 2160, height: 2880, artist: 'enaxie', caption: '\"this is my impression of him\" Hell yeah man.', cSlug: 'pubbly' },
   { number: 24, src: '/media/fanart/fanart24.png', width: 219, height: 232, artist: 'toohi', caption: 'lil guy', cSlug: 'praxor-v2' },
-  { number: 25, src: '/media/fanart/fanart25.png', width: 2048, height: 2048, artist: 'sillysatorugojo_', caption: 'The pubbler. Twice. Technically.', cSlug: 'pubbly' }
+  { number: 25, src: '/media/fanart/fanart25.png', width: 2048, height: 2048, artist: 'sillysatorugojo_', caption: 'The pubbler. Twice. Technically.', cSlug: 'pubbly' },
+  { number: 26, src: '/media/fanart/fanart26.png', width: 983, height: 959, artist: 'bloody_soda', caption: 'Soup\'s Headcanon of Mr. Cake. Indubitably splendid.', cSlug: 'mrcake' },
 ];
 
 export const fanartByNumber = new Map(fanartOptions.map((image) => [image.number, image]));
