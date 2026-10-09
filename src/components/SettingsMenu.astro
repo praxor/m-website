@@ -739,6 +739,28 @@ import AchievementNotifications from "./AchievementNotifications.astro";
     outline: 2px solid var(--accent);
     outline-offset: 3px;
   }
+  .sm-click-heart {
+    position: absolute;
+    z-index: 2;
+    width: 14px;
+    height: 14px;
+    margin: -7px 0 0 -7px;
+    pointer-events: none;
+    opacity: 0;
+    will-change: transform, opacity;
+  }
+  .sm-click-heart svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+  }
+  .sm-click-heart[data-heart-tone="0"] {
+    color: #ff5d9e;
+  }
+  .sm-click-heart[data-heart-tone="1"] {
+    color: #ff9ac1;
+  }
   .sm-info-shadow {
     position: absolute;
     right: 25px;
@@ -755,19 +777,7 @@ import AchievementNotifications from "./AchievementNotifications.astro";
     filter: blur(1px);
     transform: scale(1);
     opacity: 0.3;
-    animation: sm-info-shadow-bounce 1.65s ease-in-out infinite;
-  }
-  @keyframes sm-info-shadow-bounce {
-    0%,
-    100% {
-      transform: scale(1);
-      opacity: 0.3;
-    }
-    48%,
-    54% {
-      transform: scale(0.62);
-      opacity: 0.13;
-    }
+    will-change: transform, opacity;
   }
   :root[data-reduced-motion="true"] .sm-info-praxor,
   :root[data-reduced-motion="true"] .sm-info-shadow {
@@ -1787,96 +1797,248 @@ import AchievementNotifications from "./AchievementNotifications.astro";
       root.querySelector<HTMLImageElement>("[data-info-praxor]")!;
     const infoStats = root.querySelector<HTMLElement>("[data-info-stats]")!;
     const infoStage = root.querySelector<HTMLElement>("[data-info-stage]")!;
-    const CAT_BOUNCE_MS = 1050;
-    const CAT_FLIGHT_MS = 730;
+    const infoShadow = root.querySelector<HTMLElement>("[data-info-shadow]")!;
+    const CAT_JUMP_MS = 472.44;
+    const CAT_CYCLE_MS = CAT_JUMP_MS * 6;
+    const CAT_LANDING_PAUSE_MS = 150;
+    const CAT_REACTION_HOP_MS = 190;
+    const CAT_REACTION_GAP_MS = 55;
+    const CAT_HEART_DURATION_MS = 580;
+    const CAT_HEART_STAGGER_MS = 65;
+    const CAT_REACTION_DURATION_MS = Math.max(
+      CAT_REACTION_HOP_MS * 2 + CAT_REACTION_GAP_MS,
+      CAT_HEART_DURATION_MS + CAT_HEART_STAGGER_MS,
+    );
+    const catJumps = [
+      { tilt: -12, spin: 0 },
+      { tilt: 12, spin: 0 },
+      { tilt: 0, spin: -360 },
+      { tilt: 12, spin: 0 },
+      { tilt: -12, spin: 0 },
+      { tilt: 0, spin: 360 },
+    ] as const;
     let catMotionReduced = prefersReducedMotion();
     let catMotionFrame = 0;
-    let catBounceStartedAt = 0;
-    let catBounceActive = false;
+    const catMotionStartedAt = performance.now();
+    let catMotionActive = false;
+    let catReactionPending = false;
+    let catReactionPendingAt = 0;
+    let catReactionStartedAt = 0;
+    let catReactionQueued = false;
+    let catResumeStartedAt = 0;
+    let catClickHearts: Array<{
+      element: HTMLElement;
+      startedAt: number;
+      index: number;
+    }> = [];
     const catMotionLifetime = new AbortController();
     let catMotionObserver: MutationObserver | undefined;
-    const stopCatBounce = () => {
+    const clearCatClickHearts = () => {
+      catClickHearts.forEach(({ element }) => element.remove());
+      catClickHearts = [];
+    };
+    const stopCatMotion = () => {
       if (catMotionFrame) window.cancelAnimationFrame(catMotionFrame);
       catMotionFrame = 0;
-      catBounceActive = false;
+      catMotionActive = false;
+      catReactionPending = false;
+      catReactionPendingAt = 0;
+      catReactionStartedAt = 0;
+      catReactionQueued = false;
+      catResumeStartedAt = 0;
+      clearCatClickHearts();
       infoPraxor.style.removeProperty("transform");
+      infoShadow.style.transform = "scale(1)";
+      infoShadow.style.opacity = "0.3";
     };
     const smoothstep = (value: number) => value * value * (3 - 2 * value);
-    const updateCatBounce = (now: number) => {
+    const createCatClickHearts = (startedAt: number) => {
+      clearCatClickHearts();
+      const imageRect = infoPraxor.getBoundingClientRect();
+      const stageRect = infoStage.getBoundingClientRect();
+      for (let index = 0; index < 2; index += 1) {
+        const heart = document.createElement("span");
+        heart.className = "sm-click-heart";
+        heart.dataset.heartTone = String(index);
+        heart.setAttribute("aria-hidden", "true");
+        heart.style.left = `${imageRect.right - stageRect.left - 8 - index * 5}px`;
+        heart.style.top = `${imageRect.top - stageRect.top + 10 + index * 3}px`;
+        const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.setAttribute("viewBox", "0 0 24 24");
+        svg.setAttribute("aria-hidden", "true");
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute(
+          "d",
+          "M12 21.2 10.4 19.8C5 14.9 2 12.2 2 8.75 2 6.05 4.05 4 6.75 4c1.52 0 2.98.71 3.92 1.82L12 7.5l1.33-1.68C14.27 4.71 15.73 4 17.25 4 19.95 4 22 6.05 22 8.75c0 3.43-3 6.15-8.4 11.05L12 21.2Z",
+        );
+        svg.append(path);
+        heart.append(svg);
+        infoStage.append(heart);
+        catClickHearts.push({
+          element: heart,
+          startedAt: startedAt + index * CAT_HEART_STAGGER_MS,
+          index,
+        });
+      }
+    };
+    const requestCatReaction = () => {
+      if (catMotionReduced || !catMotionActive) return;
+      const clickedAt = performance.now();
+      if (catReactionPending || catReactionStartedAt || catResumeStartedAt) {
+        catReactionQueued = true;
+        return;
+      }
+      const elapsed = Math.max(0, clickedAt - catMotionStartedAt);
+      const beatIndex = Math.floor(elapsed / CAT_JUMP_MS);
+      catReactionPending = true;
+      catReactionPendingAt =
+        catMotionStartedAt + (beatIndex + 1) * CAT_JUMP_MS + CAT_LANDING_PAUSE_MS;
+    };
+    const updateCatClickHearts = (now: number) => {
+      catClickHearts = catClickHearts.filter(({ element, startedAt, index }) => {
+        const elapsed = now - startedAt;
+        if (elapsed < 0) return true;
+        if (elapsed >= CAT_HEART_DURATION_MS) {
+          element.remove();
+          return false;
+        }
+        const progress = elapsed / CAT_HEART_DURATION_MS;
+        const intro = Math.min(1, progress / 0.16);
+        const opacity = progress < 0.18
+          ? progress / 0.18
+          : 1 - smoothstep((progress - 0.18) / 0.82);
+        const drift = index === 0 ? 12 : -7;
+        const rise = 30 + index * 8;
+        element.style.opacity = String(opacity);
+        element.style.transform = `translate3d(${(drift * progress).toFixed(2)}px, ${(-rise * smoothstep(progress)).toFixed(2)}px, 0) scale(${(0.55 + intro * 0.55 - progress * 0.1).toFixed(3)})`;
+        return true;
+      });
+    };
+    const updateCatMotion = (now: number) => {
       catMotionFrame = 0;
       if (!root.isConnected) {
-        stopCatBounce();
+        stopCatMotion();
         catMotionObserver?.disconnect();
         catMotionLifetime.abort();
         return;
       }
-      if (!catBounceActive || catMotionReduced || overlay.dataset.open !== "true") {
-        stopCatBounce();
+      if (!catMotionActive || catMotionReduced || overlay.dataset.open !== "true") {
+        stopCatMotion();
         return;
       }
       if (document.hidden) return;
 
-      const elapsed = now - catBounceStartedAt;
-      if (elapsed >= CAT_BOUNCE_MS) {
-        stopCatBounce();
-        return;
-      }
-
+      const elapsed = Math.max(0, now - catMotionStartedAt);
+      const cycleTime = elapsed % CAT_CYCLE_MS;
+      const beatIndex = Math.min(
+        catJumps.length - 1,
+        Math.floor(cycleTime / CAT_JUMP_MS),
+      );
+      const beatProgress = (cycleTime % CAT_JUMP_MS) / CAT_JUMP_MS;
+      const jump = catJumps[beatIndex];
       const stageHeight = infoStage.clientHeight;
       const catHeight = infoPraxor.offsetHeight;
       const availableLift = Math.max(0, (stageHeight - catHeight) / 2 - 4);
       const jumpHeight = Math.min(catHeight * 2.5, availableLift);
       let verticalOffset = 0;
       let rotation = 0;
-      let scaleX = 1;
-      let scaleY = 1;
 
-      if (elapsed < CAT_FLIGHT_MS) {
-        const anticipationMs = 70;
-        const anticipation = elapsed < anticipationMs
-          ? Math.sin((elapsed / anticipationMs) * Math.PI)
-          : 0;
-        const flightProgress = Math.max(
-          0,
-          (elapsed - anticipationMs) / (CAT_FLIGHT_MS - anticipationMs),
-        );
-        const ascentPortion = 0.4;
-        const arc = elapsed < anticipationMs
-          ? 0
-          : flightProgress < ascentPortion
-            ? smoothstep(flightProgress / ascentPortion)
-            : 1 - smoothstep((flightProgress - ascentPortion) / (1 - ascentPortion));
-        verticalOffset = -jumpHeight * arc;
-        scaleX += anticipation * 0.08 - arc * 0.025;
-        scaleY -= anticipation * 0.12;
-      } else {
-        const landingProgress = (elapsed - CAT_FLIGHT_MS) / (CAT_BOUNCE_MS - CAT_FLIGHT_MS);
-        const envelope = 1 - smoothstep(landingProgress);
-        const wave = Math.sin(landingProgress * Math.PI * 8);
-        const squash = Math.exp(-landingProgress * 24);
-        rotation = wave * envelope * 10;
-        scaleX = 1 + squash * 0.18 + Math.abs(wave) * envelope * 0.05;
-        scaleY = 1 - squash * 0.22 - Math.abs(wave) * envelope * 0.08;
-        verticalOffset = -Math.abs(wave) * envelope * 2;
+      const jumpProgress = beatProgress;
+      const arc = Math.sin(Math.PI * jumpProgress);
+      verticalOffset = -jumpHeight * arc;
+      rotation = jump.tilt !== 0
+        ? jump.tilt * arc
+        : jump.spin * jumpProgress;
+      const normalPose = { verticalOffset, rotation };
+      if (catReactionPending && now >= catReactionPendingAt) {
+        catReactionPending = false;
+        catReactionStartedAt = now;
+        createCatClickHearts(now);
+      }
+      if (catResumeStartedAt && catReactionQueued) {
+        catReactionQueued = false;
+        catResumeStartedAt = 0;
+        catReactionStartedAt = now;
+        createCatClickHearts(now);
       }
 
-      infoPraxor.style.transform = `translate3d(0, ${verticalOffset.toFixed(3)}px, 0) rotate(${rotation.toFixed(3)}deg) scale(${scaleX.toFixed(4)}, ${scaleY.toFixed(4)})`;
-      catMotionFrame = window.requestAnimationFrame(updateCatBounce);
+      if (catReactionStartedAt) {
+        const reactionElapsed = now - catReactionStartedAt;
+        if (
+          reactionElapsed >= CAT_REACTION_DURATION_MS &&
+          catClickHearts.length === 0
+        ) {
+          if (catReactionQueued) {
+            catReactionQueued = false;
+            catReactionStartedAt = now;
+            createCatClickHearts(now);
+            verticalOffset = 0;
+            rotation = 0;
+          } else {
+            catReactionStartedAt = 0;
+            catResumeStartedAt = now;
+          }
+        } else if (reactionElapsed >= CAT_REACTION_DURATION_MS) {
+          verticalOffset = 0;
+          rotation = 0;
+        } else {
+          const secondHopStart = CAT_REACTION_HOP_MS + CAT_REACTION_GAP_MS;
+          const hopStart = reactionElapsed < CAT_REACTION_HOP_MS
+            ? 0
+            : reactionElapsed >= secondHopStart &&
+                reactionElapsed < secondHopStart + CAT_REACTION_HOP_MS
+              ? secondHopStart
+              : -1;
+          if (hopStart >= 0) {
+            const hopProgress = Math.max(
+              0,
+              Math.min(1, (reactionElapsed - hopStart) / CAT_REACTION_HOP_MS),
+            );
+            const hopArc = Math.max(0, Math.sin(Math.PI * hopProgress));
+            verticalOffset = -Math.min(18, catHeight * 0.16) * hopArc;
+            rotation = 0;
+          } else {
+            verticalOffset = 0;
+            rotation = 0;
+          }
+        }
+      }
+      if (
+        !catReactionStartedAt &&
+        catReactionPending &&
+        now >= catReactionPendingAt - CAT_LANDING_PAUSE_MS
+      ) {
+        verticalOffset = 0;
+        rotation = 0;
+      }
+      if (!catReactionStartedAt && catResumeStartedAt) {
+        const blend = smoothstep(Math.min(1, (now - catResumeStartedAt) / 120));
+        verticalOffset = normalPose.verticalOffset * blend;
+        rotation = normalPose.rotation * blend;
+        if (blend >= 1) catResumeStartedAt = 0;
+      }
+
+      verticalOffset = Math.min(0, verticalOffset);
+      const shadowLift = Math.max(0, -verticalOffset);
+      const shadowLiftProgress = Math.min(1, shadowLift / Math.max(1, jumpHeight));
+      infoShadow.style.transform = `scale(${(1 - shadowLiftProgress * 0.38).toFixed(4)})`;
+      infoShadow.style.opacity = String(0.3 - shadowLiftProgress * 0.17);
+      infoPraxor.style.transform = `translate3d(0, ${verticalOffset.toFixed(3)}px, 0) rotate(${rotation.toFixed(3)}deg)`;
+      updateCatClickHearts(now);
+      catMotionFrame = window.requestAnimationFrame(updateCatMotion);
     };
-    const scheduleCatBounce = () => {
-      if (catBounceActive && !document.hidden && !catMotionReduced && !catMotionFrame) {
-        catMotionFrame = window.requestAnimationFrame(updateCatBounce);
+    const scheduleCatMotion = () => {
+      if (catMotionActive && !document.hidden && !catMotionReduced && !catMotionFrame) {
+        catMotionFrame = window.requestAnimationFrame(updateCatMotion);
       }
     };
-    const startCatBounce = () => {
-      stopCatBounce();
+    const startCatMotion = () => {
       if (catMotionReduced || document.hidden) return;
-      catBounceActive = true;
-      catBounceStartedAt = performance.now();
-      scheduleCatBounce();
+      catMotionActive = true;
+      scheduleCatMotion();
     };
-    const cleanupCatBounce = () => {
-      stopCatBounce();
+    const cleanupCatMotion = () => {
+      stopCatMotion();
       catMotionObserver?.disconnect();
       catMotionLifetime.abort();
     };
@@ -1886,7 +2048,7 @@ import AchievementNotifications from "./AchievementNotifications.astro";
         if (document.hidden) {
           if (catMotionFrame) window.cancelAnimationFrame(catMotionFrame);
           catMotionFrame = 0;
-        } else scheduleCatBounce();
+        } else scheduleCatMotion();
       },
       { signal: catMotionLifetime.signal },
     );
@@ -1894,12 +2056,13 @@ import AchievementNotifications from "./AchievementNotifications.astro";
       CHANGE_EVENT,
       () => {
         catMotionReduced = prefersReducedMotion();
-        if (catMotionReduced) stopCatBounce();
+        if (catMotionReduced) stopCatMotion();
+        else if (overlay.dataset.open === "true") startCatMotion();
       },
       { signal: catMotionLifetime.signal },
     );
     catMotionObserver = new MutationObserver(() => {
-      if (!root.isConnected) cleanupCatBounce();
+      if (!root.isConnected) cleanupCatMotion();
     });
     if (root.parentElement) {
       catMotionObserver.observe(root.parentElement, { childList: true });
@@ -1913,17 +2076,7 @@ import AchievementNotifications from "./AchievementNotifications.astro";
       settingsCatAudio.playbackRate = 0.94 + Math.random() * 0.12;
       settingsCatAudio.currentTime = 0;
       void settingsCatAudio.play().catch(() => undefined);
-      if (!prefersReducedMotion()) {
-        infoPraxor.animate(
-          [
-            { scale: "1 1" },
-            { scale: "1.16 0.7", offset: 0.42 },
-            { scale: "0.94 1.08", offset: 0.72 },
-            { scale: "1 1" },
-          ],
-          { duration: 260, easing: "cubic-bezier(0.2, 0.8, 0.3, 1)" },
-        );
-      }
+      requestCatReaction();
     };
 
     infoPraxor.addEventListener("click", activateSettingsCat);
@@ -2064,9 +2217,11 @@ import AchievementNotifications from "./AchievementNotifications.astro";
     const setOpen = (open: boolean) => {
       if (open === isOpen()) return;
       if (!open) setConfirmOpen(false);
-      if (open) startCatBounce();
-      else stopCatBounce();
       overlay.dataset.open = String(open);
+        if (open) {
+          startCatMotion();
+        }
+      else stopCatMotion();
       toggle.setAttribute("aria-expanded", String(open));
       document.documentElement.classList.toggle("sm-open", open);
       background().forEach((element) => {
