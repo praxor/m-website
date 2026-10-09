@@ -462,6 +462,8 @@ const { items, title, label = "artwork", achievementCollection } = Astro.props;
     const caption = document.querySelector<HTMLElement>("#gallery-caption");
     const artistCredit = document.querySelector<HTMLElement>("#gallery-artist");
     const counter = document.querySelector<HTMLElement>("#gallery-counter");
+    const thumbnailRail = dialog?.querySelector<HTMLElement>(".gallery-thumbnails");
+    const imageFrame = dialog?.querySelector<HTMLElement>(".gallery-image-frame");
     const thumbnails = dialog
       ? Array.from(
           dialog.querySelectorAll<HTMLButtonElement>(
@@ -484,6 +486,8 @@ const { items, title, label = "artwork", achievementCollection } = Astro.props;
     let activeIndex = 0;
     let openingItem: HTMLElement | null = null;
     let closeTimer: number | undefined;
+    let imageWheelTimer: number | undefined;
+    let imageWheelDelta = 0;
     const siteHeader = document.querySelector<HTMLElement>(".site-header");
     let headerPlaceholder: Comment | null = null;
     let headerThemeFrame: number | undefined;
@@ -576,8 +580,50 @@ const { items, title, label = "artwork", achievementCollection } = Astro.props;
         });
     };
 
+    thumbnailRail?.addEventListener(
+      "wheel",
+      (event) => {
+        const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY)
+          ? event.deltaX
+          : event.deltaY;
+        if (!delta || thumbnailRail.scrollWidth <= thumbnailRail.clientWidth)
+          return;
+        event.preventDefault();
+        thumbnailRail.scrollLeft += delta;
+      },
+      { passive: false },
+    );
+
+    imageFrame?.addEventListener(
+      "wheel",
+      (event) => {
+        const delta = Math.abs(event.deltaY) >= Math.abs(event.deltaX)
+          ? event.deltaY
+          : event.deltaX;
+        if (!delta) return;
+        event.preventDefault();
+        imageWheelDelta += delta;
+        if (imageWheelTimer !== undefined)
+          window.clearTimeout(imageWheelTimer);
+        imageWheelTimer = window.setTimeout(() => {
+          const direction = Math.sign(imageWheelDelta);
+          imageWheelDelta = 0;
+          imageWheelTimer = undefined;
+          if (direction) selectArtwork(activeIndex + direction);
+        }, 90);
+      },
+      { passive: false },
+    );
+
+    const clearImageWheel = () => {
+      if (imageWheelTimer !== undefined) window.clearTimeout(imageWheelTimer);
+      imageWheelTimer = undefined;
+      imageWheelDelta = 0;
+    };
+
     const closeGallery = () => {
       if (!dialog.open || dialog.classList.contains("is-closing")) return;
+      clearImageWheel();
       captureHeaderTheme();
       document.body.classList.remove("fanart-gallery-open");
       releaseHeaderTheme();
@@ -670,6 +716,7 @@ const { items, title, label = "artwork", achievementCollection } = Astro.props;
     });
     document.addEventListener("astro:before-swap", () => {
       if (closeTimer !== undefined) window.clearTimeout(closeTimer);
+      clearImageWheel();
       captureHeaderTheme();
       openingItem = null;
       dialog.classList.remove("is-closing");

@@ -522,6 +522,7 @@ const progressOf = (id: AchievementId, definition: AchievementDefinition, goal: 
 	if (definition.inactiveSeconds) return Math.floor(live.inactiveSeconds);
 	if (definition.pageSeconds) return live.pageKey === definition.pageSeconds.page ? Math.floor(live.pageSeconds) : 0;
 	if (definition.chapterCharacter) return getState().chapterViews[definition.chapterCharacter]?.length ?? 0;
+	if (id === 'creditsArtwork') return getState().artworkViews.credits.length;
 	if (id === 'visitor') return getState().siteVisits;
 	return saved?.progress ?? definition.progress?.initial ?? 0;
 };

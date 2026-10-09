@@ -364,7 +364,7 @@ const galleryItems = fanartOptions.map((art) => ({
   }
   @keyframes fanart-scroll-up {
     to {
-      transform: translateY(-50%);
+      transform: translateY(calc(-50% - 2px));
     }
   }
 
@@ -760,9 +760,10 @@ const galleryItems = fanartOptions.map((art) => ({
       loop.style.display = "flex";
       loop.style.width = "100%";
       loop.style.flexDirection = "column";
+      loop.style.gap = `${artworkGap}px`;
       loop.style.animation = prefersReducedMotion
         ? "none"
-        : `fanart-scroll-up ${Math.max(12, columnHeights[index] / 32)}s linear infinite`;
+        : `fanart-scroll-up ${Math.max(12, (columnHeights[index] + artworkGap) / 32)}s linear infinite`;
 
       const sourceSet = document.createElement("div");
       sourceSet.className = "fanart-column-loop-set";

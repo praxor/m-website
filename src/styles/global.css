@@ -221,6 +221,36 @@ main {
   height: 0;
 }
 
+.gallery-thumbnails,
+#music-playlist,
+.music-tree,
+.workspace-tracks {
+  -ms-overflow-style: auto;
+  scrollbar-width: thin !important;
+  scrollbar-color: var(--accent-dark) transparent;
+}
+.gallery-thumbnails::-webkit-scrollbar,
+#music-playlist::-webkit-scrollbar,
+.music-tree::-webkit-scrollbar,
+.workspace-tracks::-webkit-scrollbar {
+  display: block !important;
+  width: 7px !important;
+  height: 7px !important;
+}
+.gallery-thumbnails::-webkit-scrollbar-thumb,
+#music-playlist::-webkit-scrollbar-thumb,
+.music-tree::-webkit-scrollbar-thumb,
+.workspace-tracks::-webkit-scrollbar-thumb {
+  border-radius: 6px;
+  background: var(--accent-dark);
+}
+.gallery-thumbnails::-webkit-scrollbar-track,
+#music-playlist::-webkit-scrollbar-track,
+.music-tree::-webkit-scrollbar-track,
+.workspace-tracks::-webkit-scrollbar-track {
+  background: transparent;
+}
+
 /* Page entrance motion */
 header,
 .card,
