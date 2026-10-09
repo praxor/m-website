@@ -1,402 +1,833 @@
 ﻿---
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
 const base = import.meta.env.BASE_URL;
 ---
+
 <Layout title="plinko" bodyClass="plinko-page">
-    <main class="plinko-main" data-plinko-main>
-      <div class="plinko-stage">
+  <main class="plinko-main" data-plinko-main>
+    <div class="plinko-stage">
       <section class="plinko-frame" aria-labelledby="plinko-title">
         <div class="plinko-heading">
           <h1 id="plinko-title">plinko</h1>
-          <button id="plinko-reset" type="button" aria-label="Reset Plinko" title="Reset Plinko">
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 11a8 8 0 0 1 14.8-4L20 10M20 4v6h-6M21 13a8 8 0 0 1-14.8 4L4 14M4 20v-6h6" /></svg>
+          <button
+            id="plinko-reset"
+            type="button"
+            aria-label="Reset Plinko"
+            title="Reset Plinko"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M3 11a8 8 0 0 1 14.8-4L20 10M20 4v6h-6M21 13a8 8 0 0 1-14.8 4L4 14M4 20v-6h6" />
+            </svg>
           </button>
         </div>
         <div class="plinko-board">
-          <canvas id="plinko-canvas" data-theme-cat data-theme-cat-src={`${base}media/res/oraxor.png`} data-theme-cat-default-src="media/res/oraxor.png" aria-label="Plinko board with oraxor the cat">your browser does not support canvas.</canvas>
+          <canvas
+            id="plinko-canvas"
+            data-theme-cat
+            data-theme-cat-src={`${base}media/res/oraxor.png`}
+            data-theme-cat-default-src="media/res/oraxor.png"
+            aria-label="Plinko board with oraxor the cat"
+          >
+            your browser does not support canvas.
+          </canvas>
         </div>
       </section>
-      <aside id="plinko-score-panel" class="plinko-score-panel" aria-label="Plinko points" aria-live="polite" hidden>
+      <aside
+        id="plinko-score-panel"
+        class="plinko-score-panel"
+        aria-label="Plinko points"
+        aria-live="polite"
+        hidden
+      >
         <div class="plinko-score-heading">
           <h2>points</h2>
-          <svg class="plinko-score-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m12 2.5 2.8 5.7 6.3.9-4.6 4.5 1.1 6.3-5.6-3-5.6 3 1.1-6.3L3 9.1l6.3-.9L12 2.5z" /></svg>
+          <svg
+            class="plinko-score-icon"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path d="m12 2.5 2.8 5.7 6.3.9-4.6 4.5 1.1 6.3-5.6-3-5.6 3 1.1-6.3L3 9.1l6.3-.9L12 2.5z" />
+          </svg>
         </div>
-        <p><span>total</span><span class="plinko-total-values"><strong id="plinko-total">0</strong><span id="plinko-earned" class="plinko-earned" aria-hidden="true"></span></span></p>
+        <p>
+          <span>total</span>
+          <span class="plinko-total-values">
+            <strong id="plinko-total">0</strong>
+            <span
+              id="plinko-earned"
+              class="plinko-earned"
+              aria-hidden="true"
+            ></span>
+          </span>
+        </p>
       </aside>
-      </div>
-    </main>
+    </div>
+  </main>
 </Layout>
 
 <style>
-  .plinko-page{background:var(--bg)}
-  .plinko-main{min-height:calc(100vh - 76px);box-sizing:border-box;display:flex;align-items:center;justify-content:center;max-width:1180px;margin:0 auto;padding:1.5rem 20px 1.25rem}
-  .plinko-stage{display:flex;align-items:center;justify-content:center;gap:.75rem}
-  .plinko-frame{position:relative;display:flex;flex:0 0 auto;width:min(84vw,780px);aspect-ratio:1;min-height:0;flex-direction:column;overflow:hidden;background:var(--card);border:1px solid var(--muted-border);border-radius:2px;box-shadow:0 24px 60px var(--shadow-soft),inset 0 1px 0 var(--accent-12)}
-  .plinko-frame::before{content:"";position:absolute;top:0;left:12%;right:12%;height:1px;background:var(--accent);opacity:.65;box-shadow:0 0 18px var(--accent);pointer-events:none}
-  .plinko-heading{display:flex;align-items:center;justify-content:space-between;padding:.75rem 1rem;border-bottom:1px solid var(--muted-border)}
-  .plinko-main h1{margin:0;color:var(--accent);font-size:1.15rem;line-height:1;letter-spacing:.04em}
-  #plinko-reset{display:grid;place-items:center;flex:0 0 36px;width:36px;height:36px;padding:0;border:1px solid var(--muted-border);border-radius:6px;background:transparent;color:var(--text);cursor:pointer;transition:transform 140ms ease,background-color 140ms ease,border-color 140ms ease,color 140ms ease,box-shadow 140ms ease}
-  #plinko-reset svg{display:block;width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-  #plinko-reset:hover{transform:translateY(-2px);border-color:var(--accent);background:var(--accent-10);color:var(--accent);box-shadow:0 3px 12px var(--accent-12)}
-  #plinko-reset:active{transform:translateY(0) scale(.96);box-shadow:0 0 4px var(--accent-12)}
-  #plinko-reset:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-  @media (prefers-reduced-motion:reduce){#plinko-reset{transition:none}#plinko-reset:hover,#plinko-reset:active{transform:none}}
-  .plinko-score-panel{box-sizing:border-box;display:flex;flex:0 0 158px;flex-direction:column;gap:.65rem;align-self:flex-end;margin-bottom:.85rem;padding:.85rem;border:1px solid var(--muted-border);border-radius:2px;background:var(--card);box-shadow:inset 0 1px 0 var(--accent-12);animation:plinko-score-in 240ms ease-out both}
-  .plinko-score-panel[hidden]{display:none}
-  .plinko-score-heading{display:flex;align-items:center;justify-content:space-between;gap:.5rem}
-  .plinko-score-panel h2{margin:0;color:var(--accent);font-size:.8rem;font-weight:700;text-transform:uppercase}
-  .plinko-score-icon{display:block;width:15px;height:15px;fill:none;stroke:var(--accent);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
-  .plinko-score-panel p{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin:0;color:var(--muted);font-size:.78rem}
-  .plinko-score-panel strong{display:inline-block;color:var(--text);font-size:.95rem;font-variant-numeric:tabular-nums;transform-origin:center}
-  .plinko-total-values{display:flex;align-items:center;justify-content:flex-end;gap:.45rem;min-width:0}
-  .plinko-earned{color:var(--accent);font-size:.75rem;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
-  .plinko-earned:empty{display:none}
-  @keyframes plinko-score-in{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}
-  .plinko-board{display:flex;flex:1;min-height:0;margin:.65rem;border:1px solid var(--muted-border);border-radius:2px;background:radial-gradient(circle at 50% 0%,var(--accent-10),transparent 44%),var(--plinko-board);box-shadow:inset 0 0 0 1px var(--surface-hover)}
-  #plinko-canvas{display:block;width:100%;min-height:0;flex:1;background:transparent}
-  @media (max-width:1000px){.plinko-stage{flex-direction:column;align-items:center}.plinko-score-panel{width:min(84vw,780px);flex-basis:auto;align-self:center;margin:0;flex-direction:row;align-items:center;justify-content:space-between}}
-  @media (max-width:780px){.plinko-main{width:100%;min-height:calc(100vh - 60px);padding:1.5rem 12px 1rem;overflow-x:hidden}.plinko-frame{width:calc(100vw - 24px);max-width:420px;min-width:280px;height:min(68vh,580px);aspect-ratio:auto}}
-  @media (max-width:480px){.plinko-heading{padding-left:1rem;padding-right:1rem}.plinko-board{margin:.5rem}.plinko-score-panel{width:calc(100vw - 24px);max-width:420px}}
-  .plinko-main[data-extreme-mode="true"] .plinko-stage{flex-direction:column;align-items:center}
-  .plinko-main[data-extreme-mode="true"] .plinko-frame{width:min(96vw,1100px);aspect-ratio:1}
-  .plinko-main[data-extreme-mode="true"] .plinko-score-panel{width:min(96vw,1100px);flex-basis:auto;align-self:center;margin:0;flex-direction:row;align-items:center;justify-content:space-between}
-  @media (max-width:1000px){.plinko-main[data-extreme-mode="true"] .plinko-frame{width:min(96vw,900px)}}
-  @media (max-width:780px){.plinko-main[data-extreme-mode="true"] .plinko-frame{width:calc(100vw - 24px);max-width:900px;min-width:280px;height:min(90vh,760px);aspect-ratio:auto}}
-  @media (prefers-reduced-motion:reduce){.plinko-score-panel{animation:none}}
+  /* Page styles: plinko */
+  .plinko-page {
+    background: var(--bg);
+  }
+  .plinko-main {
+    min-height: calc(100vh - 76px);
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 1.5rem 20px 1.25rem;
+  }
+  .plinko-stage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+  .plinko-frame {
+    position: relative;
+    display: flex;
+    flex: 0 0 auto;
+    width: min(84vw, 780px);
+    aspect-ratio: 1;
+    min-height: 0;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--card);
+    border: 1px solid var(--muted-border);
+    border-radius: 2px;
+    box-shadow:
+      0 24px 60px var(--shadow-soft),
+      inset 0 1px 0 var(--accent-12);
+  }
+  .plinko-frame::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 12%;
+    right: 12%;
+    height: 1px;
+    background: var(--accent);
+    opacity: 0.65;
+    box-shadow: 0 0 18px var(--accent);
+    pointer-events: none;
+  }
+  .plinko-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--muted-border);
+  }
+  .plinko-main h1 {
+    margin: 0;
+    color: var(--accent);
+    font-size: 1.15rem;
+    line-height: 1;
+    letter-spacing: 0.04em;
+  }
+  #plinko-reset {
+    display: grid;
+    place-items: center;
+    flex: 0 0 36px;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 1px solid var(--muted-border);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+    transition:
+      transform 140ms ease,
+      background-color 140ms ease,
+      border-color 140ms ease,
+      color 140ms ease,
+      box-shadow 140ms ease;
+  }
+  #plinko-reset svg {
+    display: block;
+    width: 17px;
+    height: 17px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  #plinko-reset:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+    background: var(--accent-10);
+    color: var(--accent);
+    box-shadow: 0 3px 12px var(--accent-12);
+  }
+  #plinko-reset:active {
+    transform: translateY(0) scale(0.96);
+    box-shadow: 0 0 4px var(--accent-12);
+  }
+  #plinko-reset:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #plinko-reset {
+      transition: none;
+    }
+    #plinko-reset:hover,
+    #plinko-reset:active {
+      transform: none;
+    }
+  }
+  .plinko-score-panel {
+    box-sizing: border-box;
+    display: flex;
+    flex: 0 0 158px;
+    flex-direction: column;
+    gap: 0.65rem;
+    align-self: flex-end;
+    margin-bottom: 0.85rem;
+    padding: 0.85rem;
+    border: 1px solid var(--muted-border);
+    border-radius: 2px;
+    background: var(--card);
+    box-shadow: inset 0 1px 0 var(--accent-12);
+    animation: plinko-score-in 240ms ease-out both;
+  }
+  .plinko-score-panel[hidden] {
+    display: none;
+  }
+  .plinko-score-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+  .plinko-score-panel h2 {
+    margin: 0;
+    color: var(--accent);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .plinko-score-icon {
+    display: block;
+    width: 15px;
+    height: 15px;
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .plinko-score-panel p {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.78rem;
+  }
+  .plinko-score-panel strong {
+    display: inline-block;
+    color: var(--text);
+    font-size: 0.95rem;
+    font-variant-numeric: tabular-nums;
+    transform-origin: center;
+  }
+  .plinko-total-values {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.45rem;
+    min-width: 0;
+  }
+  .plinko-earned {
+    color: var(--accent);
+    font-size: 0.75rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .plinko-earned:empty {
+    display: none;
+  }
+  @keyframes plinko-score-in {
+    from {
+      opacity: 0;
+      transform: translateX(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  .plinko-board {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    margin: 0.65rem;
+    border: 1px solid var(--muted-border);
+    border-radius: 2px;
+    background:
+      radial-gradient(circle at 50% 0%, var(--accent-10), transparent 44%),
+      var(--plinko-board);
+    box-shadow: inset 0 0 0 1px var(--surface-hover);
+  }
+  #plinko-canvas {
+    display: block;
+    width: 100%;
+    min-height: 0;
+    flex: 1;
+    background: transparent;
+  }
+  @media (max-width: 1000px) {
+    .plinko-stage {
+      flex-direction: column;
+      align-items: center;
+    }
+    .plinko-score-panel {
+      width: min(84vw, 780px);
+      flex-basis: auto;
+      align-self: center;
+      margin: 0;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+  @media (max-width: 780px) {
+    .plinko-main {
+      width: 100%;
+      min-height: calc(100vh - 60px);
+      padding: 1.5rem 12px 1rem;
+      overflow-x: hidden;
+    }
+    .plinko-frame {
+      width: calc(100vw - 24px);
+      max-width: 420px;
+      min-width: 280px;
+      height: min(68vh, 580px);
+      aspect-ratio: auto;
+    }
+  }
+  @media (max-width: 480px) {
+    .plinko-heading {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+    .plinko-board {
+      margin: 0.5rem;
+    }
+    .plinko-score-panel {
+      width: calc(100vw - 24px);
+      max-width: 420px;
+    }
+  }
+  .plinko-main[data-extreme-mode="true"] .plinko-stage {
+    flex-direction: column;
+    align-items: center;
+  }
+  .plinko-main[data-extreme-mode="true"] .plinko-frame {
+    width: min(96vw, 1100px);
+    aspect-ratio: 1;
+  }
+  .plinko-main[data-extreme-mode="true"] .plinko-score-panel {
+    width: min(96vw, 1100px);
+    flex-basis: auto;
+    align-self: center;
+    margin: 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+  @media (max-width: 1000px) {
+    .plinko-main[data-extreme-mode="true"] .plinko-frame {
+      width: min(96vw, 900px);
+    }
+  }
+  @media (max-width: 780px) {
+    .plinko-main[data-extreme-mode="true"] .plinko-frame {
+      width: calc(100vw - 24px);
+      max-width: 900px;
+      min-width: 280px;
+      height: min(90vh, 760px);
+      aspect-ratio: auto;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .plinko-score-panel {
+      animation: none;
+    }
+  }
 </style>
 
 <script>
-  import * as planck from 'planck';
-  import { CHANGE_EVENT, getSettings } from '../scripts/site-state';
-  import { PLINKO_STATE_EVENT, type PlinkoStateDetail, type PlinkoStateReason } from '../scripts/plinko-events';
+  import * as planck from "planck";
+  import { CHANGE_EVENT, getSettings } from "../scripts/site-state";
+  import {
+    PLINKO_STATE_EVENT,
+    type PlinkoStateDetail,
+    type PlinkoStateReason,
+  } from "../scripts/plinko-events";
 
   let initializedCanvas: HTMLCanvasElement | null = null;
 
   const initializePlinko = () => {
-  const canvas = document.querySelector<HTMLCanvasElement>('#plinko-canvas');
-  const plinkoMain = document.querySelector<HTMLElement>('[data-plinko-main]');
-  const resetButton = document.querySelector<HTMLButtonElement>('#plinko-reset');
-  const scorePanel = document.querySelector<HTMLElement>('#plinko-score-panel');
-  const totalDisplay = document.querySelector<HTMLElement>('#plinko-total');
-  const earnedDisplay = document.querySelector<HTMLElement>('#plinko-earned');
-  if (!canvas || canvas === initializedCanvas) return;
-  initializedCanvas = canvas;
-  let extremeMode = getSettings().plinkoExtremeMode;
-  if (plinkoMain) plinkoMain.dataset.extremeMode = String(extremeMode);
-  const context = canvas?.getContext('2d');
-  const cat = new Image();
-  cat.crossOrigin = 'anonymous';
-  const initialCat = { src: canvas.dataset.themeCatSrc || '', filter: canvas.dataset.themeCatFilter || 'none' };
-  let catFilter = initialCat.filter;
-  cat.src = initialCat.src;
-  let world: planck.World;
-  let catBody: planck.Body;
-  let width = 0;
-  let height = 0;
-  let scale = 1;
-  let spawnAt = 0;
-  let landingAt = 0;
-  let totalPoints = 0;
-  type ScoreZone = { points: number; width: number; alpha: number; special: boolean };
-  let scoreZones: ScoreZone[] = [];
-  let earnedAnimation: Animation | null = null;
-  let scoreNumberAnimation: Animation | null = null;
-  let earnedClearTimer = 0;
-  let dropFinalized = false;
-  let catActive = false;
-  let animationFrame = 0;
-  const slotPoints = [100, 50, 25, 10, 25, 50, 100];
-  const slotAlpha = [.18, .10, .15, .08, .15, .10, .18];
-  const getScoreZones = (worldWidth: number): ScoreZone[] => {
-    const availableWidth = worldWidth - .4;
-    if (!extremeMode) {
-      const width = availableWidth / slotPoints.length;
-      return slotPoints.map((points, index) => ({ points, width, alpha: slotAlpha[index], special: false }));
-    }
-
-    const normalPoints = [100, 50, 25, 10, 10, 25, 50, 100];
-    const normalAlpha = [.18, .10, .15, .08, .08, .15, .10, .18];
-    const normalWidth = availableWidth / 9.5;
-    const normalZones = normalPoints.map((points, index) => ({ points, width: normalWidth, alpha: normalAlpha[index], special: false }));
-    const specialZone = (points: number): ScoreZone => ({ points, width: normalWidth / 2, alpha: .36, special: true });
-    return [specialZone(250), ...normalZones.slice(0, 4), specialZone(500), ...normalZones.slice(4), specialZone(250)];
-  };
-
-  const publishPlinkoState = (reason: PlinkoStateReason, pointsEarned = 0) => {
-    window.dispatchEvent(new CustomEvent<PlinkoStateDetail>(PLINKO_STATE_EVENT, {
-      detail: { reason, totalPoints, extremeMode, pointsEarned },
-    }));
-  };
-
-  // Read each frame so the canvas follows theme changes, including in-flight colour transitions.
-  const readColors = () => {
-    const styles = getComputedStyle(canvas);
-    const read = (name: string) => styles.getPropertyValue(name).trim();
-    return { peg: read('--plinko-peg'), slot: read('--plinko-slot'), label: read('--plinko-label') };
-  };
-  const compactBoard = window.matchMedia('(max-width: 780px)').matches;
-  const animateScoreNumber = (element: HTMLElement | null) => {
-    if (!element || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    scoreNumberAnimation?.cancel();
-    scoreNumberAnimation = element.animate([
-      { transform: 'translateY(0) scale(1)' },
-      { transform: 'translateY(-3px) scale(1.2)', offset: .4 },
-      { transform: 'translateY(0) scale(1)' },
-    ], { duration: 420, easing: 'cubic-bezier(.16,.8,.3,1)' });
-  };
-
-  const resizeCanvas = () => {
-    if (!canvas || !context) return;
-    const ratio = window.devicePixelRatio || 1;
-    const bounds = canvas.getBoundingClientRect();
-    width = bounds.width;
-    height = bounds.height;
-    canvas.width = Math.round(bounds.width * ratio);
-    canvas.height = Math.round(bounds.height * ratio);
-    context.setTransform(ratio, 0, 0, ratio, 0, 0);
-    scale = width / (extremeMode ? 24 : 12);
-    createBoard();
-  };
-
-  const createBoard = () => {
-    if (!canvas) return;
-    spawnAt = 0;
-    world = new planck.World(planck.Vec2(0, extremeMode ? 9.5 : 10));
-    const worldWidth = width / scale;
-    const worldHeight = height / scale;
-    const pegGap = compactBoard ? .62 : .78;
-    const pegRadius = .085;
-    const slotHeight = .65;
-    scoreZones = getScoreZones(worldWidth);
-
-    const walls = world.createBody();
-    walls.createFixture(planck.Edge(planck.Vec2(.2, 0), planck.Vec2(.2, worldHeight)), { restitution: .55 });
-    walls.createFixture(planck.Edge(planck.Vec2(worldWidth - .2, 0), planck.Vec2(worldWidth - .2, worldHeight)), { restitution: .55 });
-    walls.createFixture(planck.Edge(planck.Vec2(.2, worldHeight - .15), planck.Vec2(worldWidth - .2, worldHeight - .15)), { restitution: .35 });
-    let boundaryX = .2;
-    for (const zone of scoreZones.slice(0, -1)) {
-      boundaryX += zone.width;
-      walls.createFixture(planck.Edge(planck.Vec2(boundaryX, worldHeight - .15), planck.Vec2(boundaryX, worldHeight - slotHeight)), { restitution: .35 });
-    }
-
-    const addPegSection = (startY: number, rows: number) => {
-      for (let row = 0; row < rows; row += 1) {
-      const count = Math.floor(worldWidth / .95);
-      const offset = row % 2 === 0 ? 0 : .475;
-      const y = startY + row * pegGap;
-      for (let column = 0; column < count; column += 1) {
-        const x = .65 + column * .95 + offset;
-        if (x > worldWidth - .65) continue;
-        const peg = world.createBody({ position: planck.Vec2(x, y) });
-        peg.createFixture(planck.Circle(pegRadius), { restitution: .78, friction: .08 });
+    const canvas = document.querySelector<HTMLCanvasElement>("#plinko-canvas");
+    const plinkoMain =
+      document.querySelector<HTMLElement>("[data-plinko-main]");
+    const resetButton =
+      document.querySelector<HTMLButtonElement>("#plinko-reset");
+    const scorePanel = document.querySelector<HTMLElement>(
+      "#plinko-score-panel",
+    );
+    const totalDisplay = document.querySelector<HTMLElement>("#plinko-total");
+    const earnedDisplay = document.querySelector<HTMLElement>("#plinko-earned");
+    if (!canvas || canvas === initializedCanvas) return;
+    initializedCanvas = canvas;
+    let extremeMode = getSettings().plinkoExtremeMode;
+    if (plinkoMain) plinkoMain.dataset.extremeMode = String(extremeMode);
+    const context = canvas?.getContext("2d");
+    const cat = new Image();
+    cat.crossOrigin = "anonymous";
+    const initialCat = {
+      src: canvas.dataset.themeCatSrc || "",
+      filter: canvas.dataset.themeCatFilter || "none",
+    };
+    let catFilter = initialCat.filter;
+    cat.src = initialCat.src;
+    let world: planck.World;
+    let catBody: planck.Body;
+    let width = 0;
+    let height = 0;
+    let scale = 1;
+    let spawnAt = 0;
+    let landingAt = 0;
+    let totalPoints = 0;
+    type ScoreZone = {
+      points: number;
+      width: number;
+      alpha: number;
+      special: boolean;
+    };
+    let scoreZones: ScoreZone[] = [];
+    let earnedAnimation: Animation | null = null;
+    let scoreNumberAnimation: Animation | null = null;
+    let earnedClearTimer = 0;
+    let dropFinalized = false;
+    let catActive = false;
+    let animationFrame = 0;
+    const physicsTimeStep = 1 / 60;
+    let previousFrameTime: number | null = null;
+    let physicsTimeAccumulator = 0;
+    const slotPoints = [100, 50, 25, 10, 25, 50, 100];
+    const slotAlpha = [0.18, 0.1, 0.15, 0.08, 0.15, 0.1, 0.18];
+    const getScoreZones = (worldWidth: number): ScoreZone[] => {
+      const availableWidth = worldWidth - 0.4;
+      if (!extremeMode) {
+        const width = availableWidth / slotPoints.length;
+        return slotPoints.map((points, index) => ({
+          points,
+          width,
+          alpha: slotAlpha[index],
+          special: false,
+        }));
       }
-    }
+
+      const normalPoints = [100, 50, 25, 10, 10, 25, 50, 100];
+      const normalAlpha = [0.18, 0.1, 0.15, 0.08, 0.08, 0.15, 0.1, 0.18];
+      const normalWidth = availableWidth / 9.5;
+      const normalZones = normalPoints.map((points, index) => ({
+        points,
+        width: normalWidth,
+        alpha: normalAlpha[index],
+        special: false,
+      }));
+      const specialZone = (points: number): ScoreZone => ({
+        points,
+        width: normalWidth / 2,
+        alpha: 0.36,
+        special: true,
+      });
+      return [
+        specialZone(250),
+        ...normalZones.slice(0, 4),
+        specialZone(500),
+        ...normalZones.slice(4),
+        specialZone(250),
+      ];
     };
 
-    const fieldRows = Math.max(5, Math.floor((worldHeight - slotHeight - 1.35) / pegGap));
-    addPegSection(1.15, fieldRows);
+    const publishPlinkoState = (
+      reason: PlinkoStateReason,
+      pointsEarned = 0,
+    ) => {
+      window.dispatchEvent(
+        new CustomEvent<PlinkoStateDetail>(PLINKO_STATE_EVENT, {
+          detail: { reason, totalPoints, extremeMode, pointsEarned },
+        }),
+      );
+    };
 
-    spawnCat(worldWidth);
-  };
+    // Read each frame so the canvas follows theme changes, including in-flight colour transitions.
+    const readColors = () => {
+      const styles = getComputedStyle(canvas);
+      const read = (name: string) => styles.getPropertyValue(name).trim();
+      return {
+        peg: read("--plinko-peg"),
+        slot: read("--plinko-slot"),
+        label: read("--plinko-label"),
+      };
+    };
+    const compactBoard = window.matchMedia("(max-width: 780px)").matches;
+    const animateScoreNumber = (element: HTMLElement | null) => {
+      if (
+        !element ||
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      )
+        return;
+      scoreNumberAnimation?.cancel();
+      scoreNumberAnimation = element.animate(
+        [
+          { transform: "translateY(0) scale(1)" },
+          { transform: "translateY(-3px) scale(1.2)", offset: 0.4 },
+          { transform: "translateY(0) scale(1)" },
+        ],
+        { duration: 420, easing: "cubic-bezier(.16,.8,.3,1)" },
+      );
+    };
 
-  const spawnCat = (worldWidth: number) => {
-    landingAt = 0;
-    dropFinalized = false;
-    catActive = true;
-    catBody = world.createDynamicBody({
-      position: planck.Vec2(2 + Math.random() * (worldWidth - 4), .35),
-      linearVelocity: planck.Vec2((Math.random() - .5) * 1.2, 0),
-      angularVelocity: (Math.random() - .5) * 2,
-    });
-    catBody.createFixture(planck.Circle(extremeMode ? .2 : .28), { density: 1, friction: .18, restitution: .7 });
-  };
+    const resizeCanvas = () => {
+      if (!canvas || !context) return;
+      const ratio = window.devicePixelRatio || 1;
+      const bounds = canvas.getBoundingClientRect();
+      width = bounds.width;
+      height = bounds.height;
+      canvas.width = Math.round(bounds.width * ratio);
+      canvas.height = Math.round(bounds.height * ratio);
+      context.setTransform(ratio, 0, 0, ratio, 0, 0);
+      scale = width / (extremeMode ? 24 : 12);
+      createBoard();
+    };
 
-  const clearEarnedPoints = () => {
-    if (earnedClearTimer) window.clearTimeout(earnedClearTimer);
-    earnedClearTimer = 0;
-    earnedAnimation?.cancel();
-    earnedAnimation = null;
-    scoreNumberAnimation?.cancel();
-    scoreNumberAnimation = null;
-    if (earnedDisplay) earnedDisplay.textContent = '';
-  };
+    const createBoard = () => {
+      if (!canvas) return;
+      spawnAt = 0;
+      world = new planck.World(planck.Vec2(0, extremeMode ? 9.5 : 10));
+      const worldWidth = width / scale;
+      const worldHeight = height / scale;
+      const pegGap = compactBoard ? 0.62 : 0.78;
+      const pegRadius = 0.085;
+      const slotHeight = 0.65;
+      scoreZones = getScoreZones(worldWidth);
 
-  const showEarnedPoints = (points: number) => {
-    clearEarnedPoints();
-    if (!earnedDisplay) return;
-    earnedDisplay.textContent = `+${points}`;
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      earnedAnimation = earnedDisplay.animate([
-        { opacity: 0, transform: 'translateY(5px) scale(.94)', offset: 0 },
-        { opacity: 1, transform: 'translateY(0) scale(1)', offset: .18 },
-        { opacity: 1, transform: 'translateY(0) scale(1)', offset: .72 },
-        { opacity: 0, transform: 'translateY(-5px) scale(.98)', offset: 1 },
-      ], { duration: 1050, easing: 'ease-out' });
-    }
-    earnedClearTimer = window.setTimeout(clearEarnedPoints, 1050);
-  };
+      const walls = world.createBody();
+      walls.createFixture(
+        planck.Edge(planck.Vec2(0.2, 0), planck.Vec2(0.2, worldHeight)),
+        { restitution: 0.55 },
+      );
+      walls.createFixture(
+        planck.Edge(
+          planck.Vec2(worldWidth - 0.2, 0),
+          planck.Vec2(worldWidth - 0.2, worldHeight),
+        ),
+        { restitution: 0.55 },
+      );
+      walls.createFixture(
+        planck.Edge(
+          planck.Vec2(0.2, worldHeight - 0.15),
+          planck.Vec2(worldWidth - 0.2, worldHeight - 0.15),
+        ),
+        { restitution: 0.35 },
+      );
+      let boundaryX = 0.2;
+      for (const zone of scoreZones.slice(0, -1)) {
+        boundaryX += zone.width;
+        walls.createFixture(
+          planck.Edge(
+            planck.Vec2(boundaryX, worldHeight - 0.15),
+            planck.Vec2(boundaryX, worldHeight - slotHeight),
+          ),
+          { restitution: 0.35 },
+        );
+      }
 
-  const resetSimulation = () => {
-    spawnAt = 0;
-    landingAt = 0;
-    totalPoints = 0;
-    if (totalDisplay) totalDisplay.textContent = '0';
-    clearEarnedPoints();
-    if (scorePanel) scorePanel.hidden = true;
-    createBoard();
-    drawBoard();
-    publishPlinkoState('reset');
-  };
+      const addPegSection = (startY: number, rows: number) => {
+        for (let row = 0; row < rows; row += 1) {
+          const count = Math.floor(worldWidth / 0.95);
+          const offset = row % 2 === 0 ? 0 : 0.475;
+          const y = startY + row * pegGap;
+          for (let column = 0; column < count; column += 1) {
+            const x = 0.65 + column * 0.95 + offset;
+            if (x > worldWidth - 0.65) continue;
+            const peg = world.createBody({ position: planck.Vec2(x, y) });
+            peg.createFixture(planck.Circle(pegRadius), {
+              restitution: 0.78,
+              friction: 0.08,
+            });
+          }
+        }
+      };
 
-  const drawBoard = () => {
-    if (!context || !world || !catBody) return;
-    context.clearRect(0, 0, width, height);
-    const colors = readColors();
-    context.fillStyle = colors.peg;
-    context.globalAlpha = .58;
-    for (let body = world.getBodyList(); body; body = body.getNext()) {
-      if (body === catBody) continue;
-      for (let fixture = body.getFixtureList(); fixture; fixture = fixture.getNext()) {
-        const shape = fixture.getShape();
-        if (shape.getType() === 'circle') {
-          const circle = shape as planck.Circle;
-          const position = body.getWorldPoint(circle.m_p);
-          context.beginPath();
-          context.arc(position.x * scale, position.y * scale, circle.m_radius * scale, 0, Math.PI * 2);
-          context.fill();
+      const fieldRows = Math.max(
+        5,
+        Math.floor((worldHeight - slotHeight - 1.35) / pegGap),
+      );
+      addPegSection(1.15, fieldRows);
+
+      spawnCat(worldWidth);
+    };
+
+    const spawnCat = (worldWidth: number) => {
+      landingAt = 0;
+      dropFinalized = false;
+      catActive = true;
+      catBody = world.createDynamicBody({
+        position: planck.Vec2(2 + Math.random() * (worldWidth - 4), 0.35),
+        linearVelocity: planck.Vec2((Math.random() - 0.5) * 1.2, 0),
+        angularVelocity: (Math.random() - 0.5) * 2,
+      });
+      catBody.createFixture(planck.Circle(extremeMode ? 0.2 : 0.28), {
+        density: 1,
+        friction: 0.18,
+        restitution: 0.7,
+      });
+    };
+
+    const clearEarnedPoints = () => {
+      if (earnedClearTimer) window.clearTimeout(earnedClearTimer);
+      earnedClearTimer = 0;
+      earnedAnimation?.cancel();
+      earnedAnimation = null;
+      scoreNumberAnimation?.cancel();
+      scoreNumberAnimation = null;
+      if (earnedDisplay) earnedDisplay.textContent = "";
+    };
+
+    const showEarnedPoints = (points: number) => {
+      clearEarnedPoints();
+      if (!earnedDisplay) return;
+      earnedDisplay.textContent = `+${points}`;
+      if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        earnedAnimation = earnedDisplay.animate(
+          [
+            { opacity: 0, transform: "translateY(5px) scale(.94)", offset: 0 },
+            { opacity: 1, transform: "translateY(0) scale(1)", offset: 0.18 },
+            { opacity: 1, transform: "translateY(0) scale(1)", offset: 0.72 },
+            { opacity: 0, transform: "translateY(-5px) scale(.98)", offset: 1 },
+          ],
+          { duration: 1050, easing: "ease-out" },
+        );
+      }
+      earnedClearTimer = window.setTimeout(clearEarnedPoints, 1050);
+    };
+
+    const resetSimulation = () => {
+      spawnAt = 0;
+      landingAt = 0;
+      totalPoints = 0;
+      if (totalDisplay) totalDisplay.textContent = "0";
+      clearEarnedPoints();
+      if (scorePanel) scorePanel.hidden = true;
+      createBoard();
+      drawBoard();
+      publishPlinkoState("reset");
+    };
+
+    const drawBoard = () => {
+      if (!context || !world || !catBody) return;
+      context.clearRect(0, 0, width, height);
+      const colors = readColors();
+      context.fillStyle = colors.peg;
+      context.globalAlpha = 0.58;
+      for (let body = world.getBodyList(); body; body = body.getNext()) {
+        if (body === catBody) continue;
+        for (
+          let fixture = body.getFixtureList();
+          fixture;
+          fixture = fixture.getNext()
+        ) {
+          const shape = fixture.getShape();
+          if (shape.getType() === "circle") {
+            const circle = shape as planck.Circle;
+            const position = body.getWorldPoint(circle.m_p);
+            context.beginPath();
+            context.arc(
+              position.x * scale,
+              position.y * scale,
+              circle.m_radius * scale,
+              0,
+              Math.PI * 2,
+            );
+            context.fill();
+          }
         }
       }
-    }
-    context.globalAlpha = 1;
-
-    const worldWidth = width / scale;
-    const slotTop = height - .65 * scale;
-    context.fillStyle = colors.label;
-    context.font = '600 11px sans-serif';
-    context.textAlign = 'center';
-    context.textBaseline = 'middle';
-    let zoneX = .2;
-    for (const zone of scoreZones) {
-      context.fillStyle = colors.slot;
-      context.globalAlpha = zone.alpha;
-      context.fillRect(zoneX * scale, slotTop, zone.width * scale, .65 * scale);
       context.globalAlpha = 1;
+
+      const worldWidth = width / scale;
+      const slotTop = height - 0.65 * scale;
       context.fillStyle = colors.label;
-      context.fillText(String(zone.points), (zoneX + zone.width / 2) * scale, slotTop - 8);
-      zoneX += zone.width;
-    }
-    context.strokeStyle = colors.peg;
-    context.lineWidth = 1;
-    context.globalAlpha = .42;
-    let dividerX = .2;
-    for (let divider = 0; divider <= scoreZones.length; divider += 1) {
-      const x = dividerX * scale;
-      context.beginPath();
-      context.moveTo(x, height);
-      context.lineTo(x, slotTop);
-      context.stroke();
-      if (divider < scoreZones.length) dividerX += scoreZones[divider].width;
-    }
-    context.globalAlpha = 1;
+      context.font = "600 11px sans-serif";
+      context.textAlign = "center";
+      context.textBaseline = "middle";
+      let zoneX = 0.2;
+      for (const zone of scoreZones) {
+        context.fillStyle = colors.slot;
+        context.globalAlpha = zone.alpha;
+        context.fillRect(
+          zoneX * scale,
+          slotTop,
+          zone.width * scale,
+          0.65 * scale,
+        );
+        context.globalAlpha = 1;
+        context.fillStyle = colors.label;
+        context.fillText(
+          String(zone.points),
+          (zoneX + zone.width / 2) * scale,
+          slotTop - 8,
+        );
+        zoneX += zone.width;
+      }
+      context.strokeStyle = colors.peg;
+      context.lineWidth = 1;
+      context.globalAlpha = 0.42;
+      let dividerX = 0.2;
+      for (let divider = 0; divider <= scoreZones.length; divider += 1) {
+        const x = dividerX * scale;
+        context.beginPath();
+        context.moveTo(x, height);
+        context.lineTo(x, slotTop);
+        context.stroke();
+        if (divider < scoreZones.length) dividerX += scoreZones[divider].width;
+      }
+      context.globalAlpha = 1;
 
-    const position = catBody.getPosition();
-    const size = .72 * scale;
-    context.save();
-    context.translate(position.x * scale, position.y * scale);
-    context.rotate(catBody.getAngle());
-    if (cat.complete && cat.naturalWidth > 0) {
-      context.filter = catFilter;
-      context.drawImage(cat, -size / 2, -size / 2, size, size);
-    }
-    context.restore();
-  };
-
-  const updateThemeCat = () => {
-    const nextCat = { src: canvas.dataset.themeCatSrc || '', filter: canvas.dataset.themeCatFilter || 'none' };
-    catFilter = nextCat.filter;
-    if (cat.src !== nextCat.src) cat.src = nextCat.src;
-    else drawBoard();
-  };
-
-  const animate = () => {
-    if (!world || !catBody) return;
-    world.step(1 / 60, 8, 3);
-    const now = performance.now();
-    if (catActive) {
       const position = catBody.getPosition();
-      const velocity = catBody.getLinearVelocity();
-      const worldHeight = height / scale;
-      const reachedSlots = position.y >= worldHeight - .9;
-      const settled = Math.hypot(velocity.x, velocity.y) < .18 && Math.abs(catBody.getAngularVelocity()) < .4;
-      if (reachedSlots && settled) {
-        landingAt = landingAt || now;
-        if (now - landingAt >= 400) {
-          const worldWidth = width / scale;
-          const scoringX = Math.max(.2, Math.min(worldWidth - .2, position.x));
-          let zoneStart = .2;
-          let landedZone = scoreZones[scoreZones.length - 1];
-          for (const zone of scoreZones) {
-            if (scoringX < zoneStart + zone.width) {
-              landedZone = zone;
-              break;
+      const size = 0.72 * scale;
+      context.save();
+      context.translate(position.x * scale, position.y * scale);
+      context.rotate(catBody.getAngle());
+      if (cat.complete && cat.naturalWidth > 0) {
+        context.filter = catFilter;
+        context.drawImage(cat, -size / 2, -size / 2, size, size);
+      }
+      context.restore();
+    };
+
+    const updateThemeCat = () => {
+      const nextCat = {
+        src: canvas.dataset.themeCatSrc || "",
+        filter: canvas.dataset.themeCatFilter || "none",
+      };
+      catFilter = nextCat.filter;
+      if (cat.src !== nextCat.src) cat.src = nextCat.src;
+      else drawBoard();
+    };
+
+    const animate = (frameTime: number) => {
+      if (!world || !catBody) return;
+      const elapsed =
+        previousFrameTime === null
+          ? physicsTimeStep
+          : Math.min((frameTime - previousFrameTime) / 1000, 0.1);
+      previousFrameTime = frameTime;
+      physicsTimeAccumulator += Math.max(0, elapsed);
+      while (physicsTimeAccumulator >= physicsTimeStep) {
+        world.step(physicsTimeStep, 8, 3);
+        physicsTimeAccumulator -= physicsTimeStep;
+      }
+      const now = performance.now();
+      if (catActive) {
+        const position = catBody.getPosition();
+        const velocity = catBody.getLinearVelocity();
+        const worldHeight = height / scale;
+        const reachedSlots = position.y >= worldHeight - 0.9;
+        const settled =
+          Math.hypot(velocity.x, velocity.y) < 0.18 &&
+          Math.abs(catBody.getAngularVelocity()) < 0.4;
+        if (reachedSlots && settled) {
+          landingAt = landingAt || now;
+          if (now - landingAt >= 400) {
+            const worldWidth = width / scale;
+            const scoringX = Math.max(
+              0.2,
+              Math.min(worldWidth - 0.2, position.x),
+            );
+            let zoneStart = 0.2;
+            let landedZone = scoreZones[scoreZones.length - 1];
+            for (const zone of scoreZones) {
+              if (scoringX < zoneStart + zone.width) {
+                landedZone = zone;
+                break;
+              }
+              zoneStart += zone.width;
             }
-            zoneStart += zone.width;
+            const points = landedZone.points;
+            if (!dropFinalized) {
+              totalPoints += points;
+              if (totalDisplay) totalDisplay.textContent = String(totalPoints);
+              showEarnedPoints(points);
+              animateScoreNumber(totalDisplay);
+              if (scorePanel) scorePanel.hidden = false;
+              publishPlinkoState("score", points);
+              dropFinalized = true;
+            }
+            world.destroyBody(catBody);
+            catActive = false;
+            spawnAt = now + 700;
+            landingAt = 0;
           }
-          const points = landedZone.points;
-          if (!dropFinalized) {
-            totalPoints += points;
-            if (totalDisplay) totalDisplay.textContent = String(totalPoints);
-            showEarnedPoints(points);
-            animateScoreNumber(totalDisplay);
-            if (scorePanel) scorePanel.hidden = false;
-            publishPlinkoState('score', points);
-            dropFinalized = true;
-          }
-          world.destroyBody(catBody);
-          catActive = false;
-          spawnAt = now + 700;
+        } else {
           landingAt = 0;
         }
-      } else {
-        landingAt = 0;
+      } else if (spawnAt && now >= spawnAt) {
+        spawnCat(width / scale);
+        spawnAt = 0;
       }
-    } else if (spawnAt && now >= spawnAt) {
-      spawnCat(width / scale);
-      spawnAt = 0;
-    }
-    drawBoard();
-    animationFrame = requestAnimationFrame(animate);
-  };
+      drawBoard();
+      animationFrame = requestAnimationFrame(animate);
+    };
 
-  const handleSettingsChange = () => {
-    const nextExtremeMode = getSettings().plinkoExtremeMode;
-    if (nextExtremeMode === extremeMode) return;
-    extremeMode = nextExtremeMode;
-    if (plinkoMain) plinkoMain.dataset.extremeMode = String(extremeMode);
+    const handleSettingsChange = () => {
+      const nextExtremeMode = getSettings().plinkoExtremeMode;
+      if (nextExtremeMode === extremeMode) return;
+      extremeMode = nextExtremeMode;
+      if (plinkoMain) plinkoMain.dataset.extremeMode = String(extremeMode);
+      resizeCanvas();
+      publishPlinkoState("mode-change");
+    };
+
+    cat.addEventListener("load", drawBoard);
+    window.addEventListener("theme-cats:change", updateThemeCat);
+    resetButton?.addEventListener("click", resetSimulation);
+    window.addEventListener("resize", resizeCanvas);
+    window.addEventListener(CHANGE_EVENT, handleSettingsChange);
     resizeCanvas();
-    publishPlinkoState('mode-change');
+    animationFrame = requestAnimationFrame(animate);
+    publishPlinkoState("ready");
+    document.addEventListener(
+      "astro:before-swap",
+      () => {
+        clearEarnedPoints();
+        cancelAnimationFrame(animationFrame);
+        window.removeEventListener("resize", resizeCanvas);
+        window.removeEventListener("theme-cats:change", updateThemeCat);
+        window.removeEventListener(CHANGE_EVENT, handleSettingsChange);
+        resetButton?.removeEventListener("click", resetSimulation);
+        cat.removeEventListener("load", drawBoard);
+        if (initializedCanvas === canvas) initializedCanvas = null;
+      },
+      { once: true },
+    );
   };
 
-  cat.addEventListener('load', drawBoard);
-  window.addEventListener('theme-cats:change', updateThemeCat);
-  resetButton?.addEventListener('click', resetSimulation);
-  window.addEventListener('resize', resizeCanvas);
-  window.addEventListener(CHANGE_EVENT, handleSettingsChange);
-  resizeCanvas();
-  animationFrame = requestAnimationFrame(animate);
-  publishPlinkoState('ready');
-  document.addEventListener('astro:before-swap', () => {
-    clearEarnedPoints();
-    cancelAnimationFrame(animationFrame);
-    window.removeEventListener('resize', resizeCanvas);
-    window.removeEventListener('theme-cats:change', updateThemeCat);
-    window.removeEventListener(CHANGE_EVENT, handleSettingsChange);
-    resetButton?.removeEventListener('click', resetSimulation);
-    cat.removeEventListener('load', drawBoard);
-    if (initializedCanvas === canvas) initializedCanvas = null;
-  }, { once: true });
-  };
-
-  document.addEventListener('astro:page-load', initializePlinko);
+  document.addEventListener("astro:page-load", initializePlinko);
   initializePlinko();
 </script>

@@ -94,7 +94,7 @@ export const characters: Character[] = [
     slug: 'praxor-v1',
     group: 'main',
     quote: '"I\'ve got swag, not your dumbass!"',
-    image: '/media/ocs/praxor-v1.png',
+    image: '/media/ocs/pv1.png',
     info: [
       { label: 'age', value: '17' },
       { label: 'race', value: 'Machine' },
@@ -119,7 +119,7 @@ export const characters: Character[] = [
     slug: 'praxor-v2',
     group: 'main',
     quote: '"...and I\'m the bad guy here, huh?"',
-    image: '/media/ocs/praxor-v2.png',
+    image: '/media/ocs/pv2.png',
     info: [
       { label: 'age', value: '24' },
       { label: 'race', value: 'Machine...?' },
@@ -144,7 +144,7 @@ export const characters: Character[] = [
     slug: 'praxor-irl',
     group: 'main',
     quote: '"It\'s you."',
-    image: '/media/ocs/praxor-irl.png',
+    image: '/media/ocs/preal.png',
     info: [
       { label: 'age', value: '18 (as of writing this)' },
       { label: 'race', value: 'Human' },
@@ -165,22 +165,44 @@ export const characters: Character[] = [
     design: 'praxor',
   },
   {
-    name: 'Purnid ★',
-    slug: 'purnid',
-    group: 'misc',
-    ...placeholder,
-  },
-  {
     name: 'Mr. Red',
     slug: 'mr-red',
     group: 'misc',
-    ...placeholder,
+    quote: '[character quote]',
+    image: '/media/ocs/red.png',
+    info: placeholderInfo,
+    references: [
+      {
+        image: '/media/references/mrred.png',
+        caption: 'Mr. Red. Evil. Aaaaugh. He looks ugly in this picture cause Roblox hates their playerbase.',
+        alt: 'Mr. Red. Evil. Aaaaugh. He looks ugly in this picture cause Roblox hates their playerbase.'
+      }
+    ],
+    introduction: '[write an introduction here]',
+    backstory: '[write the backstory here]',
+    credits: 'praxor',
+    creation: 'praxor',
+    design: 'praxor',
   },
   {
     name: 'The Praxor Cat(tm)',
     slug: 'the-praxor-cat',
     group: 'misc',
-    ...placeholder,
+    quote: '[character quote]',
+    image: '/media/ocs/theguy.png',
+    info: placeholderInfo,
+    references: [
+      {
+        image: '',
+        caption: '',
+        alt: ''
+      }
+    ],
+    introduction: '[write an introduction here]',
+    backstory: '[write the backstory here]',
+    credits: '[add name(s)]',
+    creation: '[add name(s)]',
+    design: '[add name(s)]',
   },
   {
     name: 'Pubbly',
@@ -196,9 +218,9 @@ export const characters: Character[] = [
     ],
     references: [
       {
-        image: '',
-        caption: '',
-        alt: ''
+        image: '/media/references/pubbly.png',
+        caption: 'Pubbly. Pubbles roblox. He had a cinnamon stick cigar, but Roblox (rightfully) took it away. How unjustified.',
+        alt: 'Pubbly. Pubbles roblox. He had a cinnamon stick cigar, but Roblox (rightfully) took it away. How unjustified.'
       }
     ],
     introduction: 'TBD',
@@ -209,38 +231,113 @@ export const characters: Character[] = [
     name: 'High-Intelligence Business Noob',
     slug: 'high-intelligence-business-noob',
     group: 'misc',
-    ...placeholder,
-  },
-  {
-    name: 'Mr. Black',
-    slug: 'mr-black',
-    group: 'misc',
-    ...placeholder,
-  },
-  {
-    name: 'Curse',
-    slug: 'curse',
-    group: 'misc',
-    ...placeholder,
-  },
-  {
-    name: 'Prophet',
-    slug: 'prophet',
-    group: 'misc',
-    ...placeholder,
+    quote: '[character quote]',
+    image: '/media/ocs/noob.png',
+    info: placeholderInfo,
+    references: [
+      {
+        image: '',
+        caption: '',
+        alt: ''
+      }
+    ],
+    introduction: '[write an introduction here]',
+    backstory: '[write the backstory here]',
+    credits: '[add name(s)]',
+    creation: '[add name(s)]',
+    design: '[add name(s)]',
   },
   {
     name: 'Detective White',
     slug: 'detective-white',
     group: 'misc',
-    ...placeholder,
+    quote: '[character quote]',
+    image: '/media/ocs/yin.png',
+    info: placeholderInfo,
+    references: [
+      {
+        image: '',
+        caption: '',
+        alt: ''
+      }
+    ],
+    introduction: '[write an introduction here]',
+    backstory: '[write the backstory here]',
+    credits: '[add name(s)]',
+    creation: '[add name(s)]',
+    design: '[add name(s)]',
+  },
+  {
+    name: 'Mr. Black',
+    slug: 'mr-black',
+    group: 'misc',
+    quote: '[character quote]',
+    image: '/media/ocs/yang.png',
+    info: placeholderInfo,
+    references: [
+      {
+        image: '',
+        caption: '',
+        alt: ''
+      }
+    ],
+    introduction: '[write an introduction here]',
+    backstory: '[write the backstory here]',
+    credits: '[add name(s)]',
+    creation: '[add name(s)]',
+    design: '[add name(s)]',
+  },
+  {
+    name: 'Curse',
+    slug: 'curse',
+    group: 'misc',
+    quote: '"..."',
+    image: '/media/ocs/curse.png',
+    info: [
+      { label: 'age', value: '~700' },
+      { label: 'race', value: 'Flesh' },
+      { label: 'technical name', value: 'Curse' },
+      { label: 'nickname', value: '\'The Silence\'' },
+    ],
+    references: [
+      {
+        image: '',
+        caption: '',
+        alt: ''
+      }
+    ],
+    introduction: 'Hell\'s incarnation. This little spikeball of joy and whimsy is honestly... terrifying... in a way... He\'s got no skin. He\'s also kinda made out of flesh and stuff.',
+    backstory: '[write the backstory here]',
+    credits: 'praxor',
+    creation: 'praxor',
+    design: 'praxor + whoever in catalog made that fit lmao',
+  },
+  {
+    name: 'Prophet',
+    slug: 'prophet',
+    group: 'misc',
+    quote: '[character quote]',
+    image: '/media/ocs/prophet.png',
+    info: placeholderInfo,
+    references: [
+      {
+        image: '',
+        caption: '',
+        alt: ''
+      }
+    ],
+    introduction: '[write an introduction here]',
+    backstory: '[write the backstory here]',
+    credits: 'praxor, toohi',
+    creation: 'praxor',
+    design: 'praxor',
   },
   {
     name: 'Mr. Cake',
     slug: 'mrcake',
     group: 'misc',
     quote: '\"Yum!\"',
-    image: '/media/ocs/mrcake.png',
+    image: '/media/ocs/cake.png',
     info: [
       { label: 'age', value: 'unknown' },
       { label: 'race', value: 'Cake' },
@@ -249,9 +346,9 @@ export const characters: Character[] = [
     ],
     references: [
       {
-        image: '',
-        caption: '',
-        alt: ''
+        image: '/media/references/mrcake.png',
+        caption: 'Mr. Cake on Roblox. Roblox avatar. Yay.',
+        alt: 'Mr. Cake on Roblox. Roblox avatar. Yay.'
       }
     ],
     introduction: 'He\'s... a slice of cake... God...\nAside from the fact he\'s a clear piece of cake, he\'s quite literally packing with the muscle. Nothing much is known about him (at the moment at least), but his vanilla ice cream frosting and cake flesh that\'s nothing short of white and delicacy.',

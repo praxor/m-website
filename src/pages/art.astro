@@ -1,17 +1,3 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import ArtGrid from '../components/ArtGrid.astro';
-import { fanartOptions } from '../data/fanart';
+return Astro.redirect("/about");
 ---
-<Layout title="art" description="check out my wonderful fanart.">
-    <main class="wrap">
-      <section class="card">
-        <div class="center-contents">
-          <h1>art</h1>
-          <p class="lead">all of my fanarts collected throughout some time. thank you to those who've supported me.</p>
-          <br>
-        </div>
-        <ArtGrid items={fanartOptions} />
-      </section>
-    </main>
-</Layout>

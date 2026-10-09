@@ -5,17 +5,40 @@ const base = import.meta.env.BASE_URL;
 <section class="home-shell" aria-label="Home page contents">
   <div class="motd" role="note">
     <span class="motd-label">MOTD</span>
-    <p>"welcome to the same exact thing that keeps me up until 5 am on a school night" -praxor</p>
+    <p>
+      "welcome to the same exact thing that keeps me up until 5 am on a school
+      night" -praxor
+    </p>
   </div>
   <div class="home-layout">
     <aside class="site-index" aria-labelledby="site-index-title">
       <h2 id="site-index-title">contents</h2>
       <nav aria-label="contents">
         <ul>
-          <li><a href={`${base}characters/`}><strong>characters</strong><span>my original characters</span></a></li>
-          <li><a href={`${base}plinko/`}><strong>plinko</strong><span>...plinko? What</span></a></li>
-          <li><a href={`${base}music/`}><strong>music</strong><span>listen to music</span></a></li>
-          <li><a href={`${base}about/`}><strong>about</strong><span>get to know me.</span></a></li>
+          <li>
+            <a href={`${base}characters/`}>
+              <strong>characters</strong>
+              <span>my original characters</span>
+            </a>
+          </li>
+          <li>
+            <a href={`${base}plinko/`}>
+              <strong>plinko</strong>
+              <span>...plinko? What</span>
+            </a>
+          </li>
+          <li>
+            <a href={`${base}music/`}>
+              <strong>music</strong>
+              <span>listen to music</span>
+            </a>
+          </li>
+          <li>
+            <a href={`${base}about/`}>
+              <strong>about</strong>
+              <span>get to know me.</span>
+            </a>
+          </li>
         </ul>
       </nav>
     </aside>
@@ -24,26 +47,133 @@ const base = import.meta.env.BASE_URL;
 </section>
 
 <style>
-  .home-shell{border:1px solid var(--muted-border);background:var(--card);animation:frame-in .62s cubic-bezier(.2,.9,.3,1) .12s both}
-  .motd{display:flex;align-items:baseline;gap:14px;padding:11px 16px;border-bottom:1px solid var(--muted-border);animation:frame-in .42s ease .2s both}
-  .motd-label{flex:0 0 auto;color:var(--accent);font-size:.7rem;font-weight:700;letter-spacing:.12em}
-  .motd p{margin:0;color:var(--muted);font-size:.9rem}
-  .home-layout{display:grid;grid-template-columns:minmax(150px,0.19fr) minmax(0,1fr);min-height:380px}
-  .site-index{padding:19px 14px;border-right:1px solid var(--muted-border);animation:frame-in .48s ease .26s both}
-  .site-index h2{margin:0 0 13px;color:var(--text);font-size:.85rem;font-weight:700}
-  .site-index ul{display:grid;gap:2px;margin:0;padding:0;list-style:none}
-  .site-index li{opacity:0;animation:frame-in .36s ease both}
-  .site-index li:nth-child(1){animation-delay:.3s}.site-index li:nth-child(2){animation-delay:.36s}.site-index li:nth-child(3){animation-delay:.42s}.site-index li:nth-child(4){animation-delay:.48s}.site-index li:nth-child(5){animation-delay:.54s}.site-index li:nth-child(6){animation-delay:.6s}
-  .site-index a{display:grid;gap:2px;padding:8px 7px;border-left:2px solid transparent;color:var(--text);text-decoration:none}
-  .site-index a:focus-visible{border-left-color:var(--accent);background:var(--accent-10)}
-  .site-index a strong{font-size:.82rem;font-weight:650}
-  .site-index a span{color:var(--muted);font-size:.72rem;line-height:1.35}
-  @keyframes frame-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-  @media(max-width:700px){
-    .home-layout{grid-template-columns:1fr}
-    .site-index{padding:14px;border-right:0;border-bottom:1px solid var(--muted-border)}
-    .site-index ul{grid-template-columns:repeat(2,minmax(0,1fr));gap:2px 8px}
-    .site-index a{padding:7px 6px}
+  /* Component styles: home frame */
+  .home-shell {
+    border: 1px solid var(--muted-border);
+    background: var(--card);
+    animation: frame-in 0.62s cubic-bezier(0.2, 0.9, 0.3, 1) 0.12s both;
   }
-  @media(prefers-reduced-motion:reduce){.home-shell,.motd,.site-index,.site-index li{animation:none;opacity:1;transform:none}}
+  .motd {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--muted-border);
+    animation: frame-in 0.42s ease 0.2s both;
+  }
+  .motd-label {
+    flex: 0 0 auto;
+    color: var(--accent);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+  }
+  .motd p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+  .home-layout {
+    display: grid;
+    grid-template-columns: minmax(150px, 0.19fr) minmax(0, 1fr);
+    min-height: 380px;
+  }
+  .site-index {
+    padding: 19px 14px;
+    border-right: 1px solid var(--muted-border);
+    animation: frame-in 0.48s ease 0.26s both;
+  }
+  .site-index h2 {
+    margin: 0 0 13px;
+    color: var(--text);
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+  .site-index ul {
+    display: grid;
+    gap: 2px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .site-index li {
+    opacity: 0;
+    animation: frame-in 0.36s ease both;
+  }
+  .site-index li:nth-child(1) {
+    animation-delay: 0.3s;
+  }
+  .site-index li:nth-child(2) {
+    animation-delay: 0.36s;
+  }
+  .site-index li:nth-child(3) {
+    animation-delay: 0.42s;
+  }
+  .site-index li:nth-child(4) {
+    animation-delay: 0.48s;
+  }
+  .site-index li:nth-child(5) {
+    animation-delay: 0.54s;
+  }
+  .site-index li:nth-child(6) {
+    animation-delay: 0.6s;
+  }
+  .site-index a {
+    display: grid;
+    gap: 2px;
+    padding: 8px 7px;
+    border-left: 2px solid transparent;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .site-index a:focus-visible {
+    border-left-color: var(--accent);
+    background: var(--accent-10);
+  }
+  .site-index a strong {
+    font-size: 0.82rem;
+    font-weight: 650;
+  }
+  .site-index a span {
+    color: var(--muted);
+    font-size: 0.72rem;
+    line-height: 1.35;
+  }
+  @keyframes frame-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @media (max-width: 700px) {
+    .home-layout {
+      grid-template-columns: 1fr;
+    }
+    .site-index {
+      padding: 14px;
+      border-right: 0;
+      border-bottom: 1px solid var(--muted-border);
+    }
+    .site-index ul {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 2px 8px;
+    }
+    .site-index a {
+      padding: 7px 6px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .home-shell,
+    .motd,
+    .site-index,
+    .site-index li {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
 </style>

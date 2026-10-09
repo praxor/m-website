@@ -1,117 +1,437 @@
 ﻿---
-import AchievementNotifications from './AchievementNotifications.astro';
+import AchievementNotifications from "./AchievementNotifications.astro";
 ---
 
-<div class="settings-menu" data-settings-menu transition:persist="settings-menu" transition:animate="none">
+<div
+  class="settings-menu"
+  data-settings-menu
+  transition:persist="settings-menu"
+  transition:animate="none"
+>
   <div class="sm-overlay" data-sm-overlay data-open="false">
-    <div id="settings-panel" class="sm-panel" role="dialog" aria-modal="true" aria-labelledby="sm-title">
+    <div
+      id="settings-panel"
+      class="sm-panel"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="sm-title"
+    >
       <div class="sm-head">
-        <h2 id="sm-title" class="sm-title">menu</h2>
+        <h2 id="sm-title" class="sm-title">
+          menu
+        </h2>
         <div class="sm-tabs" role="tablist" aria-label="Menu sections">
-          <button id="sm-tab-info" class="sm-tab" type="button" role="tab" aria-selected="true" aria-controls="sm-view-info" data-tab="info">Info</button>
-          <button id="sm-tab-achievements" class="sm-tab" type="button" role="tab" aria-selected="false" aria-controls="sm-view-achievements" tabindex="-1" data-tab="achievements">Achievements</button>
-          <button id="sm-tab-settings" class="sm-tab" type="button" role="tab" aria-selected="false" aria-controls="sm-view-settings" tabindex="-1" data-tab="settings">Settings</button>
+          <button
+            id="sm-tab-info"
+            class="sm-tab"
+            type="button"
+            role="tab"
+            aria-selected="true"
+            aria-controls="sm-view-info"
+            data-tab="info"
+          >
+            Info
+          </button>
+          <button
+            id="sm-tab-achievements"
+            class="sm-tab"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            aria-controls="sm-view-achievements"
+            tabindex="-1"
+            data-tab="achievements"
+          >
+            Achievements
+          </button>
+          <button
+            id="sm-tab-settings"
+            class="sm-tab"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            aria-controls="sm-view-settings"
+            tabindex="-1"
+            data-tab="settings"
+          >
+            Settings
+          </button>
         </div>
-        <button class="sm-close" type="button" aria-label="Close menu" data-sm-close>&#10005;</button>
+        <button
+          class="sm-close"
+          type="button"
+          aria-label="Close menu"
+          data-sm-close
+        >
+          &#10005;
+        </button>
       </div>
 
-      <div id="sm-view-info" class="sm-view sm-info-view" role="tabpanel" aria-labelledby="sm-tab-info" tabindex="0">
+      <div
+        id="sm-view-info"
+        class="sm-view sm-info-view"
+        role="tabpanel"
+        aria-labelledby="sm-tab-info"
+        tabindex="0"
+      >
         <div class="sm-info-layout">
           <div class="sm-info-controls">
-              <p class="sm-info-intro">Music player shortcuts</p>
-              <ul class="sm-shortcuts">
-                <li><span class="sm-shortcut-keys"><kbd>Space</kbd><span>/</span><kbd>K</kbd></span><span>Play or pause</span></li>
-                <li><span class="sm-shortcut-keys"><kbd>J</kbd><span>/</span><kbd>L</kbd></span><span>Seek 10 seconds</span></li>
-                <li><span class="sm-shortcut-keys"><kbd>←</kbd><span>/</span><kbd>→</kbd></span><span>Seek 5 seconds</span></li>
-                <li><span class="sm-shortcut-keys"><kbd>↑</kbd><span>/</span><kbd>↓</kbd></span><span>Adjust volume</span></li>
-                <li><span class="sm-shortcut-keys"><kbd>M</kbd></span><span>Mute</span></li>
-                <li><span class="sm-shortcut-keys"><kbd>N</kbd><span>/</span><kbd>P</kbd></span><span>Next or previous</span></li>
-                <li><span class="sm-shortcut-keys"><kbd>S</kbd><span>/</span><kbd>R</kbd></span><span>Shuffle or repeat</span></li>
-                <li><span class="sm-shortcut-keys"><kbd>0-9</kbd></span><span>Seek to a percentage</span></li>
-              </ul>
-            </div>
-            <div class="sm-info-stage" data-info-stage aria-hidden="true">
-              <span class="sm-info-shadow" data-info-shadow></span>
-              <img class="sm-info-praxor" data-info-praxor src="/media/res/oraxor.png" alt="" width="120" height="120" decoding="async" />
+            <p class="sm-info-intro">Music player shortcuts</p>
+            <ul class="sm-shortcuts">
+              <li>
+                <span class="sm-shortcut-keys">
+                  <kbd>Space</kbd>
+                  <span>/</span>
+                  <kbd>K</kbd>
+                </span>
+                <span>Play or pause</span>
+              </li>
+              <li>
+                <span class="sm-shortcut-keys">
+                  <kbd>J</kbd>
+                  <span>/</span>
+                  <kbd>L</kbd>
+                </span>
+                <span>Seek 10 seconds</span>
+              </li>
+              <li>
+                <span class="sm-shortcut-keys">
+                  <kbd>←</kbd>
+                  <span>/</span>
+                  <kbd>→</kbd>
+                </span>
+                <span>Seek 5 seconds</span>
+              </li>
+              <li>
+                <span class="sm-shortcut-keys">
+                  <kbd>↑</kbd>
+                  <span>/</span>
+                  <kbd>↓</kbd>
+                </span>
+                <span>Adjust volume</span>
+              </li>
+              <li>
+                <span class="sm-shortcut-keys">
+                  <kbd>M</kbd>
+                </span>
+                <span>Mute</span>
+              </li>
+              <li>
+                <span class="sm-shortcut-keys">
+                  <kbd>N</kbd>
+                  <span>/</span>
+                  <kbd>P</kbd>
+                </span>
+                <span>Next or previous</span>
+              </li>
+              <li>
+                <span class="sm-shortcut-keys">
+                  <kbd>S</kbd>
+                  <span>/</span>
+                  <kbd>R</kbd>
+                </span>
+                <span>Shuffle or repeat</span>
+              </li>
+              <li>
+                <span class="sm-shortcut-keys">
+                  <kbd>0-9</kbd>
+                </span>
+                <span>Seek to a percentage</span>
+              </li>
+            </ul>
+          </div>
+          <div class="sm-info-stage" data-info-stage aria-hidden="true">
+            <span class="sm-info-shadow" data-info-shadow></span>
+            <img
+              class="sm-info-praxor"
+              data-info-praxor
+              src="/media/res/oraxor.png"
+              alt=""
+              width="120"
+              height="120"
+              decoding="async"
+            />
           </div>
         </div>
       </div>
 
-      <div id="sm-view-achievements" class="sm-view" role="tabpanel" aria-labelledby="sm-tab-achievements" tabindex="0" hidden>
+      <div
+        id="sm-view-achievements"
+        class="sm-view"
+        role="tabpanel"
+        aria-labelledby="sm-tab-achievements"
+        tabindex="0"
+        hidden
+      >
         <div class="sm-summary" data-sm-summary></div>
         <ul class="sm-achievements" data-sm-achievements></ul>
       </div>
 
-      <div id="sm-view-settings" class="sm-view sm-settings-view" role="tabpanel" aria-labelledby="sm-tab-settings" tabindex="0" hidden>
+      <div
+        id="sm-view-settings"
+        class="sm-view sm-settings-view"
+        role="tabpanel"
+        aria-labelledby="sm-tab-settings"
+        tabindex="0"
+        hidden
+      >
         <fieldset class="sm-group sm-theme-group">
           <legend>Site Themes</legend>
+          <div
+            class="sm-theme-modes"
+            role="group"
+            aria-label="Theme appearance"
+          >
+            <button
+              class="sm-theme-mode"
+              type="button"
+              data-theme-mode="dark"
+              aria-pressed="true"
+            >
+              Dark
+            </button>
+            <button
+              class="sm-theme-mode"
+              type="button"
+              data-theme-mode="light"
+              aria-pressed="false"
+            >
+              Light
+            </button>
+          </div>
           <div class="sm-theme-carousel" data-sm-theme-carousel>
             <div class="sm-carousel-controls">
-              <button class="sm-carousel-nav" type="button" data-sm-previous aria-label="Previous theme" title="Previous theme">&#8249;</button>
-              <span class="sm-carousel-position" data-sm-carousel-position aria-live="polite"></span>
-              <button class="sm-carousel-nav" type="button" data-sm-next aria-label="Next theme" title="Next theme">&#8250;</button>
+              <button
+                class="sm-carousel-nav"
+                type="button"
+                data-sm-previous
+                aria-label="Previous theme"
+                title="Previous theme"
+              >
+                &#8249;
+              </button>
+              <span
+                class="sm-carousel-position"
+                data-sm-carousel-position
+                aria-live="polite"
+              ></span>
+              <button
+                class="sm-carousel-nav"
+                type="button"
+                data-sm-next
+                aria-label="Next theme"
+                title="Next theme"
+              >
+                &#8250;
+              </button>
             </div>
-            <div class="sm-carousel-viewport" data-sm-carousel-viewport tabindex="0" aria-label="Theme previews">
-              <div class="sm-carousel-track" data-sm-themes role="list" aria-label="Theme choices"></div>
+            <div
+              class="sm-carousel-viewport"
+              data-sm-carousel-viewport
+              tabindex="0"
+              aria-label="Theme previews"
+            >
+              <div
+                class="sm-carousel-track"
+                data-sm-themes
+                role="list"
+                aria-label="Theme choices"
+              ></div>
             </div>
-            <div class="sm-carousel-dots" data-sm-carousel-dots role="group" aria-label="Theme preview positions"></div>
+            <div
+              class="sm-carousel-dots"
+              data-sm-carousel-dots
+              role="group"
+              aria-label="Theme preview positions"
+            ></div>
           </div>
         </fieldset>
 
-        <div class="sm-settings-tabs" role="tablist" aria-label="Settings categories">
-          <button id="sm-settings-tab-fun" class="sm-settings-tab" type="button" role="tab" aria-selected="true" aria-controls="sm-settings-fun" data-settings-subtab="fun">Fun</button>
-          <button id="sm-settings-tab-accessibility" class="sm-settings-tab" type="button" role="tab" aria-selected="false" aria-controls="sm-settings-accessibility" tabindex="-1" data-settings-subtab="accessibility">Accessibility</button>
+        <div
+          class="sm-settings-tabs"
+          role="tablist"
+          aria-label="Settings categories"
+        >
+          <button
+            id="sm-settings-tab-fun"
+            class="sm-settings-tab"
+            type="button"
+            role="tab"
+            aria-selected="true"
+            aria-controls="sm-settings-fun"
+            data-settings-subtab="fun"
+          >
+            Fun
+          </button>
+          <button
+            id="sm-settings-tab-accessibility"
+            class="sm-settings-tab"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            aria-controls="sm-settings-accessibility"
+            tabindex="-1"
+            data-settings-subtab="accessibility"
+          >
+            Accessibility
+          </button>
         </div>
 
-        <div id="sm-settings-fun" class="sm-settings-subview" role="tabpanel" aria-labelledby="sm-settings-tab-fun">
+        <div
+          id="sm-settings-fun"
+          class="sm-settings-subview"
+          role="tabpanel"
+          aria-labelledby="sm-settings-tab-fun"
+        >
           <label class="sm-row">
-            <span class="sm-row-text"><span class="sm-row-title">Plinko Extreme Mode</span><span class="sm-row-hint">Makes the Plinko board Bigger and Badder.</span></span>
-            <input class="sm-switch" type="checkbox" role="switch" data-setting="plinkoExtremeMode" />
+            <span class="sm-row-text">
+              <span class="sm-row-title">Plinko Extreme Mode</span>
+              <span class="sm-row-hint">
+                Makes the Plinko board Bigger and Badder.
+              </span>
+            </span>
+            <input
+              class="sm-switch"
+              type="checkbox"
+              role="switch"
+              data-setting="plinkoExtremeMode"
+            />
           </label>
           <label class="sm-row sm-disabled-setting" aria-disabled="true">
-            <span class="sm-row-text"><span class="sm-row-title">???</span><span class="sm-row-hint">???</span></span>
-            <input class="sm-switch" type="checkbox" role="switch" disabled aria-label="Unavailable setting" data-mystery-switch />
+            <span class="sm-row-text">
+              <span class="sm-row-title">???</span>
+              <span class="sm-row-hint">???</span>
+            </span>
+            <input
+              class="sm-switch"
+              type="checkbox"
+              role="switch"
+              disabled
+              aria-label="Unavailable setting"
+              data-mystery-switch
+            />
           </label>
         </div>
 
-        <div id="sm-settings-accessibility" class="sm-settings-subview" role="tabpanel" aria-labelledby="sm-settings-tab-accessibility" hidden>
+        <div
+          id="sm-settings-accessibility"
+          class="sm-settings-subview"
+          role="tabpanel"
+          aria-labelledby="sm-settings-tab-accessibility"
+          hidden
+        >
           <fieldset class="sm-group">
             <legend>Accessibility</legend>
-          <label class="sm-row">
-            <span class="sm-row-text"><span class="sm-row-title">Force Theme</span><span class="sm-row-hint">Override page-specific themes with the selected theme.</span></span>
-            <input class="sm-switch" type="checkbox" role="switch" data-setting="forceTheme" />
-          </label>
-          <label class="sm-row">
-            <span class="sm-row-text"><span class="sm-row-title">Reduced Motion</span><span class="sm-row-hint">Minimize animations and movement.</span></span>
-            <input class="sm-switch" type="checkbox" role="switch" data-setting="reducedMotion" />
-          </label>
+            <label class="sm-row">
+              <span class="sm-row-text">
+                <span class="sm-row-title">Force Theme</span>
+                <span class="sm-row-hint">
+                  Override page-specific themes with the selected theme.
+                </span>
+              </span>
+              <input
+                class="sm-switch"
+                type="checkbox"
+                role="switch"
+                data-setting="forceTheme"
+              />
+            </label>
+            <label class="sm-row">
+              <span class="sm-row-text">
+                <span class="sm-row-title">Reduced Motion</span>
+                <span class="sm-row-hint">
+                  Minimize animations and movement.
+                </span>
+              </span>
+              <input
+                class="sm-switch"
+                type="checkbox"
+                role="switch"
+                data-setting="reducedMotion"
+              />
+            </label>
           </fieldset>
         </div>
 
-        <div class="sm-danger-zone sm-settings-danger sm-theme-profile" data-site-theme="praxorian">
+        <div
+          class="sm-danger-zone sm-settings-danger sm-theme-profile"
+          data-site-theme="praxorian"
+        >
           <div class="sm-danger-title">Danger Zone</div>
-          <button class="sm-danger" type="button" data-sm-reset>Reset Data</button>
+          <button class="sm-danger" type="button" data-sm-reset>
+            Reset Data
+          </button>
         </div>
       </div>
     </div>
 
     <div class="sm-confirm" data-sm-confirm data-open="false">
-      <div class="sm-confirm-panel" role="alertdialog" aria-modal="true" aria-labelledby="sm-confirm-title" aria-describedby="sm-confirm-desc">
+      <div
+        class="sm-confirm-panel"
+        role="alertdialog"
+        aria-modal="true"
+        aria-labelledby="sm-confirm-title"
+        aria-describedby="sm-confirm-desc"
+      >
         <div class="sm-confirm-head">
-          <div id="sm-confirm-title" class="sm-confirm-title" role="heading" aria-level="2">Reset your saved data?</div>
-          <button class="sm-confirm-close" type="button" data-sm-confirm-close aria-label="Close reset confirmation" title="Close">
-            <svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8" /></svg>
+          <div
+            id="sm-confirm-title"
+            class="sm-confirm-title"
+            role="heading"
+            aria-level="2"
+          >
+            Reset your saved data?
+          </div>
+          <button
+            class="sm-confirm-close"
+            type="button"
+            data-sm-confirm-close
+            aria-label="Close reset confirmation"
+            title="Close"
+          >
+            <svg
+              viewBox="0 0 16 16"
+              width="15"
+              height="15"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <path d="m4 4 8 8M12 4l-8 8" />
+            </svg>
           </button>
         </div>
         <div id="sm-confirm-desc" class="sm-confirm-desc">
-          <div>This will reset pretty much <strong>ALL</strong> of your progress on the site.</div>
-          <div>This includes achievements, unlocked themes, and settings toggled. <i>It will all be zero.</i></div>
-          <div class="sm-confirm-warn">I cannot restore your data, I don't care about your data. If you're speedrunning, just start your timer after the prompt, lol.</div>
+          <div>
+            This will reset pretty much <strong>ALL</strong> of your progress on
+            the site.
+          </div>
+          <div>
+            This includes achievements, unlocked themes, and settings toggled.{" "}
+            <i>It will all be zero.</i>
+          </div>
+          <div class="sm-confirm-warn">
+            I cannot restore your data, I don't care about your data. If you're
+            speedrunning, just start your timer after the prompt, lol.
+          </div>
         </div>
         <div class="sm-confirm-actions">
-          <button class="sm-confirm-btn" type="button" data-sm-confirm-btn aria-label="Hold to Confirm">
-            <span class="sm-confirm-progress" data-sm-confirm-progress aria-hidden="true"></span>
-            <span class="sm-confirm-label" data-sm-confirm-label>Hold to Confirm</span>
+          <button
+            class="sm-confirm-btn"
+            type="button"
+            data-sm-confirm-btn
+            aria-label="Hold to Confirm"
+          >
+            <span
+              class="sm-confirm-progress"
+              data-sm-confirm-progress
+              aria-hidden="true"
+            ></span>
+            <span class="sm-confirm-label" data-sm-confirm-label>
+              Hold to Confirm
+            </span>
           </button>
         </div>
       </div>
@@ -122,208 +442,1324 @@ import AchievementNotifications from './AchievementNotifications.astro';
 </div>
 
 <style is:global>
+  /* Component styles: settings menu */
   /* Same pattern as the music player shell: above all page layers, click-through except its children. */
-  .settings-menu{position:fixed;inset:0;z-index:300;pointer-events:none;view-transition-name:settings-menu}
-  ::view-transition-group(settings-menu),::view-transition-old(settings-menu),::view-transition-new(settings-menu){animation:none;mix-blend-mode:normal}
-  ::view-transition-old(settings-menu),::view-transition-new(settings-menu){opacity:1}
-  html.sm-open{overflow:hidden}
-  .sm-toggle{display:grid;place-items:center;width:34px;height:34px;padding:0;border:1px solid transparent;border-radius:8px;background:transparent;color:var(--muted);cursor:pointer;pointer-events:auto;transition:background-color .18s ease,color .18s ease,border-color .18s ease}
-  .sm-toggle:hover,.sm-toggle[aria-expanded="true"]{background:var(--accent-10);color:var(--text)}
-  .sm-toggle:focus-visible,.sm-tab:focus-visible,.sm-close:focus-visible,.sm-view:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-  .sm-overlay{position:absolute;inset:0;box-sizing:border-box;display:grid;place-items:center;padding:12px;background:var(--overlay);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .22s ease,visibility .22s ease}
-  .sm-overlay[data-open="true"]{opacity:1;visibility:visible;pointer-events:auto}
-  .sm-panel{box-sizing:border-box;width:min(680px,100%);min-width:0;max-height:min(720px,calc(100vh - 24px));max-height:min(720px,calc(100dvh - 24px));display:flex;flex-direction:column;background:var(--card);color:var(--text);border:1px solid var(--muted-border);border-radius:10px;box-shadow:0 24px 70px var(--shadow-strong),0 0 0 1px var(--accent-12);transform:translateY(10px) scale(.97);transition:transform .25s cubic-bezier(.2,.9,.3,1)}
-  .sm-overlay[data-open="true"] .sm-panel{transform:none}
-  .sm-head{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:8px;padding:10px 12px 0 18px;border-bottom:1px solid var(--muted-border)}
-  .sm-title{margin:0;color:var(--accent);font-size:1rem;font-weight:700;letter-spacing:.14em;text-transform:lowercase}
-  .sm-tabs{display:flex;align-items:center;justify-content:flex-end;min-width:0;gap:2px}
-  .sm-tab{padding:10px 9px;border:0;border-bottom:2px solid transparent;background:transparent;color:var(--muted);font:inherit;font-size:.82rem;font-weight:600;white-space:nowrap;cursor:pointer;transition:color .14s ease,border-color .14s ease,background-color .14s ease}
-  .sm-tab:hover{color:var(--text)}
-  .sm-tab[aria-selected="true"]{border-bottom-color:var(--accent);color:var(--text)}
-  .sm-close{width:32px;height:32px;margin-bottom:6px;padding:0;border:1px solid var(--muted-border);border-radius:50%;background:transparent;color:var(--muted);font-size:.85rem;cursor:pointer}
-  .sm-close:hover{border-color:var(--accent);color:var(--text)}
-  .sm-theme-group{padding:10px 18px 8px;border-bottom:1px solid var(--muted-border)}
-  .sm-view{box-sizing:border-box;display:flex;flex-direction:column;gap:16px;min-height:0;padding:18px;overflow-y:auto;transform-origin:top center}
-  .sm-info-view{align-self:center;width:min(460px,100%);max-height:min(380px,calc(100dvh - 90px));gap:10px}
-  .sm-settings-view{gap:12px}
-  .sm-view:not([hidden]){animation:sm-view-enter .2s cubic-bezier(.2,.8,.2,1) both}
-  .sm-view[hidden]{display:none}
-  .sm-view:not([hidden])>:is(.sm-group,.sm-row,.sm-locked-setting,.sm-danger-zone){animation:sm-row-enter .2s ease both}
-  .sm-view:not([hidden])>:nth-child(2){animation-delay:.025s}.sm-view:not([hidden])>:nth-child(3){animation-delay:.05s}.sm-view:not([hidden])>:nth-child(4){animation-delay:.075s}
-  @keyframes sm-view-enter{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
-  @keyframes sm-row-enter{from{opacity:.72;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
-  .sm-group{margin:0;padding:0;border:0;min-width:0}
-  .sm-settings-tabs{display:flex;gap:2px;border-bottom:1px solid var(--muted-border)}
-  .sm-settings-tab{padding:8px 10px;border:0;border-bottom:2px solid transparent;background:transparent;color:var(--muted);font:inherit;font-size:.76rem;font-weight:600;cursor:pointer}
-  .sm-settings-tab[aria-selected="true"]{border-bottom-color:var(--accent);color:var(--text)}
-  .sm-settings-tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-  .sm-settings-subview{display:flex;flex-direction:column;gap:10px;min-width:0}
-  .sm-settings-subview[hidden]{display:none}
-  .sm-info-intro{margin:0;color:var(--muted);font-size:.76rem}
-  .sm-shortcuts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px 14px;margin:0;padding:0;list-style:none}
-  .sm-shortcuts li{display:grid;grid-template-columns:minmax(90px,auto) minmax(0,1fr);align-items:center;gap:7px;color:var(--muted);font-size:.68rem}
-  .sm-shortcut-keys{display:flex;align-items:center;gap:4px;white-space:nowrap}
-  .sm-shortcut-keys>span{color:var(--muted);font-size:.64rem}
-  .sm-shortcuts kbd{justify-self:start;padding:2px 4px;border:1px solid var(--muted-border);border-radius:3px;color:var(--text);font:inherit;font-size:.64rem;white-space:nowrap}
-  .sm-info-stage{position:relative;display:grid;place-items:end center;height:72px;overflow:hidden}
-  .sm-info-praxor{position:relative;z-index:1;display:block;width:64px;height:64px;object-fit:contain;transform:translateY(0)}
-  .sm-info-shadow{position:absolute;bottom:6px;left:50%;width:96px;height:15px;border-radius:50%;background:radial-gradient(ellipse,rgba(0,0,0,.82),rgba(0,0,0,.28) 44%,rgba(0,0,0,0) 78%);filter:blur(1px);transform:translateX(-50%) scale(1);opacity:.3}
-  .settings-menu .sm-switch::after,.settings-menu .sm-carousel-dot::before,.settings-menu .sm-carousel-dot[aria-current="true"]::before{border-radius:0!important}
-  .sm-disabled-setting{opacity:.48;cursor:not-allowed}
-  .sm-disabled-setting .sm-switch{cursor:not-allowed;opacity:.6}
-  .sm-group legend{padding:0 0 8px;color:var(--accent);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
-  .sm-theme-carousel{display:flex;flex-direction:column;gap:7px}
-  .sm-carousel-controls{display:grid;grid-template-columns:32px 1fr 32px;align-items:center;gap:8px}
-  .sm-carousel-position{color:var(--muted);font-size:.68rem;font-variant-numeric:tabular-nums;text-align:center}
-  .sm-carousel-nav{display:grid;place-items:center;width:32px;height:28px;padding:0;border:1px solid var(--muted-border);border-radius:6px;background:var(--card);color:var(--text);font-size:1.2rem;line-height:1;cursor:pointer}
-  .sm-carousel-nav:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
-  .sm-carousel-nav:disabled{opacity:.35;cursor:default}
-  .sm-carousel-viewport{overflow:hidden;padding:3px 0;touch-action:pan-y;user-select:none;cursor:grab}
-  .sm-carousel-viewport[data-dragging="true"]{cursor:grabbing}
-  .sm-carousel-viewport:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-  .sm-carousel-track{display:flex;align-items:stretch;gap:12px;width:100%;transition:transform .3s cubic-bezier(.2,.8,.2,1);will-change:transform}
-  .sm-theme-slide{position:relative;flex:0 0 min(82%,420px);min-width:0}
-  .sm-theme-choice{position:relative;display:flex;flex-direction:column;gap:8px;width:100%;height:100%;padding:9px;border:1px solid var(--accent);border-radius:8px;background:linear-gradient(145deg,var(--bg),var(--card) 65%,color-mix(in srgb,var(--card) 76%,var(--accent)));color:var(--text);font:inherit;text-align:left;cursor:pointer;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--accent) 12%,transparent);transition:background .18s ease,border-color .18s ease,box-shadow .18s ease}
-  .sm-theme-choice:hover{background:linear-gradient(145deg,color-mix(in srgb,var(--bg) 76%,var(--accent)),color-mix(in srgb,var(--card) 82%,var(--accent)));box-shadow:0 0 0 1px var(--accent),0 6px 16px color-mix(in srgb,var(--accent) 20%,transparent)}
-  .sm-theme-choice[aria-checked="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent),0 0 16px color-mix(in srgb,var(--accent) 28%,transparent)}
-  .sm-theme-choice:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
-  .sm-theme-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:21px}
-  .sm-theme-name{font-size:.86rem;font-weight:800}
-  .sm-theme-selected{display:none;padding:3px 6px;border:1px solid var(--accent);border-radius:4px;color:var(--accent);font-size:.56rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
-  .sm-theme-choice[aria-checked="true"] .sm-theme-selected{display:block}
-  .sm-theme-lock{position:absolute;inset:7px;z-index:2;display:grid;place-content:center;gap:7px;padding:12px;border:1px solid color-mix(in srgb,var(--accent) 55%,var(--muted-border));border-radius:6px;background:color-mix(in srgb,var(--bg) 82%,transparent);color:var(--text);text-align:center;backdrop-filter:blur(3px)}
-  .sm-theme-lock[hidden]{display:none}
-  .sm-theme-lock-label{display:flex;align-items:center;justify-content:center;gap:6px;color:var(--accent);font-size:.68rem;font-weight:900;letter-spacing:.1em}
-  .sm-theme-lock-help{font-size:.67rem;line-height:1.35}
-  .sm-carousel-dots{display:flex;justify-content:center;align-items:center;gap:1px;min-height:24px}
-  .sm-carousel-dot{position:relative;flex:0 0 22px;width:22px;height:22px;padding:0;border:0;border-radius:50%;background:transparent;cursor:pointer}
-  .sm-carousel-dot::before{position:absolute;top:8px;right:8px;bottom:8px;left:8px;border-radius:50%;background:var(--muted-border);content:"";transition:top .18s ease,right .18s ease,bottom .18s ease,left .18s ease,background-color .18s ease}
-  .sm-carousel-dot[aria-current="true"]::before{top:8px;right:3px;bottom:8px;left:3px;border-radius:5px;background:var(--accent)}
-  .sm-carousel-dot:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-  :root[data-reduced-motion="true"] .sm-carousel-track,:root[data-reduced-motion="true"] .sm-carousel-dot{transition:none}
-  @media(prefers-reduced-motion:reduce){.sm-carousel-track,.sm-carousel-dot{transition:none}}
-  .sm-row{display:flex;align-items:center;justify-content:space-between;gap:14px;cursor:pointer}
-  .sm-row-text{display:flex;flex-direction:column;gap:2px;min-width:0}
-  .sm-row-title{font-size:.92rem;font-weight:600}
-  .sm-row-hint{color:var(--muted);font-size:.78rem;line-height:1.35}
-  .sm-locked-setting{padding:10px;border:1px solid var(--muted-border);border-radius:6px;opacity:.72;transition:opacity .2s ease,border-color .2s ease,background-color .2s ease}
-  .sm-locked-setting[data-unlocked="true"]{border-color:var(--accent);background:var(--accent-10);opacity:1}
-  .sm-lock-state{display:inline-flex;align-items:center;gap:6px;flex:0 0 auto;color:var(--muted);font-size:.65rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;transition:color .2s ease}
-  .sm-locked-setting[data-unlocked="true"] .sm-lock-state{color:var(--accent)}
-  .sm-lock-icon{display:block;width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s ease,opacity .2s ease}
-  .sm-locked-setting[data-unlocked="true"] .sm-lock-icon{opacity:0;transform:scale(.8)}
-  .sm-switch{appearance:none;position:relative;flex:0 0 40px;width:40px;height:23px;margin:0;border:1px solid var(--muted-border);border-radius:999px;background:var(--accent-10);cursor:pointer;transition:background-color .18s ease,border-color .18s ease,box-shadow .18s ease}
-  .sm-switch::after{content:"";position:absolute;top:2px;left:2px;width:17px;height:17px;border-radius:50%;background:var(--muted);transition:transform .18s ease,background-color .18s ease}
-  .sm-switch:checked{border-color:var(--accent);background:var(--accent)}
-  .sm-switch:active{box-shadow:0 0 0 3px var(--accent-12)}
-  .sm-switch:checked::after{transform:translateX(17px);background:var(--accent-contrast)}
-  .sm-switch:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-  .sm-summary{color:var(--muted);font-size:.78rem}
-  .sm-achievements{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin:0;padding:0;list-style:none}
-  .sm-ach{position:relative;display:grid;grid-template-columns:30px minmax(0,1fr);align-content:start;gap:10px;padding:12px;border:1px solid var(--muted-border);border-radius:8px;opacity:.72}
-  .sm-ach.is-unlocked{border-color:var(--accent);background:var(--accent-12);opacity:1;box-shadow:inset 3px 0 0 var(--accent)}
-  .sm-ach-icon{display:grid;place-items:center;width:30px;height:30px;border:1px solid var(--muted-border);border-radius:50%;color:var(--muted);font-size:.85rem}
-  .sm-ach.is-unlocked .sm-ach-icon{border-color:var(--accent);background:var(--accent);color:var(--accent-contrast)}
-  .sm-ach-name{display:block;font-size:.92rem;font-weight:700}
-  .sm-ach-desc{display:block;margin-top:2px;color:var(--muted);font-size:.78rem;line-height:1.4}
-  .sm-ach-hint{display:block;margin-top:5px;color:var(--accent);font-size:.7rem;line-height:1.35}
-  .sm-ach-progress{display:flex;align-items:center;gap:8px;margin-top:8px;color:var(--muted);font-size:.72rem;font-variant-numeric:tabular-nums;white-space:nowrap}
-  .sm-ach-bar{flex:1;height:4px;border-radius:2px;background:var(--muted-border);overflow:hidden}
-  .sm-ach-bar i{display:block;height:100%;background:var(--accent)}
-  .sm-ach-state{margin-left:auto;font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
-  .sm-ach.is-unlocked .sm-ach-state{color:var(--accent)}
-  @media (max-width:520px){.sm-overlay{padding:8px}.sm-head{gap:3px;padding:8px 7px 0}.sm-title{display:block;font-size:.7rem;letter-spacing:.03em}.sm-tabs{gap:0;justify-content:center}.sm-tab{padding:9px 5px;font-size:.68rem}.sm-close{width:28px;height:28px}.sm-view{padding:14px}.sm-info-view{max-height:min(440px,calc(100dvh - 80px))}.sm-theme-group{padding-right:14px;padding-left:14px}.sm-shortcuts{grid-template-columns:1fr}.sm-info-stage{height:58px}.sm-info-praxor{width:46px;height:46px}.sm-achievements{grid-template-columns:1fr}}
-  :root[data-reduced-motion="true"] .sm-view,:root[data-reduced-motion="true"] .sm-view>*{animation:none!important;transition:none!important}
-  @media(prefers-reduced-motion:reduce){.sm-view,.sm-view>*{animation:none!important;transition:none!important}}
-  .sm-danger-zone{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:2px;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none}
-  .sm-danger-title{color:var(--accent);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
-  .sm-danger,.sm-confirm-btn{flex:0 0 auto;padding:8px 14px;border-radius:8px;background:transparent;font:inherit;font-size:.82rem;font-weight:600;cursor:pointer;transition:background-color .18s ease,color .18s ease,border-color .18s ease}
-  .sm-danger{border:1px solid var(--accent);background:color-mix(in srgb,var(--card) 88%,var(--accent) 12%);color:var(--accent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--accent) 10%,transparent)}
-  .sm-danger:hover,.sm-danger:focus-visible{border-color:var(--accent);background:var(--accent);color:var(--accent-contrast)}
-  .sm-settings-danger .sm-danger,.sm-settings-danger .sm-danger:hover,.sm-settings-danger .sm-danger:focus-visible{padding:5px 2px;border:0;background:transparent;color:var(--danger);box-shadow:none;text-decoration:underline;text-underline-offset:3px}
-  .sm-confirm-head{position:relative;display:flex;align-items:center;justify-content:center;min-height:30px;padding:0 34px}
-  .sm-confirm-close{position:absolute;top:0;right:0;display:grid;place-items:center;width:30px;height:30px;padding:0;border:0;border-radius:50%;background:transparent;color:#aaa;cursor:pointer;transition:background-color .16s ease,color .16s ease}
-  .sm-confirm-close:hover{background:rgba(255,255,255,.1);color:#fff}
-  .sm-confirm-close:focus-visible{outline:2px solid #fff;outline-offset:2px}
-  .sm-confirm-btn{position:relative;isolation:isolate;overflow:hidden;min-width:190px;min-height:46px;border:1px solid #fff;background:#fff;color:#000;font-weight:800;touch-action:none;-webkit-user-select:none;user-select:none}
-  .sm-confirm-btn:active{cursor:grabbing}
-  .sm-confirm-progress{position:absolute;inset:4px;z-index:-1;border-radius:4px;background:#aaa;opacity:.72;transform:scaleX(0);transform-origin:left center;transition:transform .18s ease-out}
-  .sm-confirm[data-holding="true"] .sm-confirm-progress{transition:none}
-  .sm-confirm-label{position:relative;pointer-events:none}
-  .sm-danger:focus-visible,.sm-confirm-btn:focus-visible{outline:2px solid #fff;outline-offset:3px}
-  .sm-confirm{position:absolute;inset:0;box-sizing:border-box;display:grid;place-items:center;padding:12px;background:rgba(0,0,0,.82);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .2s ease,visibility .2s ease}
-  .sm-confirm[data-open="true"]{opacity:1;visibility:visible;pointer-events:auto}
-  @property --sm-rainbow-angle{syntax:"<angle>";inherits:false;initial-value:0deg}
-  .sm-confirm-panel{--sm-shake-x:0px;--sm-shake-y:0px;--sm-shake-rotation:0deg;position:relative;box-sizing:border-box;display:flex;flex-direction:column;gap:16px;width:min(460px,100%);max-height:100%;overflow-y:auto;padding:22px;background:linear-gradient(#050505,#050505) padding-box,conic-gradient(from var(--sm-rainbow-angle,0deg),#ff3158 0deg,#ffb52e 52deg,#f5f13b 104deg,#38e889 156deg,#36c9ff 208deg,#536dfe 260deg,#ae69ff 312deg,#ff3158 360deg) border-box;color:#fff;border:2px solid transparent;border-radius:10px;box-shadow:0 0 7px rgba(255,255,255,.16),0 0 15px rgba(145,100,255,.12);animation:sm-rainbow-rotate 9s linear infinite;transform:translate(var(--sm-shake-x),var(--sm-shake-y)) rotate(var(--sm-shake-rotation));transition:transform .32s cubic-bezier(.2,.85,.35,1)}
-  .sm-confirm[data-holding="true"] .sm-confirm-panel{will-change:transform;transition:none}
-  .sm-confirm-panel[data-reduced-motion="true"]{animation:none;box-shadow:0 0 12px rgba(255,255,255,.2)}
-  .sm-confirm-title{color:#fff;font-size:1.05rem;font-weight:800;text-align:center}
-  .sm-confirm-desc{display:flex;flex-direction:column;gap:12px;color:#ddd;font-size:.88rem;line-height:1.55}
-  .sm-confirm-warn{color:#fff;font-weight:800}
-  .sm-confirm-actions{display:flex;justify-content:center;margin-top:4px}
-  @keyframes sm-rainbow-rotate{to{--sm-rainbow-angle:360deg}}
-  @media (prefers-reduced-motion:reduce){.sm-confirm-panel{animation:none;box-shadow:0 0 7px rgba(255,255,255,.16)}}
-  #settings-toggle,.settings-menu :is(.sm-panel,.sm-close,.sm-tab,.sm-settings-tab,.sm-theme-choice,.sm-theme-selected,.sm-theme-lock,.sm-carousel-nav,.sm-carousel-dot,.sm-carousel-dot::before,.sm-switch,.sm-switch::after,.sm-shortcuts kbd,.sm-danger,.sm-ach,.sm-ach-icon,.sm-ach-bar,.sm-confirm-panel,.sm-confirm-close,.sm-confirm-btn,.sm-confirm-progress,.sm-reward-toast,.sm-reward-dismiss,.sm-reward-progress,.sm-mini-preview,.sm-mini-status,.sm-mini-lines i,.sm-mini-panel,.sm-mini-panel i,.sm-mini-panel span,.sm-mini-panel b,.sm-mini-button,.sm-mini-switch,.sm-mini-switch i){border-radius:0!important}
-  .sm-info-view{width:min(620px,100%);max-height:min(430px,calc(100dvh - 90px))}
-  .sm-info-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(180px,.62fr);align-items:center;gap:20px;min-width:0}
-  .sm-info-controls{min-width:0}
-  .sm-info-stage{height:158px;align-self:stretch}
-  .sm-info-praxor{width:124px;height:124px}
-  .sm-info-shadow{bottom:7px;width:98px;height:16px;background:radial-gradient(ellipse,rgba(0,0,0,.82),rgba(0,0,0,.28) 44%,rgba(0,0,0,0) 78%)}
-  @media(max-width:520px){.sm-info-layout{grid-template-columns:minmax(0,1fr) minmax(84px,.42fr);gap:8px}.sm-info-view{max-height:min(490px,calc(100dvh - 80px))}.sm-info-stage{height:118px}.sm-info-praxor{width:86px;height:86px}.sm-info-shadow{width:70px;height:12px}.sm-shortcuts li{grid-template-columns:minmax(76px,auto) minmax(0,1fr);gap:5px;font-size:.62rem}.sm-shortcut-keys{gap:2px}.sm-shortcuts kbd{padding:2px 3px;font-size:.58rem}}
+  .settings-menu {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    pointer-events: none;
+    view-transition-name: settings-menu;
+  }
+  ::view-transition-group(settings-menu),
+  ::view-transition-old(settings-menu),
+  ::view-transition-new(settings-menu) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+  ::view-transition-old(settings-menu),
+  ::view-transition-new(settings-menu) {
+    opacity: 1;
+  }
+  html.sm-open {
+    overflow: hidden;
+  }
+  .sm-toggle {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    pointer-events: auto;
+    transition:
+      background-color 0.18s ease,
+      color 0.18s ease,
+      border-color 0.18s ease;
+  }
+  .sm-toggle:hover,
+  .sm-toggle[aria-expanded="true"] {
+    background: var(--accent-10);
+    color: var(--text);
+  }
+  .sm-toggle:focus-visible,
+  .sm-tab:focus-visible,
+  .sm-close:focus-visible,
+  .sm-view:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .sm-overlay {
+    position: absolute;
+    inset: 0;
+    box-sizing: border-box;
+    display: grid;
+    place-items: center;
+    padding: 12px;
+    background: var(--overlay);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      opacity 0.22s ease,
+      visibility 0.22s ease;
+  }
+  .sm-overlay[data-open="true"] {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+  .sm-panel {
+    box-sizing: border-box;
+    width: min(680px, 100%);
+    min-width: 0;
+    max-height: min(720px, calc(100vh - 24px));
+    max-height: min(720px, calc(100dvh - 24px));
+    display: flex;
+    flex-direction: column;
+    background: var(--card);
+    color: var(--text);
+    border: 1px solid var(--muted-border);
+    border-radius: 10px;
+    box-shadow:
+      0 24px 70px var(--shadow-strong),
+      0 0 0 1px var(--accent-12);
+    transform: translateY(10px) scale(0.97);
+    transition: transform 0.25s cubic-bezier(0.2, 0.9, 0.3, 1);
+  }
+  .sm-overlay[data-open="true"] .sm-panel {
+    transform: none;
+  }
+  .sm-head {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px 0 18px;
+    border-bottom: 1px solid var(--muted-border);
+  }
+  .sm-title {
+    margin: 0;
+    color: var(--accent);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: lowercase;
+  }
+  .sm-tabs {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    min-width: 0;
+    gap: 2px;
+  }
+  .sm-tab {
+    padding: 10px 9px;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+      color 0.14s ease,
+      border-color 0.14s ease,
+      background-color 0.14s ease;
+  }
+  .sm-tab:hover {
+    color: var(--text);
+  }
+  .sm-tab[aria-selected="true"] {
+    border-bottom-color: var(--accent);
+    color: var(--text);
+  }
+  .sm-close {
+    width: 32px;
+    height: 32px;
+    margin-bottom: 6px;
+    padding: 0;
+    border: 1px solid var(--muted-border);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--muted);
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+  .sm-close:hover {
+    border-color: var(--accent);
+    color: var(--text);
+  }
+  .sm-theme-group {
+    padding: 10px 18px 8px;
+    border-bottom: 1px solid var(--muted-border);
+  }
+  .sm-view {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-height: 0;
+    padding: 18px;
+    overflow-y: auto;
+    transform-origin: top center;
+  }
+  .sm-info-view {
+    align-self: center;
+    width: min(460px, 100%);
+    max-height: min(380px, calc(100dvh - 90px));
+    gap: 10px;
+  }
+  .sm-settings-view {
+    gap: 12px;
+  }
+  .sm-view:not([hidden]) {
+    animation: sm-view-enter 0.2s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+  .sm-view[hidden] {
+    display: none;
+  }
+  .sm-view:not([hidden])
+    > :is(.sm-group, .sm-row, .sm-locked-setting, .sm-danger-zone) {
+    animation: sm-row-enter 0.2s ease both;
+  }
+  .sm-view:not([hidden]) > :nth-child(2) {
+    animation-delay: 0.025s;
+  }
+  .sm-view:not([hidden]) > :nth-child(3) {
+    animation-delay: 0.05s;
+  }
+  .sm-view:not([hidden]) > :nth-child(4) {
+    animation-delay: 0.075s;
+  }
+  @keyframes sm-view-enter {
+    from {
+      opacity: 0;
+      transform: translateY(5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes sm-row-enter {
+    from {
+      opacity: 0.72;
+      transform: translateY(3px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .sm-group {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-width: 0;
+  }
+  .sm-settings-tabs {
+    display: flex;
+    gap: 2px;
+    border-bottom: 1px solid var(--muted-border);
+  }
+  .sm-settings-tab {
+    padding: 8px 10px;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: 0.76rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .sm-settings-tab[aria-selected="true"] {
+    border-bottom-color: var(--accent);
+    color: var(--text);
+  }
+  .sm-settings-tab:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .sm-settings-subview {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+  }
+  .sm-settings-subview[hidden] {
+    display: none;
+  }
+  .sm-info-intro {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.76rem;
+  }
+  .sm-shortcuts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 5px 14px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .sm-shortcuts li {
+    display: grid;
+    grid-template-columns: minmax(90px, auto) minmax(0, 1fr);
+    align-items: center;
+    gap: 7px;
+    color: var(--muted);
+    font-size: 0.68rem;
+  }
+  .sm-shortcut-keys {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+  }
+  .sm-shortcut-keys > span {
+    color: var(--muted);
+    font-size: 0.64rem;
+  }
+  .sm-shortcuts kbd {
+    justify-self: start;
+    padding: 2px 4px;
+    border: 1px solid var(--muted-border);
+    border-radius: 3px;
+    color: var(--text);
+    font: inherit;
+    font-size: 0.64rem;
+    white-space: nowrap;
+  }
+  .sm-info-stage {
+    position: relative;
+    display: grid;
+    place-items: end center;
+    height: 72px;
+    overflow: hidden;
+  }
+  .sm-info-praxor {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    transform: translateY(0);
+  }
+  .sm-info-shadow {
+    position: absolute;
+    bottom: 6px;
+    left: 50%;
+    width: 96px;
+    height: 15px;
+    border-radius: 50%;
+    background: radial-gradient(
+      ellipse,
+      rgba(0, 0, 0, 0.82),
+      rgba(0, 0, 0, 0.28) 44%,
+      rgba(0, 0, 0, 0) 78%
+    );
+    filter: blur(1px);
+    transform: translateX(-50%) scale(1);
+    opacity: 0.3;
+  }
+  .settings-menu .sm-switch::after,
+  .settings-menu .sm-carousel-dot::before,
+  .settings-menu .sm-carousel-dot[aria-current="true"]::before {
+    border-radius: 0 !important;
+  }
+  .sm-disabled-setting {
+    opacity: 0.48;
+    cursor: not-allowed;
+  }
+  .sm-disabled-setting .sm-switch {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+  .sm-group legend {
+    padding: 0 0 8px;
+    color: var(--accent);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .sm-theme-carousel {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .sm-theme-modes {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px;
+    margin-bottom: 7px;
+    padding: 3px;
+    border: 1px solid var(--muted-border);
+    border-radius: 6px;
+    background: var(--surface-inset);
+  }
+  .sm-theme-mode {
+    min-height: 30px;
+    padding: 4px 8px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: 0.72rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .sm-theme-mode[aria-pressed="true"] {
+    border-color: var(--accent);
+    background: var(--accent-10);
+    color: var(--text);
+  }
+  .sm-theme-mode:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .sm-carousel-controls {
+    display: grid;
+    grid-template-columns: 32px 1fr 32px;
+    align-items: center;
+    gap: 8px;
+  }
+  .sm-carousel-position {
+    color: var(--muted);
+    font-size: 0.68rem;
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+  }
+  .sm-carousel-nav {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 28px;
+    padding: 0;
+    border: 1px solid var(--muted-border);
+    border-radius: 6px;
+    background: var(--card);
+    color: var(--text);
+    font-size: 1.2rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .sm-carousel-nav:hover:not(:disabled) {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .sm-carousel-nav:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+  .sm-carousel-viewport {
+    overflow: hidden;
+    padding: 3px 0;
+    touch-action: pan-y;
+    user-select: none;
+    cursor: grab;
+  }
+  .sm-carousel-viewport[data-dragging="true"] {
+    cursor: grabbing;
+  }
+  .sm-carousel-viewport:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .sm-carousel-track {
+    display: flex;
+    align-items: stretch;
+    gap: 12px;
+    width: 100%;
+    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    will-change: transform;
+  }
+  .sm-theme-slide {
+    position: relative;
+    flex: 0 0 min(82%, 420px);
+    min-width: 0;
+  }
+  .sm-theme-choice {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    height: 100%;
+    padding: 9px;
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    background: linear-gradient(
+      145deg,
+      var(--bg),
+      var(--card) 65%,
+      color-mix(in srgb, var(--card) 76%, var(--accent))
+    );
+    color: var(--text);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    box-shadow: inset 0 0 0 1px
+      color-mix(in srgb, var(--accent) 12%, transparent);
+    transition:
+      background 0.18s ease,
+      border-color 0.18s ease,
+      box-shadow 0.18s ease;
+  }
+  .sm-theme-choice:hover {
+    background: linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--bg) 76%, var(--accent)),
+      color-mix(in srgb, var(--card) 82%, var(--accent))
+    );
+    box-shadow:
+      0 0 0 1px var(--accent),
+      0 6px 16px color-mix(in srgb, var(--accent) 20%, transparent);
+  }
+  .sm-theme-choice[aria-checked="true"] {
+    border-color: var(--accent);
+    box-shadow:
+      inset 0 0 0 1px var(--accent),
+      0 0 16px color-mix(in srgb, var(--accent) 28%, transparent);
+  }
+  .sm-theme-choice:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+  .sm-theme-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    min-height: 21px;
+  }
+  .sm-theme-name {
+    font-size: 0.86rem;
+    font-weight: 800;
+  }
+  .sm-theme-selected {
+    display: none;
+    padding: 3px 6px;
+    border: 1px solid var(--accent);
+    border-radius: 4px;
+    color: var(--accent);
+    font-size: 0.56rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .sm-theme-choice[aria-checked="true"] .sm-theme-selected {
+    display: block;
+  }
+  .sm-theme-lock {
+    position: absolute;
+    inset: 7px;
+    z-index: 2;
+    display: grid;
+    place-content: center;
+    gap: 7px;
+    padding: 12px;
+    border: 1px solid color-mix(in srgb, var(--accent) 55%, var(--muted-border));
+    border-radius: 6px;
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    color: var(--text);
+    text-align: center;
+    backdrop-filter: blur(3px);
+  }
+  .sm-theme-lock[hidden] {
+    display: none;
+  }
+  .sm-theme-lock-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    color: var(--accent);
+    font-size: 0.68rem;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+  }
+  .sm-theme-lock-help {
+    font-size: 0.67rem;
+    line-height: 1.35;
+  }
+  .sm-carousel-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1px;
+    min-height: 24px;
+  }
+  .sm-carousel-dot {
+    position: relative;
+    flex: 0 0 22px;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+  }
+  .sm-carousel-dot::before {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    bottom: 8px;
+    left: 8px;
+    border-radius: 50%;
+    background: var(--muted-border);
+    content: "";
+    transition:
+      top 0.18s ease,
+      right 0.18s ease,
+      bottom 0.18s ease,
+      left 0.18s ease,
+      background-color 0.18s ease;
+  }
+  .sm-carousel-dot[aria-current="true"]::before {
+    top: 8px;
+    right: 3px;
+    bottom: 8px;
+    left: 3px;
+    border-radius: 5px;
+    background: var(--accent);
+  }
+  .sm-carousel-dot:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  :root[data-reduced-motion="true"] .sm-carousel-track,
+  :root[data-reduced-motion="true"] .sm-carousel-dot {
+    transition: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sm-carousel-track,
+    .sm-carousel-dot {
+      transition: none;
+    }
+  }
+  .sm-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    cursor: pointer;
+  }
+  .sm-row-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+  .sm-row-title {
+    font-size: 0.92rem;
+    font-weight: 600;
+  }
+  .sm-row-hint {
+    color: var(--muted);
+    font-size: 0.78rem;
+    line-height: 1.35;
+  }
+  .sm-locked-setting {
+    padding: 10px;
+    border: 1px solid var(--muted-border);
+    border-radius: 6px;
+    opacity: 0.72;
+    transition:
+      opacity 0.2s ease,
+      border-color 0.2s ease,
+      background-color 0.2s ease;
+  }
+  .sm-locked-setting[data-unlocked="true"] {
+    border-color: var(--accent);
+    background: var(--accent-10);
+    opacity: 1;
+  }
+  .sm-lock-state {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex: 0 0 auto;
+    color: var(--muted);
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: color 0.2s ease;
+  }
+  .sm-locked-setting[data-unlocked="true"] .sm-lock-state {
+    color: var(--accent);
+  }
+  .sm-lock-icon {
+    display: block;
+    width: 14px;
+    height: 14px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition:
+      transform 0.2s ease,
+      opacity 0.2s ease;
+  }
+  .sm-locked-setting[data-unlocked="true"] .sm-lock-icon {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  .sm-switch {
+    appearance: none;
+    position: relative;
+    flex: 0 0 40px;
+    width: 40px;
+    height: 23px;
+    margin: 0;
+    border: 1px solid var(--muted-border);
+    border-radius: 999px;
+    background: var(--accent-10);
+    cursor: pointer;
+    transition:
+      background-color 0.18s ease,
+      border-color 0.18s ease,
+      box-shadow 0.18s ease;
+  }
+  .sm-switch::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    background: var(--muted);
+    transition:
+      transform 0.18s ease,
+      background-color 0.18s ease;
+  }
+  .sm-switch:checked {
+    border-color: var(--accent);
+    background: var(--accent);
+  }
+  .sm-switch:active {
+    box-shadow: 0 0 0 3px var(--accent-12);
+  }
+  .sm-switch:checked::after {
+    transform: translateX(17px);
+    background: var(--accent-contrast);
+  }
+  .sm-switch:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .sm-summary {
+    color: var(--muted);
+    font-size: 0.78rem;
+  }
+  .sm-achievements {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .sm-ach {
+    position: relative;
+    display: grid;
+    grid-template-columns: 30px minmax(0, 1fr);
+    align-content: start;
+    gap: 10px;
+    padding: 12px;
+    border: 1px solid var(--muted-border);
+    border-radius: 8px;
+    opacity: 0.72;
+  }
+  .sm-ach.is-unlocked {
+    border-color: var(--accent);
+    background: var(--accent-12);
+    opacity: 1;
+    box-shadow: inset 3px 0 0 var(--accent);
+  }
+  .sm-ach-icon {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--muted-border);
+    border-radius: 50%;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+  .sm-ach.is-unlocked .sm-ach-icon {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--accent-contrast);
+  }
+  .sm-ach-name {
+    display: block;
+    font-size: 0.92rem;
+    font-weight: 700;
+  }
+  .sm-ach-desc {
+    display: block;
+    margin-top: 2px;
+    color: var(--muted);
+    font-size: 0.78rem;
+    line-height: 1.4;
+  }
+  .sm-ach-hint {
+    display: block;
+    margin-top: 5px;
+    color: var(--accent);
+    font-size: 0.7rem;
+    line-height: 1.35;
+  }
+  .sm-ach-progress {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 0.72rem;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .sm-ach-bar {
+    flex: 1;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--muted-border);
+    overflow: hidden;
+  }
+  .sm-ach-bar i {
+    display: block;
+    height: 100%;
+    background: var(--accent);
+  }
+  .sm-ach-state {
+    margin-left: auto;
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .sm-ach.is-unlocked .sm-ach-state {
+    color: var(--accent);
+  }
+  @media (max-width: 520px) {
+    .sm-overlay {
+      padding: 8px;
+    }
+    .sm-head {
+      gap: 3px;
+      padding: 8px 7px 0;
+    }
+    .sm-title {
+      display: block;
+      font-size: 0.7rem;
+      letter-spacing: 0.03em;
+    }
+    .sm-tabs {
+      gap: 0;
+      justify-content: center;
+    }
+    .sm-tab {
+      padding: 9px 5px;
+      font-size: 0.68rem;
+    }
+    .sm-close {
+      width: 28px;
+      height: 28px;
+    }
+    .sm-view {
+      padding: 14px;
+    }
+    .sm-info-view {
+      max-height: min(440px, calc(100dvh - 80px));
+    }
+    .sm-theme-group {
+      padding-right: 14px;
+      padding-left: 14px;
+    }
+    .sm-shortcuts {
+      grid-template-columns: 1fr;
+    }
+    .sm-info-stage {
+      height: 58px;
+    }
+    .sm-info-praxor {
+      width: 46px;
+      height: 46px;
+    }
+    .sm-achievements {
+      grid-template-columns: 1fr;
+    }
+  }
+  :root[data-reduced-motion="true"] .sm-view,
+  :root[data-reduced-motion="true"] .sm-view > * {
+    animation: none !important;
+    transition: none !important;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sm-view,
+    .sm-view > * {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+  .sm-danger-zone {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 2px;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+  .sm-danger-title {
+    color: var(--accent);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .sm-danger,
+  .sm-confirm-btn {
+    flex: 0 0 auto;
+    padding: 8px 14px;
+    border-radius: 8px;
+    background: transparent;
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+      background-color 0.18s ease,
+      color 0.18s ease,
+      border-color 0.18s ease;
+  }
+  .sm-danger {
+    border: 1px solid var(--accent);
+    background: color-mix(in srgb, var(--card) 88%, var(--accent) 12%);
+    color: var(--accent);
+    box-shadow: inset 0 0 0 1px
+      color-mix(in srgb, var(--accent) 10%, transparent);
+  }
+  .sm-danger:hover,
+  .sm-danger:focus-visible {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--accent-contrast);
+  }
+  .sm-settings-danger .sm-danger,
+  .sm-settings-danger .sm-danger:hover,
+  .sm-settings-danger .sm-danger:focus-visible {
+    padding: 5px 2px;
+    border: 0;
+    background: transparent;
+    color: var(--danger);
+    box-shadow: none;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .sm-confirm-head {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 30px;
+    padding: 0 34px;
+  }
+  .sm-confirm-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: #aaa;
+    cursor: pointer;
+    transition:
+      background-color 0.16s ease,
+      color 0.16s ease;
+  }
+  .sm-confirm-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+  }
+  .sm-confirm-close:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+  }
+  .sm-confirm-btn {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    min-width: 190px;
+    min-height: 46px;
+    border: 1px solid #fff;
+    background: #fff;
+    color: #000;
+    font-weight: 800;
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  .sm-confirm-btn:active {
+    cursor: grabbing;
+  }
+  .sm-confirm-progress {
+    position: absolute;
+    inset: 4px;
+    z-index: -1;
+    border-radius: 4px;
+    background: #aaa;
+    opacity: 0.72;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.18s ease-out;
+  }
+  .sm-confirm[data-holding="true"] .sm-confirm-progress {
+    transition: none;
+  }
+  .sm-confirm-label {
+    position: relative;
+    pointer-events: none;
+  }
+  .sm-danger:focus-visible,
+  .sm-confirm-btn:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 3px;
+  }
+  .sm-confirm {
+    position: absolute;
+    inset: 0;
+    box-sizing: border-box;
+    display: grid;
+    place-items: center;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.82);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      opacity 0.2s ease,
+      visibility 0.2s ease;
+  }
+  .sm-confirm[data-open="true"] {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+  @property --sm-rainbow-angle {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+  }
+  .sm-confirm-panel {
+    --sm-shake-x: 0px;
+    --sm-shake-y: 0px;
+    --sm-shake-rotation: 0deg;
+    position: relative;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: min(460px, 100%);
+    max-height: 100%;
+    overflow-y: auto;
+    padding: 22px;
+    background:
+      linear-gradient(#050505, #050505) padding-box,
+      conic-gradient(
+          from var(--sm-rainbow-angle, 0deg),
+          #ff3158 0deg,
+          #ffb52e 52deg,
+          #f5f13b 104deg,
+          #38e889 156deg,
+          #36c9ff 208deg,
+          #536dfe 260deg,
+          #ae69ff 312deg,
+          #ff3158 360deg
+        )
+        border-box;
+    color: #fff;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    box-shadow:
+      0 0 7px rgba(255, 255, 255, 0.16),
+      0 0 15px rgba(145, 100, 255, 0.12);
+    animation: sm-rainbow-rotate 9s linear infinite;
+    transform: translate(var(--sm-shake-x), var(--sm-shake-y))
+      rotate(var(--sm-shake-rotation));
+    transition: transform 0.32s cubic-bezier(0.2, 0.85, 0.35, 1);
+  }
+  .sm-confirm[data-holding="true"] .sm-confirm-panel {
+    will-change: transform;
+    transition: none;
+  }
+  .sm-confirm-panel[data-reduced-motion="true"] {
+    animation: none;
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.2);
+  }
+  .sm-confirm-title {
+    color: #fff;
+    font-size: 1.05rem;
+    font-weight: 800;
+    text-align: center;
+  }
+  .sm-confirm-desc {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: #ddd;
+    font-size: 0.88rem;
+    line-height: 1.55;
+  }
+  .sm-confirm-warn {
+    color: #fff;
+    font-weight: 800;
+  }
+  .sm-confirm-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 4px;
+  }
+  @keyframes sm-rainbow-rotate {
+    to {
+      --sm-rainbow-angle: 360deg;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sm-confirm-panel {
+      animation: none;
+      box-shadow: 0 0 7px rgba(255, 255, 255, 0.16);
+    }
+  }
+  #settings-toggle,
+  .settings-menu
+    :is(
+      .sm-panel,
+      .sm-close,
+      .sm-tab,
+      .sm-settings-tab,
+      .sm-theme-choice,
+      .sm-theme-selected,
+      .sm-theme-lock,
+      .sm-carousel-nav,
+      .sm-carousel-dot,
+      .sm-carousel-dot::before,
+      .sm-switch,
+      .sm-switch::after,
+      .sm-shortcuts kbd,
+      .sm-danger,
+      .sm-ach,
+      .sm-ach-icon,
+      .sm-ach-bar,
+      .sm-confirm-panel,
+      .sm-confirm-close,
+      .sm-confirm-btn,
+      .sm-confirm-progress,
+      .sm-reward-toast,
+      .sm-reward-dismiss,
+      .sm-reward-progress,
+      .sm-mini-preview,
+      .sm-mini-status,
+      .sm-mini-lines i,
+      .sm-mini-panel,
+      .sm-mini-panel i,
+      .sm-mini-panel span,
+      .sm-mini-panel b,
+      .sm-mini-button,
+      .sm-mini-switch,
+      .sm-mini-switch i
+    ) {
+    border-radius: 0 !important;
+  }
+  .sm-info-view {
+    width: min(620px, 100%);
+    max-height: min(430px, calc(100dvh - 90px));
+  }
+  .sm-info-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(180px, 0.62fr);
+    align-items: center;
+    gap: 20px;
+    min-width: 0;
+  }
+  .sm-info-controls {
+    min-width: 0;
+  }
+  .sm-info-stage {
+    height: 158px;
+    align-self: stretch;
+  }
+  .sm-info-praxor {
+    width: 124px;
+    height: 124px;
+  }
+  .sm-info-shadow {
+    bottom: 7px;
+    width: 98px;
+    height: 16px;
+    background: radial-gradient(
+      ellipse,
+      rgba(0, 0, 0, 0.82),
+      rgba(0, 0, 0, 0.28) 44%,
+      rgba(0, 0, 0, 0) 78%
+    );
+  }
+  @media (max-width: 520px) {
+    .sm-info-layout {
+      grid-template-columns: minmax(0, 1fr) minmax(84px, 0.42fr);
+      gap: 8px;
+    }
+    .sm-info-view {
+      max-height: min(490px, calc(100dvh - 80px));
+    }
+    .sm-info-stage {
+      height: 118px;
+    }
+    .sm-info-praxor {
+      width: 86px;
+      height: 86px;
+    }
+    .sm-info-shadow {
+      width: 70px;
+      height: 12px;
+    }
+    .sm-shortcuts li {
+      grid-template-columns: minmax(76px, auto) minmax(0, 1fr);
+      gap: 5px;
+      font-size: 0.62rem;
+    }
+    .sm-shortcut-keys {
+      gap: 2px;
+    }
+    .sm-shortcuts kbd {
+      padding: 2px 3px;
+      font-size: 0.58rem;
+    }
+  }
 </style>
 
 <script>
-  import { achievements } from '../data/achievements';
-  import { themes } from '../data/themes';
-  import { applyThemePreviewPalette } from '../scripts/theme-preview';
-  import { setupAchievementNotifications } from '../scripts/achievement-notifications';
+  import { achievements } from "../data/achievements";
+  import { themes, type ThemeMode } from "../data/themes";
+  import { applyThemePreviewPalette } from "../scripts/theme-preview";
+  import { setupAchievementNotifications } from "../scripts/achievement-notifications";
   import {
-    CHANGE_EVENT, UNLOCK_EVENT, effectiveTheme, getAchievements, getSettings, initSiteState, isThemeAvailable,
-    prefersReducedMotion, resetAllData, updateSettings,
-  } from '../scripts/site-state';
-  import { ACTIVITY_EVENT } from '../scripts/site-activity';
+    CHANGE_EVENT,
+    UNLOCK_EVENT,
+    effectiveTheme,
+    getAchievements,
+    getSettings,
+    initSiteState,
+    isThemeAvailable,
+    prefersReducedMotion,
+    resetAllData,
+    updateSettings,
+  } from "../scripts/site-state";
+  import { ACTIVITY_EVENT } from "../scripts/site-activity";
 
   const setupSettingsMenu = () => {
-    const root = document.querySelector<HTMLElement>('[data-settings-menu]');
-    if (!root || root.dataset.bound === 'true') return;
-    root.dataset.bound = 'true';
+    const root = document.querySelector<HTMLElement>("[data-settings-menu]");
+    if (!root || root.dataset.bound === "true") return;
+    root.dataset.bound = "true";
 
-    const toggle = document.querySelector<HTMLButtonElement>('#settings-toggle')!;
-    const overlay = root.querySelector<HTMLElement>('[data-sm-overlay]')!;
-    const panel = root.querySelector<HTMLElement>('#settings-panel')!;
-    const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-tab]'));
-    const themeBox = root.querySelector<HTMLElement>('[data-sm-themes]')!;
-    const carouselViewport = root.querySelector<HTMLElement>('[data-sm-carousel-viewport]')!;
-    const carouselDots = root.querySelector<HTMLElement>('[data-sm-carousel-dots]')!;
-    const carouselPosition = root.querySelector<HTMLElement>('[data-sm-carousel-position]')!;
-    const previousThemeButton = root.querySelector<HTMLButtonElement>('[data-sm-previous]')!;
-    const nextThemeButton = root.querySelector<HTMLButtonElement>('[data-sm-next]')!;
-    const previewTemplate = root.querySelector<HTMLTemplateElement>('[data-sm-theme-preview-template]')!;
-    const infoView = root.querySelector<HTMLElement>('#sm-view-info')!;
-    const settingsSubtabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-settings-subtab]'));
-    const settingsFunView = root.querySelector<HTMLElement>('#sm-settings-fun')!;
-    const settingsAccessibilityView = root.querySelector<HTMLElement>('#sm-settings-accessibility')!;
-    const forceInput = root.querySelector<HTMLInputElement>('[data-setting="forceTheme"]')!;
-    const motionInput = root.querySelector<HTMLInputElement>('[data-setting="reducedMotion"]')!;
-    const plinkoExtremeInput = root.querySelector<HTMLInputElement>('[data-setting="plinkoExtremeMode"]')!;
-    const list = root.querySelector<HTMLElement>('[data-sm-achievements]')!;
-    const summary = root.querySelector<HTMLElement>('[data-sm-summary]')!;
-    const achievementsView = root.querySelector<HTMLElement>('#sm-view-achievements')!;
-    const dangerZone = root.querySelector<HTMLElement>('.sm-danger-zone')!;
-    const confirmBox = root.querySelector<HTMLElement>('[data-sm-confirm]')!;
-    const resetButton = root.querySelector<HTMLButtonElement>('[data-sm-reset]')!;
-    const confirmCloseButton = root.querySelector<HTMLButtonElement>('[data-sm-confirm-close]')!;
-    const confirmButton = root.querySelector<HTMLButtonElement>('[data-sm-confirm-btn]')!;
-    const infoPraxor = root.querySelector<HTMLImageElement>('[data-info-praxor]')!;
-    const infoShadow = root.querySelector<HTMLElement>('[data-info-shadow]')!;
+    const toggle =
+      document.querySelector<HTMLButtonElement>("#settings-toggle")!;
+    const overlay = root.querySelector<HTMLElement>("[data-sm-overlay]")!;
+    const panel = root.querySelector<HTMLElement>("#settings-panel")!;
+    const tabs = Array.from(
+      root.querySelectorAll<HTMLButtonElement>("[data-tab]"),
+    );
+    const themeBox = root.querySelector<HTMLElement>("[data-sm-themes]")!;
+    const themeModeButtons = Array.from(
+      root.querySelectorAll<HTMLButtonElement>("[data-theme-mode]"),
+    );
+    const carouselViewport = root.querySelector<HTMLElement>(
+      "[data-sm-carousel-viewport]",
+    )!;
+    const carouselDots = root.querySelector<HTMLElement>(
+      "[data-sm-carousel-dots]",
+    )!;
+    const carouselPosition = root.querySelector<HTMLElement>(
+      "[data-sm-carousel-position]",
+    )!;
+    const previousThemeButton =
+      root.querySelector<HTMLButtonElement>("[data-sm-previous]")!;
+    const nextThemeButton =
+      root.querySelector<HTMLButtonElement>("[data-sm-next]")!;
+    const previewTemplate = root.querySelector<HTMLTemplateElement>(
+      "[data-sm-theme-preview-template]",
+    )!;
+    const infoView = root.querySelector<HTMLElement>("#sm-view-info")!;
+    const settingsSubtabs = Array.from(
+      root.querySelectorAll<HTMLButtonElement>("[data-settings-subtab]"),
+    );
+    const settingsFunView =
+      root.querySelector<HTMLElement>("#sm-settings-fun")!;
+    const settingsAccessibilityView = root.querySelector<HTMLElement>(
+      "#sm-settings-accessibility",
+    )!;
+    const forceInput = root.querySelector<HTMLInputElement>(
+      '[data-setting="forceTheme"]',
+    )!;
+    const motionInput = root.querySelector<HTMLInputElement>(
+      '[data-setting="reducedMotion"]',
+    )!;
+    const plinkoExtremeInput = root.querySelector<HTMLInputElement>(
+      '[data-setting="plinkoExtremeMode"]',
+    )!;
+    const list = root.querySelector<HTMLElement>("[data-sm-achievements]")!;
+    const summary = root.querySelector<HTMLElement>("[data-sm-summary]")!;
+    const achievementsView = root.querySelector<HTMLElement>(
+      "#sm-view-achievements",
+    )!;
+    const dangerZone = root.querySelector<HTMLElement>(".sm-danger-zone")!;
+    const confirmBox = root.querySelector<HTMLElement>("[data-sm-confirm]")!;
+    const resetButton =
+      root.querySelector<HTMLButtonElement>("[data-sm-reset]")!;
+    const confirmCloseButton = root.querySelector<HTMLButtonElement>(
+      "[data-sm-confirm-close]",
+    )!;
+    const confirmButton = root.querySelector<HTMLButtonElement>(
+      "[data-sm-confirm-btn]",
+    )!;
+    const infoPraxor =
+      root.querySelector<HTMLImageElement>("[data-info-praxor]")!;
+    const infoShadow = root.querySelector<HTMLElement>("[data-info-shadow]")!;
 
     const HOLD_DURATION_MS = 6700;
-    const confirmProgress = root.querySelector<HTMLElement>('[data-sm-confirm-progress]')!;
-    const confirmLabel = root.querySelector<HTMLElement>('[data-sm-confirm-label]')!;
+    const confirmProgress = root.querySelector<HTMLElement>(
+      "[data-sm-confirm-progress]",
+    )!;
+    const confirmLabel = root.querySelector<HTMLElement>(
+      "[data-sm-confirm-label]",
+    )!;
     let holdFrame = 0;
     let holdStartedAt = 0;
-    let holdKind: 'pointer' | 'keyboard' | null = null;
+    let holdKind: "pointer" | "keyboard" | null = null;
     let activePointerId: number | null = null;
     let activeKey: string | null = null;
     let resetStarted = false;
@@ -336,20 +1772,20 @@ import AchievementNotifications from './AchievementNotifications.astro';
       holdKind = null;
       activePointerId = null;
       activeKey = null;
-      confirmBox.removeAttribute('data-holding');
-      confirmProgress.style.transform = 'scaleX(0)';
-      confirmLabel.textContent = 'Hold to Confirm';
-      const panel = confirmBox.querySelector<HTMLElement>('.sm-confirm-panel')!;
-      panel.style.removeProperty('--sm-shake-x');
-      panel.style.removeProperty('--sm-shake-y');
-      panel.style.removeProperty('--sm-shake-rotation');
+      confirmBox.removeAttribute("data-holding");
+      confirmProgress.style.transform = "scaleX(0)";
+      confirmLabel.textContent = "Hold to Confirm";
+      const panel = confirmBox.querySelector<HTMLElement>(".sm-confirm-panel")!;
+      panel.style.removeProperty("--sm-shake-x");
+      panel.style.removeProperty("--sm-shake-y");
+      panel.style.removeProperty("--sm-shake-rotation");
     };
 
     const resetHold = () => {
       resetStarted = false;
       confirmButton.disabled = false;
       clearHold();
-      confirmProgress.setAttribute('aria-valuenow', '0');
+      confirmProgress.setAttribute("aria-valuenow", "0");
     };
 
     const completeReset = () => {
@@ -360,8 +1796,8 @@ import AchievementNotifications from './AchievementNotifications.astro';
       holdKind = null;
       activePointerId = null;
       activeKey = null;
-      confirmBox.removeAttribute('data-holding');
-      confirmLabel.textContent = 'Resetting...';
+      confirmBox.removeAttribute("data-holding");
+      confirmLabel.textContent = "Resetting...";
       confirmButton.disabled = true;
       resetAllData();
       window.location.reload();
@@ -371,15 +1807,28 @@ import AchievementNotifications from './AchievementNotifications.astro';
       if (!holdKind) return false;
       const progress = Math.min((now - holdStartedAt) / HOLD_DURATION_MS, 1);
       confirmProgress.style.transform = `scaleX(${progress})`;
-      confirmProgress.setAttribute('aria-valuenow', String(Math.round(progress * 100)));
+      confirmProgress.setAttribute(
+        "aria-valuenow",
+        String(Math.round(progress * 100)),
+      );
       if (!prefersReducedMotion()) {
         const intensity = progress * progress;
         const amplitude = intensity * 14;
         const elapsed = now - holdStartedAt;
-        const panel = confirmBox.querySelector<HTMLElement>('.sm-confirm-panel')!;
-        panel.style.setProperty('--sm-shake-x', `${Math.sin(elapsed / 24) * amplitude}px`);
-        panel.style.setProperty('--sm-shake-y', `${Math.cos(elapsed / 31) * amplitude * .72}px`);
-        panel.style.setProperty('--sm-shake-rotation', `${Math.sin(elapsed / 28) * intensity * 3.5}deg`);
+        const panel =
+          confirmBox.querySelector<HTMLElement>(".sm-confirm-panel")!;
+        panel.style.setProperty(
+          "--sm-shake-x",
+          `${Math.sin(elapsed / 24) * amplitude}px`,
+        );
+        panel.style.setProperty(
+          "--sm-shake-y",
+          `${Math.cos(elapsed / 31) * amplitude * 0.72}px`,
+        );
+        panel.style.setProperty(
+          "--sm-shake-rotation",
+          `${Math.sin(elapsed / 28) * intensity * 3.5}deg`,
+        );
       }
       if (progress >= 1) {
         completeReset();
@@ -394,12 +1843,12 @@ import AchievementNotifications from './AchievementNotifications.astro';
       holdFrame = window.requestAnimationFrame(animateHold);
     };
 
-    const startHold = (kind: 'pointer' | 'keyboard') => {
+    const startHold = (kind: "pointer" | "keyboard") => {
       if (holdKind || resetStarted) return;
       holdKind = kind;
       holdStartedAt = performance.now();
-      confirmBox.dataset.holding = 'true';
-      confirmLabel.textContent = 'Keep holding...';
+      confirmBox.dataset.holding = "true";
+      confirmLabel.textContent = "Keep holding...";
       holdFrame = window.requestAnimationFrame(animateHold);
     };
 
@@ -407,13 +1856,15 @@ import AchievementNotifications from './AchievementNotifications.astro';
       if (!updateHold(performance.now())) clearHold();
     };
 
-    const isConfirmOpen = () => confirmBox.dataset.open === 'true';
+    const isConfirmOpen = () => confirmBox.dataset.open === "true";
     const setConfirmOpen = (open: boolean) => {
       if (open === isConfirmOpen()) return;
       confirmBox.dataset.open = String(open);
       if (open) {
         resetHold();
-        confirmBox.querySelector<HTMLElement>('.sm-confirm-panel')!.dataset.reducedMotion = String(prefersReducedMotion());
+        confirmBox.querySelector<HTMLElement>(
+          ".sm-confirm-panel",
+        )!.dataset.reducedMotion = String(prefersReducedMotion());
         void confirmBox.offsetWidth;
         confirmCloseButton.focus();
       } else {
@@ -423,21 +1874,29 @@ import AchievementNotifications from './AchievementNotifications.astro';
     };
 
     // Background layers made inert while the modal is open.
-    const background = () => document.querySelectorAll<HTMLElement>('.page-shell, #music-player-shell');
-    const isOpen = () => overlay.dataset.open === 'true';
+    const background = () =>
+      document.querySelectorAll<HTMLElement>(
+        ".page-shell, #music-player-shell",
+      );
+    const isOpen = () => overlay.dataset.open === "true";
     const setOpen = (open: boolean) => {
       if (open === isOpen()) return;
       if (!open) setConfirmOpen(false);
       overlay.dataset.open = String(open);
-      toggle.setAttribute('aria-expanded', String(open));
-      document.documentElement.classList.toggle('sm-open', open);
-      background().forEach((element) => { element.inert = open; });
+      toggle.setAttribute("aria-expanded", String(open));
+      document.documentElement.classList.toggle("sm-open", open);
+      background().forEach((element) => {
+        element.inert = open;
+      });
       if (open) {
         render();
-        showTab('info');
-        panel.querySelector<HTMLElement>('.sm-view:not([hidden])')!.scrollTop = 0;
+        showTab("info");
+        panel.querySelector<HTMLElement>(".sm-view:not([hidden])")!.scrollTop =
+          0;
         void overlay.offsetWidth;
-        tabs.find((tab) => tab.getAttribute('aria-selected') === 'true')?.focus();
+        tabs
+          .find((tab) => tab.getAttribute("aria-selected") === "true")
+          ?.focus();
       } else {
         stopInfoAnimation();
         toggle.focus();
@@ -447,26 +1906,39 @@ import AchievementNotifications from './AchievementNotifications.astro';
     const showTab = (name: string, focus = false) => {
       tabs.forEach((tab) => {
         const selected = tab.dataset.tab === name;
-        tab.setAttribute('aria-selected', String(selected));
+        tab.setAttribute("aria-selected", String(selected));
         tab.tabIndex = selected ? 0 : -1;
-        const view = root.querySelector<HTMLElement>(`#${tab.getAttribute('aria-controls')}`)!;
+        const view = root.querySelector<HTMLElement>(
+          `#${tab.getAttribute("aria-controls")}`,
+        )!;
         view.hidden = !selected;
         if (selected) view.scrollTop = 0;
         if (selected && focus) tab.focus();
       });
-      if (name === 'achievements') renderAchievements();
-      if (name === 'settings') showSettingsSubtab('fun');
+      if (name === "achievements") renderAchievements();
+      if (name === "settings") {
+        showSettingsSubtab("fun");
+        renderSettings();
+      }
       updateInfoAnimation();
     };
 
-    const showSettingsSubtab = (name: 'fun' | 'accessibility', focus = false) => {
+    const showSettingsSubtab = (
+      name: "fun" | "accessibility",
+      focus = false,
+    ) => {
       settingsSubtabs.forEach((tab) => {
         const selected = tab.dataset.settingsSubtab === name;
-        tab.setAttribute('aria-selected', String(selected));
+        tab.setAttribute("aria-selected", String(selected));
         tab.tabIndex = selected ? 0 : -1;
-        const view = name === 'fun' ? settingsFunView : settingsAccessibilityView;
+        const view =
+          name === "fun" ? settingsFunView : settingsAccessibilityView;
         if (tab.dataset.settingsSubtab === name) view.hidden = false;
-        else (name === 'fun' ? settingsAccessibilityView : settingsFunView).hidden = true;
+        else
+          (name === "fun"
+            ? settingsAccessibilityView
+            : settingsFunView
+          ).hidden = true;
         if (selected && focus) tab.focus();
       });
     };
@@ -475,9 +1947,9 @@ import AchievementNotifications from './AchievementNotifications.astro';
       if (infoFrame) window.cancelAnimationFrame(infoFrame);
       infoFrame = 0;
       infoAnimationStartedAt = 0;
-      infoPraxor.style.transform = 'translateY(0)';
-      infoShadow.style.transform = 'translateX(-50%) scale(1)';
-      infoShadow.style.opacity = '.6';
+      infoPraxor.style.transform = "translateY(0)";
+      infoShadow.style.transform = "translateX(-50%) scale(1)";
+      infoShadow.style.opacity = ".6";
     };
 
     const animateInfoPraxor = (timestamp: number) => {
@@ -490,27 +1962,30 @@ import AchievementNotifications from './AchievementNotifications.astro';
       const impactDuration = 45;
       const ascentDuration = 650;
       const peakHoldDuration = 45;
-      const descentDuration = cycleDuration - impactDuration - ascentDuration - peakHoldDuration;
+      const descentDuration =
+        cycleDuration - impactDuration - ascentDuration - peakHoldDuration;
       const elapsed = (timestamp - infoAnimationStartedAt) % cycleDuration;
       let lift = 0;
       let impact = 0;
       if (elapsed < impactDuration) {
-        impact = Math.sin(Math.PI * elapsed / impactDuration);
+        impact = Math.sin((Math.PI * elapsed) / impactDuration);
       } else if (elapsed < impactDuration + ascentDuration) {
         const progress = (elapsed - impactDuration) / ascentDuration;
         lift = 48 * (1 - (1 - progress) ** 3);
       } else if (elapsed < impactDuration + ascentDuration + peakHoldDuration) {
         lift = 48;
       } else {
-        const progress = (elapsed - impactDuration - ascentDuration - peakHoldDuration) / descentDuration;
+        const progress =
+          (elapsed - impactDuration - ascentDuration - peakHoldDuration) /
+          descentDuration;
         const easedFall = progress * progress * (3 - 2 * progress);
         lift = 48 * (1 - easedFall);
       }
-      const scaleX = 1 + impact * .24;
-      const scaleY = 1 - impact * .2;
+      const scaleX = 1 + impact * 0.24;
+      const scaleY = 1 - impact * 0.2;
       infoPraxor.style.transform = `translateY(${-lift}px) scale(${scaleX},${scaleY})`;
-      infoShadow.style.transform = `translateX(-50%) scale(${1 - lift / 120 + impact * .32})`;
-      infoShadow.style.opacity = String(.34 - lift / 220 + impact * .46);
+      infoShadow.style.transform = `translateX(-50%) scale(${1 - lift / 120 + impact * 0.32})`;
+      infoShadow.style.opacity = String(0.34 - lift / 220 + impact * 0.46);
       infoFrame = window.requestAnimationFrame(animateInfoPraxor);
     };
 
@@ -525,9 +2000,13 @@ import AchievementNotifications from './AchievementNotifications.astro';
       }
     };
 
-    let themeKey = '';
+    let themeKey = "";
     let activeThemeIndex = 0;
-    let lastSelectedTheme = '';
+    let activeThemeMode: ThemeMode = "dark";
+    let visibleThemes = themes.filter(
+      (theme) => theme.mode === activeThemeMode,
+    );
+    let lastSelectedTheme = "";
     let carouselOffset = 0;
     let dragPointerId: number | null = null;
     let dragStartX = 0;
@@ -538,113 +2017,175 @@ import AchievementNotifications from './AchievementNotifications.astro';
     let suppressCardClickUntil = 0;
 
     const layoutCarousel = (focusChoice = false) => {
-      const slides = Array.from(themeBox.querySelectorAll<HTMLElement>('[data-theme-slide]'));
+      const slides = Array.from(
+        themeBox.querySelectorAll<HTMLElement>("[data-theme-slide]"),
+      );
       if (!slides.length) return;
-      activeThemeIndex = Math.max(0, Math.min(activeThemeIndex, slides.length - 1));
+      activeThemeIndex = Math.max(
+        0,
+        Math.min(activeThemeIndex, slides.length - 1),
+      );
       const activeSlide = slides[activeThemeIndex];
-      carouselOffset = carouselViewport.clientWidth / 2 - (activeSlide.offsetLeft + activeSlide.offsetWidth / 2);
-      if (prefersReducedMotion()) themeBox.style.transition = 'none';
-      else themeBox.style.removeProperty('transition');
+      const activeSlideRect = activeSlide.getBoundingClientRect();
+      const viewportRect = carouselViewport.getBoundingClientRect();
+      const currentTransform = getComputedStyle(themeBox).transform;
+      const currentOffset =
+        currentTransform === "none"
+          ? 0
+          : new DOMMatrixReadOnly(currentTransform).m41;
+      carouselOffset =
+        currentOffset +
+        viewportRect.left +
+        carouselViewport.clientWidth / 2 -
+        (activeSlideRect.left + activeSlideRect.width / 2);
+      if (prefersReducedMotion()) themeBox.style.transition = "none";
+      else themeBox.style.removeProperty("transition");
       themeBox.style.transform = `translate3d(${carouselOffset}px,0,0)`;
-      themeBox.querySelectorAll<HTMLButtonElement>('[data-theme-choice]').forEach((choice, index) => {
-        choice.tabIndex = index === activeThemeIndex ? 0 : -1;
-      });
-      carouselDots.querySelectorAll<HTMLButtonElement>('[data-theme-dot]').forEach((dot, index) => {
-        dot.setAttribute('aria-current', String(index === activeThemeIndex));
-      });
+      themeBox
+        .querySelectorAll<HTMLButtonElement>("[data-theme-choice]")
+        .forEach((choice, index) => {
+          choice.tabIndex = index === activeThemeIndex ? 0 : -1;
+        });
+      carouselDots
+        .querySelectorAll<HTMLButtonElement>("[data-theme-dot]")
+        .forEach((dot, index) => {
+          dot.setAttribute("aria-current", String(index === activeThemeIndex));
+        });
       carouselPosition.textContent = `${activeThemeIndex + 1} / ${slides.length}`;
       previousThemeButton.disabled = activeThemeIndex === 0;
       nextThemeButton.disabled = activeThemeIndex === slides.length - 1;
-      if (focusChoice) themeBox.querySelectorAll<HTMLButtonElement>('[data-theme-choice]')[activeThemeIndex].focus();
+      if (focusChoice)
+        themeBox
+          .querySelectorAll<HTMLButtonElement>("[data-theme-choice]")
+          [activeThemeIndex].focus();
     };
 
     const setActiveTheme = (index: number, focusChoice = false) => {
-      activeThemeIndex = Math.max(0, Math.min(index, themes.length - 1));
+      activeThemeIndex = Math.max(0, Math.min(index, visibleThemes.length - 1));
       layoutCarousel(focusChoice);
     };
 
     const renderThemes = () => {
-      const key = themes.map((theme) => theme.id).join();
+      const selectedTheme = effectiveTheme();
+      const selectionChanged = selectedTheme !== lastSelectedTheme;
+      if (selectionChanged) {
+        lastSelectedTheme = selectedTheme;
+        const selectedDefinition = themes.find(
+          (theme) => theme.id === selectedTheme,
+        );
+        if (selectedDefinition) activeThemeMode = selectedDefinition.mode;
+      }
+      visibleThemes = themes.filter((theme) => theme.mode === activeThemeMode);
+      themeModeButtons.forEach((button) => {
+        button.setAttribute(
+          "aria-pressed",
+          String(button.dataset.themeMode === activeThemeMode),
+        );
+      });
+      if (selectionChanged) {
+        const selectedIndex = visibleThemes.findIndex(
+          (theme) => theme.id === selectedTheme,
+        );
+        if (selectedIndex >= 0) activeThemeIndex = selectedIndex;
+      }
+
+      const key = visibleThemes.map((theme) => theme.id).join();
       if (key !== themeKey) {
         themeKey = key;
-        const slides = themes.map((theme, index) => {
-          const slide = document.createElement('div');
-          slide.className = 'sm-theme-slide';
-          slide.dataset.themeSlide = '';
-          slide.setAttribute('role', 'listitem');
+        carouselDots.replaceChildren();
+        const slides = visibleThemes.map((theme, index) => {
+          const slide = document.createElement("div");
+          slide.className = "sm-theme-slide";
+          slide.dataset.themeSlide = "";
+          slide.setAttribute("role", "listitem");
 
-          const choice = document.createElement('button');
-          choice.type = 'button';
-          choice.className = 'sm-theme-choice sm-theme-profile';
+          const choice = document.createElement("button");
+          choice.type = "button";
+          choice.className = "sm-theme-choice sm-theme-profile";
           choice.dataset.siteTheme = theme.id;
-          choice.dataset.themeChoice = '';
-          choice.setAttribute('aria-pressed', 'false');
+          choice.dataset.themeChoice = "";
+          choice.setAttribute("aria-pressed", "false");
           choice.tabIndex = -1;
-          choice.addEventListener('click', () => {
+          choice.addEventListener("click", () => {
             if (!isThemeAvailable(theme.id)) return;
             activeThemeIndex = index;
             updateSettings({ theme: theme.id });
           });
 
-          const meta = document.createElement('span');
-          meta.className = 'sm-theme-meta';
-          const name = document.createElement('strong');
-          name.className = 'sm-theme-name';
+          const meta = document.createElement("span");
+          meta.className = "sm-theme-meta";
+          const name = document.createElement("strong");
+          name.className = "sm-theme-name";
           name.textContent = theme.name;
-          const selected = document.createElement('span');
-          selected.className = 'sm-theme-selected';
-          selected.textContent = 'Selected';
+          const selected = document.createElement("span");
+          selected.className = "sm-theme-selected";
+          selected.textContent = "Selected";
           meta.append(name, selected);
 
-          const preview = previewTemplate.content.firstElementChild?.cloneNode(true) as HTMLElement;
+          const preview = previewTemplate.content.firstElementChild?.cloneNode(
+            true,
+          ) as HTMLElement;
           preview.dataset.siteTheme = theme.id;
-          preview.style.setProperty('--sm-mini-swatch', theme.swatch);
-          preview.querySelector<HTMLElement>('[data-sm-mini-name]')!.textContent = theme.name;
+          preview.style.setProperty("--sm-mini-swatch", theme.swatch);
+          preview.querySelector<HTMLElement>(
+            "[data-sm-mini-name]",
+          )!.textContent = theme.name;
 
-          const lock = document.createElement('span');
-          lock.className = 'sm-theme-lock';
+          const lock = document.createElement("span");
+          lock.className = "sm-theme-lock";
           lock.hidden = true;
-          const lockLabel = document.createElement('strong');
-          lockLabel.className = 'sm-theme-lock-label';
-          lockLabel.innerHTML = '<span aria-hidden="true">\u{1F512}\uFE0E</span> LOCKED';
-          const lockHelp = document.createElement('span');
-          lockHelp.className = 'sm-theme-lock-help';
-          lock.dataset.themeLock = '';
+          const lockLabel = document.createElement("strong");
+          lockLabel.className = "sm-theme-lock-label";
+          lockLabel.innerHTML =
+            '<span aria-hidden="true">\u{1F512}\uFE0E</span> LOCKED';
+          const lockHelp = document.createElement("span");
+          lockHelp.className = "sm-theme-lock-help";
+          lock.dataset.themeLock = "";
           lock.append(lockLabel, lockHelp);
           choice.append(meta, preview, lock);
           applyThemePreviewPalette(choice, theme);
           slide.append(choice);
 
-          const dot = document.createElement('button');
-          dot.type = 'button';
-          dot.className = 'sm-carousel-dot';
-          dot.dataset.themeDot = '';
-          dot.setAttribute('aria-current', 'false');
-          dot.addEventListener('click', () => setActiveTheme(index));
+          const dot = document.createElement("button");
+          dot.type = "button";
+          dot.className = "sm-carousel-dot";
+          dot.dataset.themeDot = "";
+          dot.setAttribute("aria-current", "false");
+          dot.addEventListener("click", () => setActiveTheme(index));
           carouselDots.append(dot);
           return slide;
         });
         themeBox.replaceChildren(...slides);
       }
 
-      const selectedTheme = effectiveTheme();
-      if (selectedTheme !== lastSelectedTheme) {
-        lastSelectedTheme = selectedTheme;
-        const selectedIndex = themes.findIndex((theme) => theme.id === selectedTheme);
-        if (selectedIndex >= 0) activeThemeIndex = selectedIndex;
-      }
-      themes.forEach((theme, index) => {
+      visibleThemes.forEach((theme, index) => {
         const available = isThemeAvailable(theme.id);
-        const choice = themeBox.querySelectorAll<HTMLButtonElement>('[data-theme-choice]')[index];
-        const lock = choice.querySelector<HTMLElement>('[data-theme-lock]')!;
-        const dot = carouselDots.querySelectorAll<HTMLButtonElement>('[data-theme-dot]')[index];
-        const achievementName = theme.unlockedBy ? achievements[theme.unlockedBy].name : '';
-        choice.setAttribute('aria-pressed', String(theme.id === selectedTheme));
-        choice.setAttribute('aria-disabled', String(!available));
-        choice.setAttribute('aria-label', available ? `${theme.name} theme${theme.id === selectedTheme ? ', selected' : ''}` : `${theme.name} theme, locked. Unlock by completing ${achievementName}.`);
+        const choice = themeBox.querySelectorAll<HTMLButtonElement>(
+          "[data-theme-choice]",
+        )[index];
+        const lock = choice.querySelector<HTMLElement>("[data-theme-lock]")!;
+        const dot =
+          carouselDots.querySelectorAll<HTMLButtonElement>("[data-theme-dot]")[
+            index
+          ];
+        const achievementName = theme.unlockedBy
+          ? achievements[theme.unlockedBy].name
+          : "";
+        choice.setAttribute("aria-pressed", String(theme.id === selectedTheme));
+        choice.setAttribute("aria-disabled", String(!available));
+        choice.setAttribute(
+          "aria-label",
+          available
+            ? `${theme.name} theme${theme.id === selectedTheme ? ", selected" : ""}`
+            : `${theme.name} theme, locked. Unlock by completing ${achievementName}.`,
+        );
         lock.hidden = available;
-        lock.querySelector<HTMLElement>('.sm-theme-lock-help')!.textContent = `Unlock by completing "${achievementName}".`;
-        dot.setAttribute('aria-label', `Show ${theme.name} theme preview${available ? '' : ', locked'}`);
+        lock.querySelector<HTMLElement>(".sm-theme-lock-help")!.textContent =
+          `Unlock by completing "${achievementName}".`;
+        dot.setAttribute(
+          "aria-label",
+          `Show ${theme.name} theme preview${available ? "" : ", locked"}`,
+        );
       });
       layoutCarousel();
     };
@@ -660,56 +2201,59 @@ import AchievementNotifications from './AchievementNotifications.astro';
     const renderAchievements = () => {
       const visible = getAchievements();
       summary.textContent = `${visible.filter((item) => item.unlocked).length} / ${visible.length} unlocked`;
-      list.replaceChildren(...visible.map((item) => {
-        const li = document.createElement('li');
-        li.className = `sm-ach${item.unlocked ? ' is-unlocked' : ''}`;
-        const icon = document.createElement('span');
-        icon.className = 'sm-ach-icon';
-        icon.setAttribute('aria-hidden', 'true');
-        icon.textContent = item.unlocked ? '\u2713' : '\u{1F512}\uFE0E';
-        const body = document.createElement('div');
-        const name = document.createElement('span');
-        name.className = 'sm-ach-name';
-        name.textContent = item.name;
-        const desc = document.createElement('span');
-        desc.className = 'sm-ach-desc';
-        desc.textContent = item.secret && !item.unlocked ? '???' : item.description;
-        const hint = item.hint ? document.createElement('span') : null;
-        if (hint) {
-          hint.className = 'sm-ach-hint';
-          hint.textContent = `Hint: ${item.hint}`;
-        }
-        const progress = document.createElement('div');
-        progress.className = 'sm-ach-progress';
-        const bar = document.createElement('div');
-        bar.className = 'sm-ach-bar';
-        bar.setAttribute('role', 'progressbar');
-        bar.setAttribute('aria-label', `${item.name} progress`);
-        bar.setAttribute('aria-valuemin', '0');
-        bar.setAttribute('aria-valuemax', String(item.goal));
-        bar.setAttribute('aria-valuenow', String(item.progress));
-        const fill = document.createElement('i');
-        fill.style.width = `${(item.progress / item.goal) * 100}%`;
-        bar.append(fill);
-        const count = document.createElement('span');
-        const state = document.createElement('span');
-        state.className = 'sm-ach-state';
-        state.textContent = item.unlocked ? 'Unlocked' : 'Locked';
-        if (!item.progressVisible) {
-          progress.append(state);
-        } else if (!item.goalVisible) {
-          count.textContent = `${item.progress} / ???${item.unit ? ` ${item.unit}` : ''}`;
-          progress.append(count, state);
-        } else {
-          count.textContent = `${item.progress} / ${item.goal}${item.unit ? ` ${item.unit}` : ''}`;
-          progress.append(bar, count, state);
-        }
-        body.append(name, desc);
-        if (hint) body.append(hint);
-        body.append(progress);
-        li.append(icon, body);
-        return li;
-      }));
+      list.replaceChildren(
+        ...visible.map((item) => {
+          const li = document.createElement("li");
+          li.className = `sm-ach${item.unlocked ? " is-unlocked" : ""}`;
+          const icon = document.createElement("span");
+          icon.className = "sm-ach-icon";
+          icon.setAttribute("aria-hidden", "true");
+          icon.textContent = item.unlocked ? "\u2713" : "\u{1F512}\uFE0E";
+          const body = document.createElement("div");
+          const name = document.createElement("span");
+          name.className = "sm-ach-name";
+          name.textContent = item.name;
+          const desc = document.createElement("span");
+          desc.className = "sm-ach-desc";
+          desc.textContent =
+            item.secret && !item.unlocked ? "???" : item.description;
+          const hint = item.hint ? document.createElement("span") : null;
+          if (hint) {
+            hint.className = "sm-ach-hint";
+            hint.textContent = `Hint: ${item.hint}`;
+          }
+          const progress = document.createElement("div");
+          progress.className = "sm-ach-progress";
+          const bar = document.createElement("div");
+          bar.className = "sm-ach-bar";
+          bar.setAttribute("role", "progressbar");
+          bar.setAttribute("aria-label", `${item.name} progress`);
+          bar.setAttribute("aria-valuemin", "0");
+          bar.setAttribute("aria-valuemax", String(item.goal));
+          bar.setAttribute("aria-valuenow", String(item.progress));
+          const fill = document.createElement("i");
+          fill.style.width = `${(item.progress / item.goal) * 100}%`;
+          bar.append(fill);
+          const count = document.createElement("span");
+          const state = document.createElement("span");
+          state.className = "sm-ach-state";
+          state.textContent = item.unlocked ? "Unlocked" : "Locked";
+          if (!item.progressVisible) {
+            progress.append(state);
+          } else if (!item.goalVisible) {
+            count.textContent = `${item.progress} / ???${item.unit ? ` ${item.unit}` : ""}`;
+            progress.append(count, state);
+          } else {
+            count.textContent = `${item.progress} / ${item.goal}${item.unit ? ` ${item.unit}` : ""}`;
+            progress.append(bar, count, state);
+          }
+          body.append(name, desc);
+          if (hint) body.append(hint);
+          body.append(progress);
+          li.append(icon, body);
+          return li;
+        }),
+      );
     };
 
     const render = () => {
@@ -721,15 +2265,16 @@ import AchievementNotifications from './AchievementNotifications.astro';
       if (event.pointerId !== dragPointerId) return;
       const wasDragging = carouselDragging;
       const deltaX = dragDeltaX;
-      window.removeEventListener('pointermove', moveCarouselPointer);
-      window.removeEventListener('pointerup', endCarouselPointer);
-      window.removeEventListener('pointercancel', cancelCarouselPointer);
+      window.removeEventListener("pointermove", moveCarouselPointer);
+      window.removeEventListener("pointerup", endCarouselPointer);
+      window.removeEventListener("pointercancel", cancelCarouselPointer);
       dragPointerId = null;
       carouselDragging = false;
-      carouselViewport.removeAttribute('data-dragging');
+      carouselViewport.removeAttribute("data-dragging");
       if (!cancelled && wasDragging) {
         suppressCardClickUntil = performance.now() + 450;
-        if (Math.abs(deltaX) >= 45) setActiveTheme(activeThemeIndex + (deltaX < 0 ? 1 : -1));
+        if (Math.abs(deltaX) >= 45)
+          setActiveTheme(activeThemeIndex + (deltaX < 0 ? 1 : -1));
         else layoutCarousel();
       } else {
         layoutCarousel();
@@ -740,10 +2285,14 @@ import AchievementNotifications from './AchievementNotifications.astro';
       if (event.pointerId !== dragPointerId) return;
       dragDeltaX = event.clientX - dragStartX;
       const deltaY = event.clientY - dragStartY;
-      if (!carouselDragging && Math.abs(dragDeltaX) > 8 && Math.abs(dragDeltaX) > Math.abs(deltaY)) {
+      if (
+        !carouselDragging &&
+        Math.abs(dragDeltaX) > 8 &&
+        Math.abs(dragDeltaX) > Math.abs(deltaY)
+      ) {
         carouselDragging = true;
-        carouselViewport.dataset.dragging = 'true';
-        themeBox.style.transition = 'none';
+        carouselViewport.dataset.dragging = "true";
+        themeBox.style.transition = "none";
       }
       if (carouselDragging) {
         event.preventDefault();
@@ -751,138 +2300,242 @@ import AchievementNotifications from './AchievementNotifications.astro';
       }
     };
 
-    const endCarouselPointer = (event: PointerEvent) => finishCarouselDrag(event);
-    const cancelCarouselPointer = (event: PointerEvent) => finishCarouselDrag(event, true);
+    const endCarouselPointer = (event: PointerEvent) =>
+      finishCarouselDrag(event);
+    const cancelCarouselPointer = (event: PointerEvent) =>
+      finishCarouselDrag(event, true);
 
     const cancelCarouselDrag = () => {
       if (dragPointerId === null) return;
-      window.removeEventListener('pointermove', moveCarouselPointer);
-      window.removeEventListener('pointerup', endCarouselPointer);
-      window.removeEventListener('pointercancel', cancelCarouselPointer);
+      window.removeEventListener("pointermove", moveCarouselPointer);
+      window.removeEventListener("pointerup", endCarouselPointer);
+      window.removeEventListener("pointercancel", cancelCarouselPointer);
       dragPointerId = null;
       carouselDragging = false;
-      carouselViewport.removeAttribute('data-dragging');
+      carouselViewport.removeAttribute("data-dragging");
       layoutCarousel();
     };
 
-    previousThemeButton.addEventListener('click', () => setActiveTheme(activeThemeIndex - 1));
-    nextThemeButton.addEventListener('click', () => setActiveTheme(activeThemeIndex + 1));
-    carouselViewport.addEventListener('keydown', (event) => {
-      if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+    themeModeButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const mode = button.dataset.themeMode;
+        if ((mode !== "light" && mode !== "dark") || mode === activeThemeMode)
+          return;
+        activeThemeMode = mode;
+        const selectedIndex = themes
+          .filter((theme) => theme.mode === activeThemeMode)
+          .findIndex((theme) => theme.id === effectiveTheme());
+        activeThemeIndex = selectedIndex >= 0 ? selectedIndex : 0;
+        renderThemes();
+      });
+    });
+    previousThemeButton.addEventListener("click", () =>
+      setActiveTheme(activeThemeIndex - 1),
+    );
+    nextThemeButton.addEventListener("click", () =>
+      setActiveTheme(activeThemeIndex + 1),
+    );
+    carouselViewport.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
         event.preventDefault();
-        setActiveTheme(activeThemeIndex + (event.key === 'ArrowRight' ? 1 : -1), true);
-      } else if (event.key === 'Home' || event.key === 'End') {
+        setActiveTheme(
+          activeThemeIndex + (event.key === "ArrowRight" ? 1 : -1),
+          true,
+        );
+      } else if (event.key === "Home" || event.key === "End") {
         event.preventDefault();
-        setActiveTheme(event.key === 'Home' ? 0 : themes.length - 1, true);
+        setActiveTheme(
+          event.key === "Home" ? 0 : visibleThemes.length - 1,
+          true,
+        );
       }
     });
-    carouselViewport.addEventListener('pointerdown', (event) => {
-      if (event.pointerType === 'mouse' && event.button !== 0) return;
+    carouselViewport.addEventListener("pointerdown", (event) => {
+      if (event.pointerType === "mouse" && event.button !== 0) return;
       dragPointerId = event.pointerId;
       dragStartX = event.clientX;
       dragStartY = event.clientY;
       dragBaseOffset = carouselOffset;
       dragDeltaX = 0;
       carouselDragging = false;
-      window.addEventListener('pointermove', moveCarouselPointer);
-      window.addEventListener('pointerup', endCarouselPointer);
-      window.addEventListener('pointercancel', cancelCarouselPointer);
+      window.addEventListener("pointermove", moveCarouselPointer);
+      window.addEventListener("pointerup", endCarouselPointer);
+      window.addEventListener("pointercancel", cancelCarouselPointer);
     });
-    carouselViewport.addEventListener('click', (event) => {
-      if (performance.now() >= suppressCardClickUntil) return;
-      event.preventDefault();
-      event.stopImmediatePropagation();
-    }, true);
-    window.addEventListener('resize', () => layoutCarousel());
-    window.addEventListener('blur', cancelCarouselDrag);
+    carouselViewport.addEventListener(
+      "click",
+      (event) => {
+        if (performance.now() >= suppressCardClickUntil) return;
+        event.preventDefault();
+        event.stopImmediatePropagation();
+      },
+      true,
+    );
+    window.addEventListener("resize", () => layoutCarousel());
+    window.addEventListener("blur", cancelCarouselDrag);
 
-    toggle.addEventListener('click', () => setOpen(!isOpen()));
-    resetButton.addEventListener('click', () => setConfirmOpen(true));
-    confirmCloseButton.addEventListener('click', () => setConfirmOpen(false));
-    confirmBox.addEventListener('pointerdown', (event) => { if (event.target === confirmBox) setConfirmOpen(false); });
-    confirmButton.addEventListener('pointerdown', (event) => {
-      if (event.pointerType === 'mouse' && event.button !== 0) return;
+    toggle.addEventListener("click", () => setOpen(!isOpen()));
+    resetButton.addEventListener("click", () => setConfirmOpen(true));
+    confirmCloseButton.addEventListener("click", () => setConfirmOpen(false));
+    confirmBox.addEventListener("pointerdown", (event) => {
+      if (event.target === confirmBox) setConfirmOpen(false);
+    });
+    confirmButton.addEventListener("pointerdown", (event) => {
+      if (event.pointerType === "mouse" && event.button !== 0) return;
       event.preventDefault();
       if (holdKind) return;
       activePointerId = event.pointerId;
-      startHold('pointer');
-      try { confirmButton.setPointerCapture(event.pointerId); } catch { clearHold(); }
+      startHold("pointer");
+      try {
+        confirmButton.setPointerCapture(event.pointerId);
+      } catch {
+        clearHold();
+      }
     });
-    confirmButton.addEventListener('pointerup', (event) => {
-      if (holdKind !== 'pointer' || event.pointerId !== activePointerId) return;
+    confirmButton.addEventListener("pointerup", (event) => {
+      if (holdKind !== "pointer" || event.pointerId !== activePointerId) return;
       event.preventDefault();
       finishHold();
     });
-    confirmButton.addEventListener('pointercancel', () => { if (holdKind === 'pointer') clearHold(); });
-    confirmButton.addEventListener('lostpointercapture', () => { if (holdKind === 'pointer') clearHold(); });
-    confirmButton.addEventListener('keydown', (event) => {
-      if (event.key !== 'Enter' && event.code !== 'Space') return;
+    confirmButton.addEventListener("pointercancel", () => {
+      if (holdKind === "pointer") clearHold();
+    });
+    confirmButton.addEventListener("lostpointercapture", () => {
+      if (holdKind === "pointer") clearHold();
+    });
+    confirmButton.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" && event.code !== "Space") return;
       event.preventDefault();
       if (event.repeat || holdKind) return;
       activeKey = event.code || event.key;
-      startHold('keyboard');
+      startHold("keyboard");
     });
-    confirmButton.addEventListener('keyup', (event) => {
-      if (holdKind !== 'keyboard' || (event.code || event.key) !== activeKey) return;
+    confirmButton.addEventListener("keyup", (event) => {
+      if (holdKind !== "keyboard" || (event.code || event.key) !== activeKey)
+        return;
       event.preventDefault();
       finishHold();
     });
-    confirmButton.addEventListener('click', (event) => event.preventDefault());
-    confirmButton.addEventListener('blur', () => { if (holdKind === 'keyboard') clearHold(); });
-    window.addEventListener('blur', clearHold);
-    root.querySelector('[data-sm-close]')!.addEventListener('click', () => setOpen(false));
-    overlay.addEventListener('pointerdown', (event) => { if (event.target === overlay) setOpen(false); });
+    confirmButton.addEventListener("click", (event) => event.preventDefault());
+    confirmButton.addEventListener("blur", () => {
+      if (holdKind === "keyboard") clearHold();
+    });
+    window.addEventListener("blur", clearHold);
+    root
+      .querySelector("[data-sm-close]")!
+      .addEventListener("click", () => setOpen(false));
+    overlay.addEventListener("pointerdown", (event) => {
+      if (event.target === overlay) setOpen(false);
+    });
     tabs.forEach((tab, index) => {
-      tab.addEventListener('click', () => showTab(tab.dataset.tab!));
-      tab.addEventListener('keydown', (event) => {
-        const step = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
-        if (event.key === 'Home' || event.key === 'End') {
+      tab.addEventListener("click", () => showTab(tab.dataset.tab!));
+      tab.addEventListener("keydown", (event) => {
+        const step =
+          event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0;
+        if (event.key === "Home" || event.key === "End") {
           event.preventDefault();
-          showTab(tabs[event.key === 'Home' ? 0 : tabs.length - 1].dataset.tab!, true);
+          showTab(
+            tabs[event.key === "Home" ? 0 : tabs.length - 1].dataset.tab!,
+            true,
+          );
         } else if (step) {
           event.preventDefault();
-          showTab(tabs[(index + step + tabs.length) % tabs.length].dataset.tab!, true);
+          showTab(
+            tabs[(index + step + tabs.length) % tabs.length].dataset.tab!,
+            true,
+          );
         }
       });
     });
     settingsSubtabs.forEach((tab, index) => {
-      tab.addEventListener('click', () => showSettingsSubtab(tab.dataset.settingsSubtab as 'fun' | 'accessibility'));
-      tab.addEventListener('keydown', (event) => {
-        if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+      tab.addEventListener("click", () =>
+        showSettingsSubtab(
+          tab.dataset.settingsSubtab as "fun" | "accessibility",
+        ),
+      );
+      tab.addEventListener("keydown", (event) => {
+        if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key))
+          return;
         event.preventDefault();
-        const nextIndex = event.key === 'Home' ? 0 : event.key === 'End' ? settingsSubtabs.length - 1 : (index + (event.key === 'ArrowRight' ? 1 : -1) + settingsSubtabs.length) % settingsSubtabs.length;
+        const nextIndex =
+          event.key === "Home"
+            ? 0
+            : event.key === "End"
+              ? settingsSubtabs.length - 1
+              : (index +
+                  (event.key === "ArrowRight" ? 1 : -1) +
+                  settingsSubtabs.length) %
+                settingsSubtabs.length;
         const next = settingsSubtabs[nextIndex];
-        showSettingsSubtab(next.dataset.settingsSubtab as 'fun' | 'accessibility', true);
+        showSettingsSubtab(
+          next.dataset.settingsSubtab as "fun" | "accessibility",
+          true,
+        );
       });
     });
-    forceInput.addEventListener('change', () => updateSettings({ forceTheme: forceInput.checked }));
-    motionInput.addEventListener('change', () => updateSettings({ reducedMotion: motionInput.checked }));
-    plinkoExtremeInput.addEventListener('change', () => updateSettings({ plinkoExtremeMode: plinkoExtremeInput.checked }));
+    forceInput.addEventListener("change", () =>
+      updateSettings({ forceTheme: forceInput.checked }),
+    );
+    motionInput.addEventListener("change", () =>
+      updateSettings({ reducedMotion: motionInput.checked }),
+    );
+    plinkoExtremeInput.addEventListener("change", () =>
+      updateSettings({ plinkoExtremeMode: plinkoExtremeInput.checked }),
+    );
 
     // Keep keystrokes (space, letters) from reaching the music player's global shortcuts.
-    overlay.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape') { if (isConfirmOpen()) { event.stopPropagation(); setConfirmOpen(false); } else setOpen(false); return; }
+    overlay.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        if (isConfirmOpen()) {
+          event.stopPropagation();
+          setConfirmOpen(false);
+        } else setOpen(false);
+        return;
+      }
       event.stopPropagation();
-      if (event.key !== 'Tab') return;
+      if (event.key !== "Tab") return;
       const trapRoot = isConfirmOpen() ? confirmBox : panel;
-      const focusable = Array.from(trapRoot.querySelectorAll<HTMLElement>('button, input, [tabindex="0"]'))
-        .filter((element) => !element.closest('[hidden]') && element.tabIndex >= 0);
+      const focusable = Array.from(
+        trapRoot.querySelectorAll<HTMLElement>('button, input, [tabindex="0"]'),
+      ).filter(
+        (element) => !element.closest("[hidden]") && element.tabIndex >= 0,
+      );
       const first = focusable[0];
       const last = focusable[focusable.length - 1];
-      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
-      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     });
-    document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && isOpen() && !isConfirmOpen()) setOpen(false); });
-    document.addEventListener('astro:before-swap', () => { cancelCarouselDrag(); setOpen(false); stopInfoAnimation(); });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && isOpen() && !isConfirmOpen())
+        setOpen(false);
+    });
+    document.addEventListener("astro:before-swap", () => {
+      cancelCarouselDrag();
+      setOpen(false);
+      stopInfoAnimation();
+    });
 
-    window.addEventListener(CHANGE_EVENT, () => { render(); updateInfoAnimation(); });
-    window.addEventListener(ACTIVITY_EVENT, () => { if (isOpen() && !achievementsView.hidden) renderAchievements(); });
-    window.addEventListener(UNLOCK_EVENT, () => { render(); updateInfoAnimation(); });
+    window.addEventListener(CHANGE_EVENT, () => {
+      render();
+      updateInfoAnimation();
+    });
+    window.addEventListener(ACTIVITY_EVENT, () => {
+      if (isOpen() && !achievementsView.hidden) renderAchievements();
+    });
+    window.addEventListener(UNLOCK_EVENT, () => {
+      render();
+      updateInfoAnimation();
+    });
     setupAchievementNotifications(root);
     initSiteState();
     render();
   };
 
   setupSettingsMenu();
-  document.addEventListener('astro:page-load', setupSettingsMenu);
+  document.addEventListener("astro:page-load", setupSettingsMenu);
 </script>

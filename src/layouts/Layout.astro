@@ -1,14 +1,14 @@
 ---
-import { ClientRouter } from 'astro:transitions';
-import AnnouncementStrip from '../components/AnnouncementStrip.astro';
-import FirstLoadWarning from '../components/FirstLoadWarning.astro';
-import Header from '../components/Header.astro';
-import MusicPlayer from '../components/MusicPlayer.astro';
-import SettingsMenu from '../components/SettingsMenu.astro';
-import { themes, DEFAULT_THEME } from '../data/themes';
-import '../styles/global.css';
-import { getVisiblePostIds } from '../data/posts';
-import { STORAGE_KEY } from '../scripts/site-state';
+import { ClientRouter } from "astro:transitions";
+import AnnouncementStrip from "../components/AnnouncementStrip.astro";
+import FirstLoadWarning from "../components/FirstLoadWarning.astro";
+import Header from "../components/Header.astro";
+import MusicPlayer from "../components/MusicPlayer.astro";
+import SettingsMenu from "../components/SettingsMenu.astro";
+import { themes, DEFAULT_THEME } from "../data/themes";
+import "../styles/global.css";
+import { getVisiblePostIds } from "../data/posts";
+import { STORAGE_KEY } from "../scripts/site-state";
 
 interface Props {
   title: string;
@@ -16,19 +16,33 @@ interface Props {
   bodyClass?: string;
 }
 
-const { title, description = 'the praxor website', bodyClass = '' } = Astro.props;
-const image = 'https://praxor.de/media/res/snes_undertall.png';
-const postIds = JSON.stringify(await getVisiblePostIds()).replace(/</g, '\\u003c');
+const {
+  title,
+  description = "the praxor website",
+  bodyClass = "",
+} = Astro.props;
+const image = "https://praxor.de/media/res/snes_undertall.png";
+const postIds = JSON.stringify(await getVisiblePostIds()).replace(
+  /</g,
+  "\\u003c",
+);
 ---
+
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
     <title>{title}</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="icon" href="/favicon.ico" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={Astro.url.href} />
@@ -40,9 +54,38 @@ const postIds = JSON.stringify(await getVisiblePostIds()).replace(/</g, '\\u003c
     <meta property="twitter:title" content="the praxor website" />
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={image} />
-    <script is:inline define:vars={{ key: STORAGE_KEY, themes, fallback: DEFAULT_THEME }}>
+    <script
+      is:inline
+      define:vars={{ key: STORAGE_KEY, themes, fallback: DEFAULT_THEME }}
+    >
       // Applies saved theme/motion settings before first paint to avoid a flash.
-      (function(){try{var d=JSON.parse(localStorage.getItem(key))||{};var s=d.settings||{};var a=d.achievements||{};var r=document.documentElement;var t=themes.filter(function(x){return x.id===s.theme&&(!x.unlockedBy||(a[x.unlockedBy]&&a[x.unlockedBy].unlocked===true));})[0];r.dataset.siteTheme=t?t.id:fallback;r.dataset.forceTheme=String(s.forceTheme===true);r.dataset.reducedMotion=String(typeof s.reducedMotion==='boolean'?s.reducedMotion:matchMedia('(prefers-reduced-motion: reduce)').matches);r.dataset.warningRequired=String(d.flashingWarningAcknowledged!==true);}catch(e){document.documentElement.dataset.warningRequired='true';}})();
+      (function () {
+        try {
+          var d = JSON.parse(localStorage.getItem(key)) || {};
+          var s = d.settings || {};
+          var a = d.achievements || {};
+          var r = document.documentElement;
+          var t = themes.filter(function (x) {
+            return (
+              x.id === s.theme &&
+              (!x.unlockedBy ||
+                (a[x.unlockedBy] && a[x.unlockedBy].unlocked === true))
+            );
+          })[0];
+          r.dataset.siteTheme = t ? t.id : fallback;
+          r.dataset.forceTheme = String(s.forceTheme === true);
+          r.dataset.reducedMotion = String(
+            typeof s.reducedMotion === "boolean"
+              ? s.reducedMotion
+              : matchMedia("(prefers-reduced-motion: reduce)").matches,
+          );
+          r.dataset.warningRequired = String(
+            d.flashingWarningAcknowledged !== true,
+          );
+        } catch (e) {
+          document.documentElement.dataset.warningRequired = "true";
+        }
+      })();
     </script>
     <ClientRouter />
   </head>
@@ -55,47 +98,73 @@ const postIds = JSON.stringify(await getVisiblePostIds()).replace(/</g, '\\u003c
     </div>
     <MusicPlayer />
     <SettingsMenu />
-    <script is:inline type="application/json" id="site-post-ids" set:html={postIds}></script>
+    <script
+      is:inline
+      type="application/json"
+      id="site-post-ids"
+      set:html={postIds}
+    ></script>
   </body>
 </html>
 
 <script>
-  import { initSiteState } from '../scripts/site-state';
-  import { initSiteActivity } from '../scripts/site-activity';
-  import { initHoldTriggers } from '../scripts/site-hold';
-  import { initializeThemeCats } from '../scripts/theme-cats';
+  import { initSiteState } from "../scripts/site-state";
+  import { initSiteActivity } from "../scripts/site-activity";
+  import { initHoldTriggers } from "../scripts/site-hold";
+  import { initializeThemeCats } from "../scripts/theme-cats";
   initSiteState();
   initSiteActivity();
   initHoldTriggers();
   initializeThemeCats(import.meta.env.BASE_URL);
-  const themeProperties = ['--bg', '--card', '--text', '--muted', '--accent', '--accent-contrast', '--accent-dark', '--accent-10', '--accent-12', '--muted-border'];
-  const persistentThemeSurfaces = () => document.querySelectorAll<HTMLElement>('.site-header, #persistent-music-player');
+  const themeProperties = [
+    "--bg",
+    "--card",
+    "--text",
+    "--muted",
+    "--accent",
+    "--accent-contrast",
+    "--accent-dark",
+    "--accent-10",
+    "--accent-12",
+    "--muted-border",
+  ];
+  const persistentThemeSurfaces = () =>
+    document.querySelectorAll<HTMLElement>(
+      ".site-header, #persistent-music-player",
+    );
   const capturePersistentTheme = () => {
     persistentThemeSurfaces().forEach((surface) => {
       const computed = getComputedStyle(surface);
-      themeProperties.forEach((property) => surface.style.setProperty(property, computed.getPropertyValue(property)));
-      surface.dataset.themeTransitionCaptured = 'true';
+      themeProperties.forEach((property) =>
+        surface.style.setProperty(
+          property,
+          computed.getPropertyValue(property),
+        ),
+      );
+      surface.dataset.themeTransitionCaptured = "true";
     });
   };
   const releasePersistentTheme = () => {
     requestAnimationFrame(() => {
       persistentThemeSurfaces().forEach((surface) => {
-        if (surface.dataset.themeTransitionCaptured !== 'true') return;
-        themeProperties.forEach((property) => surface.style.removeProperty(property));
+        if (surface.dataset.themeTransitionCaptured !== "true") return;
+        themeProperties.forEach((property) =>
+          surface.style.removeProperty(property),
+        );
         delete surface.dataset.themeTransitionCaptured;
       });
     });
   };
   const markPageLoaded = () => {
-    document.documentElement.classList.remove('is-transitioning');
-    document.documentElement.classList.add('is-loaded');
+    document.documentElement.classList.remove("is-transitioning");
+    document.documentElement.classList.add("is-loaded");
   };
-  document.addEventListener('astro:before-swap', () => {
+  document.addEventListener("astro:before-swap", () => {
     capturePersistentTheme();
-    document.documentElement.classList.remove('is-loaded');
-    document.documentElement.classList.add('is-transitioning');
+    document.documentElement.classList.remove("is-loaded");
+    document.documentElement.classList.add("is-transitioning");
   });
-  document.addEventListener('astro:after-swap', releasePersistentTheme);
-  document.addEventListener('astro:page-load', markPageLoaded);
+  document.addEventListener("astro:after-swap", releasePersistentTheme);
+  document.addEventListener("astro:page-load", markPageLoaded);
   markPageLoaded();
 </script>

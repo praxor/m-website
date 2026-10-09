@@ -1,5 +1,5 @@
 ﻿---
-import type { ArtworkCollection } from '../scripts/site-state';
+import type { ArtworkCollection } from "../scripts/site-state";
 
 export interface GalleryItem {
   src: string;
@@ -17,9 +17,16 @@ interface Props {
   achievementCollection?: ArtworkCollection;
 }
 
-const { items, title, label = 'artwork', achievementCollection } = Astro.props;
+const { items, title, label = "artwork", achievementCollection } = Astro.props;
 ---
-<dialog id="fanart-gallery" class="fanart-gallery" aria-labelledby="gallery-title" data-single={items.length < 2 ? '' : undefined} data-achievement-collection={achievementCollection}>
+
+<dialog
+  id="fanart-gallery"
+  class="fanart-gallery"
+  aria-labelledby="gallery-title"
+  data-single={items.length < 2 ? "" : undefined}
+  data-achievement-collection={achievementCollection}
+>
   <div class="gallery-shell">
     <header class="gallery-toolbar">
       <div>
@@ -27,25 +34,72 @@ const { items, title, label = 'artwork', achievementCollection } = Astro.props;
         <h2 id="gallery-title">{title}</h2>
       </div>
       <div class="gallery-toolbar-actions">
-        <span id="gallery-counter" class="gallery-counter" aria-live="polite"></span>
-        <button class="gallery-close" type="button" data-gallery-close aria-label="Close gallery">×</button>
+        <span
+          id="gallery-counter"
+          class="gallery-counter"
+          aria-live="polite"
+        ></span>
+        <button
+          class="gallery-close"
+          type="button"
+          data-gallery-close
+          aria-label="Close gallery"
+        >
+          ×
+        </button>
       </div>
     </header>
     <div class="gallery-stage">
-      <button class="gallery-step" type="button" data-gallery-previous aria-label={`Previous ${label}`}><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m15 18-6-6 6-6" /></svg></button>
+      <button
+        class="gallery-step"
+        type="button"
+        data-gallery-previous
+        aria-label={`Previous ${label}`}
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="m15 18-6-6 6-6" />
+        </svg>
+      </button>
       <figure class="gallery-feature">
-        <div class="gallery-image-frame"><img id="gallery-image" alt="" decoding="async" /></div>
+        <div class="gallery-image-frame">
+          <img id="gallery-image" alt="" decoding="async" />
+        </div>
         <figcaption class="gallery-attribution">
           <span id="gallery-caption" class="gallery-caption" hidden></span>
           <span id="gallery-artist" class="gallery-artist"></span>
         </figcaption>
       </figure>
-      <button class="gallery-step" type="button" data-gallery-next aria-label={`Next ${label}`}><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6" /></svg></button>
+      <button
+        class="gallery-step"
+        type="button"
+        data-gallery-next
+        aria-label={`Next ${label}`}
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="m9 18 6-6-6-6" />
+        </svg>
+      </button>
     </div>
     <nav class="gallery-thumbnails" aria-label={`Choose ${label}`}>
       {items.map((item, index) => (
-        <button class="gallery-thumbnail" type="button" data-gallery-thumbnail={index} data-gallery-src={item.src} data-gallery-alt={item.alt} data-gallery-caption={item.caption || ''} data-gallery-artist={item.credit || ''} aria-label={`Show ${label} ${index + 1}`}>
-          <img src={item.src} alt="" width={item.width} height={item.height} loading="lazy" decoding="async" />
+        <button
+          class="gallery-thumbnail"
+          type="button"
+          data-gallery-thumbnail={index}
+          data-gallery-src={item.src}
+          data-gallery-alt={item.alt}
+          data-gallery-caption={item.caption || ""}
+          data-gallery-artist={item.credit || ""}
+          aria-label={`Show ${label} ${index + 1}`}
+        >
+          <img
+            src={item.src}
+            alt=""
+            width={item.width}
+            height={item.height}
+            loading="lazy"
+            decoding="async"
+          />
         </button>
       ))}
     </nav>
@@ -53,9 +107,22 @@ const { items, title, label = 'artwork', achievementCollection } = Astro.props;
 </dialog>
 
 <style is:global>
-  body.fanart-gallery-open .site-header { color: var(--text); background: var(--card); border-color: var(--muted-border); }
-  body.fanart-gallery-open .site-header .cult-link { color: transparent !important; }
-  .fanart-gallery .site-header { position: fixed; inset: 0 0 auto; z-index: 2; box-sizing: border-box; width: 100%; }
+  /* Component styles: image gallery dialog */
+  body.fanart-gallery-open .site-header {
+    color: var(--text);
+    background: var(--card);
+    border-color: var(--muted-border);
+  }
+  body.fanart-gallery-open .site-header .cult-link {
+    color: transparent !important;
+  }
+  .fanart-gallery .site-header {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 2;
+    box-sizing: border-box;
+    width: 100%;
+  }
   .fanart-gallery {
     --gallery-nav-height: 45px;
     position: fixed;
@@ -71,97 +138,394 @@ const { items, title, label = 'artwork', achievementCollection } = Astro.props;
     color: var(--text);
     background: var(--bg);
   }
-  .fanart-gallery[open] { display: grid; place-items: center; }
-  .fanart-gallery::backdrop { background: var(--bg); }
-  .fanart-gallery[data-single] .gallery-step { visibility: hidden; }
+  .fanart-gallery[open] {
+    display: grid;
+    place-items: center;
+  }
+  .fanart-gallery::backdrop {
+    background: var(--bg);
+  }
+  .fanart-gallery[data-single] .gallery-step {
+    visibility: hidden;
+  }
   .fanart-gallery[data-single] .gallery-thumbnails,
-  .fanart-gallery[data-single] .gallery-counter { display: none; }
-  .gallery-shell { box-sizing: border-box; display: grid; grid-template-rows: auto minmax(0,1fr) auto; gap: 1rem; width: min(100%,1280px); height: min(100dvh,1000px); padding: clamp(14px,3vw,32px); padding-top: calc(var(--gallery-nav-height) + 14px); animation: gallery-enter .34s cubic-bezier(.2,.9,.2,1) both; }
-  .fanart-gallery.is-closing .gallery-shell { animation: gallery-exit .22s ease both; }
-  .gallery-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
-  .gallery-kicker { margin: 0 0 3px; color: var(--muted); font-size: .68rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
-  .gallery-toolbar h2 { margin: 0; color: var(--text); font-size: 1.2rem; line-height: 1.2; letter-spacing: 0; }
-  .gallery-toolbar-actions { display: flex; align-items: center; gap: 16px; }
-  .gallery-counter { min-width: 58px; color: var(--muted); font-variant-numeric: tabular-nums; font-size: .82rem; text-align: right; }
-  .gallery-close,.gallery-step { display: grid; place-items: center; padding: 0; border: 1px solid var(--muted-border); border-radius: 2px; color: var(--text); background: linear-gradient(180deg,var(--accent-10),var(--surface-hover)); box-shadow: inset 0 1px 0 var(--accent-10),0 3px 12px var(--shadow-soft); cursor: pointer; transition: color .18s ease,background .18s ease,border-color .18s ease,box-shadow .18s ease,transform .18s ease; }
-  .gallery-close { width: 42px; height: 42px; font-size: 1.55rem; line-height: 1; }
-  .gallery-step { width: 42px; height: 42px; border-radius: 0; }
-  .gallery-step svg { display: block; width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-  .gallery-close:hover,.gallery-step:hover { transform: translateY(-2px); border-color: var(--accent); color: var(--accent); background: var(--accent-12); box-shadow: inset 0 1px 0 var(--accent-12),0 6px 18px var(--accent-12); }
-  .gallery-close:active,.gallery-step:active { transform: translateY(0) scale(.96); background: var(--accent-12); box-shadow: inset 0 1px 4px var(--shadow-strong); }
-  .gallery-close:focus-visible,.gallery-step:focus-visible,.gallery-thumbnail:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-  .gallery-stage { display: grid; grid-template-columns: 42px minmax(0,1fr) 42px; align-items: center; justify-items: center; gap: clamp(8px,2vw,24px); min-height: 0; }
-  .gallery-feature { display: grid; grid-template-rows: minmax(0,1fr) auto; gap: 10px; width: 100%; height: 100%; min-width: 0; min-height: 0; margin: 0; }
-  .gallery-image-frame { position: relative; display: grid; place-items: center; justify-self: center; align-self: center; box-sizing: border-box; width: min(100%,960px); height: min(68vh,720px); max-height: 100%; min-width: 0; min-height: 0; overflow: hidden; }
-  .gallery-image-frame img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; min-width: 0; min-height: 0; object-fit: contain; animation: gallery-image-in .28s cubic-bezier(.2,.9,.3,1) both; }
-  .gallery-attribution { display: grid; gap: 1px; min-height: 1.25em; text-align: center; }
-  .gallery-caption { color: var(--text); font-size: .86rem; line-height: 1.25; }
-  .gallery-caption[hidden] { display: none; }
-  .gallery-artist { color: var(--muted); font-size: .68rem; line-height: 1.2; }
-  .gallery-thumbnails { display: flex; gap: 8px; min-width: 0; overflow-x: auto; padding: 4px 3px 10px; scrollbar-width: thin; scrollbar-color: var(--accent-dark) transparent; }
-  .gallery-thumbnail { flex: 0 0 76px; width: 76px; height: 62px; padding: 0; overflow: hidden; border: 1px solid var(--muted-border); background: var(--bg); cursor: pointer; opacity: .56; transition: opacity .18s ease,border-color .18s ease,box-shadow .18s ease,transform .18s ease; }
-  .gallery-thumbnail:hover { border-color: var(--accent); opacity: .96; transform: translateY(-2px); }
-  .gallery-thumbnail[aria-current="true"] { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-12); opacity: 1; }
-  .gallery-thumbnail img { display: block; width: 100%; height: 100%; object-fit: cover; }
-  @keyframes gallery-enter { from { opacity: 0; transform: translateY(12px) scale(.985); } to { opacity: 1; transform: none; } }
-  @keyframes gallery-exit { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateY(8px) scale(.99); } }
-  @keyframes gallery-image-in { from { opacity: 0; transform: scale(.985); } to { opacity: 1; transform: scale(1); } }
-  @keyframes gallery-image-change { from { opacity: 0; filter: blur(4px); transform: translateY(8px) scale(.985); } to { opacity: 1; filter: blur(0); transform: translateY(0) scale(1); } }
-  .gallery-image-frame img.is-changing { animation: gallery-image-change .32s cubic-bezier(.2,.9,.3,1) both; }
+  .fanart-gallery[data-single] .gallery-counter {
+    display: none;
+  }
+  .gallery-shell {
+    box-sizing: border-box;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: 1rem;
+    width: min(100%, 1280px);
+    height: min(100dvh, 1000px);
+    padding: clamp(14px, 3vw, 32px);
+    padding-top: calc(var(--gallery-nav-height) + 14px);
+    animation: gallery-enter 0.34s cubic-bezier(0.2, 0.9, 0.2, 1) both;
+  }
+  .fanart-gallery.is-closing .gallery-shell {
+    animation: gallery-exit 0.22s ease both;
+  }
+  .gallery-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .gallery-kicker {
+    margin: 0 0 3px;
+    color: var(--muted);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .gallery-toolbar h2 {
+    margin: 0;
+    color: var(--text);
+    font-size: 1.2rem;
+    line-height: 1.2;
+    letter-spacing: 0;
+  }
+  .gallery-toolbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .gallery-counter {
+    min-width: 58px;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.82rem;
+    text-align: right;
+  }
+  .gallery-close,
+  .gallery-step {
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 1px solid var(--muted-border);
+    border-radius: 2px;
+    color: var(--text);
+    background: linear-gradient(180deg, var(--accent-10), var(--surface-hover));
+    box-shadow:
+      inset 0 1px 0 var(--accent-10),
+      0 3px 12px var(--shadow-soft);
+    cursor: pointer;
+    transition:
+      color 0.18s ease,
+      background 0.18s ease,
+      border-color 0.18s ease,
+      box-shadow 0.18s ease,
+      transform 0.18s ease;
+  }
+  .gallery-close {
+    width: 42px;
+    height: 42px;
+    font-size: 1.55rem;
+    line-height: 1;
+  }
+  .gallery-step {
+    width: 42px;
+    height: 42px;
+    border-radius: 0;
+  }
+  .gallery-step svg {
+    display: block;
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .gallery-close:hover,
+  .gallery-step:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-12);
+    box-shadow:
+      inset 0 1px 0 var(--accent-12),
+      0 6px 18px var(--accent-12);
+  }
+  .gallery-close:active,
+  .gallery-step:active {
+    transform: translateY(0) scale(0.96);
+    background: var(--accent-12);
+    box-shadow: inset 0 1px 4px var(--shadow-strong);
+  }
+  .gallery-close:focus-visible,
+  .gallery-step:focus-visible,
+  .gallery-thumbnail:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+  .gallery-stage {
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr) 42px;
+    align-items: center;
+    justify-items: center;
+    gap: clamp(8px, 2vw, 24px);
+    min-height: 0;
+  }
+  .gallery-feature {
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: 10px;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    margin: 0;
+  }
+  .gallery-image-frame {
+    position: relative;
+    display: grid;
+    place-items: center;
+    justify-self: center;
+    align-self: center;
+    box-sizing: border-box;
+    width: min(100%, 960px);
+    height: min(68vh, 720px);
+    max-height: 100%;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .gallery-image-frame img {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    object-fit: contain;
+    animation: gallery-image-in 0.28s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+  }
+  .gallery-attribution {
+    display: grid;
+    gap: 1px;
+    min-height: 1.25em;
+    text-align: center;
+  }
+  .gallery-caption {
+    color: var(--text);
+    font-size: 0.86rem;
+    line-height: 1.25;
+  }
+  .gallery-caption[hidden] {
+    display: none;
+  }
+  .gallery-artist {
+    color: var(--muted);
+    font-size: 0.68rem;
+    line-height: 1.2;
+  }
+  .gallery-thumbnails {
+    display: flex;
+    gap: 8px;
+    min-width: 0;
+    overflow-x: auto;
+    padding: 4px 3px 10px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-dark) transparent;
+  }
+  .gallery-thumbnail {
+    flex: 0 0 76px;
+    width: 76px;
+    height: 62px;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid var(--muted-border);
+    background: var(--bg);
+    cursor: pointer;
+    opacity: 0.56;
+    transition:
+      opacity 0.18s ease,
+      border-color 0.18s ease,
+      box-shadow 0.18s ease,
+      transform 0.18s ease;
+  }
+  .gallery-thumbnail:hover {
+    border-color: var(--accent);
+    opacity: 0.96;
+    transform: translateY(-2px);
+  }
+  .gallery-thumbnail[aria-current="true"] {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent-12);
+    opacity: 1;
+  }
+  .gallery-thumbnail img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  @keyframes gallery-enter {
+    from {
+      opacity: 0;
+      transform: translateY(12px) scale(0.985);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes gallery-exit {
+    from {
+      opacity: 1;
+      transform: none;
+    }
+    to {
+      opacity: 0;
+      transform: translateY(8px) scale(0.99);
+    }
+  }
+  @keyframes gallery-image-in {
+    from {
+      opacity: 0;
+      transform: scale(0.985);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  @keyframes gallery-image-change {
+    from {
+      opacity: 0;
+      filter: blur(4px);
+      transform: translateY(8px) scale(0.985);
+    }
+    to {
+      opacity: 1;
+      filter: blur(0);
+      transform: translateY(0) scale(1);
+    }
+  }
+  .gallery-image-frame img.is-changing {
+    animation: gallery-image-change 0.32s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+  }
 
   @media (max-width: 600px) {
-    .fanart-gallery { --gallery-nav-height: 53px; }
-    .gallery-shell { gap: .7rem; padding: 12px; padding-top: calc(var(--gallery-nav-height) + 12px); }
-    .gallery-stage { grid-template-columns: 34px minmax(0,1fr) 34px; gap: 6px; }
-    .gallery-step { width: 34px; height: 34px; }
-    .gallery-image-frame { height: min(56vh,480px); }
-    .gallery-thumbnail { flex-basis: 62px; width: 62px; height: 54px; }
+    .fanart-gallery {
+      --gallery-nav-height: 53px;
+    }
+    .gallery-shell {
+      gap: 0.7rem;
+      padding: 12px;
+      padding-top: calc(var(--gallery-nav-height) + 12px);
+    }
+    .gallery-stage {
+      grid-template-columns: 34px minmax(0, 1fr) 34px;
+      gap: 6px;
+    }
+    .gallery-step {
+      width: 34px;
+      height: 34px;
+    }
+    .gallery-image-frame {
+      height: min(56vh, 480px);
+    }
+    .gallery-thumbnail {
+      flex-basis: 62px;
+      width: 62px;
+      height: 54px;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .gallery-shell,.fanart-gallery.is-closing .gallery-shell,.gallery-image-frame img,.gallery-image-frame img.is-changing { animation: none; }
-    .gallery-thumbnail,.gallery-close,.gallery-step { transition: none; }
+    .gallery-shell,
+    .fanart-gallery.is-closing .gallery-shell,
+    .gallery-image-frame img,
+    .gallery-image-frame img.is-changing {
+      animation: none;
+    }
+    .gallery-thumbnail,
+    .gallery-close,
+    .gallery-step {
+      transition: none;
+    }
   }
 </style>
 
 <script>
   const initializeGallery = () => {
-    const dialog = document.querySelector<HTMLDialogElement>('#fanart-gallery');
+    const dialog = document.querySelector<HTMLDialogElement>("#fanart-gallery");
     const scope = dialog?.parentElement;
-    const featureImage = document.querySelector<HTMLImageElement>('#gallery-image');
-    const caption = document.querySelector<HTMLElement>('#gallery-caption');
-    const artistCredit = document.querySelector<HTMLElement>('#gallery-artist');
-    const counter = document.querySelector<HTMLElement>('#gallery-counter');
-    const thumbnails = dialog ? Array.from(dialog.querySelectorAll<HTMLButtonElement>('[data-gallery-thumbnail]')) : [];
-    if (!scope || !dialog || !featureImage || !caption || !artistCredit || !counter || dialog.dataset.initialized === 'true') return;
-    dialog.dataset.initialized = 'true';
+    const featureImage =
+      document.querySelector<HTMLImageElement>("#gallery-image");
+    const caption = document.querySelector<HTMLElement>("#gallery-caption");
+    const artistCredit = document.querySelector<HTMLElement>("#gallery-artist");
+    const counter = document.querySelector<HTMLElement>("#gallery-counter");
+    const thumbnails = dialog
+      ? Array.from(
+          dialog.querySelectorAll<HTMLButtonElement>(
+            "[data-gallery-thumbnail]",
+          ),
+        )
+      : [];
+    if (
+      !scope ||
+      !dialog ||
+      !featureImage ||
+      !caption ||
+      !artistCredit ||
+      !counter ||
+      dialog.dataset.initialized === "true"
+    )
+      return;
+    dialog.dataset.initialized = "true";
 
     let activeIndex = 0;
     let openingItem: HTMLElement | null = null;
     let closeTimer: number | undefined;
-    const siteHeader = document.querySelector<HTMLElement>('.site-header');
+    const siteHeader = document.querySelector<HTMLElement>(".site-header");
     let headerPlaceholder: Comment | null = null;
     let headerThemeFrame: number | undefined;
-    const headerThemeProperties = ['--bg', '--card', '--text', '--muted', '--accent', '--accent-contrast', '--accent-dark', '--accent-10', '--accent-12', '--muted-border'];
+    const headerThemeProperties = [
+      "--bg",
+      "--card",
+      "--text",
+      "--muted",
+      "--accent",
+      "--accent-contrast",
+      "--accent-dark",
+      "--accent-10",
+      "--accent-12",
+      "--muted-border",
+    ];
 
     const captureHeaderTheme = () => {
       if (!siteHeader) return;
       const computed = getComputedStyle(siteHeader);
-      headerThemeProperties.forEach((property) => siteHeader.style.setProperty(property, computed.getPropertyValue(property)));
+      headerThemeProperties.forEach((property) =>
+        siteHeader.style.setProperty(
+          property,
+          computed.getPropertyValue(property),
+        ),
+      );
     };
 
     const releaseHeaderTheme = () => {
       if (!siteHeader) return;
-      if (headerThemeFrame !== undefined) cancelAnimationFrame(headerThemeFrame);
+      if (headerThemeFrame !== undefined)
+        cancelAnimationFrame(headerThemeFrame);
       headerThemeFrame = requestAnimationFrame(() => {
-        headerThemeProperties.forEach((property) => siteHeader.style.removeProperty(property));
+        headerThemeProperties.forEach((property) =>
+          siteHeader.style.removeProperty(property),
+        );
         headerThemeFrame = undefined;
       });
     };
 
     const moveHeaderIntoGallery = () => {
       if (!siteHeader || headerPlaceholder) return;
-      headerPlaceholder = document.createComment('gallery-header-placeholder');
+      headerPlaceholder = document.createComment("gallery-header-placeholder");
       siteHeader.after(headerPlaceholder);
       dialog.insertBefore(siteHeader, dialog.firstChild);
     };
@@ -177,35 +541,50 @@ const { items, title, label = 'artwork', achievementCollection } = Astro.props;
       if (!thumbnails.length) return;
       activeIndex = (index + thumbnails.length) % thumbnails.length;
       const thumbnail = thumbnails[activeIndex];
-      featureImage.classList.remove('is-changing');
-      featureImage.src = thumbnail.dataset.gallerySrc || '';
-      featureImage.alt = thumbnail.dataset.galleryAlt || '';
-      caption.textContent = thumbnail.dataset.galleryCaption || '';
+      featureImage.classList.remove("is-changing");
+      featureImage.src = thumbnail.dataset.gallerySrc || "";
+      featureImage.alt = thumbnail.dataset.galleryAlt || "";
+      caption.textContent = thumbnail.dataset.galleryCaption || "";
       caption.hidden = !caption.textContent;
-      artistCredit.textContent = thumbnail.dataset.galleryArtist || '';
-      counter.textContent = `${String(activeIndex + 1).padStart(2, '0')} / ${String(thumbnails.length).padStart(2, '0')}`;
-      thumbnails.forEach((item, itemIndex) => item.setAttribute('aria-current', String(itemIndex === activeIndex)));
+      artistCredit.textContent = thumbnail.dataset.galleryArtist || "";
+      counter.textContent = `${String(activeIndex + 1).padStart(2, "0")} / ${String(thumbnails.length).padStart(2, "0")}`;
+      thumbnails.forEach((item, itemIndex) =>
+        item.setAttribute("aria-current", String(itemIndex === activeIndex)),
+      );
       if (dialog.open && dialog.dataset.achievementCollection) {
-        window.dispatchEvent(new CustomEvent('site-artwork:view', {
-          detail: { collection: dialog.dataset.achievementCollection, src: thumbnail.dataset.gallerySrc || '' },
-        }));
+        window.dispatchEvent(
+          new CustomEvent("site-artwork:view", {
+            detail: {
+              collection: dialog.dataset.achievementCollection,
+              src: thumbnail.dataset.gallerySrc || "",
+            },
+          }),
+        );
       }
-      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         void featureImage.offsetWidth;
-        featureImage.classList.add('is-changing');
+        featureImage.classList.add("is-changing");
       }
-      if (dialog.open) thumbnails[activeIndex].scrollIntoView({ block: 'nearest', inline: 'center', behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+      if (dialog.open)
+        thumbnails[activeIndex].scrollIntoView({
+          block: "nearest",
+          inline: "center",
+          behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
+            .matches
+            ? "auto"
+            : "smooth",
+        });
     };
 
     const closeGallery = () => {
-      if (!dialog.open || dialog.classList.contains('is-closing')) return;
+      if (!dialog.open || dialog.classList.contains("is-closing")) return;
       captureHeaderTheme();
-      document.body.classList.remove('fanart-gallery-open');
+      document.body.classList.remove("fanart-gallery-open");
       releaseHeaderTheme();
-      dialog.classList.add('is-closing');
+      dialog.classList.add("is-closing");
       closeTimer = window.setTimeout(() => {
         dialog.close();
-        dialog.classList.remove('is-closing');
+        dialog.classList.remove("is-closing");
         openingItem?.focus();
         openingItem = null;
       }, 220);
@@ -213,83 +592,94 @@ const { items, title, label = 'artwork', achievementCollection } = Astro.props;
 
     const openGallery = (item: HTMLElement) => {
       const index = Number(item.dataset.artIndex);
-      if (!Number.isInteger(index) || index < 0 || index >= thumbnails.length) return;
+      if (!Number.isInteger(index) || index < 0 || index >= thumbnails.length)
+        return;
       if (closeTimer !== undefined) window.clearTimeout(closeTimer);
-      dialog.classList.remove('is-closing');
+      dialog.classList.remove("is-closing");
       openingItem = item;
       captureHeaderTheme();
-      document.body.classList.add('fanart-gallery-open');
+      document.body.classList.add("fanart-gallery-open");
       moveHeaderIntoGallery();
       if (!dialog.open) dialog.showModal();
       selectArtwork(index);
-      dialog.querySelector<HTMLButtonElement>('[data-gallery-close]')?.focus();
+      dialog.querySelector<HTMLButtonElement>("[data-gallery-close]")?.focus();
       releaseHeaderTheme();
     };
 
     const findTrigger = (event: Event) => {
-      const item = (event.target as HTMLElement).closest<HTMLElement>('[data-art-index]');
-      return item && !dialog.contains(item) && !item.closest('[data-fanart-copy]') ? item : null;
+      const item = (event.target as HTMLElement).closest<HTMLElement>(
+        "[data-art-index]",
+      );
+      return item &&
+        !dialog.contains(item) &&
+        !item.closest("[data-fanart-copy]")
+        ? item
+        : null;
     };
 
-    scope.addEventListener('click', (event) => {
+    scope.addEventListener("click", (event) => {
       const item = findTrigger(event);
       if (item) openGallery(item);
     });
-    scope.addEventListener('keydown', (event) => {
-      if (event.key !== 'Enter' && event.key !== ' ') return;
+    scope.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" && event.key !== " ") return;
       const item = findTrigger(event);
       if (!item) return;
       event.preventDefault();
       openGallery(item);
     });
-    dialog.addEventListener('click', (event) => {
+    dialog.addEventListener("click", (event) => {
       const target = event.target as HTMLElement;
-      if (target === dialog || target.closest('[data-gallery-close]')) closeGallery();
-      if (target.closest('[data-gallery-previous]')) selectArtwork(activeIndex - 1);
-      if (target.closest('[data-gallery-next]')) selectArtwork(activeIndex + 1);
-      const thumbnail = target.closest<HTMLButtonElement>('[data-gallery-thumbnail]');
+      if (target === dialog || target.closest("[data-gallery-close]"))
+        closeGallery();
+      if (target.closest("[data-gallery-previous]"))
+        selectArtwork(activeIndex - 1);
+      if (target.closest("[data-gallery-next]")) selectArtwork(activeIndex + 1);
+      const thumbnail = target.closest<HTMLButtonElement>(
+        "[data-gallery-thumbnail]",
+      );
       if (thumbnail) selectArtwork(Number(thumbnail.dataset.galleryThumbnail));
     });
-    dialog.addEventListener('cancel', (event) => {
+    dialog.addEventListener("cancel", (event) => {
       event.preventDefault();
       closeGallery();
     });
-    dialog.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape') {
+    dialog.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
         event.preventDefault();
         closeGallery();
-      } else if (event.key === 'ArrowLeft') {
+      } else if (event.key === "ArrowLeft") {
         event.preventDefault();
         selectArtwork(activeIndex - 1);
-      } else if (event.key === 'ArrowRight') {
+      } else if (event.key === "ArrowRight") {
         event.preventDefault();
         selectArtwork(activeIndex + 1);
       }
     });
-    dialog.addEventListener('close', () => {
+    dialog.addEventListener("close", () => {
       if (closeTimer !== undefined) window.clearTimeout(closeTimer);
-      dialog.classList.remove('is-closing');
+      dialog.classList.remove("is-closing");
       restoreHeader();
-      if (document.body.classList.contains('fanart-gallery-open')) {
+      if (document.body.classList.contains("fanart-gallery-open")) {
         captureHeaderTheme();
-        document.body.classList.remove('fanart-gallery-open');
+        document.body.classList.remove("fanart-gallery-open");
         releaseHeaderTheme();
       }
       openingItem?.focus();
       openingItem = null;
     });
-    document.addEventListener('astro:before-swap', () => {
+    document.addEventListener("astro:before-swap", () => {
       if (closeTimer !== undefined) window.clearTimeout(closeTimer);
       captureHeaderTheme();
       openingItem = null;
-      dialog.classList.remove('is-closing');
+      dialog.classList.remove("is-closing");
       restoreHeader();
-      document.body.classList.remove('fanart-gallery-open');
+      document.body.classList.remove("fanart-gallery-open");
       releaseHeaderTheme();
       if (dialog.open) dialog.close();
     });
   };
 
-  document.addEventListener('astro:page-load', initializeGallery);
+  document.addEventListener("astro:page-load", initializeGallery);
   initializeGallery();
 </script>

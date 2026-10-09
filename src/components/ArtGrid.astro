@@ -1,24 +1,60 @@
 ---
-import { Image } from 'astro:assets';
+import { Image } from "astro:assets";
 
 const { items = [] } = Astro.props as {
   items: Array<{ src: string; width: number; height: number; artist: string }>;
 };
 ---
+
 <div class="masonry">
   {items.map((item) => (
     <figure class="m-item">
-      <Image src={item.src} alt={item.artist || 'art'} width={item.width} height={item.height} loading="lazy" decoding="async" />
+      <Image
+        src={item.src}
+        alt={item.artist || "art"}
+        width={item.width}
+        height={item.height}
+        loading="lazy"
+        decoding="async"
+      />
       <figcaption>{item.artist}</figcaption>
     </figure>
   ))}
 </div>
 
 <style>
-  .masonry{column-count:5;column-gap:1rem}
-  .m-item{break-inside:avoid;display:inline-block;width:100%;margin:0 0 1rem;border-radius:2px;overflow:hidden}
-  .m-item img{width:100%;height:auto;display:block;object-fit:cover}
-  .m-item figcaption{padding:8px 6px;color:var(--muted);font-size:.95rem}
-  @media (max-width:900px){.masonry{column-count:2}}
-  @media (max-width:600px){.masonry{column-count:1}}
+  /* Component styles: art grid */
+  .masonry {
+    column-count: 5;
+    column-gap: 1rem;
+  }
+  .m-item {
+    break-inside: avoid;
+    display: inline-block;
+    width: 100%;
+    margin: 0 0 1rem;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .m-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+  .m-item figcaption {
+    padding: 8px 6px;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  @media (max-width: 900px) {
+    .masonry {
+      column-count: 2;
+    }
+  }
+  @media (max-width: 600px) {
+    .masonry {
+      column-count: 1;
+    }
+  }
 </style>

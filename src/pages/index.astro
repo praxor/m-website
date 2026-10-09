@@ -1,201 +1,534 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import HomeHero from '../components/HomeHero.astro';
-import HomeFrame from '../components/HomeFrame.astro';
-import PostTypeIcon from '../components/PostTypeIcon.astro';
-import { getCollection } from 'astro:content';
-import { comparePostsByDateAndOrder } from '../data/posts';
+import Layout from "../layouts/Layout.astro";
+import HomeHero from "../components/HomeHero.astro";
+import HomeFrame from "../components/HomeFrame.astro";
+import PostTypeIcon from "../components/PostTypeIcon.astro";
+import { getCollection } from "astro:content";
+import { comparePostsByDateAndOrder } from "../data/posts";
 
 const base = import.meta.env.BASE_URL;
-const entries = await getCollection('posts', ({ data }) => !data.draft || !import.meta.env.PROD);
+const entries = await getCollection(
+  "posts",
+  ({ data }) => !data.draft || !import.meta.env.PROD,
+);
 const posts = entries.sort(comparePostsByDateAndOrder);
-const postTypeLabels = { update: 'UPDATE', major: 'MAJOR UPDATE', post: 'POST' } as const;
-const formatDate = (date: Date) => new Intl.DateTimeFormat('en-US', {
-	month: 'long',
-	day: 'numeric',
-	year: 'numeric',
-	timeZone: 'UTC',
-}).format(date);
+const postTypeLabels = {
+  update: "UPDATE",
+  major: "MAJOR UPDATE",
+  post: "POST",
+} as const;
+const formatDate = (date: Date) =>
+  new Intl.DateTimeFormat("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(date);
 ---
 
-<Layout title="home" description="the praxor website: music, characters, art, updates, and assorted things to poke at.">
-	<main class="home-page">
-		<HomeHero />
+<Layout
+  title="home"
+  description="the praxor website: music, characters, art, updates, and assorted things to poke at."
+>
+  <main class="home-page">
+    <HomeHero />
 
-		<HomeFrame>
-				<section class="dispatch-feed" slot="feed" aria-labelledby="dispatch-title" data-recent-feed>
-					<div class="feed-heading">
-						<div>
-							<p class="feed-kicker">information</p>
-							<h2 id="dispatch-title">recent updates</h2>
-						</div>
-						<div class="feed-controls">
-							<div class="feed-tabs" role="tablist" aria-label="Filter recent updates">
-								<button id="feed-tab-all" class="feed-tab" type="button" role="tab" aria-selected="true" aria-controls="post-grid" tabindex="0" data-post-filter="all">all</button>
-								<button id="feed-tab-updates" class="feed-tab" type="button" role="tab" aria-selected="false" aria-controls="post-grid" tabindex="-1" data-post-filter="update">updates</button>
-								<button id="feed-tab-major" class="feed-tab" type="button" role="tab" aria-selected="false" aria-controls="post-grid" tabindex="-1" data-post-filter="major">major</button>
-								<button id="feed-tab-posts" class="feed-tab" type="button" role="tab" aria-selected="false" aria-controls="post-grid" tabindex="-1" data-post-filter="post">posts</button>
-							</div>
-							<span class="post-count" data-post-count>{posts.length} {posts.length === 1 ? 'item' : 'items'}</span>
-						</div>
-					</div>
+    <HomeFrame>
+      <section
+        class="dispatch-feed"
+        slot="feed"
+        aria-labelledby="dispatch-title"
+        data-recent-feed
+      >
+        <div class="feed-heading">
+          <div>
+            <p class="feed-kicker">information</p>
+            <h2 id="dispatch-title">recent updates</h2>
+          </div>
+          <div class="feed-controls">
+            <div
+              class="feed-tabs"
+              role="tablist"
+              aria-label="Filter recent updates"
+            >
+              <button
+                id="feed-tab-all"
+                class="feed-tab"
+                type="button"
+                role="tab"
+                aria-selected="true"
+                aria-controls="post-grid"
+                tabindex="0"
+                data-post-filter="all"
+              >
+                all
+              </button>
+              <button
+                id="feed-tab-updates"
+                class="feed-tab"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                aria-controls="post-grid"
+                tabindex="-1"
+                data-post-filter="update"
+              >
+                updates
+              </button>
+              <button
+                id="feed-tab-major"
+                class="feed-tab"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                aria-controls="post-grid"
+                tabindex="-1"
+                data-post-filter="major"
+              >
+                major
+              </button>
+              <button
+                id="feed-tab-posts"
+                class="feed-tab"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                aria-controls="post-grid"
+                tabindex="-1"
+                data-post-filter="post"
+              >
+                posts
+              </button>
+            </div>
+            <span class="post-count" data-post-count>
+              {posts.length} {posts.length === 1 ? "item" : "items"}
+            </span>
+          </div>
+        </div>
 
-					{posts.length > 0 ? (
-						<div id="post-grid" class="post-grid" role="tabpanel" aria-labelledby="feed-tab-all" tabindex="0">
-							{posts.map((post) => {
-								const isMajor = post.data.type === 'major';
-								const typeLabel = postTypeLabels[post.data.type];
-								const bannerSrc = post.data.banner
-									? (/^(https?:|data:)/.test(post.data.banner) ? post.data.banner : `${base}${post.data.banner.replace(/^\/+/, '')}`)
-									: undefined;
-								return (
-									<a class:list={['post-card', { 'is-major': isMajor }]} href={`${base}updates/${post.id}/`} data-post-href={`${base}updates/${post.id}/`} data-post-type={post.data.type}>
-										{bannerSrc && <span class="post-card-banner" aria-hidden="true"><img src={bannerSrc} alt="" loading="lazy" decoding="async" /></span>}
-										<span class="post-card-copy">
-											<span class="post-kind">{typeLabel}</span>
-											<strong class="post-card-title">{post.data.title}</strong>
-											{post.data.description && <span class="post-card-description">{post.data.description}</span>}
-										</span>
-										<span class="post-card-footer">
-											<span class="post-kind-icon" aria-hidden="true"><PostTypeIcon type={post.data.type} /></span>
-											<time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
-										</span>
-									</a>
-								);
-							})}
-							<p class="empty-filter" data-empty-filter hidden>Nothing in this tab yet.</p>
-						</div>
-					) : (
-						<p class="empty-feed">nothing posted here yet.</p>
-					)}
-				</section>
-		</HomeFrame>
-	</main>
+        {posts.length > 0 ? (
+          <div
+            id="post-grid"
+            class="post-grid"
+            role="tabpanel"
+            aria-labelledby="feed-tab-all"
+            tabindex="0"
+          >
+            {posts.map((post) => {
+              const isMajor = post.data.type === "major";
+              const typeLabel = postTypeLabels[post.data.type];
+              const bannerSrc = post.data.banner
+                ? /^(https?:|data:)/.test(post.data.banner)
+                  ? post.data.banner
+                  : `${base}${post.data.banner.replace(/^\/+/, "")}`
+                : undefined;
+              return (
+                <a
+                  class:list={["post-card", { "is-major": isMajor }]}
+                  href={`${base}updates/${post.id}/`}
+                  data-post-href={`${base}updates/${post.id}/`}
+                  data-post-type={post.data.type}
+                >
+                  {bannerSrc && (
+                    <span class="post-card-banner" aria-hidden="true">
+                      <img
+                        src={bannerSrc}
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </span>
+                  )}
+                  <span class="post-card-copy">
+                    <span class="post-kind">{typeLabel}</span>
+                    <strong class="post-card-title">{post.data.title}</strong>
+                    {post.data.description && (
+                      <span class="post-card-description">
+                        {post.data.description}
+                      </span>
+                    )}
+                  </span>
+                  <span class="post-card-footer">
+                    <span class="post-kind-icon" aria-hidden="true">
+                      <PostTypeIcon type={post.data.type} />
+                    </span>
+                    <time datetime={post.data.date.toISOString()}>
+                      {formatDate(post.data.date)}
+                    </time>
+                  </span>
+                </a>
+              );
+            })}
+            <p class="empty-filter" data-empty-filter hidden>
+              Nothing in this tab yet.
+            </p>
+          </div>
+        ) : (
+          <p class="empty-feed">nothing posted here yet.</p>
+        )}
+      </section>
+    </HomeFrame>
+  </main>
 </Layout>
 
 <style>
-	.home-page{width:min(1100px,calc(100% - 32px));margin:0 auto}
-	.feed-kicker{margin:0 0 7px;color:var(--accent);font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
-	.dispatch-feed{min-width:0;padding:19px clamp(16px,3vw,30px) 28px;animation:home-rise-in .5s ease .3s both}
-	.feed-heading{display:flex;align-items:end;justify-content:space-between;gap:16px;padding-bottom:13px;border-bottom:1px solid var(--muted-border)}
-	.feed-kicker{margin-bottom:5px}
-	.feed-heading h2{margin:0;color:var(--text);font-size:1.35rem;line-height:1.15;letter-spacing:0}
-	.feed-controls{display:flex;align-items:center;gap:14px}
-	.feed-tabs{display:flex;align-items:center;gap:12px}
-	.feed-tab{padding:6px 0;border:0;border-bottom:1px solid transparent;background:transparent;color:var(--muted);font:inherit;font-size:.76rem;cursor:pointer;transition:color .16s ease,border-color .16s ease}
-	.feed-tab:hover,.feed-tab:focus-visible{color:var(--text)}
-	.feed-tab[aria-selected="true"]{border-color:var(--accent);color:var(--text)}
-	.feed-tab:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
-	.post-count{padding-left:14px;border-left:1px solid var(--muted-border);color:var(--muted);font-size:.75rem;white-space:nowrap}
-	.post-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-content:start;gap:12px;margin-top:14px}
-	.post-card{position:relative;isolation:isolate;box-sizing:border-box;display:flex;min-width:0;min-height:188px;flex-direction:column;justify-content:space-between;gap:22px;overflow:hidden;padding:15px;border:1px solid var(--muted-border);background:var(--card);color:var(--text);text-decoration:none;animation:home-rise-in .42s ease both;transition:border-color .18s ease,transform .18s ease,background-color .18s ease}
-	.post-card:nth-child(1){animation-delay:.34s}.post-card:nth-child(2){animation-delay:.42s}.post-card:nth-child(3){animation-delay:.5s}.post-card:nth-child(4){animation-delay:.58s}.post-card:nth-child(5){animation-delay:.66s}.post-card:nth-child(6){animation-delay:.74s}
-	.post-card:hover{transform:translateY(-3px);border-color:var(--accent);background-color:var(--accent-10)}
-	.post-card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
-	.post-card.is-major{border-color:var(--accent);box-shadow:inset 3px 0 0 var(--accent)}
-	.post-card-banner{position:absolute;z-index:-1;inset:0 0 0 auto;width:48%;opacity:.27;mask-image:linear-gradient(90deg,transparent 0%,#000 58%)}
-	.post-card-banner img{display:block;width:100%;height:100%;object-fit:cover;object-position:center right;filter:grayscale(1)}
-	.post-card-copy{position:relative;z-index:1;display:grid;align-content:start;gap:8px;max-width:82%}
-	.post-kind{color:var(--accent);font-size:.66rem;font-weight:700;letter-spacing:.12em;line-height:1.3}
-	.post-card-title{font-size:1rem;line-height:1.28;font-weight:700;overflow-wrap:anywhere}
-	.post-card-description{color:var(--muted);font-size:.78rem;line-height:1.5}
-	.post-card-footer{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:8px;color:var(--muted);font-size:.68rem}
-	.post-kind-icon{display:grid;place-items:center;width:26px;height:26px;border:1px solid var(--muted-border);color:var(--accent);font-size:1rem;line-height:1}
-	.post-card time{font-variant-numeric:tabular-nums}
-	#post-grid[hidden],.post-card[hidden],.empty-filter[hidden]{display:none}
-	.empty-feed{margin:20px 0;color:var(--muted);font-size:.9rem}
-	.empty-filter{grid-column:1/-1;margin:0;padding:24px 8px;color:var(--muted);font-size:.85rem}
-	@keyframes home-rise-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-	@media(max-width:700px){
-		.home-page{width:calc(100% - 24px)}
-		.dispatch-feed{padding:17px 14px 22px}
-		.feed-heading{align-items:flex-start;flex-direction:column}
-		.feed-controls{width:100%;justify-content:space-between}
-		.post-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-	}
-	@media(max-width:420px){
-		.feed-tabs{gap:9px}
-		.post-grid{grid-template-columns:1fr}
-	}
-	@media(prefers-reduced-motion:reduce){.dispatch-feed,.post-card{animation:none;opacity:1;transform:none}}
+  /* Page styles: home */
+  .home-page {
+    width: min(1100px, calc(100% - 32px));
+    margin: 0 auto;
+  }
+  .feed-kicker {
+    margin: 0 0 7px;
+    color: var(--accent);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .dispatch-feed {
+    min-width: 0;
+    padding: 19px clamp(16px, 3vw, 30px) 28px;
+    animation: home-rise-in 0.5s ease 0.3s both;
+  }
+  .feed-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 16px;
+    padding-bottom: 13px;
+    border-bottom: 1px solid var(--muted-border);
+  }
+  .feed-kicker {
+    margin-bottom: 5px;
+  }
+  .feed-heading h2 {
+    margin: 0;
+    color: var(--text);
+    font-size: 1.35rem;
+    line-height: 1.15;
+    letter-spacing: 0;
+  }
+  .feed-controls {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .feed-tabs {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .feed-tab {
+    padding: 6px 0;
+    border: 0;
+    border-bottom: 1px solid transparent;
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: 0.76rem;
+    cursor: pointer;
+    transition:
+      color 0.16s ease,
+      border-color 0.16s ease;
+  }
+  .feed-tab:hover,
+  .feed-tab:focus-visible {
+    color: var(--text);
+  }
+  .feed-tab[aria-selected="true"] {
+    border-color: var(--accent);
+    color: var(--text);
+  }
+  .feed-tab:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+  }
+  .post-count {
+    padding-left: 14px;
+    border-left: 1px solid var(--muted-border);
+    color: var(--muted);
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+  .post-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-content: start;
+    gap: 12px;
+    margin-top: 14px;
+  }
+  .post-card {
+    position: relative;
+    isolation: isolate;
+    box-sizing: border-box;
+    display: flex;
+    min-width: 0;
+    min-height: 188px;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 22px;
+    overflow: hidden;
+    padding: 15px;
+    border: 1px solid var(--muted-border);
+    background: var(--card);
+    color: var(--text);
+    text-decoration: none;
+    animation: home-rise-in 0.42s ease both;
+    transition:
+      border-color 0.18s ease,
+      transform 0.18s ease,
+      background-color 0.18s ease;
+  }
+  .post-card:nth-child(1) {
+    animation-delay: 0.34s;
+  }
+  .post-card:nth-child(2) {
+    animation-delay: 0.42s;
+  }
+  .post-card:nth-child(3) {
+    animation-delay: 0.5s;
+  }
+  .post-card:nth-child(4) {
+    animation-delay: 0.58s;
+  }
+  .post-card:nth-child(5) {
+    animation-delay: 0.66s;
+  }
+  .post-card:nth-child(6) {
+    animation-delay: 0.74s;
+  }
+  .post-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+    background-color: var(--accent-10);
+  }
+  .post-card:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+  .post-card.is-major {
+    border-color: var(--accent);
+    box-shadow: inset 3px 0 0 var(--accent);
+  }
+  .post-card-banner {
+    position: absolute;
+    z-index: -1;
+    inset: 0 0 0 auto;
+    width: 48%;
+    opacity: 0.27;
+    mask-image: linear-gradient(90deg, transparent 0%, #000 58%);
+  }
+  .post-card-banner img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center right;
+    filter: grayscale(1);
+  }
+  .post-card-copy {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    align-content: start;
+    gap: 8px;
+    max-width: 82%;
+  }
+  .post-kind {
+    color: var(--accent);
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    line-height: 1.3;
+  }
+  .post-card-title {
+    font-size: 1rem;
+    line-height: 1.28;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+  }
+  .post-card-description {
+    color: var(--muted);
+    font-size: 0.78rem;
+    line-height: 1.5;
+  }
+  .post-card-footer {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    color: var(--muted);
+    font-size: 0.68rem;
+  }
+  .post-kind-icon {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border: 1px solid var(--muted-border);
+    color: var(--accent);
+    font-size: 1rem;
+    line-height: 1;
+  }
+  .post-card time {
+    font-variant-numeric: tabular-nums;
+  }
+  #post-grid[hidden],
+  .post-card[hidden],
+  .empty-filter[hidden] {
+    display: none;
+  }
+  .empty-feed {
+    margin: 20px 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+  .empty-filter {
+    grid-column: 1/-1;
+    margin: 0;
+    padding: 24px 8px;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+  @keyframes home-rise-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @media (max-width: 700px) {
+    .home-page {
+      width: calc(100% - 24px);
+    }
+    .dispatch-feed {
+      padding: 17px 14px 22px;
+    }
+    .feed-heading {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+    .feed-controls {
+      width: 100%;
+      justify-content: space-between;
+    }
+    .post-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 420px) {
+    .feed-tabs {
+      gap: 9px;
+    }
+    .post-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .dispatch-feed,
+    .post-card {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
 </style>
 
 <script>
-	import { unlockAchievement } from '../scripts/site-state';
+  import { unlockAchievement } from "../scripts/site-state";
 
-	if (Math.random() < 0.001) {
-		unlockAchievement('surpriseSurprise');
-		window.location.replace('/surprise/');
-	}
+  if (Math.random() < 0.001) {
+    unlockAchievement("surpriseSurprise");
+    try {
+      window.sessionStorage.setItem("surprise-access", "granted");
+    } catch {}
+    window.location.replace("/surprise/");
+  }
 
-	const initializeFeed = () => {
-		const feed = document.querySelector<HTMLElement>('[data-recent-feed]');
-		if (!feed || feed.dataset.initialized === 'true') return;
-		feed.dataset.initialized = 'true';
+  const initializeFeed = () => {
+    const feed = document.querySelector<HTMLElement>("[data-recent-feed]");
+    if (!feed || feed.dataset.initialized === "true") return;
+    feed.dataset.initialized = "true";
 
-		const tabs = Array.from(feed.querySelectorAll<HTMLButtonElement>('[data-post-filter]'));
-		const postGrid = feed.querySelector<HTMLElement>('#post-grid');
-		const postCards: HTMLAnchorElement[] = postGrid ? Array.from(postGrid.querySelectorAll<HTMLAnchorElement>('.post-card')) : [];
-		const emptyFilterMessage = postGrid?.querySelector<HTMLElement>('[data-empty-filter]');
-		const postCount = feed.querySelector<HTMLElement>('[data-post-count]');
-		const filters = new Set(tabs.map((tab) => tab.dataset.postFilter || ''));
+    const tabs = Array.from(
+      feed.querySelectorAll<HTMLButtonElement>("[data-post-filter]"),
+    );
+    const postGrid = feed.querySelector<HTMLElement>("#post-grid");
+    const postCards: HTMLAnchorElement[] = postGrid
+      ? Array.from(postGrid.querySelectorAll<HTMLAnchorElement>(".post-card"))
+      : [];
+    const emptyFilterMessage = postGrid?.querySelector<HTMLElement>(
+      "[data-empty-filter]",
+    );
+    const postCount = feed.querySelector<HTMLElement>("[data-post-count]");
+    const filters = new Set(tabs.map((tab) => tab.dataset.postFilter || ""));
 
-		const updateFeedUrl = (filter: string) => {
-			const url = new URL(window.location.href);
-			if (filter === 'all') url.searchParams.delete('feed');
-			else url.searchParams.set('feed', filter);
-			window.history.replaceState(window.history.state, '', url);
-		};
+    const updateFeedUrl = (filter: string) => {
+      const url = new URL(window.location.href);
+      if (filter === "all") url.searchParams.delete("feed");
+      else url.searchParams.set("feed", filter);
+      window.history.replaceState(window.history.state, "", url);
+    };
 
-		const updatePostLinks = (filter: string) => {
-			postCards.forEach((card) => {
-				const route = card.dataset.postHref;
-				if (!route) return;
-				const url = new URL(route, document.baseURI);
-				url.searchParams.set('feed', filter);
-				url.searchParams.set('feedReturn', '1');
-				card.href = `${url.pathname}${url.search}${url.hash}`;
-			});
-		};
+    const updatePostLinks = (filter: string) => {
+      postCards.forEach((card) => {
+        const route = card.dataset.postHref;
+        if (!route) return;
+        const url = new URL(route, document.baseURI);
+        url.searchParams.set("feed", filter);
+        url.searchParams.set("feedReturn", "1");
+        card.href = `${url.pathname}${url.search}${url.hash}`;
+      });
+    };
 
-		const filterPosts = (filter: string, focusTab = false) => {
-			const selectedTab = tabs.find((tab) => tab.dataset.postFilter === filter);
-			if (!selectedTab) return;
-			tabs.forEach((tab) => {
-				const selected = tab === selectedTab;
-				tab.setAttribute('aria-selected', String(selected));
-				tab.tabIndex = selected ? 0 : -1;
-			});
-			if (postGrid) postGrid.setAttribute('aria-labelledby', selectedTab.id);
-			postCards.forEach((card) => {
-				card.hidden = filter !== 'all' && card.dataset.postType !== filter;
-			});
-			const visibleCount = postCards.filter((card) => !card.hidden).length;
-			if (emptyFilterMessage) emptyFilterMessage.hidden = visibleCount > 0;
-			if (postCount) postCount.textContent = `${visibleCount} ${visibleCount === 1 ? 'item' : 'items'}`;
-			updateFeedUrl(filter);
-			updatePostLinks(filter);
-			if (focusTab) selectedTab.focus();
-		};
+    const filterPosts = (filter: string, focusTab = false) => {
+      const selectedTab = tabs.find((tab) => tab.dataset.postFilter === filter);
+      if (!selectedTab) return;
+      tabs.forEach((tab) => {
+        const selected = tab === selectedTab;
+        tab.setAttribute("aria-selected", String(selected));
+        tab.tabIndex = selected ? 0 : -1;
+      });
+      if (postGrid) postGrid.setAttribute("aria-labelledby", selectedTab.id);
+      postCards.forEach((card) => {
+        card.hidden = filter !== "all" && card.dataset.postType !== filter;
+      });
+      const visibleCount = postCards.filter((card) => !card.hidden).length;
+      if (emptyFilterMessage) emptyFilterMessage.hidden = visibleCount > 0;
+      if (postCount)
+        postCount.textContent = `${visibleCount} ${visibleCount === 1 ? "item" : "items"}`;
+      updateFeedUrl(filter);
+      updatePostLinks(filter);
+      if (focusTab) selectedTab.focus();
+    };
 
-		tabs.forEach((tab, index) => {
-			tab.addEventListener('click', () => filterPosts(tab.dataset.postFilter || 'all'));
-			tab.addEventListener('keydown', (event) => {
-				let nextIndex = index;
-				if (event.key === 'ArrowRight') nextIndex = (index + 1) % tabs.length;
-				else if (event.key === 'ArrowLeft') nextIndex = (index - 1 + tabs.length) % tabs.length;
-				else if (event.key === 'Home') nextIndex = 0;
-				else if (event.key === 'End') nextIndex = tabs.length - 1;
-				else return;
-				event.preventDefault();
-				filterPosts(tabs[nextIndex].dataset.postFilter || 'all', true);
-			});
-		});
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () =>
+        filterPosts(tab.dataset.postFilter || "all"),
+      );
+      tab.addEventListener("keydown", (event) => {
+        let nextIndex = index;
+        if (event.key === "ArrowRight") nextIndex = (index + 1) % tabs.length;
+        else if (event.key === "ArrowLeft")
+          nextIndex = (index - 1 + tabs.length) % tabs.length;
+        else if (event.key === "Home") nextIndex = 0;
+        else if (event.key === "End") nextIndex = tabs.length - 1;
+        else return;
+        event.preventDefault();
+        filterPosts(tabs[nextIndex].dataset.postFilter || "all", true);
+      });
+    });
 
-		const requestedFilter = new URLSearchParams(window.location.search).get('feed') || 'all';
-		filterPosts(filters.has(requestedFilter) ? requestedFilter : 'all');
-	};
+    const requestedFilter =
+      new URLSearchParams(window.location.search).get("feed") || "all";
+    filterPosts(filters.has(requestedFilter) ? requestedFilter : "all");
+  };
 
-	document.addEventListener('astro:page-load', initializeFeed);
-	initializeFeed();
+  document.addEventListener("astro:page-load", initializeFeed);
+  initializeFeed();
 </script>

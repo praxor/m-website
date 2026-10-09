@@ -1,5 +1,5 @@
 ---
-import type { CreditSectionData } from '../data/credits';
+import type { CreditSectionData } from "../data/credits";
 
 interface Props {
   section: CreditSectionData;
@@ -8,7 +8,12 @@ interface Props {
 const { section } = Astro.props as Props;
 ---
 
-<section class:list={['credit-section', `credit-section--${section.align}`]} id={`credit-${section.id}`} data-credit-section={section.id} aria-labelledby={`credit-${section.id}-title`}>
+<section
+  class:list={["credit-section", `credit-section--${section.align}`]}
+  id={`credit-${section.id}`}
+  data-credit-section={section.id}
+  aria-labelledby={`credit-${section.id}-title`}
+>
   <h2 id={`credit-${section.id}-title`}>{section.title}</h2>
   {section.entries.length > 0 && (
     <dl>
@@ -23,16 +28,76 @@ const { section } = Astro.props as Props;
 </section>
 
 <style>
-  .credit-section{display:grid;align-content:center;justify-items:center;gap:1.25rem;box-sizing:border-box;width:100%;min-height:100%;padding:8vh 24px;text-align:center}
-  .credit-section--left{justify-items:start;margin-right:auto;padding-left:clamp(28px,10vw,180px);text-align:left}
-  .credit-section--right{justify-items:end;margin-left:auto;padding-right:clamp(28px,10vw,180px);text-align:right}
-  .credit-section h2{margin:0;color:#fff;font-size:clamp(1.3rem,3vw,2rem);font-weight:500}
-  .credit-section[data-credit-section="opening-title"] h2{font-size:clamp(2rem,6vw,4.5rem)}
-  .credit-section[data-credit-section="opening-joke"] h2{font-size:clamp(1.15rem,3vw,2rem)}
-  .credit-section[data-credit-section="ending"] h2{font-size:clamp(1.7rem,5vw,3.5rem)}
-  .credit-section dl{display:grid;gap:1rem;margin:0}
-  .credit-entry{display:grid;gap:.25rem}
-  .credit-entry dt{color:#aaa;font-size:.8rem}
-  .credit-entry dd{margin:0;color:#fff;font-size:1rem}
-  @media(max-width:600px){.credit-section{min-height:65vh;padding-right:22px;padding-left:22px}.credit-section--left,.credit-section--right{padding-right:22px;padding-left:22px}.credit-section h2{font-size:1.25rem}}
+  /* Component styles: credits section */
+  .credit-section {
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    gap: 1.25rem;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 100%;
+    padding: 8vh 24px;
+    text-align: center;
+  }
+  .credit-section--left {
+    justify-items: start;
+    margin-right: auto;
+    padding-left: clamp(28px, 10vw, 180px);
+    text-align: left;
+  }
+  .credit-section--right {
+    justify-items: end;
+    margin-left: auto;
+    padding-right: clamp(28px, 10vw, 180px);
+    text-align: right;
+  }
+  .credit-section h2 {
+    margin: 0;
+    color: #fff;
+    font-size: clamp(1.3rem, 3vw, 2rem);
+    font-weight: 500;
+  }
+  .credit-section[data-credit-section="opening-title"] h2 {
+    font-size: clamp(2rem, 6vw, 4.5rem);
+  }
+  .credit-section[data-credit-section="opening-joke"] h2 {
+    font-size: clamp(1.15rem, 3vw, 2rem);
+  }
+  .credit-section[data-credit-section="ending"] h2 {
+    font-size: clamp(1.7rem, 5vw, 3.5rem);
+  }
+  .credit-section dl {
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+  }
+  .credit-entry {
+    display: grid;
+    gap: 0.25rem;
+  }
+  .credit-entry dt {
+    color: #aaa;
+    font-size: 0.8rem;
+  }
+  .credit-entry dd {
+    margin: 0;
+    color: #fff;
+    font-size: 1rem;
+  }
+  @media (max-width: 600px) {
+    .credit-section {
+      min-height: 65vh;
+      padding-right: 22px;
+      padding-left: 22px;
+    }
+    .credit-section--left,
+    .credit-section--right {
+      padding-right: 22px;
+      padding-left: 22px;
+    }
+    .credit-section h2 {
+      font-size: 1.25rem;
+    }
+  }
 </style>

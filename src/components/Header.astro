@@ -1,230 +1,1056 @@
 ﻿---
-import { characters } from '../data/characters';
-import { Image } from 'astro:assets';
+import { characters } from "../data/characters";
+import { Image } from "astro:assets";
 const base = import.meta.env.BASE_URL;
 ---
-<header class="site-header" role="banner" data-persisted-shell transition:persist transition:animate="none">
+
+<header
+  class="site-header"
+  role="banner"
+  data-persisted-shell
+  transition:persist
+  transition:animate="none"
+>
   <div class="container">
     <a class="logo" href={base}>
-      <Image src="https://praxor.de/media/res/oraxor.png" alt="oraxor the cat" width={36} height={36} loading="eager" decoding="async" data-theme-cat="" data-theme-cat-default-src="media/res/oraxor.png" />
+      <Image
+        src="https://praxor.de/media/res/oraxor.png"
+        alt="oraxor the cat"
+        width={36}
+        height={36}
+        loading="eager"
+        decoding="async"
+        data-theme-cat=""
+        data-theme-cat-default-src="media/res/oraxor.png"
+      />
     </a>
     <nav class="nav" role="navigation" aria-label="Main">
       <div class="character-menu">
-        <a class="character-menu-link" href={`${base}characters`}>characters <span class="character-chevron" aria-hidden="true"></span></a>
+        <a class="character-menu-link" href={`${base}characters`}>
+          characters <span class="character-chevron" aria-hidden="true"></span>
+        </a>
         <div class="character-menu-panel">
-          {characters.map((character) => <a href={`${base}characters/${character.slug}`}>{character.name}</a>)}
+          {characters.map((character) => (
+            <a href={`${base}characters/${character.slug}`}>{character.name}</a>
+          ))}
         </div>
       </div>
       <a href={`${base}plinko`}>plinko</a>
       <a href={`${base}music`}>music</a>
       <a href={`${base}about`}>about</a>
-      <a class="cult-link" href={`${base}cult`}>cult</a>
+      <a class="cult-link" href={`${base}cult`}>
+        cult
+      </a>
     </nav>
     <div class="actions">
-      <button id="contact-btn" class="cta" aria-haspopup="dialog" aria-expanded="false">contact</button>
       <div class="header-socials">
-        <a href="https://open.spotify.com/artist/5qjpeOAlOrY6kilCDZzYoz" target="_blank" rel="noopener" aria-label="Spotify" title="open praxor on spotify" class="social-btn">
-          <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>spotify</title><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3"/></svg>
+        <a
+          href="https://open.spotify.com/artist/5qjpeOAlOrY6kilCDZzYoz"
+          target="_blank"
+          rel="noopener"
+          aria-label="Spotify"
+          title="open praxor on spotify"
+          class="social-btn"
+        >
+          <svg
+            role="img"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <title>spotify</title>
+            <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3" />
+          </svg>
         </a>
-        <a href="https://soundcloud.com/praxor" target="_blank" rel="noopener" aria-label="SoundCloud" title="open praxor on soundcloud" class="social-btn">
-          <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>soundcloud</title><path d="M23.999 14.165c-.052 1.796-1.612 3.169-3.4 3.169h-8.18a.68.68 0 0 1-.675-.683V7.862a.747.747 0 0 1 .452-.724s.75-.513 2.333-.513a5.364 5.364 0 0 1 2.763.755 5.433 5.433 0 0 1 2.57 3.54c.282-.08.574-.121.868-.12.884 0 1.73.358 2.347.992s.948 1.49.922 2.373ZM10.721 8.421c.247 2.98.427 5.697 0 8.672a.264.264 0 0 1-.53 0c-.395-2.946-.22-5.718 0-8.672a.264.264 0 0 1 .53 0ZM9.072 9.448c.285 2.659.37 4.986-.006 7.655a.277.277 0 0 1-.55 0c-.331-2.63-.256-5.02 0-7.655a.277.277 0 0 1 .556 0Zm-1.663-.257c.27 2.726.39 5.171 0 7.904a.266.266 0 0 1-.532 0c-.38-2.69-.257-5.21 0-7.904a.266.266 0 0 1 .532 0Zm-1.647.77a26.108 26.108 0 0 1-.008 7.147.272.272 0 0 1-.542 0 27.955 27.955 0 0 1 0-7.147.275.275 0 0 1 .55 0Zm-1.67 1.769c.421 1.865.228 3.5-.029 5.388a.257.257 0 0 1-.514 0c-.21-1.858-.398-3.549 0-5.389a.272.272 0 0 1 .543 0Zm-1.655-.273c.388 1.897.26 3.508-.01 5.412-.026.28-.514.283-.54 0-.244-1.878-.347-3.54-.01-5.412a.283.283 0 0 1 .56 0Zm-1.668.911c.4 1.268.257 2.292-.026 3.572a.257.257 0 0 1-.514 0c-.241-1.262-.354-2.312-.023-3.572a.283.283 0 0 1 .563 0Z"/></svg>
+        <a
+          href="https://soundcloud.com/praxor"
+          target="_blank"
+          rel="noopener"
+          aria-label="SoundCloud"
+          title="open praxor on soundcloud"
+          class="social-btn"
+        >
+          <svg
+            role="img"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <title>soundcloud</title>
+            <path d="M23.999 14.165c-.052 1.796-1.612 3.169-3.4 3.169h-8.18a.68.68 0 0 1-.675-.683V7.862a.747.747 0 0 1 .452-.724s.75-.513 2.333-.513a5.364 5.364 0 0 1 2.763.755 5.433 5.433 0 0 1 2.57 3.54c.282-.08.574-.121.868-.12.884 0 1.73.358 2.347.992s.948 1.49.922 2.373ZM10.721 8.421c.247 2.98.427 5.697 0 8.672a.264.264 0 0 1-.53 0c-.395-2.946-.22-5.718 0-8.672a.264.264 0 0 1 .53 0ZM9.072 9.448c.285 2.659.37 4.986-.006 7.655a.277.277 0 0 1-.55 0c-.331-2.63-.256-5.02 0-7.655a.277.277 0 0 1 .556 0Zm-1.663-.257c.27 2.726.39 5.171 0 7.904a.266.266 0 0 1-.532 0c-.38-2.69-.257-5.21 0-7.904a.266.266 0 0 1 .532 0Zm-1.647.77a26.108 26.108 0 0 1-.008 7.147.272.272 0 0 1-.542 0 27.955 27.955 0 0 1 0-7.147.275.275 0 0 1 .55 0Zm-1.67 1.769c.421 1.865.228 3.5-.029 5.388a.257.257 0 0 1-.514 0c-.21-1.858-.398-3.549 0-5.389a.272.272 0 0 1 .543 0Zm-1.655-.273c.388 1.897.26 3.508-.01 5.412-.026.28-.514.283-.54 0-.244-1.878-.347-3.54-.01-5.412a.283.283 0 0 1 .56 0Zm-1.668.911c.4 1.268.257 2.292-.026 3.572a.257.257 0 0 1-.514 0c-.241-1.262-.354-2.312-.023-3.572a.283.283 0 0 1 .563 0Z" />
+          </svg>
         </a>
-        <a href="https://www.youtube.com/@realpraxor" target="_blank" rel="noopener" aria-label="YouTube" title="open praxor on youtube" class="social-btn">
-          <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>youtube</title><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        <a
+          href="https://www.youtube.com/@realpraxor"
+          target="_blank"
+          rel="noopener"
+          aria-label="YouTube"
+          title="open praxor on youtube"
+          class="social-btn"
+        >
+          <svg
+            role="img"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <title>youtube</title>
+            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+          </svg>
         </a>
-        <a href="https://x.com/praxorf" target="_blank" rel="noopener" aria-label="Twitter" title="open praxor on x" class="social-btn">
-          <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>x</title><path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z"/></svg>
+        <a
+          href="https://x.com/praxorf"
+          target="_blank"
+          rel="noopener"
+          aria-label="Twitter"
+          title="open praxor on x"
+          class="social-btn"
+        >
+          <svg
+            role="img"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <title>x</title>
+            <path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z" />
+          </svg>
         </a>
       </div>
+      <span class="header-divider" aria-hidden="true"></span>
+      <button
+        id="contact-btn"
+        class="header-icon-button"
+        type="button"
+        aria-label="Contact"
+        title="Contact"
+        aria-haspopup="dialog"
+        aria-expanded="false"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          width="20"
+          height="20"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <rect x="3.5" y="5.5" width="17" height="13" rx="1.5" />
+          <path d="m4.5 7 7.5 6 7.5-6" />
+        </svg>
+      </button>
     </div>
-    <button id="settings-toggle" class="sm-toggle" type="button" aria-label="Settings and achievements" aria-haspopup="dialog" aria-expanded="false" aria-controls="settings-panel" title="settings & achievements">
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
+    <button
+      id="settings-toggle"
+      class="sm-toggle"
+      type="button"
+      aria-label="Settings and achievements"
+      aria-haspopup="dialog"
+      aria-expanded="false"
+      aria-controls="settings-panel"
+      title="settings & achievements"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        width="20"
+        height="20"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        aria-hidden="true"
+        focusable="false"
+      >
         <path d="M4 6h8M20 6h-2M4 12h2M14 12h6M4 18h10M20 18h-2" />
-        <circle cx="15" cy="6" r="2.2" /><circle cx="9" cy="12" r="2.2" /><circle cx="17" cy="18" r="2.2" />
+        <circle cx="15" cy="6" r="2.2" />
+        <circle cx="9" cy="12" r="2.2" />
+        <circle cx="17" cy="18" r="2.2" />
       </svg>
     </button>
-    <button id="menu-toggle" class="menu-toggle" type="button" aria-label="Toggle menu" aria-controls="mobile-nav" aria-expanded="false">
-      <span class="menu-icon" aria-hidden="true"><i></i><i></i><i></i></span>
+    <button
+      id="menu-toggle"
+      class="menu-toggle"
+      type="button"
+      aria-label="Toggle menu"
+      aria-controls="mobile-nav"
+      aria-expanded="false"
+    >
+      <span class="menu-icon" aria-hidden="true">
+        <i></i>
+        <i></i>
+        <i></i>
+      </span>
     </button>
   </div>
   <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile navigation">
     <div class="mobile-character-menu">
       <div class="mobile-character-row">
         <a href={`${base}characters`}>characters</a>
-        <button class="mobile-character-toggle" type="button" aria-label="Show character links" aria-controls="mobile-character-links" aria-expanded="false">⌄</button>
+        <button
+          class="mobile-character-toggle"
+          type="button"
+          aria-label="Show character links"
+          aria-controls="mobile-character-links"
+          aria-expanded="false"
+        >
+          ⌄
+        </button>
       </div>
       <div id="mobile-character-links" class="mobile-character-links">
-        {characters.map((character) => <a href={`${base}characters/${character.slug}`}>{character.name}</a>)}
+        {characters.map((character) => (
+          <a href={`${base}characters/${character.slug}`}>{character.name}</a>
+        ))}
       </div>
     </div>
     <a href={`${base}plinko`}>plinko</a>
     <a href={`${base}music`}>music</a>
     <a href={`${base}about`}>about</a>
     <div class="mobile-socials" aria-label="Social links">
-      <a href="https://open.spotify.com/artist/5qjpeOAlOrY6kilCDZzYoz" target="_blank" rel="noopener" aria-label="Spotify" title="open praxor on spotify" class="social-btn">
-        <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>spotify</title><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3"/></svg>
+      <a
+        href="https://open.spotify.com/artist/5qjpeOAlOrY6kilCDZzYoz"
+        target="_blank"
+        rel="noopener"
+        aria-label="Spotify"
+        title="open praxor on spotify"
+        class="social-btn"
+      >
+        <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <title>spotify</title>
+          <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3" />
+        </svg>
       </a>
-      <a href="https://soundcloud.com/praxor" target="_blank" rel="noopener" aria-label="SoundCloud" title="open praxor on soundcloud" class="social-btn">
-        <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>soundcloud</title><path d="M23.999 14.165c-.052 1.796-1.612 3.169-3.4 3.169h-8.18a.68.68 0 0 1-.675-.683V7.862a.747.747 0 0 1 .452-.724s.75-.513 2.333-.513a5.364 5.364 0 0 1 2.763.755 5.433 5.433 0 0 1 2.57 3.54c.282-.08.574-.121.868-.12.884 0 1.73.358 2.347.992s.948 1.49.922 2.373ZM10.721 8.421c.247 2.98.427 5.697 0 8.672a.264.264 0 0 1-.53 0c-.395-2.946-.22-5.718 0-8.672a.264.264 0 0 1 .53 0ZM9.072 9.448c.285 2.659.37 4.986-.006 7.655a.277.277 0 0 1-.55 0c-.331-2.63-.256-5.02 0-7.655a.277.277 0 0 1 .556 0Zm-1.663-.257c.27 2.726.39 5.171 0 7.904a.266.266 0 0 1-.532 0c-.38-2.69-.257-5.21 0-7.904a.266.266 0 0 1 .532 0Zm-1.647.77a26.108 26.108 0 0 1-.008 7.147.272.272 0 0 1-.542 0 27.955 27.955 0 0 1 0-7.147.275.275 0 0 1 .55 0Zm-1.67 1.769c.421 1.865.228 3.5-.029 5.388a.257.257 0 0 1-.514 0c-.21-1.858-.398-3.549 0-5.389a.272.272 0 0 1 .543 0Zm-1.655-.273c.388 1.897.26 3.508-.01 5.412-.026.28-.514.283-.54 0-.244-1.878-.347-3.54-.01-5.412a.283.283 0 0 1 .56 0Zm-1.668.911c.4 1.268.257 2.292-.026 3.572a.257.257 0 0 1-.514 0c-.241-1.262-.354-2.312-.023-3.572a.283.283 0 0 1 .563 0Z"/></svg>
+      <a
+        href="https://soundcloud.com/praxor"
+        target="_blank"
+        rel="noopener"
+        aria-label="SoundCloud"
+        title="open praxor on soundcloud"
+        class="social-btn"
+      >
+        <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <title>soundcloud</title>
+          <path d="M23.999 14.165c-.052 1.796-1.612 3.169-3.4 3.169h-8.18a.68.68 0 0 1-.675-.683V7.862a.747.747 0 0 1 .452-.724s.75-.513 2.333-.513a5.364 5.364 0 0 1 2.763.755 5.433 5.433 0 0 1 2.57 3.54c.282-.08.574-.121.868-.12.884 0 1.73.358 2.347.992s.948 1.49.922 2.373ZM10.721 8.421c.247 2.98.427 5.697 0 8.672a.264.264 0 0 1-.53 0c-.395-2.946-.22-5.718 0-8.672a.264.264 0 0 1 .53 0ZM9.072 9.448c.285 2.659.37 4.986-.006 7.655a.277.277 0 0 1-.55 0c-.331-2.63-.256-5.02 0-7.655a.277.277 0 0 1 .556 0Zm-1.663-.257c.27 2.726.39 5.171 0 7.904a.266.266 0 0 1-.532 0c-.38-2.69-.257-5.21 0-7.904a.266.266 0 0 1 .532 0Zm-1.647.77a26.108 26.108 0 0 1-.008 7.147.272.272 0 0 1-.542 0 27.955 27.955 0 0 1 0-7.147.275.275 0 0 1 .55 0Zm-1.67 1.769c.421 1.865.228 3.5-.029 5.388a.257.257 0 0 1-.514 0c-.21-1.858-.398-3.549 0-5.389a.272.272 0 0 1 .543 0Zm-1.655-.273c.388 1.897.26 3.508-.01 5.412-.026.28-.514.283-.54 0-.244-1.878-.347-3.54-.01-5.412a.283.283 0 0 1 .56 0Zm-1.668.911c.4 1.268.257 2.292-.026 3.572a.257.257 0 0 1-.514 0c-.241-1.262-.354-2.312-.023-3.572a.283.283 0 0 1 .563 0Z" />
+        </svg>
       </a>
-      <a href="https://www.youtube.com/@realpraxor" target="_blank" rel="noopener" aria-label="YouTube" title="open praxor on youtube" class="social-btn">
-        <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>youtube</title><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+      <a
+        href="https://www.youtube.com/@realpraxor"
+        target="_blank"
+        rel="noopener"
+        aria-label="YouTube"
+        title="open praxor on youtube"
+        class="social-btn"
+      >
+        <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <title>youtube</title>
+          <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+        </svg>
       </a>
-      <a href="https://x.com/praxorf" target="_blank" rel="noopener" aria-label="Twitter" title="open praxor on x" class="social-btn">
-        <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>x</title><path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z"/></svg>
+      <a
+        href="https://x.com/praxorf"
+        target="_blank"
+        rel="noopener"
+        aria-label="Twitter"
+        title="open praxor on x"
+        class="social-btn"
+      >
+        <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <title>x</title>
+          <path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z" />
+        </svg>
       </a>
     </div>
   </nav>
   <div class="toohi-cats" aria-hidden="true">
-    {[0, 1, 2, 3, 4].map((index) => <img src={`${base}media/res/oraxor.png`} alt="" width="24" height="24" loading="lazy" decoding="async" style={`--i:${index}`} />)}
+    {[0, 1, 2, 3, 4].map((index) => (
+      <img
+        src={`${base}media/res/oraxor.png`}
+        alt=""
+        width="24"
+        height="24"
+        loading="lazy"
+        decoding="async"
+        style={`--i:${index}`}
+      />
+    ))}
   </div>
   <style>
-    .site-header{position:sticky;top:0;z-index:40;background:var(--card);border-bottom:1px solid var(--muted-border);transition:var(--theme-transition),background-color .22s ease,color .22s ease,border-color .22s ease}
-    .site-header .container{max-width:1100px;margin:0 auto;padding:6px 16px;display:flex;align-items:center;gap:10px}
-    .logo{display:inline-block;text-decoration:none;touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
-    .logo img{height:28px;width:auto;border-radius:0;display:block;-webkit-user-drag:none;-webkit-touch-callout:none}
-    .logo.secret-ready img{animation:secret-cat-spin .32s linear infinite}
-    @keyframes secret-cat-spin{to{transform:rotate(360deg)}}
-    .nav{display:flex;gap:6px;margin-left:2px}
-    .site-header nav a{-webkit-user-select:none;user-select:none}
-    .nav a{color:var(--muted);text-decoration:none;padding:4px 6px;border-radius:7px;font-weight:600;transition:color .22s ease,background-color .22s ease;-webkit-user-select:none;user-select:none}
-    @media (hover:hover){.nav a:hover{background:var(--surface-hover);color:var(--text)}}
-    .character-menu{position:relative;display:flex;align-items:center}
-    .character-chevron{display:inline-block;width:6px;height:6px;margin:0 0 3px 6px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg);transition:transform .18s ease}
-    @media (hover:hover){.character-menu:hover .character-chevron{transform:rotate(225deg)}}
-    .character-menu:has(:focus-visible) .character-chevron{transform:rotate(225deg)}
-    .character-menu-panel{position:absolute;top:calc(100% + 10px);left:0;min-width:170px;padding:6px;background:var(--card);border:1px solid var(--muted-border);border-radius:8px;box-shadow:0 16px 34px var(--shadow-soft);opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .18s ease,transform .18s ease,visibility .18s ease}
-    @media (hover:hover){.character-menu:hover .character-menu-panel{opacity:1;visibility:visible;transform:translateY(0)}}
-    .character-menu:has(:focus-visible) .character-menu-panel{opacity:1;visibility:visible;transform:translateY(0)}
-    .character-menu-panel a{display:block;white-space:nowrap}
-    .cult-link{color:transparent!important}
-    .nav .cult-link{transition-duration:.12s}
-    .actions{margin-left:auto;display:flex;align-items:center;gap:4px}
-    .site-header .sm-toggle{position:relative;flex:0 0 34px}
-    .cta{padding:7px 10px;border-radius:8px;font-size:.88rem}
-    .header-socials{gap:4px;margin-left:4px}
-    .header-socials .social-btn{width:32px;height:32px}
-    .menu-toggle{display:none;width:44px;height:44px;padding:0;background:transparent;border:1px solid transparent;border-radius:7px;color:var(--muted);line-height:1;cursor:pointer}
-    @media (hover:hover){.menu-toggle:hover{background:var(--accent-10);color:var(--text)}}
-    .menu-toggle:focus-visible{background:var(--accent-10);color:var(--text)}
-    .menu-icon{position:relative;display:block;width:18px;height:14px;margin:auto}
-    .menu-icon i{position:absolute;left:0;width:18px;height:2px;border-radius:2px;background:currentColor;transition:transform .24s ease,opacity .18s ease,top .24s ease}
-    .menu-icon i:nth-child(1){top:0}.menu-icon i:nth-child(2){top:6px}.menu-icon i:nth-child(3){top:12px}
-    .menu-toggle[aria-expanded="true"] .menu-icon i:nth-child(1){top:6px;transform:rotate(45deg)}
-    .menu-toggle[aria-expanded="true"] .menu-icon i:nth-child(2){opacity:0;transform:scaleX(0)}
-    .menu-toggle[aria-expanded="true"] .menu-icon i:nth-child(3){top:6px;transform:rotate(-45deg)}
-    .mobile-nav{display:none}
-
-    @media (max-width:780px){
-      .nav{display:none}
-      .site-header .sm-toggle{margin-left:auto}
-      .menu-toggle{display:inline-block;margin-left:0}
-      .actions{display:none}
-      .site-header .container{padding:4px 12px}
-      .logo img{height:30px}
-      .mobile-nav{position:absolute;top:100%;left:0;right:0;box-sizing:border-box;display:flex;flex-direction:column;gap:2px;max-height:0;padding:0 12px;background:var(--card);border-top:1px solid transparent;opacity:0;overflow:hidden;transform:translateY(-8px);transition:max-height .32s ease,padding .32s ease,opacity .24s ease,transform .32s ease,border-color .32s ease;visibility:hidden}
-      .mobile-nav.open{max-height:min(80vh,720px);padding:8px 12px 4px;border-top-color:var(--muted-border);opacity:1;overflow-y:auto;transform:translateY(0);visibility:visible}
-      .mobile-nav a{display:block;color:var(--muted);text-decoration:none;padding:11px 10px;border-radius:8px;font-weight:600}
-      @media (hover:hover){.mobile-nav a:hover{background:var(--surface-hover);color:var(--text)}}
-      .mobile-nav a:focus-visible{background:var(--surface-hover);color:var(--text)}
-      .mobile-nav .cult-link{color:transparent!important}
-      .mobile-character-row{display:flex;align-items:center;gap:4px}
-      .mobile-character-row>a{flex:1}
-      .mobile-character-toggle{width:38px;height:38px;border:0;border-radius:7px;background:transparent;color:var(--muted);font:inherit;font-size:1rem;cursor:pointer;transition:background .18s ease,transform .24s ease}
-      @media (hover:hover){.mobile-character-toggle:hover{background:var(--accent-10);color:var(--text)}}
-      .mobile-character-toggle:focus-visible{background:var(--accent-10);color:var(--text)}
-      .mobile-character-toggle[aria-expanded="true"]{transform:rotate(180deg)}
-      .mobile-character-links{max-height:0;overflow:hidden;opacity:0;transition:max-height .28s ease,opacity .2s ease}
-      .mobile-character-links.open{max-height:min(45vh,300px);overflow-y:auto;opacity:1}
-      .mobile-character-links a{padding:8px 20px;font-size:.92rem}
-      .mobile-socials{display:flex;align-items:center;justify-content:center;gap:4px;padding:5px 4px 0;border-top:1px solid var(--muted-border);margin-top:2px}
-      .mobile-socials .social-btn{display:flex;align-items:center;justify-content:center;width:38px;height:34px;padding:0;font-size:16px}
+    /* Component styles: site header and navigation */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: var(--card);
+      border-bottom: 1px solid var(--muted-border);
+      transition:
+        var(--theme-transition),
+        background-color 0.22s ease,
+        color 0.22s ease,
+        border-color 0.22s ease;
     }
-    @media (max-width:780px){.character-menu{display:none}}
-    @media (prefers-reduced-motion:reduce){
-      .site-header,.site-header .nav a,.site-header .character-menu-panel,.site-header .cta,.site-header .mobile-nav,.site-header .mobile-nav a{transition:none!important}
+    .site-header .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 6px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo {
+      display: inline-block;
+      text-decoration: none;
+      touch-action: manipulation;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .logo img {
+      height: 28px;
+      width: auto;
+      border-radius: 0;
+      display: block;
+      -webkit-user-drag: none;
+      -webkit-touch-callout: none;
+    }
+    .logo.secret-ready img {
+      animation: secret-cat-spin 0.32s linear infinite;
+    }
+    @keyframes secret-cat-spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    .nav {
+      display: flex;
+      gap: 6px;
+      margin-left: 2px;
+    }
+    .site-header nav a {
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    .nav a {
+      color: var(--muted);
+      text-decoration: none;
+      padding: 4px 6px;
+      border-radius: 7px;
+      font-weight: 600;
+      transition:
+        color 0.22s ease,
+        background-color 0.22s ease;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    @media (hover: hover) {
+      .nav a:hover {
+        background: var(--surface-hover);
+        color: var(--text);
+      }
+    }
+    .character-menu {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .character-chevron {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      margin: 0 0 3px 6px;
+      border-right: 1.5px solid currentColor;
+      border-bottom: 1.5px solid currentColor;
+      transform: rotate(45deg);
+      transition: transform 0.18s ease;
+    }
+    @media (hover: hover) {
+      .character-menu:hover .character-chevron {
+        transform: rotate(225deg);
+      }
+    }
+    .character-menu:has(:focus-visible) .character-chevron {
+      transform: rotate(225deg);
+    }
+    .character-menu-panel {
+      position: absolute;
+      top: calc(100% + 10px);
+      left: 0;
+      min-width: 170px;
+      padding: 6px;
+      background: var(--card);
+      border: 1px solid var(--muted-border);
+      border-radius: 8px;
+      box-shadow: 0 16px 34px var(--shadow-soft);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-6px);
+      transition:
+        opacity 0.18s ease,
+        transform 0.18s ease,
+        visibility 0.18s ease;
+    }
+    @media (hover: hover) {
+      .character-menu:hover .character-menu-panel {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+    }
+    .character-menu:has(:focus-visible) .character-menu-panel {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    .character-menu-panel a {
+      display: block;
+      white-space: nowrap;
+    }
+    .cult-link {
+      color: transparent !important;
+    }
+    .nav .cult-link {
+      transition-duration: 0.12s;
+    }
+    .actions {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .site-header .sm-toggle {
+      position: relative;
+      flex: 0 0 34px;
+    }
+    .header-socials {
+      gap: 4px;
+      margin-left: 0;
+    }
+    .header-divider {
+      flex: 0 0 1px;
+      height: 22px;
+      margin: 0 2px;
+      background: var(--muted-border);
+    }
+    .header-icon-button {
+      display: grid;
+      place-items: center;
+      flex: 0 0 32px;
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition:
+        background-color 0.18s ease,
+        color 0.18s ease;
+    }
+    .header-icon-button:hover,
+    .header-icon-button[aria-expanded="true"] {
+      background: var(--accent-10);
+      color: var(--text);
+    }
+    .header-icon-button:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    .header-icon-button svg {
+      display: block;
+    }
+    .header-socials .social-btn {
+      width: 32px;
+      height: 32px;
+    }
+    .menu-toggle {
+      display: none;
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 7px;
+      color: var(--muted);
+      line-height: 1;
+      cursor: pointer;
+    }
+    @media (hover: hover) {
+      .menu-toggle:hover {
+        background: var(--accent-10);
+        color: var(--text);
+      }
+    }
+    .menu-toggle:focus-visible {
+      background: var(--accent-10);
+      color: var(--text);
+    }
+    .menu-icon {
+      position: relative;
+      display: block;
+      width: 18px;
+      height: 14px;
+      margin: auto;
+    }
+    .menu-icon i {
+      position: absolute;
+      left: 0;
+      width: 18px;
+      height: 2px;
+      border-radius: 2px;
+      background: currentColor;
+      transition:
+        transform 0.24s ease,
+        opacity 0.18s ease,
+        top 0.24s ease;
+    }
+    .menu-icon i:nth-child(1) {
+      top: 0;
+    }
+    .menu-icon i:nth-child(2) {
+      top: 6px;
+    }
+    .menu-icon i:nth-child(3) {
+      top: 12px;
+    }
+    .menu-toggle[aria-expanded="true"] .menu-icon i:nth-child(1) {
+      top: 6px;
+      transform: rotate(45deg);
+    }
+    .menu-toggle[aria-expanded="true"] .menu-icon i:nth-child(2) {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+    .menu-toggle[aria-expanded="true"] .menu-icon i:nth-child(3) {
+      top: 6px;
+      transform: rotate(-45deg);
+    }
+    .mobile-nav {
+      display: none;
+    }
+
+    @media (max-width: 780px) {
+      .nav {
+        display: none;
+      }
+      .site-header .sm-toggle {
+        margin-left: 0;
+      }
+      .menu-toggle {
+        display: inline-block;
+        margin-left: 0;
+      }
+      .actions {
+        display: flex;
+        gap: 4px;
+      }
+      .header-socials,
+      .header-divider {
+        display: none;
+      }
+      .site-header .container {
+        padding: 4px 12px;
+      }
+      .logo img {
+        height: 30px;
+      }
+      .mobile-nav {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        max-height: 0;
+        padding: 0 12px;
+        background: var(--card);
+        border-top: 1px solid transparent;
+        opacity: 0;
+        overflow: hidden;
+        transform: translateY(-8px);
+        transition:
+          max-height 0.32s ease,
+          padding 0.32s ease,
+          opacity 0.24s ease,
+          transform 0.32s ease,
+          border-color 0.32s ease;
+        visibility: hidden;
+      }
+      .mobile-nav.open {
+        max-height: min(80vh, 720px);
+        padding: 8px 12px 4px;
+        border-top-color: var(--muted-border);
+        opacity: 1;
+        overflow-y: auto;
+        transform: translateY(0);
+        visibility: visible;
+      }
+      .mobile-nav a {
+        display: block;
+        color: var(--muted);
+        text-decoration: none;
+        padding: 11px 10px;
+        border-radius: 8px;
+        font-weight: 600;
+      }
+      @media (hover: hover) {
+        .mobile-nav a:hover {
+          background: var(--surface-hover);
+          color: var(--text);
+        }
+      }
+      .mobile-nav a:focus-visible {
+        background: var(--surface-hover);
+        color: var(--text);
+      }
+      .mobile-nav .cult-link {
+        color: transparent !important;
+      }
+      .mobile-character-row {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .mobile-character-row > a {
+        flex: 1;
+      }
+      .mobile-character-toggle {
+        width: 38px;
+        height: 38px;
+        border: 0;
+        border-radius: 7px;
+        background: transparent;
+        color: var(--muted);
+        font: inherit;
+        font-size: 1rem;
+        cursor: pointer;
+        transition:
+          background 0.18s ease,
+          transform 0.24s ease;
+      }
+      @media (hover: hover) {
+        .mobile-character-toggle:hover {
+          background: var(--accent-10);
+          color: var(--text);
+        }
+      }
+      .mobile-character-toggle:focus-visible {
+        background: var(--accent-10);
+        color: var(--text);
+      }
+      .mobile-character-toggle[aria-expanded="true"] {
+        transform: rotate(180deg);
+      }
+      .mobile-character-links {
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition:
+          max-height 0.28s ease,
+          opacity 0.2s ease;
+      }
+      .mobile-character-links.open {
+        max-height: min(45vh, 300px);
+        overflow-y: auto;
+        opacity: 1;
+      }
+      .mobile-character-links a {
+        padding: 8px 20px;
+        font-size: 0.92rem;
+      }
+      .mobile-socials {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        padding: 5px 4px 0;
+        border-top: 1px solid var(--muted-border);
+        margin-top: 2px;
+      }
+      .mobile-socials .social-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 34px;
+        padding: 0;
+        font-size: 16px;
+      }
+    }
+    @media (max-width: 780px) {
+      .character-menu {
+        display: none;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .site-header,
+      .site-header .nav a,
+      .site-header .character-menu-panel,
+      .site-header .cta,
+      .site-header .mobile-nav,
+      .site-header .mobile-nav a {
+        transition: none !important;
+      }
     }
   </style>
 
-  <div id="contact-panel" class="contact-panel" role="dialog" aria-modal="true" aria-hidden="true">
+  <div
+    id="contact-panel"
+    class="contact-panel"
+    role="dialog"
+    aria-modal="true"
+    aria-hidden="true"
+  >
     <div class="contact-overlay" tabindex="-1"></div>
     <div class="contact-inner" role="document">
-      <button id="contact-close" class="contact-close" aria-label="Close contact panel">✕</button>
+      <button
+        id="contact-close"
+        class="contact-close"
+        aria-label="Close contact panel"
+      >
+        ✕
+      </button>
       <div class="modal-top">
         <div class="confetti" aria-hidden="true"></div>
         <div class="shards" aria-hidden="true"></div>
-        <Image class="modal-cat" src="https://praxor.de/media/res/oraxor.png" alt="oraxor the cat" width={72} height={72} loading="lazy" decoding="async" data-theme-cat="" data-theme-cat-default-src="media/res/oraxor.png" />
+        <Image
+          class="modal-cat"
+          src="https://praxor.de/media/res/oraxor.png"
+          alt="oraxor the cat"
+          width={72}
+          height={72}
+          loading="lazy"
+          decoding="async"
+          data-theme-cat=""
+          data-theme-cat-default-src="media/res/oraxor.png"
+        />
       </div>
       <h2 class="modal-title">contact</h2>
       <p class="modal-lead">
-        <a class="contact-row" href="mailto:admin@praxor.de">email: <span class="contact-value">admin@praxor.de</span></a>
-        <button type="button" id="copy-discord" class="contact-row" data-copy="trapstars" aria-label="Copy discord username trapstars">discord: @<strong>trapstars</strong><span class="copy-hint" role="status" aria-live="polite"></span></button>
+        <a class="contact-row" href="mailto:admin@praxor.de">
+          email: <span class="contact-value">admin@praxor.de</span>
+        </a>
+        <button
+          type="button"
+          id="copy-discord"
+          class="contact-row"
+          data-copy="trapstars"
+          aria-label="Copy discord username trapstars"
+        >
+          discord: @<strong>trapstars</strong>
+          <span class="copy-hint" role="status" aria-live="polite"></span>
+        </button>
       </p>
     </div>
   </div>
 
   <style>
-    .contact-panel{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:60;pointer-events:none;opacity:0;transition:opacity .28s ease}
-    .contact-panel .contact-overlay{position:absolute;inset:0;background:color-mix(in srgb,var(--bg) 72%,transparent);opacity:0;transition:opacity .28s ease}
-    .contact-panel .contact-inner{position:relative;z-index:2;max-width:380px;width:calc(100% - 40px);background:radial-gradient(120% 80% at 50% 0%, color-mix(in srgb,var(--accent) 32%,transparent), transparent 70%), var(--card);border:1px solid color-mix(in srgb,var(--accent) 45%,transparent);padding:48px 22px 22px;border-radius:18px;box-shadow:0 24px 70px var(--shadow-strong), 0 0 0 1px var(--accent-12), 0 0 48px color-mix(in srgb,var(--accent) 18%,transparent);transform:translateY(24px) scale(.92);opacity:0;transition:transform .3s ease,opacity .2s ease}
-    .contact-inner::before{content:"";position:absolute;left:50%;top:0;width:96px;height:2px;transform:translateX(-50%);border-radius:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);pointer-events:none}
-    .modal-top{position:absolute;left:50%;top:-36px;width:72px;height:72px;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:2}
-    .modal-top .confetti{position:absolute;left:50%;top:50%;transform:translate(-50%,-10%);width:220px;height:140px;pointer-events:none;z-index:1}
+    /* Component styles: contact dialog */
+    .contact-panel {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 60;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.28s ease;
+    }
+    .contact-panel .contact-overlay {
+      position: absolute;
+      inset: 0;
+      background: color-mix(in srgb, var(--bg) 72%, transparent);
+      opacity: 0;
+      transition: opacity 0.28s ease;
+    }
+    .contact-panel .contact-inner {
+      position: relative;
+      z-index: 2;
+      max-width: 380px;
+      width: calc(100% - 40px);
+      background:
+        radial-gradient(
+          120% 80% at 50% 0%,
+          color-mix(in srgb, var(--accent) 32%, transparent),
+          transparent 70%
+        ),
+        var(--card);
+      border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+      padding: 48px 22px 22px;
+      border-radius: 18px;
+      box-shadow:
+        0 24px 70px var(--shadow-strong),
+        0 0 0 1px var(--accent-12),
+        0 0 48px color-mix(in srgb, var(--accent) 18%, transparent);
+      transform: translateY(24px) scale(0.92);
+      opacity: 0;
+      transition:
+        transform 0.3s ease,
+        opacity 0.2s ease;
+    }
+    .contact-inner::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 0;
+      width: 96px;
+      height: 2px;
+      transform: translateX(-50%);
+      border-radius: 2px;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        var(--accent),
+        transparent
+      );
+      pointer-events: none;
+    }
+    .modal-top {
+      position: absolute;
+      left: 50%;
+      top: -36px;
+      width: 72px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .modal-top .confetti {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -10%);
+      width: 220px;
+      height: 140px;
+      pointer-events: none;
+      z-index: 1;
+    }
     /* JS-created nodes lack Astro's scope attribute, so these need :global */
-    .modal-top .confetti :global(.piece){position:absolute;left:50%;top:50%;border-radius:2px;opacity:0}
-    .modal-top .shards{position:absolute;inset:0;pointer-events:none}
-    .modal-top .shards :global(.shard){position:absolute;will-change:transform,opacity}
-
-    .modal-cat{position:relative;height:72px;width:72px;border-radius:0;object-fit:cover;display:block;opacity:1;will-change:transform,opacity;transform-origin:center}
-
-    @keyframes cat-slide-in {
-      0% { transform: translate3d(-120vw,0,0) rotate(0deg); opacity:0; animation-timing-function:cubic-bezier(.1,.7,.2,1) }
-      8% { opacity:1 }
-      58% { transform: translate3d(calc(-50% + 44px),0,0) rotate(7deg); animation-timing-function:ease-in-out }
-      80% { transform: translate3d(calc(-50% - 9px),0,0) rotate(-3deg); animation-timing-function:ease-out }
-      100% { transform: translate3d(-50%,0,0) rotate(0deg); opacity:1 }
+    .modal-top .confetti :global(.piece) {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      border-radius: 2px;
+      opacity: 0;
+    }
+    .modal-top .shards {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    .modal-top .shards :global(.shard) {
+      position: absolute;
+      will-change: transform, opacity;
     }
 
-    .contact-panel.open .modal-top{animation:cat-slide-in 1.1s linear forwards}
-    .contact-panel:not(.open) .modal-cat{visibility:hidden}
+    .modal-cat {
+      position: relative;
+      height: 72px;
+      width: 72px;
+      border-radius: 0;
+      object-fit: cover;
+      display: block;
+      opacity: 1;
+      will-change: transform, opacity;
+      transform-origin: center;
+    }
 
-    .modal-title{margin:0 0 14px;color:var(--accent);text-align:center;font-size:1.6rem;font-weight:700;letter-spacing:.14em;text-transform:lowercase}
+    @keyframes cat-slide-in {
+      0% {
+        transform: translate3d(-120vw, 0, 0) rotate(0deg);
+        opacity: 0;
+        animation-timing-function: cubic-bezier(0.1, 0.7, 0.2, 1);
+      }
+      8% {
+        opacity: 1;
+      }
+      58% {
+        transform: translate3d(calc(-50% + 44px), 0, 0) rotate(7deg);
+        animation-timing-function: ease-in-out;
+      }
+      80% {
+        transform: translate3d(calc(-50% - 9px), 0, 0) rotate(-3deg);
+        animation-timing-function: ease-out;
+      }
+      100% {
+        transform: translate3d(-50%, 0, 0) rotate(0deg);
+        opacity: 1;
+      }
+    }
 
-    .contact-panel.closing .modal-cat{visibility:hidden}
-    .modal-lead{margin:0;display:grid;gap:8px;color:var(--muted);font-style:italic;text-align:center;opacity:1}
-    .contact-row{position:relative;display:block;width:100%;box-sizing:border-box;padding:11px 14px;border-radius:10px;background:var(--surface-hover);border:1px solid var(--muted-border);color:inherit;font:inherit;font-style:italic;text-align:center;text-decoration:none;cursor:pointer;transition:border-color .2s ease,background .2s ease,transform .15s ease}
-    @media (hover:hover){.contact-row:hover{border-color:var(--accent);background:var(--accent-12)}}
-    .contact-row:focus-visible{border-color:var(--accent);background:var(--accent-12)}
-    .contact-row:active{transform:scale(.98)}
-    .contact-value{color:var(--accent)}
-    .copy-hint{position:absolute;right:10px;top:50%;transform:translateY(-50%) scale(.9);padding:2px 8px;border-radius:999px;background:var(--accent);color:var(--accent-contrast);font-size:.72rem;font-style:normal;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease}
-    .copy-hint.show{opacity:1;transform:translateY(-50%) scale(1)}
-    .contact-panel.open{pointer-events:auto;opacity:1}
-    .contact-panel.open .contact-overlay{opacity:1;transition:opacity .35s ease}
-    .contact-panel.open .contact-inner{transform:translateY(0) scale(1);opacity:1;transition:transform .55s cubic-bezier(.2,1.25,.35,1) .1s,opacity .3s ease .1s}
+    .contact-panel.open .modal-top {
+      animation: cat-slide-in 1.1s linear forwards;
+    }
+    .contact-panel:not(.open) .modal-cat {
+      visibility: hidden;
+    }
+
+    .modal-title {
+      margin: 0 0 14px;
+      color: var(--accent);
+      text-align: center;
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: lowercase;
+    }
+
+    .contact-panel.closing .modal-cat {
+      visibility: hidden;
+    }
+    .modal-lead {
+      margin: 0;
+      display: grid;
+      gap: 8px;
+      color: var(--muted);
+      font-style: italic;
+      text-align: center;
+      opacity: 1;
+    }
+    .contact-row {
+      position: relative;
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 11px 14px;
+      border-radius: 10px;
+      background: var(--surface-hover);
+      border: 1px solid var(--muted-border);
+      color: inherit;
+      font: inherit;
+      font-style: italic;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        transform 0.15s ease;
+    }
+    @media (hover: hover) {
+      .contact-row:hover {
+        border-color: var(--accent);
+        background: var(--accent-12);
+      }
+    }
+    .contact-row:focus-visible {
+      border-color: var(--accent);
+      background: var(--accent-12);
+    }
+    .contact-row:active {
+      transform: scale(0.98);
+    }
+    .contact-value {
+      color: var(--accent);
+    }
+    .copy-hint {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%) scale(0.9);
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--accent);
+      color: var(--accent-contrast);
+      font-size: 0.72rem;
+      font-style: normal;
+      opacity: 0;
+      pointer-events: none;
+      transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
+    }
+    .copy-hint.show {
+      opacity: 1;
+      transform: translateY(-50%) scale(1);
+    }
+    .contact-panel.open {
+      pointer-events: auto;
+      opacity: 1;
+    }
+    .contact-panel.open .contact-overlay {
+      opacity: 1;
+      transition: opacity 0.35s ease;
+    }
+    .contact-panel.open .contact-inner {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+      transition:
+        transform 0.55s cubic-bezier(0.2, 1.25, 0.35, 1) 0.1s,
+        opacity 0.3s ease 0.1s;
+    }
     /* Card and backdrop fade out after the cat's pieces have started flying. */
-    .contact-panel.closing .contact-inner{transform:translateY(14px) scale(.96);opacity:0;transition:transform .4s ease .5s,opacity .35s ease .5s}
-    .contact-panel.closing .contact-overlay{opacity:0;transition:opacity .45s ease .7s}
-    .contact-close{position:absolute;right:12px;top:12px;width:32px;height:32px;display:grid;place-items:center;padding:0;border-radius:50%;background:var(--surface-hover);border:1px solid var(--muted-border);color:var(--muted);font-size:.95rem;cursor:pointer;transition:background .2s ease,color .2s ease,border-color .2s ease}
-    @media (hover:hover){.contact-close:hover{background:color-mix(in srgb,var(--accent) 25%,transparent);border-color:var(--accent);color:var(--text)}}
-    .contact-close:focus-visible{background:color-mix(in srgb,var(--accent) 25%,transparent);border-color:var(--accent);color:var(--text)}
-    .contact-panel h3{margin:6px 0 8px;color:var(--accent)}
-    .contact-panel a{color:var(--accent)}
+    .contact-panel.closing .contact-inner {
+      transform: translateY(14px) scale(0.96);
+      opacity: 0;
+      transition:
+        transform 0.4s ease 0.5s,
+        opacity 0.35s ease 0.5s;
+    }
+    .contact-panel.closing .contact-overlay {
+      opacity: 0;
+      transition: opacity 0.45s ease 0.7s;
+    }
+    .contact-close {
+      position: absolute;
+      right: 12px;
+      top: 12px;
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border-radius: 50%;
+      background: var(--surface-hover);
+      border: 1px solid var(--muted-border);
+      color: var(--muted);
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+    }
+    @media (hover: hover) {
+      .contact-close:hover {
+        background: color-mix(in srgb, var(--accent) 25%, transparent);
+        border-color: var(--accent);
+        color: var(--text);
+      }
+    }
+    .contact-close:focus-visible {
+      background: color-mix(in srgb, var(--accent) 25%, transparent);
+      border-color: var(--accent);
+      color: var(--text);
+    }
+    .contact-panel h3 {
+      margin: 6px 0 8px;
+      color: var(--accent);
+    }
+    .contact-panel a {
+      color: var(--accent);
+    }
   </style>
 
   <script>
-    import { prefersReducedMotion } from '../scripts/site-state';
-    (function(){
-      const sizeSocialIcons = function(){
-        document.querySelectorAll<SVGElement>('.social-btn svg').forEach((icon)=>{
-          icon.setAttribute('width','20');
-          icon.setAttribute('height','20');
-        });
+    import { prefersReducedMotion } from "../scripts/site-state";
+    (function () {
+      const sizeSocialIcons = function () {
+        document
+          .querySelectorAll<SVGElement>(".social-btn svg")
+          .forEach((icon) => {
+            icon.setAttribute("width", "20");
+            icon.setAttribute("height", "20");
+          });
       };
       sizeSocialIcons();
-      document.addEventListener('astro:page-load', sizeSocialIcons);
-      const logo = document.querySelector<HTMLAnchorElement>('.logo');
-      const cultUrl = `${import.meta.env.BASE_URL.replace(/\/?$/, '/')}cult`;
+      document.addEventListener("astro:page-load", sizeSocialIcons);
+      const logo = document.querySelector<HTMLAnchorElement>(".logo");
+      const cultUrl = `${import.meta.env.BASE_URL.replace(/\/?$/, "/")}cult`;
       let secretLogoTimer: number | undefined;
       let secretLogoReady = false;
       let logoHoldCompleted = false;
@@ -240,11 +1066,15 @@ const base = import.meta.env.BASE_URL;
       let shakeTargetX = 0;
       let shakeTargetY = 0;
       let nextShakeTarget = 0;
-      const stopRumble = function(){
+      const stopRumble = function () {
         rumbleActive = false;
         if (rumbleGain) {
           rumbleGain.gain.cancelScheduledValues(rumbleGain.context.currentTime);
-          rumbleGain.gain.setTargetAtTime(0.0001, rumbleGain.context.currentTime, .03);
+          rumbleGain.gain.setTargetAtTime(
+            0.0001,
+            rumbleGain.context.currentTime,
+            0.03,
+          );
         }
         if (rumbleNoiseSource) rumbleNoiseSource.stop();
         rumbleNoiseSource = undefined;
@@ -254,7 +1084,7 @@ const base = import.meta.env.BASE_URL;
         rumbleContext = undefined;
         rumbleGain = undefined;
       };
-      const startRumble = async function(){
+      const startRumble = async function () {
         if (rumbleActive) return;
         rumbleActive = true;
         rumbleContext = new AudioContext();
@@ -263,45 +1093,53 @@ const base = import.meta.env.BASE_URL;
         rumbleGain = rumbleContext.createGain();
         rumbleGain.gain.value = 0.0001;
         rumbleGain.connect(rumbleContext.destination);
-        const noiseBuffer = rumbleContext.createBuffer(1, rumbleContext.sampleRate * 2, rumbleContext.sampleRate);
+        const noiseBuffer = rumbleContext.createBuffer(
+          1,
+          rumbleContext.sampleRate * 2,
+          rumbleContext.sampleRate,
+        );
         const noiseData = noiseBuffer.getChannelData(0);
-        for (let index = 0; index < noiseData.length; index += 1) noiseData[index] = Math.random() * 2 - 1;
+        for (let index = 0; index < noiseData.length; index += 1)
+          noiseData[index] = Math.random() * 2 - 1;
         rumbleNoiseSource = rumbleContext.createBufferSource();
         rumbleNoiseSource.buffer = noiseBuffer;
         rumbleNoiseSource.loop = true;
         const rumbleFilter = rumbleContext.createBiquadFilter();
-        rumbleFilter.type = 'lowpass';
+        rumbleFilter.type = "lowpass";
         rumbleFilter.frequency.value = 150;
-        rumbleFilter.Q.value = .7;
+        rumbleFilter.Q.value = 0.7;
         rumbleNoiseSource.connect(rumbleFilter);
         rumbleFilter.connect(rumbleGain);
         rumbleNoiseSource.start();
         rumbleOscillators = [28, 36].map((frequency, index) => {
           const oscillator = rumbleContext!.createOscillator();
-          oscillator.type = index === 0 ? 'sine' : 'triangle';
+          oscillator.type = index === 0 ? "sine" : "triangle";
           oscillator.frequency.value = frequency;
           oscillator.connect(rumbleGain!);
           oscillator.start();
           return oscillator;
         });
-        rumbleGain.gain.exponentialRampToValueAtTime(.035, rumbleContext.currentTime + .12);
+        rumbleGain.gain.exponentialRampToValueAtTime(
+          0.035,
+          rumbleContext.currentTime + 0.12,
+        );
       };
-      const rampSecretShake = function(now: number){
+      const rampSecretShake = function (now: number) {
         if (!secretLogoReady || !logo) return;
         const intensity = Math.min(1, (now - shakeStartedAt) / 1700);
         const distance = 3 + intensity * 15;
-        const speed = .06 - intensity * .042;
+        const speed = 0.06 - intensity * 0.042;
         if (now >= nextShakeTarget) {
           shakeTargetX = (Math.random() * 2 - 1) * distance;
-          shakeTargetY = (Math.random() * 2 - 1) * distance * .45;
+          shakeTargetY = (Math.random() * 2 - 1) * distance * 0.45;
           nextShakeTarget = now + speed * 1000;
         }
-        shakeX += (shakeTargetX - shakeX) * .35;
-        shakeY += (shakeTargetY - shakeY) * .35;
+        shakeX += (shakeTargetX - shakeX) * 0.35;
+        shakeY += (shakeTargetY - shakeY) * 0.35;
         logo.style.transform = `translate(${shakeX}px,${shakeY}px)`;
         shakeFrame = window.requestAnimationFrame(rampSecretShake);
       };
-      const cancelSecretLogo = function(){
+      const cancelSecretLogo = function () {
         if (secretLogoTimer) window.clearTimeout(secretLogoTimer);
         secretLogoTimer = undefined;
         if (shakeFrame) window.cancelAnimationFrame(shakeFrame);
@@ -311,25 +1149,30 @@ const base = import.meta.env.BASE_URL;
         shakeTargetX = 0;
         shakeTargetY = 0;
         nextShakeTarget = 0;
-        logo?.style.removeProperty('transform');
-        logo?.classList.remove('secret-ready');
+        logo?.style.removeProperty("transform");
+        logo?.classList.remove("secret-ready");
         stopRumble();
       };
-      logo?.addEventListener('pointerdown', function(event: PointerEvent){
+      logo?.addEventListener("pointerdown", function (event: PointerEvent) {
         logoHoldCompleted = false;
-        if (!window.matchMedia('(max-width: 780px)').matches) return;
+        if (!window.matchMedia("(max-width: 780px)").matches) return;
         // Capture keeps the hold alive through small finger drift.
-        try { logo.setPointerCapture(event.pointerId); } catch { /* unsupported */ }
+        try {
+          logo.setPointerCapture(event.pointerId);
+        } catch {
+          /* unsupported */
+        }
         secretLogoReady = false;
         secretLogoTimer = window.setTimeout(() => {
           secretLogoReady = true;
-          logo?.classList.add('secret-ready');
+          logo?.classList.add("secret-ready");
           shakeStartedAt = performance.now();
-          if (!prefersReducedMotion()) shakeFrame = window.requestAnimationFrame(rampSecretShake);
+          if (!prefersReducedMotion())
+            shakeFrame = window.requestAnimationFrame(rampSecretShake);
           void startRumble();
         }, 700);
       });
-      logo?.addEventListener('pointerup', function(event){
+      logo?.addEventListener("pointerup", function (event) {
         if (!secretLogoReady) {
           cancelSecretLogo();
           return;
@@ -338,67 +1181,97 @@ const base = import.meta.env.BASE_URL;
         cancelSecretLogo();
         secretLogoReady = false;
         logoHoldCompleted = true;
-        if (window.matchMedia('(max-width: 780px)').matches) {
+        if (window.matchMedia("(max-width: 780px)").matches) {
           window.location.href = cultUrl;
         }
       });
       // The release after a completed hold would otherwise also follow the logo's own link.
-      logo?.addEventListener('click', function(event){
+      logo?.addEventListener("click", function (event) {
         if (!logoHoldCompleted) return;
         logoHoldCompleted = false;
         event.preventDefault();
       });
-      logo?.addEventListener('dragstart', function(event){ event.preventDefault(); });
-      logo?.addEventListener('contextmenu', function(event){
-        if (window.matchMedia('(pointer: coarse)').matches) event.preventDefault();
+      logo?.addEventListener("dragstart", function (event) {
+        event.preventDefault();
       });
-      logo?.addEventListener('pointercancel', cancelSecretLogo);
-      logo?.addEventListener('pointerleave', cancelSecretLogo);
-      const setupHeaderInteractions = function(){
-        const btn = document.getElementById('contact-btn') as HTMLButtonElement;
-        const menuToggle = document.getElementById('menu-toggle');
-        const mobileNav = document.getElementById('mobile-nav');
-        const mobileCharacterToggle = document.querySelector<HTMLButtonElement>('.mobile-character-toggle');
-        const mobileCharacterLinks = document.getElementById('mobile-character-links');
-        const panel = document.getElementById('contact-panel') as HTMLElement;
-        const close = document.getElementById('contact-close') as HTMLButtonElement | null;
-        if (!btn || !panel || btn.dataset.bound === 'true') return;
-        btn.dataset.bound = 'true';
-        const closeMobileNav = function(){
-        if (!menuToggle || !mobileNav) return;
-        mobileNav.classList.remove('open');
-        menuToggle.setAttribute('aria-expanded','false');
-        mobileCharacterLinks?.classList.remove('open');
-        mobileCharacterToggle?.setAttribute('aria-expanded','false');
+      logo?.addEventListener("contextmenu", function (event) {
+        if (window.matchMedia("(pointer: coarse)").matches)
+          event.preventDefault();
+      });
+      logo?.addEventListener("pointercancel", cancelSecretLogo);
+      logo?.addEventListener("pointerleave", cancelSecretLogo);
+      const setupHeaderInteractions = function () {
+        const btn = document.getElementById("contact-btn") as HTMLButtonElement;
+        const menuToggle = document.getElementById("menu-toggle");
+        const mobileNav = document.getElementById("mobile-nav");
+        const mobileCharacterToggle = document.querySelector<HTMLButtonElement>(
+          ".mobile-character-toggle",
+        );
+        const mobileCharacterLinks = document.getElementById(
+          "mobile-character-links",
+        );
+        const panel = document.getElementById("contact-panel") as HTMLElement;
+        const close = document.getElementById(
+          "contact-close",
+        ) as HTMLButtonElement | null;
+        if (!btn || !panel || btn.dataset.bound === "true") return;
+        btn.dataset.bound = "true";
+        const closeMobileNav = function () {
+          if (!menuToggle || !mobileNav) return;
+          mobileNav.classList.remove("open");
+          menuToggle.setAttribute("aria-expanded", "false");
+          mobileCharacterLinks?.classList.remove("open");
+          mobileCharacterToggle?.setAttribute("aria-expanded", "false");
         };
         if (menuToggle && mobileNav) {
-          menuToggle.addEventListener('click', function(){
-            const isOpen = mobileNav.classList.toggle('open');
-            menuToggle.setAttribute('aria-expanded', String(isOpen));
+          menuToggle.addEventListener("click", function () {
+            const isOpen = mobileNav.classList.toggle("open");
+            menuToggle.setAttribute("aria-expanded", String(isOpen));
           });
-          mobileNav.querySelectorAll('a').forEach((link)=> link.addEventListener('click', closeMobileNav));
-          document.addEventListener('keydown', function(e){
-            if (e.key === 'Escape') closeMobileNav();
+          mobileNav
+            .querySelectorAll("a")
+            .forEach((link) => link.addEventListener("click", closeMobileNav));
+          document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape") closeMobileNav();
           });
         }
         if (mobileCharacterToggle && mobileCharacterLinks) {
-          mobileCharacterToggle.addEventListener('click', function(){
-            const isOpen = mobileCharacterLinks.classList.toggle('open');
-            mobileCharacterToggle.setAttribute('aria-expanded', String(isOpen));
+          mobileCharacterToggle.addEventListener("click", function () {
+            const isOpen = mobileCharacterLinks.classList.toggle("open");
+            mobileCharacterToggle.setAttribute("aria-expanded", String(isOpen));
           });
         }
-        const confettiBox = panel.querySelector<HTMLElement>('.confetti');
-        const shardBox = panel.querySelector<HTMLElement>('.shards');
-        const colors = ['#ff5e7e','#ffb470','#ffd36b','#7ee4a3','#7ec9ff','#c58cff','#ff8fcf','#ffd2a6'];
-        const rand = (min: number, max: number) => min + Math.random() * (max - min);
+        const confettiBox = panel.querySelector<HTMLElement>(".confetti");
+        const shardBox = panel.querySelector<HTMLElement>(".shards");
+        const colors = [
+          "#ff5e7e",
+          "#ffb470",
+          "#ffd36b",
+          "#7ee4a3",
+          "#7ec9ff",
+          "#c58cff",
+          "#ff8fcf",
+          "#ffd2a6",
+        ];
+        const rand = (min: number, max: number) =>
+          min + Math.random() * (max - min);
         const reduceMotion = prefersReducedMotion;
         let confettiTimer: number | undefined;
-        type Particle = { el: HTMLElement; vx: number; vy: number; vr: number; life: number; drag: number; delay: number; born?: number };
+        type Particle = {
+          el: HTMLElement;
+          vx: number;
+          vy: number;
+          vr: number;
+          life: number;
+          drag: number;
+          delay: number;
+          born?: number;
+        };
         const GRAVITY = 1500; // px/s^2
         let particles: Particle[] = [];
         let fxFrame = 0;
         let fxResolvers: Array<() => void> = [];
-        const stopFx = function(){
+        const stopFx = function () {
           if (fxFrame) window.cancelAnimationFrame(fxFrame);
           fxFrame = 0;
           particles = [];
@@ -406,20 +1279,30 @@ const base = import.meta.env.BASE_URL;
           fxResolvers = [];
         };
         // Ballistic motion: x follows drag-damped velocity, y follows velocity plus gravity, so paths arc.
-        const launch = function(batch: Particle[]): Promise<void> {
+        const launch = function (batch: Particle[]): Promise<void> {
           const launchedAt = performance.now();
-          batch.forEach((p) => { p.born = launchedAt; });
+          batch.forEach((p) => {
+            p.born = launchedAt;
+          });
           particles.push(...batch);
-          const done = new Promise<void>((resolve) => fxResolvers.push(resolve));
+          const done = new Promise<void>((resolve) =>
+            fxResolvers.push(resolve),
+          );
           if (fxFrame) return done;
-          const tick = function(now: number){
+          const tick = function (now: number) {
             particles = particles.filter((p) => {
               const age = (now - p.born!) / 1000 - p.delay;
               if (age < 0) return true;
-              if (age >= p.life) { p.el.remove(); return false; }
-              const x = p.drag > 0 ? p.vx * (1 - Math.exp(-p.drag * age)) / p.drag : p.vx * age;
-              const y = p.vy * age + .5 * GRAVITY * age * age;
-              const fade = Math.min(1, (p.life - age) / (p.life * .3));
+              if (age >= p.life) {
+                p.el.remove();
+                return false;
+              }
+              const x =
+                p.drag > 0
+                  ? (p.vx * (1 - Math.exp(-p.drag * age))) / p.drag
+                  : p.vx * age;
+              const y = p.vy * age + 0.5 * GRAVITY * age * age;
+              const fade = Math.min(1, (p.life - age) / (p.life * 0.3));
               p.el.style.opacity = String(fade);
               p.el.style.transform = `translate(${x}px,${y}px) rotate(${p.vr * age}deg)`;
               return true;
@@ -435,7 +1318,7 @@ const base = import.meta.env.BASE_URL;
           fxFrame = window.requestAnimationFrame(tick);
           return done;
         };
-        const clearFx = function(){
+        const clearFx = function () {
           if (confettiTimer) window.clearTimeout(confettiTimer);
           confettiTimer = undefined;
           stopFx();
@@ -443,21 +1326,22 @@ const base = import.meta.env.BASE_URL;
           if (shardBox) shardBox.replaceChildren();
         };
         // Runs after the cat finishes sliding in.
-        const burstConfetti = function(){
+        const burstConfetti = function () {
           if (!confettiBox || reduceMotion()) return;
           confettiBox.replaceChildren();
           const count = Math.round(rand(40, 64));
           const batch: Particle[] = [];
           for (let i = 0; i < count; i += 1) {
-            const piece = document.createElement('span');
-            piece.className = 'piece';
+            const piece = document.createElement("span");
+            piece.className = "piece";
             const w = rand(6, 12);
             piece.style.width = `${w}px`;
-            piece.style.height = `${Math.random() < .4 ? w : w * rand(.4, .7)}px`;
-            piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-            if (Math.random() < .25) piece.style.borderRadius = '50%';
+            piece.style.height = `${Math.random() < 0.4 ? w : w * rand(0.4, 0.7)}px`;
+            piece.style.background =
+              colors[Math.floor(Math.random() * colors.length)];
+            if (Math.random() < 0.25) piece.style.borderRadius = "50%";
             confettiBox.appendChild(piece);
-            const angle = rand(-Math.PI * .92, -Math.PI * .08);
+            const angle = rand(-Math.PI * 0.92, -Math.PI * 0.08);
             const speed = rand(450, 1100);
             batch.push({
               el: piece,
@@ -466,12 +1350,12 @@ const base = import.meta.env.BASE_URL;
               vr: rand(-900, 900),
               life: rand(1.8, 2.8),
               drag: 1.1,
-              delay: rand(0, .08)
+              delay: rand(0, 0.08),
             });
           }
           void launch(batch);
         };
-        const explodeCat = function(cat: HTMLImageElement): Promise<void> {
+        const explodeCat = function (cat: HTMLImageElement): Promise<void> {
           if (!shardBox || reduceMotion()) return Promise.resolve();
           shardBox.replaceChildren();
           const size = 72;
@@ -481,12 +1365,12 @@ const base = import.meta.env.BASE_URL;
           const batch: Particle[] = [];
           for (let r = 0; r < n; r += 1) {
             for (let c = 0; c < n; c += 1) {
-              const shard = document.createElement('span');
-              shard.className = 'shard';
+              const shard = document.createElement("span");
+              shard.className = "shard";
               shard.style.cssText = `left:${c * cell}px;top:${r * cell}px;width:${cell}px;height:${cell}px;background:url("${src}") ${-c * cell}px ${-r * cell}px / ${size}px ${size}px no-repeat`;
               shardBox.appendChild(shard);
-              const dx = (c + .5) * cell - size / 2;
-              const dy = (r + .5) * cell - size / 2;
+              const dx = (c + 0.5) * cell - size / 2;
+              const dy = (r + 0.5) * cell - size / 2;
               const len = Math.hypot(dx, dy) || 1;
               const speed = rand(500, 1000);
               batch.push({
@@ -496,66 +1380,81 @@ const base = import.meta.env.BASE_URL;
                 vr: rand(-720, 720),
                 life: rand(1.1, 1.6),
                 drag: 0,
-                delay: 0
+                delay: 0,
               });
             }
           }
           return launch(batch);
         };
-        const copyBtn = panel.querySelector<HTMLButtonElement>('#copy-discord');
-        const copyHint = copyBtn?.querySelector<HTMLElement>('.copy-hint');
+        const copyBtn = panel.querySelector<HTMLButtonElement>("#copy-discord");
+        const copyHint = copyBtn?.querySelector<HTMLElement>(".copy-hint");
         let copyTimer: number | undefined;
-        copyBtn?.addEventListener('click', async function(){
-          const text = copyBtn.dataset.copy ?? '';
+        copyBtn?.addEventListener("click", async function () {
+          const text = copyBtn.dataset.copy ?? "";
           let ok = false;
           try {
             await navigator.clipboard.writeText(text);
             ok = true;
           } catch {
-            const ta = document.createElement('textarea');
+            const ta = document.createElement("textarea");
             ta.value = text;
-            ta.style.cssText = 'position:fixed;opacity:0';
+            ta.style.cssText = "position:fixed;opacity:0";
             document.body.appendChild(ta);
             ta.select();
-            ok = document.execCommand('copy');
+            ok = document.execCommand("copy");
             ta.remove();
           }
           if (!copyHint) return;
-          copyHint.textContent = ok ? 'copied!' : 'copy failed';
-          copyHint.classList.add('show');
+          copyHint.textContent = ok ? "copied!" : "copy failed";
+          copyHint.classList.add("show");
           if (copyTimer) window.clearTimeout(copyTimer);
-          copyTimer = window.setTimeout(() => copyHint.classList.remove('show'), 1600);
+          copyTimer = window.setTimeout(
+            () => copyHint.classList.remove("show"),
+            1600,
+          );
         });
-        const modalTop = panel.querySelector<HTMLElement>('.modal-top');
+        const modalTop = panel.querySelector<HTMLElement>(".modal-top");
         // Confetti fires when the cat finishes pulling in.
-        modalTop?.addEventListener('animationend', function(e){
-          if (e.target === modalTop && e.animationName.includes('cat-slide-in') && panel.classList.contains('open') && !panel.classList.contains('closing')) burstConfetti();
+        modalTop?.addEventListener("animationend", function (e) {
+          if (
+            e.target === modalTop &&
+            e.animationName.includes("cat-slide-in") &&
+            panel.classList.contains("open") &&
+            !panel.classList.contains("closing")
+          )
+            burstConfetti();
         });
-        function openPanel(){
+        function openPanel() {
           clearFx();
-          panel.classList.remove('closing');
-          panel.classList.add('open');
-          panel.setAttribute('aria-hidden','false');
-          btn.setAttribute('aria-expanded','true');
-          const focusable = panel.querySelector<HTMLElement>('a, button, [tabindex], input');
-          if(focusable) focusable.focus();
+          panel.classList.remove("closing");
+          panel.classList.add("open");
+          panel.setAttribute("aria-hidden", "false");
+          btn.setAttribute("aria-expanded", "true");
+          const focusable = panel.querySelector<HTMLElement>(
+            "a, button, [tabindex], input",
+          );
+          if (focusable) focusable.focus();
         }
-        function closePanel(){
-          if (!panel.classList.contains('open') || panel.classList.contains('closing')) return;
-          panel.classList.add('closing');
+        function closePanel() {
+          if (
+            !panel.classList.contains("open") ||
+            panel.classList.contains("closing")
+          )
+            return;
+          panel.classList.add("closing");
           if (confettiTimer) window.clearTimeout(confettiTimer);
           confettiTimer = undefined;
           confettiBox?.replaceChildren();
 
-            const modalCat = panel.querySelector<HTMLImageElement>('.modal-cat');
-            const finishClose = function(){
-              clearFx();
-              panel.classList.remove('closing');
-              panel.classList.remove('open');
-              panel.setAttribute('aria-hidden','true');
-              btn.setAttribute('aria-expanded','false');
-              btn.focus();
-            };
+          const modalCat = panel.querySelector<HTMLImageElement>(".modal-cat");
+          const finishClose = function () {
+            clearFx();
+            panel.classList.remove("closing");
+            panel.classList.remove("open");
+            panel.setAttribute("aria-hidden", "true");
+            btn.setAttribute("aria-expanded", "false");
+            btn.focus();
+          };
 
           if (modalCat) {
             void explodeCat(modalCat).then(finishClose);
@@ -563,23 +1462,26 @@ const base = import.meta.env.BASE_URL;
             finishClose();
           }
         }
-        btn.addEventListener('click', function(){
-          const open = panel.classList.contains('open');
-          if(open) closePanel(); else openPanel();
+        btn.addEventListener("click", function () {
+          const open = panel.classList.contains("open");
+          if (open) closePanel();
+          else openPanel();
         });
-        if (close) close.addEventListener('click', closePanel);
-        const overlay = panel.querySelector('.contact-overlay');
-        if (overlay) overlay.addEventListener('click', closePanel);
-        document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closePanel(); });
+        if (close) close.addEventListener("click", closePanel);
+        const overlay = panel.querySelector(".contact-overlay");
+        if (overlay) overlay.addEventListener("click", closePanel);
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") closePanel();
+        });
       };
       setupHeaderInteractions();
-      document.addEventListener('astro:page-load', setupHeaderInteractions);
+      document.addEventListener("astro:page-load", setupHeaderInteractions);
     })();
   </script>
   <script>
-    if (typeof window !== 'undefined') {
-      window.addEventListener('load', function() {
-        document.documentElement.classList.add('is-loaded');
+    if (typeof window !== "undefined") {
+      window.addEventListener("load", function () {
+        document.documentElement.classList.add("is-loaded");
       });
     }
   </script>

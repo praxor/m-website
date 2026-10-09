@@ -1,43 +1,182 @@
 ﻿---
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
 ---
-<Layout title="cult" description="buddy found the cult page." bodyClass="cult-page">
-    <main class="cult-main" data-unlock-on-view="cultbound">
-      <section class="cult-hero" aria-labelledby="cult-title">
-        <p class="cult-kicker">so you want in, huh?</p>
-        <div class="cult-title-band">
-          <h1 id="cult-title">the cult</h1>
-        </div>
-        <p class="cult-intro">did you wanna take a journey? do it with praxoria.</p>
-        <div class="cult-writing-space">
-          <h2>about our cause</h2>
-          <p>well, i'd probably go on a 500 page monologue about it if i fucking wanted to, but i don't. we don't even do anything bad. so what are you waiting for?</p>
-        </div>
-        <a class="cult-join" href="https://discord.gg/u2SQwTusMS" target="_blank" rel="noopener">apply now!</a>
-      </section>
-    </main>
+
+<Layout
+  title="cult"
+  description="buddy found the cult page."
+  bodyClass="cult-page"
+>
+  <main class="cult-main" data-unlock-on-view="cultbound">
+    <section class="cult-hero" aria-labelledby="cult-title">
+      <p class="cult-kicker">so you want in, huh?</p>
+      <div class="cult-title-band">
+        <h1 id="cult-title">the cult</h1>
+      </div>
+      <p class="cult-intro">
+        did you wanna take a journey? do it with praxoria.
+      </p>
+      <div class="cult-writing-space">
+        <h2>about our cause</h2>
+        <p>
+          well, i'd probably go on a 500 page monologue about it if i fucking
+          wanted to, but i don't. we don't even do anything bad. so what are you
+          waiting for?
+        </p>
+      </div>
+      <a
+        class="cult-join"
+        href="https://discord.gg/u2SQwTusMS"
+        target="_blank"
+        rel="noopener"
+      >
+        apply now!
+      </a>
+    </section>
+  </main>
 </Layout>
 
 <style>
-  :global(.cult-page){--bg:#020812;--card:#061326;--text:#dcecff;--muted:#7895b8;--accent:#3872b1;--accent-dark:#061c32;--accent-10:rgba(56,114,177,.1);--accent-12:rgba(56,114,177,.18);--muted-border:rgba(56,114,177,.2);--overlay:rgba(0,0,0,.7);--shadow-soft:rgba(0,6,16,.5);--shadow-strong:rgba(0,0,0,.65);--surface-hover:rgba(255,255,255,.04);--surface-inset:rgba(0,0,0,.16);--code-bg:#030c18;background-color:var(--bg);background-image:linear-gradient(rgba(2,8,18,.96),rgba(2,8,18,.98)),url('https://praxor.de/media/bluebricks.png');background-repeat:repeat;background-size:auto;position:relative}
-  :global(.cult-page::before){background-image:url('https://praxor.de/media/res/bluebricks.png');opacity:.04}
-  :global(.cult-page .site-header){background:var(--card);border-color:var(--muted-border)}
-  :global(.cult-page .cta){background:linear-gradient(180deg,#1b6caf,#061c32);color:#fff;border-color:#3872b1;box-shadow:0 8px 20px rgba(8,57,107,.35)}
-  :global(.cult-page .cta:hover){background:linear-gradient(180deg,#2585d3,#092842);box-shadow:0 14px 30px rgba(8,57,107,.5)}
-  :global(.cult-page .cult-link){color:transparent!important;background:transparent;box-shadow:none}
-  :global(.cult-page .mobile-nav .cult-link){color:transparent!important}
+  /* Page styles: cult */
+  :global(.cult-page) {
+    --bg: #020812;
+    --card: #061326;
+    --text: #dcecff;
+    --muted: #7895b8;
+    --accent: #3872b1;
+    --accent-dark: #061c32;
+    --accent-10: rgba(56, 114, 177, 0.1);
+    --accent-12: rgba(56, 114, 177, 0.18);
+    --muted-border: rgba(56, 114, 177, 0.2);
+    --overlay: rgba(0, 0, 0, 0.7);
+    --shadow-soft: rgba(0, 6, 16, 0.5);
+    --shadow-strong: rgba(0, 0, 0, 0.65);
+    --surface-hover: rgba(255, 255, 255, 0.04);
+    --surface-inset: rgba(0, 0, 0, 0.16);
+    --code-bg: #030c18;
+    background-color: var(--bg);
+    background-image:
+      linear-gradient(rgba(2, 8, 18, 0.96), rgba(2, 8, 18, 0.98)),
+      url("https://praxor.de/media/bluebricks.png");
+    background-repeat: repeat;
+    background-size: auto;
+    position: relative;
+  }
+  :global(.cult-page::before) {
+    background-image: url("https://praxor.de/media/res/bluebricks.png");
+    opacity: 0.04;
+  }
+  :global(.cult-page .site-header) {
+    background: var(--card);
+    border-color: var(--muted-border);
+  }
+  :global(.cult-page .cta) {
+    background: linear-gradient(180deg, #1b6caf, #061c32);
+    color: #fff;
+    border-color: #3872b1;
+    box-shadow: 0 8px 20px rgba(8, 57, 107, 0.35);
+  }
+  :global(.cult-page .cta:hover) {
+    background: linear-gradient(180deg, #2585d3, #092842);
+    box-shadow: 0 14px 30px rgba(8, 57, 107, 0.5);
+  }
+  :global(.cult-page .cult-link) {
+    color: transparent !important;
+    background: transparent;
+    box-shadow: none;
+  }
+  :global(.cult-page .mobile-nav .cult-link) {
+    color: transparent !important;
+  }
   /* No z-index on main: a stacking context here would paint over the fixed music player. */
-  .cult-main{min-height:calc(100vh - 76px);display:grid;place-items:center;padding:clamp(3rem,8vw,6rem) 20px 9rem;box-sizing:border-box;position:relative}
-  .cult-hero{position:relative;display:flex;flex-direction:column;align-items:center;width:min(100%,640px);text-align:center}
-  .cult-kicker{margin:0 0 1rem;color:var(--accent);font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
-  .cult-title-band{width:100%}
-  .cult-hero h1{margin:0;font-size:clamp(3rem,11vw,6rem);font-weight:700;line-height:1;color:var(--text)}
-  .cult-intro{max-width:460px;margin:1.2rem 0 0;color:var(--muted);font-size:clamp(1rem,2vw,1.15rem);line-height:1.7}
-  .cult-writing-space{box-sizing:border-box;width:100%;margin:2.4rem 0 2rem;padding:1.6rem 1.8rem;text-align:left;background:var(--card);border:1px solid var(--muted-border);border-radius:2px}
-  .cult-writing-space h2{margin:0 0 .6rem;color:var(--accent);font-size:1.05rem}
-  .cult-writing-space p{margin:0;color:var(--muted);line-height:1.7}
-  .cult-join{display:inline-flex;align-items:center;justify-content:center;padding:11px 24px;border:1px solid var(--accent);border-radius:4px;background:transparent;color:var(--text);text-decoration:none;font-weight:700;transition:background .2s ease}
-  .cult-join:hover,.cult-join:focus-visible{background:var(--accent)}
-  .cult-join:focus-visible{outline:2px solid var(--text);outline-offset:3px}
-  @media (max-width:780px){.cult-main{min-height:calc(100vh - 60px)}.cult-writing-space{padding:1.3rem}}
+  .cult-main {
+    min-height: calc(100vh - 76px);
+    display: grid;
+    place-items: center;
+    padding: clamp(3rem, 8vw, 6rem) 20px 9rem;
+    box-sizing: border-box;
+    position: relative;
+  }
+  .cult-hero {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: min(100%, 640px);
+    text-align: center;
+  }
+  .cult-kicker {
+    margin: 0 0 1rem;
+    color: var(--accent);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .cult-title-band {
+    width: 100%;
+  }
+  .cult-hero h1 {
+    margin: 0;
+    font-size: clamp(3rem, 11vw, 6rem);
+    font-weight: 700;
+    line-height: 1;
+    color: var(--text);
+  }
+  .cult-intro {
+    max-width: 460px;
+    margin: 1.2rem 0 0;
+    color: var(--muted);
+    font-size: clamp(1rem, 2vw, 1.15rem);
+    line-height: 1.7;
+  }
+  .cult-writing-space {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 2.4rem 0 2rem;
+    padding: 1.6rem 1.8rem;
+    text-align: left;
+    background: var(--card);
+    border: 1px solid var(--muted-border);
+    border-radius: 2px;
+  }
+  .cult-writing-space h2 {
+    margin: 0 0 0.6rem;
+    color: var(--accent);
+    font-size: 1.05rem;
+  }
+  .cult-writing-space p {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  .cult-join {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 11px 24px;
+    border: 1px solid var(--accent);
+    border-radius: 4px;
+    background: transparent;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 700;
+    transition: background 0.2s ease;
+  }
+  .cult-join:hover,
+  .cult-join:focus-visible {
+    background: var(--accent);
+  }
+  .cult-join:focus-visible {
+    outline: 2px solid var(--text);
+    outline-offset: 3px;
+  }
+  @media (max-width: 780px) {
+    .cult-main {
+      min-height: calc(100vh - 60px);
+    }
+    .cult-writing-space {
+      padding: 1.3rem;
+    }
+  }
 </style>

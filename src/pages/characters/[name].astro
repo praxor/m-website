@@ -1,11 +1,11 @@
 ﻿---
-import Layout from '../../layouts/Layout.astro';
-import { Image } from 'astro:assets';
-import { characters } from '../../data/characters';
-import { getCharacterArtwork } from '../../data/character-artwork';
-import CharacterStory from '../../components/CharacterStory.astro';
-import { marked } from 'marked';
-import ImageGallery from '../../components/ImageGallery.astro';
+import Layout from "../../layouts/Layout.astro";
+import { Image } from "astro:assets";
+import { characters } from "../../data/characters";
+import { getCharacterArtwork } from "../../data/character-artwork";
+import CharacterStory from "../../components/CharacterStory.astro";
+import { marked } from "marked";
+import ImageGallery from "../../components/ImageGallery.astro";
 
 export function getStaticPaths() {
   return characters.map((character) => ({
@@ -20,118 +20,395 @@ const galleryItems = getCharacterArtwork(character);
 const mainArtCount = character.image ? 1 : 0;
 const references = galleryItems.slice(mainArtCount);
 ---
+
 <Layout title={character.name}>
-    <main class="character-main" data-track-page={`character-${character.slug}`}>
-      <a class="character-back" href="/characters">← all characters</a>
-      <article class="character-biography">
-        <h1 id="character-title">{character.name}</h1>
-        <div class="bio-divider"></div>
-        <div class="character-layout">
-          <div class="character-content">
-            <section class="bio-section"><h2>introduction</h2><div class="markdown-body" set:html={renderMarkdown(character.introduction)} /></section>
-            <section class="bio-section"><h2>backstory</h2><div class="markdown-body" set:html={renderMarkdown(character.backstory)} /></section>
-            {references.length > 0 && (
-              <section class="bio-section character-references" aria-label="References">
-                <h2>references</h2>
-                <div class="reference-carousel">
-                  {references.map((ref, index) => (
-                      <figure class="reference-item" role="button" tabindex="0" aria-haspopup="dialog" aria-label={`View reference ${index + 1} larger`} data-art-index={mainArtCount + index}>
-                      <img src={ref.src} alt={ref.alt} width={ref.width} height={ref.height} loading="lazy" decoding="async" />
-                      {ref.caption && <figcaption>{ref.caption}</figcaption>}
-                    </figure>
-                  ))}
-                </div>
-              </section>
-            )}
-            <section class="bio-section credits"><h2>credits · {character.credits}</h2></section>
-          </div>
-          <div class="character-sidebar">
-            <aside class="character-infobox" aria-label={`${character.name} info`}>
-              <h2 class="infobox-title">
-                {character.nameImage ? (
-                  <>
-                    <span data-name-image-fallback>{character.name}</span>
-                    <img class="infobox-name-image" data-name-image src={character.nameImage} alt={character.name} hidden />
-                  </>
-                ) : character.name}
-              </h2>
-              <div class="character-detail-portrait" {...(character.image ? { role: 'button', tabindex: 0, 'aria-haspopup': 'dialog', 'aria-label': `View ${character.name} larger`, 'data-art-index': 0 } : {})} {...(character.slug === 'praxor-v1' ? { 'data-hold-unlock': 'bestDayEver' } : {})}>
-                {character.image ? <Image src={character.image} alt={character.name} width={800} height={800} loading="lazy" decoding="async" /> : <span>portrait slot</span>}
+  <main class="character-main" data-track-page={`character-${character.slug}`}>
+    <a class="character-back" href="/characters">
+      ← all characters
+    </a>
+    <article class="character-biography">
+      <h1 id="character-title">{character.name}</h1>
+      <div class="bio-divider"></div>
+      <div class="character-layout">
+        <div class="character-content">
+          <section class="bio-section">
+            <h2>introduction</h2>
+            <div
+              class="markdown-body"
+              set:html={renderMarkdown(character.introduction)}
+            />
+          </section>
+          <section class="bio-section">
+            <h2>backstory</h2>
+            <div
+              class="markdown-body"
+              set:html={renderMarkdown(character.backstory)}
+            />
+          </section>
+          {references.length > 0 && (
+            <section
+              class="bio-section character-references"
+              aria-label="References"
+            >
+              <h2>references</h2>
+              <div class="reference-carousel">
+                {references.map((ref, index) => (
+                  <figure
+                    class="reference-item"
+                    role="button"
+                    tabindex="0"
+                    aria-haspopup="dialog"
+                    aria-label={`View reference ${index + 1} larger`}
+                    data-art-index={mainArtCount + index}
+                  >
+                    <img
+                      src={ref.src}
+                      alt={ref.alt}
+                      width={ref.width}
+                      height={ref.height}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    {ref.caption && <figcaption>{ref.caption}</figcaption>}
+                  </figure>
+                ))}
               </div>
-              <p class="character-quote">{character.quote}</p>
-              <dl class="infobox-body">
-                {character.info.map((row) => <div class="infobox-row"><dt>{row.label}</dt><dd>{row.value}</dd></div>)}
-              </dl>
-            </aside>
-            {character.chapters && character.chapters.length > 0 && <CharacterStory chapters={character.chapters} />}
-          </div>
+            </section>
+          )}
+          <section class="bio-section credits">
+            <h2>credits · {character.credits}</h2>
+          </section>
         </div>
-      </article>
-    </main>
-    {galleryItems.length > 0 && <ImageGallery title="characters" label="image" items={galleryItems} achievementCollection={character.slug === 'praxor-v1' ? 'praxor-v1' : character.slug === 'praxor-v2' ? 'praxor-v2' : undefined} />}
+        <div class="character-sidebar">
+          <aside
+            class="character-infobox"
+            aria-label={`${character.name} info`}
+          >
+            <h2 class="infobox-title">
+              {character.nameImage ? (
+                <>
+                  <span data-name-image-fallback>{character.name}</span>
+                  <img
+                    class="infobox-name-image"
+                    data-name-image
+                    src={character.nameImage}
+                    alt={character.name}
+                    hidden
+                  />
+                </>
+              ) : (
+                character.name
+              )}
+            </h2>
+            <div
+              class="character-detail-portrait"
+              {...(character.image
+                ? {
+                    role: "button",
+                    tabindex: 0,
+                    "aria-haspopup": "dialog",
+                    "aria-label": `View ${character.name} larger`,
+                    "data-art-index": 0,
+                  }
+                : {})}
+              {...(character.slug === "praxor-v1"
+                ? { "data-hold-unlock": "bestDayEver" }
+                : {})}
+            >
+              {character.image ? (
+                <Image
+                  src={character.image}
+                  alt={character.name}
+                  width={800}
+                  height={800}
+                  loading="lazy"
+                  decoding="async"
+                />
+              ) : (
+                <span>portrait slot</span>
+              )}
+            </div>
+            <p class="character-quote">{character.quote}</p>
+            <dl class="infobox-body">
+              {character.info.map((row) => (
+                <div class="infobox-row">
+                  <dt>{row.label}</dt>
+                  <dd>{row.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </aside>
+          {character.chapters && character.chapters.length > 0 && (
+            <CharacterStory chapters={character.chapters} />
+          )}
+        </div>
+      </div>
+    </article>
+  </main>
+  {galleryItems.length > 0 && (
+    <ImageGallery
+      title="characters"
+      label="image"
+      items={galleryItems}
+      achievementCollection={
+        character.slug === "praxor-v1"
+          ? "praxor-v1"
+          : character.slug === "praxor-v2"
+            ? "praxor-v2"
+            : undefined
+      }
+    />
+  )}
 </Layout>
 
 <style>
-  .character-main{box-sizing:border-box;width:100%;max-width:1160px;margin:clamp(1.25rem,3vw,2.5rem) auto;padding:clamp(1.25rem,2.5vw,2rem);background:var(--card);border:1px solid var(--muted-border);border-radius:2px;box-shadow:inset 0 1px 0 var(--accent-12)}
-  .character-back{display:inline-block;margin-bottom:1.25rem;color:var(--muted);font-size:.9rem}
-  .character-biography{max-width:1000px;margin:0 auto}
-  .character-quote{margin:.75rem 0 0;color:var(--muted);font-size:.9rem;font-style:italic;text-align:center}
-  .character-biography>h1{margin:0;color:var(--accent);font-size:1.15rem;line-height:1;letter-spacing:.04em;text-align:center}
-  .bio-divider{height:1px;margin:1.4rem 0;background:var(--muted-border)}
-  .character-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(240px,320px);gap:clamp(1.5rem,4vw,2.5rem);align-items:start}
-  .character-content{display:grid;grid-template-columns:minmax(0,1fr);gap:1.6rem;min-width:0}
-  .character-content>*{min-width:0}
-  .character-sidebar{display:grid;align-content:start;gap:1rem;min-width:0}
-  .character-infobox,.infobox-body{overflow-wrap:anywhere}
-  .markdown-body{overflow-wrap:anywhere}
-  .bio-section h2{margin:0 0 .7rem;padding-bottom:.35rem;border-bottom:1px solid var(--muted-border);color:var(--accent);font-size:1rem;text-transform:lowercase}
-  .markdown-body{color:var(--muted);line-height:1.7}.markdown-body ul{padding-left:1.2rem}
-  .credits h2{margin:0;padding:0;border:0;color:var(--muted);font-size:.78rem;font-weight:500;letter-spacing:.04em}
-  .character-infobox{box-sizing:border-box;padding:.75rem;background:var(--accent-10);border:1px solid var(--muted-border);border-radius:2px}
-  .infobox-title{margin:0 0 .75rem;color:var(--accent);font-size:1rem;text-align:center}
-  .infobox-name-image{display:block;width:auto;max-width:100%;height:auto;max-height:40px;margin:0 auto;object-fit:contain}
-  .infobox-name-image[hidden]{display:none}
-  .character-detail-portrait{display:grid;place-items:center;aspect-ratio:1;width:100%;border:1px solid var(--muted-border);color:var(--muted);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase}
-  .character-detail-portrait img{width:100%;height:100%;object-fit:contain}.character-detail-portrait[role="button"]{cursor:zoom-in}
-  .infobox-body{margin:.75rem 0 0;font-size:.9rem;line-height:1.5;color:var(--muted)}
-  .infobox-row{display:grid;grid-template-columns:minmax(80px,38%) minmax(0,1fr);gap:.75rem;padding:.4rem .25rem;border-top:1px solid var(--muted-border)}
-  .infobox-row dt{color:var(--accent);font-weight:600;text-transform:lowercase}
-  .infobox-row dd{margin:0}
-  .reference-carousel{display:flex;gap:10px;overflow-x:auto;padding:4px 2px 12px;scroll-snap-type:x proximity;scrollbar-width:thin}
-  .reference-item{position:relative;flex:0 0 clamp(140px,22vw,220px);aspect-ratio:1;margin:0;overflow:hidden;border:1px solid var(--muted-border);scroll-snap-align:start;cursor:zoom-in}
-  .reference-item img{width:100%;height:100%;object-fit:contain;transition:filter .18s ease}
-  .reference-item figcaption{position:absolute;inset:auto 0 0;padding:.4rem;background:var(--image-scrim);color:var(--on-image);font-size:.72rem;line-height:1.3;text-align:center;opacity:0;transition:opacity .18s ease}
-  .reference-item:hover figcaption,.reference-item:focus-visible figcaption{opacity:1}
-  .reference-item:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
-  @media (max-width:760px){.character-main{margin:1rem 12px;padding:1rem 12px}.character-layout{grid-template-columns:1fr}.character-sidebar{order:-1}}
+  /* Page styles: character profile */
+  .character-main {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 1160px;
+    margin: clamp(1.25rem, 3vw, 2.5rem) auto;
+    padding: clamp(1.25rem, 2.5vw, 2rem);
+    background: var(--card);
+    border: 1px solid var(--muted-border);
+    border-radius: 2px;
+    box-shadow: inset 0 1px 0 var(--accent-12);
+  }
+  .character-back {
+    display: inline-block;
+    margin-bottom: 1.25rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+  .character-biography {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .character-quote {
+    margin: 0.75rem 0 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-style: italic;
+    text-align: center;
+  }
+  .character-biography > h1 {
+    margin: 0;
+    color: var(--accent);
+    font-size: 1.15rem;
+    line-height: 1;
+    letter-spacing: 0.04em;
+    text-align: center;
+  }
+  .bio-divider {
+    height: 1px;
+    margin: 1.4rem 0;
+    background: var(--muted-border);
+  }
+  .character-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(240px, 320px);
+    gap: clamp(1.5rem, 4vw, 2.5rem);
+    align-items: start;
+  }
+  .character-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.6rem;
+    min-width: 0;
+  }
+  .character-content > * {
+    min-width: 0;
+  }
+  .character-sidebar {
+    display: grid;
+    align-content: start;
+    gap: 1rem;
+    min-width: 0;
+  }
+  .character-infobox,
+  .infobox-body {
+    overflow-wrap: anywhere;
+  }
+  .markdown-body {
+    overflow-wrap: anywhere;
+  }
+  .bio-section h2 {
+    margin: 0 0 0.7rem;
+    padding-bottom: 0.35rem;
+    border-bottom: 1px solid var(--muted-border);
+    color: var(--accent);
+    font-size: 1rem;
+    text-transform: lowercase;
+  }
+  .markdown-body {
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  .markdown-body ul {
+    padding-left: 1.2rem;
+  }
+  .credits h2 {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    color: var(--muted);
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+  .character-infobox {
+    box-sizing: border-box;
+    padding: 0.75rem;
+    background: var(--accent-10);
+    border: 1px solid var(--muted-border);
+    border-radius: 2px;
+  }
+  .infobox-title {
+    margin: 0 0 0.75rem;
+    color: var(--accent);
+    font-size: 1rem;
+    text-align: center;
+  }
+  .infobox-name-image {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: 40px;
+    margin: 0 auto;
+    object-fit: contain;
+  }
+  .infobox-name-image[hidden] {
+    display: none;
+  }
+  .character-detail-portrait {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1;
+    width: 100%;
+    border: 1px solid var(--muted-border);
+    color: var(--muted);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .character-detail-portrait img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .character-detail-portrait[role="button"] {
+    cursor: zoom-in;
+  }
+  .infobox-body {
+    margin: 0.75rem 0 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  .infobox-row {
+    display: grid;
+    grid-template-columns: minmax(80px, 38%) minmax(0, 1fr);
+    gap: 0.75rem;
+    padding: 0.4rem 0.25rem;
+    border-top: 1px solid var(--muted-border);
+  }
+  .infobox-row dt {
+    color: var(--accent);
+    font-weight: 600;
+    text-transform: lowercase;
+  }
+  .infobox-row dd {
+    margin: 0;
+  }
+  .reference-carousel {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 4px 2px 12px;
+    scroll-snap-type: x proximity;
+    scrollbar-width: thin;
+  }
+  .reference-item {
+    position: relative;
+    flex: 0 0 clamp(140px, 22vw, 220px);
+    aspect-ratio: 1;
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid var(--muted-border);
+    scroll-snap-align: start;
+    cursor: zoom-in;
+  }
+  .reference-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: filter 0.18s ease;
+  }
+  .reference-item figcaption {
+    position: absolute;
+    inset: auto 0 0;
+    padding: 0.4rem;
+    background: var(--image-scrim);
+    color: var(--on-image);
+    font-size: 0.72rem;
+    line-height: 1.3;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.18s ease;
+  }
+  .reference-item:hover figcaption,
+  .reference-item:focus-visible figcaption {
+    opacity: 1;
+  }
+  .reference-item:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+  @media (max-width: 760px) {
+    .character-main {
+      margin: 1rem 12px;
+      padding: 1rem 12px;
+    }
+    .character-layout {
+      grid-template-columns: 1fr;
+    }
+    .character-sidebar {
+      order: -1;
+    }
+  }
 </style>
 
 <script>
   const initializeNameImages = () => {
-    document.querySelectorAll<HTMLImageElement>('[data-name-image]').forEach((image) => {
-      if (image.dataset.initialized === 'true') return;
-      image.dataset.initialized = 'true';
-      const fallback = image.parentElement?.querySelector<HTMLElement>('[data-name-image-fallback]');
-      if (!fallback) return;
+    document
+      .querySelectorAll<HTMLImageElement>("[data-name-image]")
+      .forEach((image) => {
+        if (image.dataset.initialized === "true") return;
+        image.dataset.initialized = "true";
+        const fallback = image.parentElement?.querySelector<HTMLElement>(
+          "[data-name-image-fallback]",
+        );
+        if (!fallback) return;
 
-      const showFallback = () => {
-        image.hidden = true;
-        fallback.hidden = false;
-      };
-      const showImage = () => {
-        if (image.naturalWidth === 0) return showFallback();
-        image.hidden = false;
-        fallback.hidden = true;
-      };
+        const showFallback = () => {
+          image.hidden = true;
+          fallback.hidden = false;
+        };
+        const showImage = () => {
+          if (image.naturalWidth === 0) return showFallback();
+          image.hidden = false;
+          fallback.hidden = true;
+        };
 
-      if (image.complete) showImage();
-      else {
-        image.addEventListener('load', showImage, { once: true });
-        image.addEventListener('error', showFallback, { once: true });
-      }
-    });
+        if (image.complete) showImage();
+        else {
+          image.addEventListener("load", showImage, { once: true });
+          image.addEventListener("error", showFallback, { once: true });
+        }
+      });
   };
 
-  document.addEventListener('astro:page-load', initializeNameImages);
+  document.addEventListener("astro:page-load", initializeNameImages);
   initializeNameImages();
 </script>

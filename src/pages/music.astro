@@ -1,60 +1,176 @@
 ﻿---
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
 const base = import.meta.env.BASE_URL;
 ---
+
 <Layout title="music" description="listen to some music boy.">
   <main class="music-main">
     <section class="music-frame" aria-labelledby="music-title">
       <header class="music-heading">
-        <h1 id="music-title"><svg class="music-title-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg><span>music</span></h1>
-        <p class="music-note">so we've got my music on my phone then some BULLSHIT!!!!!!!!!!!!!!!</p>
+        <h1 id="music-title">
+          <svg
+            class="music-title-icon"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path d="M9 18V5l12-2v13" />
+            <circle cx="6" cy="18" r="3" />
+            <circle cx="18" cy="16" r="3" />
+          </svg>
+          <span>music</span>
+        </h1>
+        <p class="music-note">
+          so we've got my music on my phone then some BULLSHIT!!!!!!!!!!!!!!!
+        </p>
       </header>
-      <button id="music-tree-toggle" class="music-tree-toggle" type="button" aria-label="Toggle playlist folders" aria-expanded="false">‹</button>
+      <button
+        id="music-tree-toggle"
+        class="music-tree-toggle"
+        type="button"
+        aria-label="Toggle playlist folders"
+        aria-expanded="false"
+      >
+        ‹
+      </button>
       <div class="music-browser">
         <aside class="music-tree collapsed" aria-label="Music folders">
-          <div class="tree-root"><strong>music/</strong></div>
+          <div class="tree-root">
+            <strong>music/</strong>
+          </div>
           <details class="music-folder" open>
-            <summary><span class="folder-glyph" aria-hidden="true"></span><strong>all/</strong></summary>
-            <button class="tree-playlist active" type="button" data-playlist-url={`${base}musicplayer/playlists/all.json`} data-playlist-name="all.playlist"><span class="file-glyph">.pl</span>all.playlist</button>
+            <summary>
+              <span class="folder-glyph" aria-hidden="true"></span>
+              <strong>all/</strong>
+            </summary>
+            <button
+              class="tree-playlist active"
+              type="button"
+              data-playlist-url={`${base}musicplayer/playlists/all.json`}
+              data-playlist-name="all.playlist"
+            >
+              <span class="file-glyph">.pl</span>all.playlist
+            </button>
           </details>
           <details class="music-folder">
-            <summary><span class="folder-glyph" aria-hidden="true"></span><strong>bday/</strong></summary>
-            <button class="tree-playlist" type="button" data-playlist-url={`${base}musicplayer/playlists/bday.json`} data-playlist-name="bday.playlist"><span class="file-glyph">.pl</span>bday.playlist</button>
+            <summary>
+              <span class="folder-glyph" aria-hidden="true"></span>
+              <strong>bday/</strong>
+            </summary>
+            <button
+              class="tree-playlist"
+              type="button"
+              data-playlist-url={`${base}musicplayer/playlists/bday.json`}
+              data-playlist-name="bday.playlist"
+            >
+              <span class="file-glyph">.pl</span>bday.playlist
+            </button>
           </details>
           <details class="music-folder">
-            <summary><span class="folder-glyph" aria-hidden="true"></span><strong>bonk/</strong></summary>
-            <button class="tree-playlist" type="button" data-playlist-url={`${base}musicplayer/playlists/bmc.json`} data-playlist-name="bonk.playlist"><span class="file-glyph">.pl</span>bonk.playlist</button>
+            <summary>
+              <span class="folder-glyph" aria-hidden="true"></span>
+              <strong>bonk/</strong>
+            </summary>
+            <button
+              class="tree-playlist"
+              type="button"
+              data-playlist-url={`${base}musicplayer/playlists/bmc.json`}
+              data-playlist-name="bonk.playlist"
+            >
+              <span class="file-glyph">.pl</span>bonk.playlist
+            </button>
           </details>
           <details class="music-folder">
-            <summary><span class="folder-glyph" aria-hidden="true"></span><strong>bonk-new/</strong></summary>
-            <button class="tree-playlist" type="button" data-playlist-url={`${base}musicplayer/playlists/bmc-new.json`} data-playlist-name="bonk-new.playlist"><span class="file-glyph">.pl</span>bonk-new.playlist</button>
+            <summary>
+              <span class="folder-glyph" aria-hidden="true"></span>
+              <strong>bonk-new/</strong>
+            </summary>
+            <button
+              class="tree-playlist"
+              type="button"
+              data-playlist-url={`${base}musicplayer/playlists/bmc-new.json`}
+              data-playlist-name="bonk-new.playlist"
+            >
+              <span class="file-glyph">.pl</span>bonk-new.playlist
+            </button>
           </details>
           <details class="music-folder">
-            <summary><span class="folder-glyph" aria-hidden="true"></span><strong>ocs/</strong></summary>
-            <button class="tree-playlist" type="button" data-playlist-url={`${base}musicplayer/playlists/ocs-playlist.json`} data-playlist-name="ocs.playlist"><span class="file-glyph">.pl</span>ocs.playlist</button>
+            <summary>
+              <span class="folder-glyph" aria-hidden="true"></span>
+              <strong>ocs/</strong>
+            </summary>
+            <button
+              class="tree-playlist"
+              type="button"
+              data-playlist-url={`${base}musicplayer/playlists/ocs-playlist.json`}
+              data-playlist-name="ocs.playlist"
+            >
+              <span class="file-glyph">.pl</span>ocs.playlist
+            </button>
           </details>
           <details class="music-folder">
-            <summary><span class="folder-glyph" aria-hidden="true"></span><strong>remixes/</strong></summary>
-            <button class="tree-playlist" type="button" data-playlist-url={`${base}musicplayer/playlists/not-mine.json`} data-playlist-name="remixes.playlist"><span class="file-glyph">.pl</span>remixes.playlist</button>
+            <summary>
+              <span class="folder-glyph" aria-hidden="true"></span>
+              <strong>remixes/</strong>
+            </summary>
+            <button
+              class="tree-playlist"
+              type="button"
+              data-playlist-url={`${base}musicplayer/playlists/not-mine.json`}
+              data-playlist-name="remixes.playlist"
+            >
+              <span class="file-glyph">.pl</span>remixes.playlist
+            </button>
           </details>
           <details class="music-folder">
-            <summary><span class="folder-glyph" aria-hidden="true"></span><strong>stores/</strong></summary>
-            <button class="tree-playlist" type="button" data-playlist-url={`${base}musicplayer/playlists/stores.json`} data-playlist-name="stores.playlist"><span class="file-glyph">.pl</span>stores.playlist</button>
+            <summary>
+              <span class="folder-glyph" aria-hidden="true"></span>
+              <strong>stores/</strong>
+            </summary>
+            <button
+              class="tree-playlist"
+              type="button"
+              data-playlist-url={`${base}musicplayer/playlists/stores.json`}
+              data-playlist-name="stores.playlist"
+            >
+              <span class="file-glyph">.pl</span>stores.playlist
+            </button>
           </details>
         </aside>
         <section class="music-workspace" aria-live="polite">
-          <div class="workspace-topline"><span>playlist file</span><span id="workspace-count"></span></div>
-          <div class="workspace-heading"><div><h2 id="workspace-title">blank.playlist</h2><p id="workspace-description">loading...</p></div></div>
+          <div class="workspace-topline">
+            <span>playlist file</span>
+            <span id="workspace-count"></span>
+          </div>
+          <div class="workspace-heading">
+            <div>
+              <h2 id="workspace-title">blank.playlist</h2>
+              <p id="workspace-description">loading...</p>
+            </div>
+          </div>
           <div id="workspace-tracks" class="workspace-tracks"></div>
           <details class="shortcuts-guide">
             <summary>keyboard shortcuts</summary>
             <ul>
-              <li><kbd>space</kbd> / <kbd>k</kbd> play / pause</li>
-              <li><kbd>←</kbd> <kbd>→</kbd> seek 5s &middot; <kbd>j</kbd> <kbd>l</kbd> seek 10s</li>
-              <li><kbd>↑</kbd> <kbd>↓</kbd> volume &middot; <kbd>m</kbd> mute</li>
-              <li><kbd>n</kbd> next &middot; <kbd>p</kbd> previous</li>
-              <li><kbd>s</kbd> shuffle &middot; <kbd>r</kbd> repeat</li>
-              <li><kbd>0</kbd>-<kbd>9</kbd> jump to 0-90%</li>
+              <li>
+                <kbd>space</kbd> / <kbd>k</kbd> play / pause
+              </li>
+              <li>
+                <kbd>←</kbd> <kbd>→</kbd> seek 5s &middot; <kbd>j</kbd>{" "}
+                <kbd>l</kbd> seek 10s
+              </li>
+              <li>
+                <kbd>↑</kbd> <kbd>↓</kbd> volume &middot; <kbd>m</kbd> mute
+              </li>
+              <li>
+                <kbd>n</kbd> next &middot; <kbd>p</kbd> previous
+              </li>
+              <li>
+                <kbd>s</kbd> shuffle &middot; <kbd>r</kbd> repeat
+              </li>
+              <li>
+                <kbd>0</kbd>-<kbd>9</kbd> jump to 0-90%
+              </li>
             </ul>
           </details>
         </section>
@@ -64,153 +180,784 @@ const base = import.meta.env.BASE_URL;
 </Layout>
 
 <script>
-  import { loadMusicPlaylist } from '../scripts/music-library';
+  import { loadMusicPlaylist } from "../scripts/music-library";
 
   const initializeMusicPage = () => {
-  const musicMain = document.querySelector<HTMLElement>('.music-main');
-  if (!musicMain || musicMain.dataset.initialized === 'true') return;
-  musicMain.dataset.initialized = 'true';
-  const playlistButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('.tree-playlist'));
-  const workspaceTitle = document.querySelector<HTMLElement>('#workspace-title');
-  const workspaceDescription = document.querySelector<HTMLElement>('#workspace-description');
-  const workspaceCount = document.querySelector<HTMLElement>('#workspace-count');
-  const workspaceTracks = document.querySelector<HTMLElement>('#workspace-tracks');
-  const tree = document.querySelector<HTMLElement>('.music-tree');
-  const treeToggle = document.querySelector<HTMLButtonElement>('#music-tree-toggle');
+    const musicMain = document.querySelector<HTMLElement>(".music-main");
+    if (!musicMain || musicMain.dataset.initialized === "true") return;
+    musicMain.dataset.initialized = "true";
+    const playlistButtons = Array.from(
+      document.querySelectorAll<HTMLButtonElement>(".tree-playlist"),
+    );
+    const workspaceTitle =
+      document.querySelector<HTMLElement>("#workspace-title");
+    const workspaceDescription = document.querySelector<HTMLElement>(
+      "#workspace-description",
+    );
+    const workspaceCount =
+      document.querySelector<HTMLElement>("#workspace-count");
+    const workspaceTracks =
+      document.querySelector<HTMLElement>("#workspace-tracks");
+    const tree = document.querySelector<HTMLElement>(".music-tree");
+    const treeToggle =
+      document.querySelector<HTMLButtonElement>("#music-tree-toggle");
 
-  let playlistRequestId = 0;
-  const openPlaylist = async (button: HTMLButtonElement) => {
-    if (!workspaceTitle || !workspaceDescription || !workspaceCount || !workspaceTracks) return;
-    const requestId = ++playlistRequestId;
-    playlistButtons.forEach((item) => item.classList.toggle('active', item === button));
-    if (tree && window.matchMedia('(max-width: 600px)').matches) {
-      tree.classList.add('collapsed');
-      treeToggle?.setAttribute('aria-expanded', 'false');
-    }
-    workspaceTracks.replaceChildren();
-    workspaceTitle.textContent = button.dataset.playlistName || 'playlist';
-    workspaceDescription.textContent = 'opening file...';
-    try {
-      const data = await loadMusicPlaylist(button.dataset.playlistUrl || '');
-      const tracks = data.tracks || [];
-      if (requestId !== playlistRequestId) return;
-      workspaceDescription.textContent = data.description || 'a small pile of sounds.';
-      workspaceCount.textContent = `${tracks.length} track${tracks.length === 1 ? '' : 's'}`;
-      tracks.forEach((track, index) => {
-        const trackButton = document.createElement('button');
-        trackButton.className = 'workspace-track';
-        trackButton.type = 'button';
-        trackButton.dataset.playerLaunch = String(index);
-        trackButton.dataset.playerPlaylist = button.dataset.playlistUrl || '';
-        trackButton.dataset.trackTitle = track.title || `track ${index + 1}`;
-        const artist = track.artist ? `<strong>${track.artist}</strong><b aria-hidden="true">·</b>` : '';
-        trackButton.innerHTML = `<span class="track-play-icon" aria-hidden="true">▶</span><small>${String(index + 1).padStart(2, '0')}</small><span class="track-divider" aria-hidden="true"></span><span class="track-details">${artist}<em>${track.title || `track ${index + 1}`}</em></span><time>${track.duration || '--:--'}</time>`;
-        workspaceTracks.append(trackButton);
-      });
-    } catch {
-      if (requestId !== playlistRequestId) return;
-      workspaceDescription.textContent = 'could not open this file.';
-      workspaceCount.textContent = '';
-    }
+    let playlistRequestId = 0;
+    const openPlaylist = async (button: HTMLButtonElement) => {
+      if (
+        !workspaceTitle ||
+        !workspaceDescription ||
+        !workspaceCount ||
+        !workspaceTracks
+      )
+        return;
+      const requestId = ++playlistRequestId;
+      playlistButtons.forEach((item) =>
+        item.classList.toggle("active", item === button),
+      );
+      if (tree && window.matchMedia("(max-width: 600px)").matches) {
+        tree.classList.add("collapsed");
+        treeToggle?.setAttribute("aria-expanded", "false");
+      }
+      workspaceTracks.replaceChildren();
+      workspaceTitle.textContent = button.dataset.playlistName || "playlist";
+      workspaceDescription.textContent = "opening file...";
+      try {
+        const data = await loadMusicPlaylist(button.dataset.playlistUrl || "");
+        const tracks = data.tracks || [];
+        if (requestId !== playlistRequestId) return;
+        workspaceDescription.textContent =
+          data.description || "a small pile of sounds.";
+        workspaceCount.textContent = `${tracks.length} track${tracks.length === 1 ? "" : "s"}`;
+        tracks.forEach((track, index) => {
+          const trackButton = document.createElement("button");
+          trackButton.className = "workspace-track";
+          trackButton.type = "button";
+          trackButton.dataset.playerLaunch = String(index);
+          trackButton.dataset.playerPlaylist = button.dataset.playlistUrl || "";
+          trackButton.dataset.trackTitle = track.title || `track ${index + 1}`;
+          const artist = track.artist
+            ? `<strong>${track.artist}</strong><b aria-hidden="true">·</b>`
+            : "";
+          trackButton.innerHTML = `<span class="track-play-icon" aria-hidden="true">▶</span><small>${String(index + 1).padStart(2, "0")}</small><span class="track-divider" aria-hidden="true"></span><span class="track-details">${artist}<em>${track.title || `track ${index + 1}`}</em></span><time>${track.duration || "--:--"}</time>`;
+          workspaceTracks.append(trackButton);
+        });
+      } catch {
+        if (requestId !== playlistRequestId) return;
+        workspaceDescription.textContent = "could not open this file.";
+        workspaceCount.textContent = "";
+      }
+    };
+
+    playlistButtons.forEach((button) =>
+      button.addEventListener("click", () => {
+        void openPlaylist(button);
+      }),
+    );
+    const initialPlaylist = playlistButtons[0];
+    if (initialPlaylist) void openPlaylist(initialPlaylist);
+    window.addEventListener("music:track-change", (event) => {
+      const detail = (event as CustomEvent<{ title?: string }>).detail;
+      document
+        .querySelectorAll<HTMLButtonElement>(".workspace-track")
+        .forEach((track) =>
+          track.classList.toggle(
+            "active",
+            track.dataset.trackTitle === detail.title,
+          ),
+        );
+    });
+    treeToggle?.addEventListener("click", () => {
+      if (!tree) return;
+      const collapsed = tree.classList.toggle("collapsed");
+      treeToggle.setAttribute("aria-expanded", String(!collapsed));
+    });
   };
 
-  playlistButtons.forEach((button) => button.addEventListener('click', () => { void openPlaylist(button); }));
-  const initialPlaylist = playlistButtons[0];
-  if (initialPlaylist) void openPlaylist(initialPlaylist);
-  window.addEventListener('music:track-change', (event) => {
-    const detail = (event as CustomEvent<{ title?: string }>).detail;
-    document.querySelectorAll<HTMLButtonElement>('.workspace-track').forEach((track) => track.classList.toggle('active', track.dataset.trackTitle === detail.title));
-  });
-  treeToggle?.addEventListener('click', () => {
-    if (!tree) return;
-    const collapsed = tree.classList.toggle('collapsed');
-    treeToggle.setAttribute('aria-expanded', String(!collapsed));
-  });
-  };
-
-  document.addEventListener('astro:page-load', initializeMusicPage);
+  document.addEventListener("astro:page-load", initializeMusicPage);
   initializeMusicPage();
 </script>
 
 <style>
-  .shortcuts-guide{margin-top:1rem;font-size:.75rem;color:var(--muted)}
-  .shortcuts-guide summary{cursor:pointer;color:var(--accent)}
-  .shortcuts-guide ul{margin:.5rem 0 0;padding:0;list-style:none;line-height:1.9}
-  .shortcuts-guide kbd{padding:0 .35rem;border:1px solid var(--muted-border);border-radius:3px;font:inherit;color:var(--text)}
-  .music-main{flex:0 1 auto;width:calc(100% - 40px);max-width:980px;box-sizing:border-box;margin:0 auto;padding:clamp(1.5rem,4vw,3rem) 0}
-  .music-frame{position:relative;padding:clamp(1rem,2.4vw,1.75rem);border:1px solid var(--muted-border);border-radius:2px;background:var(--card);box-shadow:inset 0 1px 0 var(--accent-12);animation:music-frame-in .5s cubic-bezier(.2,.9,.2,1) both}
-  @keyframes music-frame-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-  .music-heading{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;margin:0 0 1.25rem;padding-bottom:.75rem;border-bottom:1px solid var(--muted-border)}
-  .music-heading h1{display:flex;align-items:center;gap:.45rem;margin:0;color:var(--accent);font-size:1.15rem;line-height:1;letter-spacing:.04em}
-  .music-title-icon{display:block;width:17px;height:17px;flex:0 0 17px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-  .music-note{margin:0;color:var(--muted);font-size:.78rem;text-align:right}
-  .music-tree-toggle{display:none}.music-browser{display:grid;grid-template-columns:30% 70%;min-height:330px;border:1px solid var(--muted-border);border-radius:2px;overflow:hidden}.music-tree{padding:14px 10px;background:var(--surface-inset);border-right:1px solid var(--muted-border)}.tree-root{display:flex;gap:8px;align-items:center;padding:8px;color:var(--accent);font-size:.85rem}.music-folder{margin-left:14px;padding:2px 0}.music-folder summary{display:flex;align-items:center;gap:7px;padding:9px 8px;color:var(--muted);cursor:pointer;list-style:none;font-size:.83rem}.music-folder summary::-webkit-details-marker{display:none}.music-folder summary:hover{color:var(--text)}
-  .music-folder summary::-webkit-details-marker{display:none}
-  .folder-glyph{color:var(--accent);font-size:1rem;transition:transform .22s ease}.music-folder[open] .folder-glyph{transform:rotate(0)}.music-folder:not([open]) .folder-glyph{transform:rotate(-90deg)}.tree-playlist{display:flex;align-items:center;gap:7px;width:100%;padding:8px 8px 8px 28px;border:0;border-radius:5px;background:transparent;color:var(--muted);font:inherit;font-size:.78rem;text-align:left;cursor:pointer}.tree-playlist:hover,.tree-playlist:focus-visible,.tree-playlist.active{background:var(--accent-10);color:var(--text)}.file-glyph{color:var(--accent);font-size:.65rem;font-weight:700}.music-workspace{padding:clamp(1.25rem,4vw,2.5rem);background:var(--surface-inset);transition:opacity .2s ease,transform .2s ease}.workspace-topline{display:flex;justify-content:space-between;color:var(--muted);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase}.music-workspace h2{margin:1.2rem 0 .6rem;color:var(--accent);font-size:clamp(1.4rem,3vw,2.1rem);line-height:1}.music-workspace p{margin:0 0 1.5rem;color:var(--muted);font-size:.9rem}.workspace-tracks{display:flex;flex-direction:column;gap:4px}.workspace-track{display:grid;grid-template-columns:20px 30px 1px minmax(0,1fr) auto;gap:9px;align-items:center;padding:10px 9px;border:1px solid transparent;border-radius:5px;background:transparent;color:var(--muted);font:inherit;text-align:left;cursor:pointer}.workspace-track:hover,.workspace-track:focus-visible,.workspace-track.active{background:var(--accent-10);border-color:var(--muted-border);color:var(--text)}.workspace-track.active{border-color:var(--accent)}.track-play-icon{color:var(--accent);font-size:.65rem;opacity:0}.workspace-track:hover .track-play-icon,.workspace-track:focus-visible .track-play-icon,.workspace-track.active .track-play-icon{opacity:1}.workspace-track small{color:var(--accent)}.track-divider{height:18px;background:var(--muted-border)}.track-details{display:flex;min-width:0;align-items:center;gap:7px;overflow:hidden}.track-details strong,.track-details em{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.track-details strong{font-size:.8rem;color:var(--muted);font-weight:500}.track-details em{font-style:normal;font-weight:600}.track-details b{color:var(--accent)}.workspace-track time{color:var(--muted);font-size:.72rem}
-  .workspace-heading{display:flex;align-items:center;gap:1rem;margin:1.2rem 0 1.5rem}.workspace-heading h2{margin:0 0 .6rem}.workspace-heading p{margin:0}
-  @media (max-width:600px){.music-main{width:calc(100% - 28px);padding:3rem 0 6rem}.music-frame{padding:1.25rem 1rem 1.5rem}.music-heading{display:block;margin-bottom:1.5rem}.music-note{margin-top:.8rem;text-align:left}.music-browser{position:relative;display:block;min-height:360px}.music-tree{position:absolute;inset:0 25% 0 0;z-index:2;overflow:auto;background:var(--card);transform:translateX(0);transition:transform .25s ease;border-right:1px solid var(--muted-border)}.music-tree.collapsed{transform:translateX(-100%)}.music-workspace{min-height:328px;padding:1.25rem}.music-tree-toggle{position:absolute;top:82px;left:10px;z-index:4;display:flex;width:32px;height:32px;align-items:center;justify-content:center;border:1px solid var(--muted-border);border-radius:50%;background:var(--card);color:var(--accent);font:inherit;font-size:1.4rem;cursor:pointer;transition:left .25s ease,transform .25s ease}.music-tree-toggle[aria-expanded="false"]{left:8px;transform:rotate(180deg)}.workspace-track{grid-template-columns:20px 24px 1px minmax(0,1fr);gap:6px}.workspace-track time{grid-column:4;margin-top:-3px}}
-  .music-main{width:calc(100% - 32px);max-width:1040px;padding:1.5rem 0 7rem}
-  .music-frame{padding:clamp(.9rem,2vw,1.4rem);border-radius:2px}
-  .music-heading{margin-bottom:.85rem;padding-bottom:.65rem}
-  .music-browser{grid-template-columns:minmax(190px,25%) minmax(0,1fr);min-height:0}
-  .music-tree{min-width:0;padding:9px 8px}
-  .music-workspace{min-width:0;padding:clamp(1rem,2.4vw,1.6rem)}
-  .workspace-heading{gap:.75rem;margin:.8rem 0 1rem}
-  .music-workspace h2{font-size:1.35rem}
-  .music-workspace p{margin-bottom:.8rem;font-size:.82rem;line-height:1.45}
-  .workspace-tracks{max-height:390px}
-  .workspace-track{grid-template-columns:18px 25px 1px minmax(0,1fr) auto;gap:7px;padding:6px 7px}
-  @media (max-width:600px){
-    .music-main{width:calc(100% - 20px);padding:1rem 0 9rem}
-    .music-frame{padding:.8rem;border-radius:2px}
-    .music-heading{display:flex;align-items:baseline;gap:.6rem;margin-bottom:.65rem}
-    .music-heading h1{flex:none}
-    .music-note{margin:0;text-align:left;font-size:.68rem;line-height:1.3}
-    .music-browser{display:flex;flex-direction:column;min-height:0;overflow:visible;border:0;gap:.55rem}
-    .music-tree,.music-tree.collapsed{position:relative;inset:auto;z-index:auto;display:flex;flex:0 0 auto;gap:5px;overflow-x:auto;overflow-y:hidden;padding:4px 0 8px;border:0;background:transparent;transform:none;transition:none;scrollbar-width:none}
-    .music-tree::-webkit-scrollbar{height:0}
-    .tree-root{display:none}
-    .music-folder{display:flex;flex:0 0 auto;align-items:center;gap:3px;margin-left:0;padding:0;border:1px solid var(--muted-border);border-radius:5px;background:var(--surface-inset)}
-    .music-folder summary{gap:4px;padding:7px 8px;font-size:.73rem;white-space:nowrap}
-    .folder-glyph{font-size:.78rem}
-    .tree-playlist{width:auto;gap:4px;padding:7px 8px;border-left:1px solid var(--muted-border);border-radius:0;font-size:.7rem;white-space:nowrap}
-    .file-glyph{display:none}
-    .music-tree-toggle{display:none!important}
-    .music-workspace{min-height:0;padding:12px;border:1px solid var(--muted-border);border-radius:2px;background:var(--surface-inset)}
-    .workspace-topline{font-size:.6rem}
-    .workspace-heading{gap:.6rem;margin:.65rem 0 .8rem}
-    .music-workspace h2{margin:0 0 .35rem;font-size:1.05rem;overflow-wrap:anywhere}
-    .music-workspace p{margin:0;font-size:.73rem;line-height:1.4}
-    .workspace-tracks{max-height:min(42vh,300px);gap:1px;padding-right:2px}
-    .workspace-track{grid-template-columns:16px 21px minmax(0,1fr) auto;gap:5px;padding:7px 5px}
-    .workspace-track .track-divider{display:none}
-    .workspace-track .track-details{gap:4px}
-    .workspace-track .track-details em{font-size:.72rem}
-    .workspace-track time{grid-column:auto;margin:0;font-size:.66rem}
+  /* Page styles: music library */
+  .shortcuts-guide {
+    margin-top: 1rem;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+  .shortcuts-guide summary {
+    cursor: pointer;
+    color: var(--accent);
+  }
+  .shortcuts-guide ul {
+    margin: 0.5rem 0 0;
+    padding: 0;
+    list-style: none;
+    line-height: 1.9;
+  }
+  .shortcuts-guide kbd {
+    padding: 0 0.35rem;
+    border: 1px solid var(--muted-border);
+    border-radius: 3px;
+    font: inherit;
+    color: var(--text);
+  }
+  .music-main {
+    flex: 0 1 auto;
+    width: calc(100% - 40px);
+    max-width: 980px;
+    box-sizing: border-box;
+    margin: 0 auto;
+    padding: clamp(1.5rem, 4vw, 3rem) 0;
+  }
+  .music-frame {
+    position: relative;
+    padding: clamp(1rem, 2.4vw, 1.75rem);
+    border: 1px solid var(--muted-border);
+    border-radius: 2px;
+    background: var(--card);
+    box-shadow: inset 0 1px 0 var(--accent-12);
+    animation: music-frame-in 0.5s cubic-bezier(0.2, 0.9, 0.2, 1) both;
+  }
+  @keyframes music-frame-in {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .music-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0 0 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--muted-border);
+  }
+  .music-heading h1 {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin: 0;
+    color: var(--accent);
+    font-size: 1.15rem;
+    line-height: 1;
+    letter-spacing: 0.04em;
+  }
+  .music-title-icon {
+    display: block;
+    width: 17px;
+    height: 17px;
+    flex: 0 0 17px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .music-note {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.78rem;
+    text-align: right;
+  }
+  .music-tree-toggle {
+    display: none;
+  }
+  .music-browser {
+    display: grid;
+    grid-template-columns: 30% 70%;
+    min-height: 330px;
+    border: 1px solid var(--muted-border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .music-tree {
+    padding: 14px 10px;
+    background: var(--surface-inset);
+    border-right: 1px solid var(--muted-border);
+  }
+  .tree-root {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding: 8px;
+    color: var(--accent);
+    font-size: 0.85rem;
+  }
+  .music-folder {
+    margin-left: 14px;
+    padding: 2px 0;
+  }
+  .music-folder summary {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 8px;
+    color: var(--muted);
+    cursor: pointer;
+    list-style: none;
+    font-size: 0.83rem;
+  }
+  .music-folder summary::-webkit-details-marker {
+    display: none;
+  }
+  .music-folder summary:hover {
+    color: var(--text);
+  }
+  .music-folder summary::-webkit-details-marker {
+    display: none;
+  }
+  .folder-glyph {
+    color: var(--accent);
+    font-size: 1rem;
+    transition: transform 0.22s ease;
+  }
+  .music-folder[open] .folder-glyph {
+    transform: rotate(0);
+  }
+  .music-folder:not([open]) .folder-glyph {
+    transform: rotate(-90deg);
+  }
+  .tree-playlist {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    width: 100%;
+    padding: 8px 8px 8px 28px;
+    border: 0;
+    border-radius: 5px;
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: 0.78rem;
+    text-align: left;
+    cursor: pointer;
+  }
+  .tree-playlist:hover,
+  .tree-playlist:focus-visible,
+  .tree-playlist.active {
+    background: var(--accent-10);
+    color: var(--text);
+  }
+  .file-glyph {
+    color: var(--accent);
+    font-size: 0.65rem;
+    font-weight: 700;
+  }
+  .music-workspace {
+    padding: clamp(1.25rem, 4vw, 2.5rem);
+    background: var(--surface-inset);
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease;
+  }
+  .workspace-topline {
+    display: flex;
+    justify-content: space-between;
+    color: var(--muted);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .music-workspace h2 {
+    margin: 1.2rem 0 0.6rem;
+    color: var(--accent);
+    font-size: clamp(1.4rem, 3vw, 2.1rem);
+    line-height: 1;
+  }
+  .music-workspace p {
+    margin: 0 0 1.5rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+  .workspace-tracks {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .workspace-track {
+    display: grid;
+    grid-template-columns: 20px 30px 1px minmax(0, 1fr) auto;
+    gap: 9px;
+    align-items: center;
+    padding: 10px 9px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+  .workspace-track:hover,
+  .workspace-track:focus-visible,
+  .workspace-track.active {
+    background: var(--accent-10);
+    border-color: var(--muted-border);
+    color: var(--text);
+  }
+  .workspace-track.active {
+    border-color: var(--accent);
+  }
+  .track-play-icon {
+    color: var(--accent);
+    font-size: 0.65rem;
+    opacity: 0;
+  }
+  .workspace-track:hover .track-play-icon,
+  .workspace-track:focus-visible .track-play-icon,
+  .workspace-track.active .track-play-icon {
+    opacity: 1;
+  }
+  .workspace-track small {
+    color: var(--accent);
+  }
+  .track-divider {
+    height: 18px;
+    background: var(--muted-border);
+  }
+  .track-details {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 7px;
+    overflow: hidden;
+  }
+  .track-details strong,
+  .track-details em {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .track-details strong {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .track-details em {
+    font-style: normal;
+    font-weight: 600;
+  }
+  .track-details b {
+    color: var(--accent);
+  }
+  .workspace-track time {
+    color: var(--muted);
+    font-size: 0.72rem;
+  }
+  .workspace-heading {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 1.2rem 0 1.5rem;
+  }
+  .workspace-heading h2 {
+    margin: 0 0 0.6rem;
+  }
+  .workspace-heading p {
+    margin: 0;
+  }
+  @media (max-width: 600px) {
+    .music-main {
+      width: calc(100% - 28px);
+      padding: 3rem 0 6rem;
+    }
+    .music-frame {
+      padding: 1.25rem 1rem 1.5rem;
+    }
+    .music-heading {
+      display: block;
+      margin-bottom: 1.5rem;
+    }
+    .music-note {
+      margin-top: 0.8rem;
+      text-align: left;
+    }
+    .music-browser {
+      position: relative;
+      display: block;
+      min-height: 360px;
+    }
+    .music-tree {
+      position: absolute;
+      inset: 0 25% 0 0;
+      z-index: 2;
+      overflow: auto;
+      background: var(--card);
+      transform: translateX(0);
+      transition: transform 0.25s ease;
+      border-right: 1px solid var(--muted-border);
+    }
+    .music-tree.collapsed {
+      transform: translateX(-100%);
+    }
+    .music-workspace {
+      min-height: 328px;
+      padding: 1.25rem;
+    }
+    .music-tree-toggle {
+      position: absolute;
+      top: 82px;
+      left: 10px;
+      z-index: 4;
+      display: flex;
+      width: 32px;
+      height: 32px;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--muted-border);
+      border-radius: 50%;
+      background: var(--card);
+      color: var(--accent);
+      font: inherit;
+      font-size: 1.4rem;
+      cursor: pointer;
+      transition:
+        left 0.25s ease,
+        transform 0.25s ease;
+    }
+    .music-tree-toggle[aria-expanded="false"] {
+      left: 8px;
+      transform: rotate(180deg);
+    }
+    .workspace-track {
+      grid-template-columns: 20px 24px 1px minmax(0, 1fr);
+      gap: 6px;
+    }
+    .workspace-track time {
+      grid-column: 4;
+      margin-top: -3px;
+    }
+  }
+  .music-main {
+    width: calc(100% - 32px);
+    max-width: 1040px;
+    padding: 1.5rem 0 7rem;
+  }
+  .music-frame {
+    padding: clamp(0.9rem, 2vw, 1.4rem);
+    border-radius: 2px;
+  }
+  .music-heading {
+    margin-bottom: 0.85rem;
+    padding-bottom: 0.65rem;
+  }
+  .music-browser {
+    grid-template-columns: minmax(190px, 25%) minmax(0, 1fr);
+    min-height: 0;
+  }
+  .music-tree {
+    min-width: 0;
+    padding: 9px 8px;
+  }
+  .music-workspace {
+    min-width: 0;
+    padding: clamp(1rem, 2.4vw, 1.6rem);
+  }
+  .workspace-heading {
+    gap: 0.75rem;
+    margin: 0.8rem 0 1rem;
+  }
+  .music-workspace h2 {
+    font-size: 1.35rem;
+  }
+  .music-workspace p {
+    margin-bottom: 0.8rem;
+    font-size: 0.82rem;
+    line-height: 1.45;
+  }
+  .workspace-tracks {
+    max-height: 390px;
+  }
+  .workspace-track {
+    grid-template-columns: 18px 25px 1px minmax(0, 1fr) auto;
+    gap: 7px;
+    padding: 6px 7px;
+  }
+  @media (max-width: 600px) {
+    .music-main {
+      width: calc(100% - 20px);
+      padding: 1rem 0 9rem;
+    }
+    .music-frame {
+      padding: 0.8rem;
+      border-radius: 2px;
+    }
+    .music-heading {
+      display: flex;
+      align-items: baseline;
+      gap: 0.6rem;
+      margin-bottom: 0.65rem;
+    }
+    .music-heading h1 {
+      flex: none;
+    }
+    .music-note {
+      margin: 0;
+      text-align: left;
+      font-size: 0.68rem;
+      line-height: 1.3;
+    }
+    .music-browser {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      overflow: visible;
+      border: 0;
+      gap: 0.55rem;
+    }
+    .music-tree,
+    .music-tree.collapsed {
+      position: relative;
+      inset: auto;
+      z-index: auto;
+      display: flex;
+      flex: 0 0 auto;
+      gap: 5px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 4px 0 8px;
+      border: 0;
+      background: transparent;
+      transform: none;
+      transition: none;
+      scrollbar-width: none;
+    }
+    .music-tree::-webkit-scrollbar {
+      height: 0;
+    }
+    .tree-root {
+      display: none;
+    }
+    .music-folder {
+      display: flex;
+      flex: 0 0 auto;
+      align-items: center;
+      gap: 3px;
+      margin-left: 0;
+      padding: 0;
+      border: 1px solid var(--muted-border);
+      border-radius: 5px;
+      background: var(--surface-inset);
+    }
+    .music-folder summary {
+      gap: 4px;
+      padding: 7px 8px;
+      font-size: 0.73rem;
+      white-space: nowrap;
+    }
+    .folder-glyph {
+      font-size: 0.78rem;
+    }
+    .tree-playlist {
+      width: auto;
+      gap: 4px;
+      padding: 7px 8px;
+      border-left: 1px solid var(--muted-border);
+      border-radius: 0;
+      font-size: 0.7rem;
+      white-space: nowrap;
+    }
+    .file-glyph {
+      display: none;
+    }
+    .music-tree-toggle {
+      display: none !important;
+    }
+    .music-workspace {
+      min-height: 0;
+      padding: 12px;
+      border: 1px solid var(--muted-border);
+      border-radius: 2px;
+      background: var(--surface-inset);
+    }
+    .workspace-topline {
+      font-size: 0.6rem;
+    }
+    .workspace-heading {
+      gap: 0.6rem;
+      margin: 0.65rem 0 0.8rem;
+    }
+    .music-workspace h2 {
+      margin: 0 0 0.35rem;
+      font-size: 1.05rem;
+      overflow-wrap: anywhere;
+    }
+    .music-workspace p {
+      margin: 0;
+      font-size: 0.73rem;
+      line-height: 1.4;
+    }
+    .workspace-tracks {
+      max-height: min(42vh, 300px);
+      gap: 1px;
+      padding-right: 2px;
+    }
+    .workspace-track {
+      grid-template-columns: 16px 21px minmax(0, 1fr) auto;
+      gap: 5px;
+      padding: 7px 5px;
+    }
+    .workspace-track .track-divider {
+      display: none;
+    }
+    .workspace-track .track-details {
+      gap: 4px;
+    }
+    .workspace-track .track-details em {
+      font-size: 0.72rem;
+    }
+    .workspace-track time {
+      grid-column: auto;
+      margin: 0;
+      font-size: 0.66rem;
+    }
   }
 </style>
 
 <style is:global>
-  .music-folder{animation:music-folder-in .32s ease both}
-  .music-folder:nth-child(2){animation-delay:.06s}.music-folder:nth-child(3){animation-delay:.12s}.music-folder:nth-child(4){animation-delay:.18s}
-  @keyframes music-folder-in{from{opacity:0;transform:translateX(-7px)}to{opacity:1;transform:none}}
-  .music-folder[open] > .tree-playlist{animation:music-file-in .22s ease both}
-  @keyframes music-file-in{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
-  .workspace-tracks{max-height:340px;overflow-y:auto;padding-right:4px;scrollbar-width:thin;scrollbar-color:var(--accent-dark) transparent}
-  .workspace-track{display:grid;grid-template-columns:20px 30px 1px minmax(0,1fr) auto;gap:8px;align-items:center;padding:7px 8px;border:1px solid transparent;border-radius:5px;background:transparent;color:var(--muted);font:inherit;text-align:left;cursor:pointer;animation:music-track-in .24s ease both}
-  .workspace-track:nth-child(2){animation-delay:.05s}.workspace-track:nth-child(3){animation-delay:.1s}.workspace-track:nth-child(4){animation-delay:.15s}
-  @keyframes music-track-in{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
-  .workspace-track:hover,.workspace-track:focus-visible,.workspace-track.active{background:var(--accent-10);border-color:var(--muted-border);color:var(--text)}
-  .workspace-track.active{border-color:var(--accent)}
-  .workspace-track .track-play-icon{color:var(--accent);font-size:.65rem;opacity:0}
-  .workspace-track:hover .track-play-icon,.workspace-track:focus-visible .track-play-icon,.workspace-track.active .track-play-icon{opacity:1}
-  .workspace-track small{color:var(--accent)}
-  .workspace-track .track-divider{height:15px;background:var(--muted-border)}
-  .workspace-track .track-details{display:flex;min-width:0;align-items:center;gap:6px;overflow:hidden}
-  .workspace-track .track-details strong,.workspace-track .track-details em{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .workspace-track .track-details strong{font-size:.8rem;color:var(--muted);font-weight:500}
-  .workspace-track .track-details em{font-style:normal;font-weight:600}
-  .workspace-track .track-details b{color:var(--accent)}
-  .workspace-track time{color:var(--muted);font-size:.72rem}
-  @media (max-width:600px){.workspace-track .track-details strong,.workspace-track .track-details b{display:none}}
+  /* Page styles: music library overlays */
+  .music-folder {
+    animation: music-folder-in 0.32s ease both;
+  }
+  .music-folder:nth-child(2) {
+    animation-delay: 0.06s;
+  }
+  .music-folder:nth-child(3) {
+    animation-delay: 0.12s;
+  }
+  .music-folder:nth-child(4) {
+    animation-delay: 0.18s;
+  }
+  @keyframes music-folder-in {
+    from {
+      opacity: 0;
+      transform: translateX(-7px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .music-folder[open] > .tree-playlist {
+    animation: music-file-in 0.22s ease both;
+  }
+  @keyframes music-file-in {
+    from {
+      opacity: 0;
+      transform: translateY(-5px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .workspace-tracks {
+    max-height: 340px;
+    overflow-y: auto;
+    padding-right: 4px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-dark) transparent;
+  }
+  .workspace-track {
+    display: grid;
+    grid-template-columns: 20px 30px 1px minmax(0, 1fr) auto;
+    gap: 8px;
+    align-items: center;
+    padding: 7px 8px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    animation: music-track-in 0.24s ease both;
+  }
+  .workspace-track:nth-child(2) {
+    animation-delay: 0.05s;
+  }
+  .workspace-track:nth-child(3) {
+    animation-delay: 0.1s;
+  }
+  .workspace-track:nth-child(4) {
+    animation-delay: 0.15s;
+  }
+  @keyframes music-track-in {
+    from {
+      opacity: 0;
+      transform: translateY(5px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .workspace-track:hover,
+  .workspace-track:focus-visible,
+  .workspace-track.active {
+    background: var(--accent-10);
+    border-color: var(--muted-border);
+    color: var(--text);
+  }
+  .workspace-track.active {
+    border-color: var(--accent);
+  }
+  .workspace-track .track-play-icon {
+    color: var(--accent);
+    font-size: 0.65rem;
+    opacity: 0;
+  }
+  .workspace-track:hover .track-play-icon,
+  .workspace-track:focus-visible .track-play-icon,
+  .workspace-track.active .track-play-icon {
+    opacity: 1;
+  }
+  .workspace-track small {
+    color: var(--accent);
+  }
+  .workspace-track .track-divider {
+    height: 15px;
+    background: var(--muted-border);
+  }
+  .workspace-track .track-details {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 6px;
+    overflow: hidden;
+  }
+  .workspace-track .track-details strong,
+  .workspace-track .track-details em {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .workspace-track .track-details strong {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .workspace-track .track-details em {
+    font-style: normal;
+    font-weight: 600;
+  }
+  .workspace-track .track-details b {
+    color: var(--accent);
+  }
+  .workspace-track time {
+    color: var(--muted);
+    font-size: 0.72rem;
+  }
+  @media (max-width: 600px) {
+    .workspace-track .track-details strong,
+    .workspace-track .track-details b {
+      display: none;
+    }
+  }
 </style>

@@ -1,13 +1,16 @@
 ﻿---
-import Layout from '../../layouts/Layout.astro';
-import HomeHero from '../../components/HomeHero.astro';
-import HomeFrame from '../../components/HomeFrame.astro';
-import PostTypeIcon from '../../components/PostTypeIcon.astro';
-import { getCollection, render } from 'astro:content';
-import { comparePostsByDateAndOrder } from '../../data/posts';
+import Layout from "../../layouts/Layout.astro";
+import HomeHero from "../../components/HomeHero.astro";
+import HomeFrame from "../../components/HomeFrame.astro";
+import PostTypeIcon from "../../components/PostTypeIcon.astro";
+import { getCollection, render } from "astro:content";
+import { comparePostsByDateAndOrder } from "../../data/posts";
 
 export async function getStaticPaths() {
-  const visiblePosts = await getCollection('posts', ({ data }) => !data.draft || !import.meta.env.PROD);
+  const visiblePosts = await getCollection(
+    "posts",
+    ({ data }) => !data.draft || !import.meta.env.PROD,
+  );
   const sortedPosts = visiblePosts.sort(comparePostsByDateAndOrder);
   return sortedPosts.map((post) => ({
     params: { id: post.id },
@@ -16,44 +19,90 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const isMajor = post.data.type === 'major';
+const isMajor = post.data.type === "major";
 const { Content } = await render(post);
 const base = import.meta.env.BASE_URL;
-const formatDate = (date: Date) => new Intl.DateTimeFormat('en-US', {
-  month: 'long',
-  day: 'numeric',
-  year: 'numeric',
-  timeZone: 'UTC',
-}).format(date);
-const postTypeLabels = { update: 'UPDATE', major: 'MAJOR UPDATE', post: 'POST' } as const;
+const formatDate = (date: Date) =>
+  new Intl.DateTimeFormat("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(date);
+const postTypeLabels = {
+  update: "UPDATE",
+  major: "MAJOR UPDATE",
+  post: "POST",
+} as const;
 const typeLabel = postTypeLabels[post.data.type];
 const imageSrc = post.data.image
-  ? (/^(https?:|data:)/.test(post.data.image) ? post.data.image : `${base}${post.data.image.replace(/^\/+/, '')}`)
+  ? /^(https?:|data:)/.test(post.data.image)
+    ? post.data.image
+    : `${base}${post.data.image.replace(/^\/+/, "")}`
   : undefined;
 ---
 
-<Layout title={post.data.title} description={post.data.description || 'a post from the praxor website.'}>
+<Layout
+  title={post.data.title}
+  description={post.data.description || "a post from the praxor website."}
+>
   <main class="home-page">
     <HomeHero />
     <HomeFrame>
-      <section class="dispatch-feed update-reader" slot="feed" aria-labelledby="update-title">
-        <a class="update-back" href={`${base}#dispatch-title`} data-update-back aria-label="Back to recent updates">
-          <svg class="update-back-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.5 3.5 6 8l4.5 4.5M6.25 8h7" /></svg>
+      <section
+        class="dispatch-feed update-reader"
+        slot="feed"
+        aria-labelledby="update-title"
+      >
+        <a
+          class="update-back"
+          href={`${base}#dispatch-title`}
+          data-update-back
+          aria-label="Back to recent updates"
+        >
+          <svg
+            class="update-back-icon"
+            viewBox="0 0 16 16"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path d="M10.5 3.5 6 8l4.5 4.5M6.25 8h7" />
+          </svg>
           <span>back</span>
         </a>
-        <article class:list={['update-article', { 'is-major': isMajor }]} data-post-id={post.id}>
+        <article
+          class:list={["update-article", { "is-major": isMajor }]}
+          data-post-id={post.id}
+        >
           <header class="update-header">
             <p class="update-kind">{typeLabel}</p>
             <h2 id="update-title">{post.data.title}</h2>
-            <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+            <time datetime={post.data.date.toISOString()}>
+              {formatDate(post.data.date)}
+            </time>
           </header>
           <div class="update-divider" aria-hidden="true"></div>
-          {imageSrc && <figure class="update-cover"><img src={imageSrc} alt={post.data.imageAlt || post.data.title} loading="eager" decoding="async" /></figure>}
-          {post.data.description && <p class="update-description">{post.data.description}</p>}
+          {imageSrc && (
+            <figure class="update-cover">
+              <img
+                src={imageSrc}
+                alt={post.data.imageAlt || post.data.title}
+                loading="eager"
+                decoding="async"
+              />
+            </figure>
+          )}
+          {post.data.description && (
+            <p class="update-description">{post.data.description}</p>
+          )}
           <div class="update-divider markdown-divider" aria-hidden="true"></div>
-          <div class="update-body"><Content /></div>
+          <div class="update-body">
+            <Content />
+          </div>
           <footer class="update-footer">
-            <span class="post-kind-icon" aria-hidden="true"><PostTypeIcon type={post.data.type} /></span>
+            <span class="post-kind-icon" aria-hidden="true">
+              <PostTypeIcon type={post.data.type} />
+            </span>
             <span>{typeLabel}</span>
           </footer>
         </article>
@@ -64,21 +113,30 @@ const imageSrc = post.data.image
 
 <script>
   const updateBackLink = () => {
-    const backLink = document.querySelector<HTMLAnchorElement>('[data-update-back]');
-    if (!backLink || backLink.dataset.initialized === 'true') return;
-    backLink.dataset.initialized = 'true';
+    const backLink =
+      document.querySelector<HTMLAnchorElement>("[data-update-back]");
+    if (!backLink || backLink.dataset.initialized === "true") return;
+    backLink.dataset.initialized = "true";
 
     const params = new URLSearchParams(window.location.search);
-    const filter = params.get('feed');
-    const validFilters = ['all', 'update', 'major', 'post'];
-    const hasFeedReturn = params.get('feedReturn') === '1' && filter !== null && validFilters.includes(filter);
+    const filter = params.get("feed");
+    const validFilters = ["all", "update", "major", "post"];
+    const hasFeedReturn =
+      params.get("feedReturn") === "1" &&
+      filter !== null &&
+      validFilters.includes(filter);
     const destination = new URL(import.meta.env.BASE_URL, window.location.href);
-    if (filter && validFilters.includes(filter)) destination.searchParams.set('feed', filter);
-    destination.hash = 'dispatch-title';
+    if (filter && validFilters.includes(filter))
+      destination.searchParams.set("feed", filter);
+    destination.hash = "dispatch-title";
     backLink.href = `${destination.pathname}${destination.search}${destination.hash}`;
 
-    if (hasFeedReturn && typeof window.history.state?.index === 'number' && window.history.state.index > 0) {
-      backLink.addEventListener('click', (event) => {
+    if (
+      hasFeedReturn &&
+      typeof window.history.state?.index === "number" &&
+      window.history.state.index > 0
+    ) {
+      backLink.addEventListener("click", (event) => {
         event.preventDefault();
         window.history.back();
       });
@@ -86,45 +144,234 @@ const imageSrc = post.data.image
   };
 
   const resetPostScroll = () => {
-    if (document.querySelector('.update-reader')) window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    if (document.querySelector(".update-reader"))
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   };
-  document.addEventListener('astro:page-load', () => { updateBackLink(); resetPostScroll(); });
+  document.addEventListener("astro:page-load", () => {
+    updateBackLink();
+    resetPostScroll();
+  });
   updateBackLink();
   resetPostScroll();
 </script>
 
 <style>
-  .home-page{box-sizing:border-box;width:min(1100px,calc(100% - 32px));margin:0 auto;padding-bottom:132px}
-  .update-reader{padding:12px clamp(14px,2.5vw,28px) 28px}
-  .update-back{display:inline-flex;align-items:center;gap:5px;margin:0 0 14px;color:var(--muted);font-size:.76rem;text-decoration:none}
-  .update-back-icon{display:block;width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-  .update-back:hover,.update-back:focus-visible{color:var(--text);text-decoration:underline;text-underline-offset:3px}
-  .update-article{position:relative;min-width:0;padding-bottom:24px}
-  .update-article.is-major{box-shadow:inset 2px 0 0 var(--accent);padding:0 12px 24px}
-  .update-header{position:relative;max-width:100%}
-  .update-kind{margin:0 0 10px;color:var(--accent);font-size:.7rem;font-weight:700;letter-spacing:.12em}
-  .update-header h2{margin:0;color:var(--text);font-size:clamp(1.35rem,3vw,2rem);line-height:1.15;letter-spacing:0;overflow-wrap:anywhere}
-  .update-header time{display:block;margin-top:10px;color:var(--muted);font-size:.76rem}
-  .update-divider{width:34px;height:2px;margin:18px 0;background:var(--accent)}
-  .update-cover{display:grid;place-items:center;min-height:100px;max-height:min(58vh,560px);margin:0 0 13px;overflow:hidden;background:var(--surface-inset)}
-  .update-cover img{display:block;width:100%;height:auto;max-height:min(58vh,560px);object-fit:contain}
-  .update-description{margin:0;color:var(--muted);font-size:.87rem;line-height:1.6}
-  .markdown-divider{margin:20px 0}
-  .update-body{min-width:0;color:var(--text);font-size:.93rem;line-height:1.75;overflow-wrap:anywhere}
-  .update-body :global(p){margin:0 0 14px}
-  .update-body :global(p:last-child){margin-bottom:0}
-  .update-body :global(h2),.update-body :global(h3){margin:24px 0 10px;color:var(--text);line-height:1.3;letter-spacing:0}
-  .update-body :global(a){color:var(--accent);text-decoration:underline;text-underline-offset:2px}
-  .update-body :global(ul),.update-body :global(ol){padding-left:1.3rem}
-  .update-body :global(img){display:block;width:auto;height:auto;max-width:100%;max-height:min(72vh,720px);margin:20px auto;object-fit:contain}
-  .update-body :global(figure){max-width:100%;margin:20px 0}
-  .update-body :global(pre){box-sizing:border-box;max-width:100%;overflow-x:auto;margin:18px 0;padding:14px;border:1px solid var(--muted-border);background:var(--code-bg);color:var(--text);font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;font-size:.8rem;line-height:1.6;white-space:pre}
-  .update-body :global(pre code){padding:0;background:transparent;color:inherit;font-size:inherit;white-space:pre}
-  .update-body :global(:not(pre) > code){padding:2px 4px;background:var(--code-bg);font-size:.86em}
-  .update-body :global(blockquote){margin:16px 0;padding-left:14px;border-left:2px solid var(--accent);color:var(--muted)}
-  .update-body :global(table){display:block;max-width:100%;overflow-x:auto;border-collapse:collapse}
-  .update-body :global(th),.update-body :global(td){padding:7px 10px;border:1px solid var(--muted-border);text-align:left}
-  .update-footer{display:flex;align-items:center;gap:8px;margin-top:28px;padding-top:14px;border-top:1px solid var(--muted-border);color:var(--muted);font-size:.7rem;letter-spacing:.08em}
-  .update-footer .post-kind-icon{display:grid;place-items:center;width:26px;height:26px;border:1px solid var(--muted-border);color:var(--accent)}
-  @media(max-width:600px){.update-reader{padding-right:14px;padding-left:14px}.update-cover{min-height:60px}.update-footer{margin-top:20px}}
+  /* Page styles: update article */
+  .home-page {
+    box-sizing: border-box;
+    width: min(1100px, calc(100% - 32px));
+    margin: 0 auto;
+    padding-bottom: 132px;
+  }
+  .update-reader {
+    padding: 12px clamp(14px, 2.5vw, 28px) 28px;
+  }
+  .update-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin: 0 0 14px;
+    color: var(--muted);
+    font-size: 0.76rem;
+    text-decoration: none;
+  }
+  .update-back-icon {
+    display: block;
+    width: 14px;
+    height: 14px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .update-back:hover,
+  .update-back:focus-visible {
+    color: var(--text);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .update-article {
+    position: relative;
+    min-width: 0;
+    padding-bottom: 24px;
+  }
+  .update-article.is-major {
+    box-shadow: inset 2px 0 0 var(--accent);
+    padding: 0 12px 24px;
+  }
+  .update-header {
+    position: relative;
+    max-width: 100%;
+  }
+  .update-kind {
+    margin: 0 0 10px;
+    color: var(--accent);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+  }
+  .update-header h2 {
+    margin: 0;
+    color: var(--text);
+    font-size: clamp(1.35rem, 3vw, 2rem);
+    line-height: 1.15;
+    letter-spacing: 0;
+    overflow-wrap: anywhere;
+  }
+  .update-header time {
+    display: block;
+    margin-top: 10px;
+    color: var(--muted);
+    font-size: 0.76rem;
+  }
+  .update-divider {
+    width: 34px;
+    height: 2px;
+    margin: 18px 0;
+    background: var(--accent);
+  }
+  .update-cover {
+    display: grid;
+    place-items: center;
+    min-height: 100px;
+    max-height: min(58vh, 560px);
+    margin: 0 0 13px;
+    overflow: hidden;
+    background: var(--surface-inset);
+  }
+  .update-cover img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: min(58vh, 560px);
+    object-fit: contain;
+  }
+  .update-description {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.87rem;
+    line-height: 1.6;
+  }
+  .markdown-divider {
+    margin: 20px 0;
+  }
+  .update-body {
+    min-width: 0;
+    color: var(--text);
+    font-size: 0.93rem;
+    line-height: 1.75;
+    overflow-wrap: anywhere;
+  }
+  .update-body :global(p) {
+    margin: 0 0 14px;
+  }
+  .update-body :global(p:last-child) {
+    margin-bottom: 0;
+  }
+  .update-body :global(h2),
+  .update-body :global(h3) {
+    margin: 24px 0 10px;
+    color: var(--text);
+    line-height: 1.3;
+    letter-spacing: 0;
+  }
+  .update-body :global(a) {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .update-body :global(ul),
+  .update-body :global(ol) {
+    padding-left: 1.3rem;
+  }
+  .update-body :global(img) {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: min(72vh, 720px);
+    margin: 20px auto;
+    object-fit: contain;
+  }
+  .update-body :global(figure) {
+    max-width: 100%;
+    margin: 20px 0;
+  }
+  .update-body :global(pre) {
+    box-sizing: border-box;
+    max-width: 100%;
+    overflow-x: auto;
+    margin: 18px 0;
+    padding: 14px;
+    border: 1px solid var(--muted-border);
+    background: var(--code-bg);
+    color: var(--text);
+    font-family:
+      "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 0.8rem;
+    line-height: 1.6;
+    white-space: pre;
+  }
+  .update-body :global(pre code) {
+    padding: 0;
+    background: transparent;
+    color: inherit;
+    font-size: inherit;
+    white-space: pre;
+  }
+  .update-body :global(:not(pre) > code) {
+    padding: 2px 4px;
+    background: var(--code-bg);
+    font-size: 0.86em;
+  }
+  .update-body :global(blockquote) {
+    margin: 16px 0;
+    padding-left: 14px;
+    border-left: 2px solid var(--accent);
+    color: var(--muted);
+  }
+  .update-body :global(table) {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    border-collapse: collapse;
+  }
+  .update-body :global(th),
+  .update-body :global(td) {
+    padding: 7px 10px;
+    border: 1px solid var(--muted-border);
+    text-align: left;
+  }
+  .update-footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 28px;
+    padding-top: 14px;
+    border-top: 1px solid var(--muted-border);
+    color: var(--muted);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+  }
+  .update-footer .post-kind-icon {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border: 1px solid var(--muted-border);
+    color: var(--accent);
+  }
+  @media (max-width: 600px) {
+    .update-reader {
+      padding-right: 14px;
+      padding-left: 14px;
+    }
+    .update-cover {
+      min-height: 60px;
+    }
+    .update-footer {
+      margin-top: 20px;
+    }
+  }
 </style>
