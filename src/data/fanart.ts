@@ -27,9 +27,9 @@ export const fanartOptions: FanartImage[] = [
   { number: 15, src: '/media/fanart/fanart15.png', width: 876, height: 1405, artist: 'mynt719', caption: 'Purnid swagged out.', cSlug: 'purnid' },
   { number: 16, src: '/media/fanart/fanart16.png', width: 1868, height: 2054, artist: 'mynt719', caption: 'praxor!V2 smoking a birthday candle. Yeah, it was for my birthday.', cSlug: 'praxor-v2' },
   { number: 17, src: '/media/fanart/fanart17.png', width: 1821, height: 1541, artist: 'toohi', caption: 'Toohi blessed me with this piece. This can count as praxor!V2\'s official design, and reference sheet.', cSlug: 'praxor-v2' },
-  { number: 18, src: '/media/fanart/fanart18.jpg', width: 3060, height: 4080, artist: 'null / roota / the_real_peter_griffin.', caption: 'Quite the calm sketch for our \'Dead man in hollow arms\'.', cSlug: 'praxor-v2' },
+  { number: 18, src: '/media/fanart/fanart18.jpg', width: 3060, height: 4080, artist: 'null', caption: 'Quite the calm sketch for our \'Dead man in hollow arms\'.', cSlug: 'praxor-v2' },
   { number: 19, src: '/media/fanart/fanart19.png', width: 3072, height: 3072, artist: 'mcpattychon', caption: 'Evidence of mcpatty locking in.', cSlug: 'praxor-v2' },
-  { number: 20, src: '/media/fanart/fanart20.png', width: 1024, height: 894, artist: 'null / roota / the_real_peter_griffin.', caption: 'I don\'t mean to glaze insanely, but SWEET MOTHER OF PEARL I was not expecting this from her.', cSlug: 'praxor-v2' },
+  { number: 20, src: '/media/fanart/fanart20.png', width: 1024, height: 894, artist: 'null', caption: 'I don\'t mean to glaze insanely, but SWEET MOTHER OF PEARL I was not expecting this from her.', cSlug: 'praxor-v2' },
   { number: 21, src: '/media/fanart/fanart21.png', width: 2048, height: 2048, artist: 'bibiipusheen.', caption: 'Chibi version of praxor!V2. Why did I get blushed twice in a row?', cSlug: 'praxor-v2' },
   { number: 22, src: '/media/fanart/fanart22.png', width: 2048, height: 2048, artist: 'sillysatorugojo_', caption: 'He is justice. He is truth.', cSlug: 'pubbly' },
   { number: 23, src: '/media/fanart/fanart23.jpg', width: 2160, height: 2880, artist: 'enaxie', caption: '\"this is my impression of him\" Hell yeah man.', cSlug: 'pubbly' },
@@ -37,6 +37,7 @@ export const fanartOptions: FanartImage[] = [
   { number: 25, src: '/media/fanart/fanart25.png', width: 2048, height: 2048, artist: 'sillysatorugojo_', caption: 'The pubbler. Twice. Technically.', cSlug: 'pubbly' },
   { number: 26, src: '/media/fanart/fanart26.png', width: 983, height: 959, artist: 'bloody_soda', caption: 'Soup\'s Headcanon of Mr. Cake. Indubitably splendid.', cSlug: 'mrcake' },
   { number: 27, src: '/media/fanart/fanart27.png', width: 579, height: 569, artist: 'thatonedude7637', caption: '"praxor cat" ', cSlug: 'the-praxor-cat' },
+  { number: 28, src: '/media/fanart/fanart28.png', width: 870, height: 1024, artist: 'null', caption: 'Flesh man himself. Better than fentanyl or whatever.', cSlug: 'curse' }
 ];
 
 export const fanartByNumber = new Map(fanartOptions.map((image) => [image.number, image]));
