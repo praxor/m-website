@@ -353,9 +353,6 @@ html.is-loaded .contact-inner {
   max-width: none;
   max-height: none;
 }
-.social-btn svg path {
-  fill: currentColor;
-}
 .social-btn:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
@@ -540,9 +537,6 @@ a:focus-visible {
   background: var(--card);
   border-bottom: 1px solid var(--muted-border);
 }
-:root[data-announcement-visible="true"] .site-header {
-  top: 25px;
-}
 .site-header .container {
   max-width: 1100px;
   margin: 0 auto;
@@ -721,6 +715,108 @@ a:focus-visible {
   --plinko-label: #e0b83a !important;
   --accent-2: #e0b83a !important;
 }
+:root[data-site-theme="halloween"],
+:root[data-force-theme="true"][data-site-theme="halloween"] *,
+:root .settings-menu .sm-theme-profile[data-site-theme="halloween"] {
+  --bg: #060303 !important;
+  --card: #120a08 !important;
+  --text: #ffe6cf !important;
+  --muted: #d99a62 !important;
+  --accent: #ff7518 !important;
+  --accent-contrast: #060303 !important;
+  --accent-dark: #c4510a !important;
+  --accent-10: rgba(255, 117, 24, 0.1) !important;
+  --accent-12: rgba(255, 117, 24, 0.18) !important;
+  --muted-border: rgba(255, 117, 24, 0.28) !important;
+  --danger: #ff5a5a !important;
+  --pattern-url: none !important;
+  --overlay: rgba(0, 0, 0, 0.8) !important;
+  --shadow-soft: rgba(0, 0, 0, 0.5) !important;
+  --shadow-strong: rgba(0, 0, 0, 0.75) !important;
+  --surface-hover: rgba(255, 117, 24, 0.07) !important;
+  --surface-inset: rgba(0, 0, 0, 0.35) !important;
+  --code-bg: #030101 !important;
+  --image-scrim: rgba(0, 0, 0, 0.8) !important;
+  --on-image: #ffffff !important;
+  --plinko-board: rgba(6, 3, 3, 0.5) !important;
+  --plinko-slot: #8a3a0a !important;
+  --plinko-peg: var(--accent) !important;
+  --plinko-label: #ff9a3d !important;
+  --accent-2: #ff9a3d !important;
+  --accent-3: #ff9a3d !important;
+}
+/* Halloween: orange on black; Creepster headings. */
+:root[data-site-theme="halloween"] body:not(.cult-page),
+:root[data-force-theme="true"][data-site-theme="halloween"] body {
+  color-scheme: dark;
+  background-color: #060303;
+  background-image: linear-gradient(180deg, #050303 0%, #0a0504 100%);
+  background-attachment: fixed;
+}
+:is(
+    :root[data-site-theme="halloween"] body:not(.cult-page),
+    :root[data-site-theme="halloween"][data-force-theme="true"]
+  )
+  :is(h1, h2, h3, .logo) {
+  font-family: "Creepster", "IBM Plex Sans", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+}
+:root[data-site-theme="halloween"] body:not(.cult-page)::before,
+:root[data-force-theme="true"][data-site-theme="halloween"] body::before {
+  display: none;
+}
+:is(
+    :root[data-site-theme="halloween"] body:not(.cult-page),
+    :root[data-site-theme="halloween"][data-force-theme="true"]
+  )
+  :is(.cta, .btn, .music-play) {
+  background-image: linear-gradient(180deg, #ff9a3d, #e0560a);
+  border-color: #8a3a0a;
+  color: #060303;
+}
+:is(
+    :root[data-site-theme="halloween"] body:not(.cult-page),
+    :root[data-site-theme="halloween"][data-force-theme="true"]
+  )
+  a:not(.cta):not(.btn):not(.music-play) {
+  color: #ff9a3d;
+}
+:is(
+    :root[data-site-theme="halloween"] body:not(.cult-page),
+    :root[data-site-theme="halloween"][data-force-theme="true"]
+  )
+  a:not(.cta):not(.btn):not(.music-play):hover {
+  color: #ffc58a;
+  text-decoration: underline;
+}
+:root[data-site-theme="halloween"] .contact-panel .contact-overlay {
+  background: rgba(0, 0, 0, 0.78);
+}
+:root[data-site-theme="halloween"] .contact-panel .contact-inner {
+  background: #050302;
+  border-color: #ff7518;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.8);
+  --text: #ffd9b8;
+  --muted: #ff9a3d;
+  --accent: #ff7518;
+  --accent-12: rgba(255, 117, 24, 0.14);
+  --muted-border: rgba(255, 117, 24, 0.4);
+  --surface-hover: rgba(255, 117, 24, 0.06);
+}
+:root[data-site-theme="halloween"] .contact-panel .contact-inner::before {
+  background: #ff7518;
+}
+:root[data-site-theme="halloween"] body .hero-copy h1 {
+  font-size: clamp(1.9rem, 7vw, 3.4rem);
+  line-height: 1.05;
+}
+:root[data-site-theme="halloween"] body .hero-kicker {
+  font-size: clamp(0.76rem, 2.6vw, 0.9rem);
+}
+:root[data-site-theme="halloween"] body .hero-lead {
+  font-size: clamp(0.92rem, 3vw, 1.15rem);
+}
 :root[data-site-theme="toohi-ian"],
 :root[data-force-theme="true"][data-site-theme="toohi-ian"] *,
 :root .settings-menu .sm-theme-profile[data-site-theme="toohi-ian"] {
@@ -846,32 +942,32 @@ a:focus-visible {
 :root[data-site-theme="mr-cake"],
 :root .settings-menu .sm-theme-profile[data-site-theme="mr-cake"] {
   color-scheme: light !important;
-  --bg: #ffffff !important;
-  --card: #141414 !important;
-  --text: #211e19 !important;
-  --muted: rgba(89, 83, 74, 0.72) !important;
-  --accent: #6b4c16 !important;
+  --bg: #f6f1e5 !important;
+  --card: #fffaf0 !important;
+  --text: #4c4f69 !important;
+  --muted: #6c6f85 !important;
+  --accent: #c5790d !important;
   --accent-contrast: #ffffff !important;
-  --accent-dark: #3c2c10 !important;
-  --accent-10: rgba(107, 76, 22, 0.1) !important;
-  --accent-12: rgba(107, 76, 22, 0.16) !important;
-  --muted-border: rgba(20, 18, 15, 0.15) !important;
-  --danger: #8a3324 !important;
+  --accent-dark: #a35f00 !important;
+  --accent-10: rgba(223, 142, 29, 0.12) !important;
+  --accent-12: rgba(223, 142, 29, 0.2) !important;
+  --muted-border: #e4d9c3 !important;
+  --danger: #d20f39 !important;
   --pattern-url: none !important;
   --overlay: rgba(0, 0, 0, 0.64) !important;
-  --shadow-soft: rgba(0, 0, 0, 0.12) !important;
-  --shadow-strong: rgba(0, 0, 0, 0.5) !important;
-  --surface-hover: rgba(0, 0, 0, 0.035) !important;
-  --surface-inset: rgba(0, 0, 0, 0.025) !important;
-  --code-bg: #f4f1e9 !important;
+  --shadow-soft: rgba(126, 98, 49, 0.1) !important;
+  --shadow-strong: rgba(76, 79, 105, 0.2) !important;
+  --surface-hover: rgba(223, 142, 29, 0.08) !important;
+  --surface-inset: rgba(76, 79, 105, 0.04) !important;
+  --code-bg: #f0e8d8 !important;
   --image-scrim: rgba(0, 0, 0, 0.72) !important;
   --on-image: #ffffff !important;
-  --plinko-board: #141414 !important;
-  --plinko-slot: #6b4c16 !important;
+  --plinko-board: #fffaf0 !important;
+  --plinko-slot: #df8e1d !important;
   --plinko-peg: var(--accent) !important;
-  --plinko-label: #3c2c10 !important;
-  --accent-2: #9a7d45 !important;
-  --accent-3: #e9ddc2 !important;
+  --plinko-label: #a35f00 !important;
+  --accent-2: #df8e1d !important;
+  --accent-3: #fe640b !important;
 }
 :root[data-site-theme="cult"],
 :root[data-force-theme="true"][data-site-theme="cult"] *,
@@ -1363,7 +1459,7 @@ a:focus-visible {
     :root[data-site-theme="macintoshing"] body:not(.cult-page),
     :root[data-site-theme="macintoshing"][data-force-theme="true"]
   )
-  .music-control {
+  .music-control:not(.music-play) {
   background: linear-gradient(#ffffff, #e6e6e6);
   border-color: #bbbbbb;
   color: #333333;
@@ -1474,9 +1570,9 @@ a:focus-visible {
     :root[data-site-theme="true-fr"][data-force-theme="true"]
   )
   .sm-ach.is-unlocked {
-  border-color: var(--accent-3) !important;
-  background: rgba(255, 213, 42, 0.1) !important;
-  box-shadow: inset 3px 0 0 var(--accent-3) !important;
+  border-bottom-color: var(--accent-3) !important;
+  background: transparent !important;
+  box-shadow: none !important;
 }
 :is(
     :root[data-site-theme="true-fr"] body:not(.cult-page),
@@ -1484,14 +1580,14 @@ a:focus-visible {
   )
   .sm-ach.is-unlocked .sm-ach-icon {
   border-color: var(--accent-3) !important;
-  background: var(--accent-3) !important;
+  background: transparent !important;
   color: #071011 !important;
 }
 :is(
     :root[data-site-theme="true-fr"] body:not(.cult-page),
     :root[data-site-theme="true-fr"][data-force-theme="true"]
   )
-  :is(.sm-reward-toast, .sm-reward-item) {
+  .sm-reward-toast {
   border-color: var(--accent-3) !important;
 }
 :is(
@@ -1623,7 +1719,7 @@ a:focus-visible {
     :root[data-site-theme="praxor-pop"] body:not(.cult-page),
     :root[data-site-theme="praxor-pop"][data-force-theme="true"]
   )
-  .music-control {
+  .music-control:not(.music-play) {
   background: linear-gradient(#ffffff, #fdeef8);
   border-color: var(--muted-border);
   color: var(--muted);
@@ -1909,11 +2005,11 @@ img.bouncy-cat.theme-cat-solid-red {
   color: #d1f0d9;
 }
 
-/* Mr. Cake: white porcelain outside, dark cake layers with off-white text. */
+/* Vanilla: warm Catppuccin Latte surfaces with soft golden accents. */
 :root[data-site-theme="mr-cake"] body:not(.cult-page),
 :root[data-force-theme="true"][data-site-theme="mr-cake"] body {
-  color: #211e19;
-  background-color: #ffffff;
+  color: #4c4f69;
+  background-color: #f6f1e5;
   background-image: none;
 }
 :root[data-site-theme="mr-cake"] body:not(.cult-page)::before,
@@ -1942,35 +2038,35 @@ img.bouncy-cat.theme-cat-solid-red {
     .cult-writing-space,
     .contact-inner
   ) {
-  --text: #f5f1e8 !important;
-  --muted: rgba(208, 200, 184, 0.72) !important;
-  --accent: #f5e8c9 !important;
-  --accent-contrast: #1a1710 !important;
-  --accent-dark: #c7b58d !important;
-  --accent-10: rgba(245, 232, 201, 0.1) !important;
-  --accent-12: rgba(245, 232, 201, 0.16) !important;
-  --muted-border: rgba(245, 241, 232, 0.16) !important;
-  background-color: #141414 !important;
+  --text: #4c4f69 !important;
+  --muted: #6c6f85 !important;
+  --accent: #df8e1d !important;
+  --accent-contrast: #4c4f69 !important;
+  --accent-dark: #c5790d !important;
+  --accent-10: rgba(223, 142, 29, 0.12) !important;
+  --accent-12: rgba(223, 142, 29, 0.2) !important;
+  --muted-border: #e4d9c3 !important;
+  background-color: #fffaf0 !important;
   background-image: none !important;
-  border-color: rgba(245, 241, 232, 0.16);
-  color: #f5f1e8;
+  border-color: #e4d9c3;
+  color: #4c4f69;
 }
 :is(
     :root[data-site-theme="mr-cake"] body:not(.cult-page),
     :root[data-site-theme="mr-cake"][data-force-theme="true"]
   )
   :is(.cta, .btn, .music-play) {
-  background: #f5e8c9;
-  border-color: #c7b58d;
-  color: #1a1710;
+  background: #df8e1d;
+  border-color: #c5790d;
+  color: #4c4f69;
   box-shadow: none;
 }
 .settings-menu .sm-theme-profile[data-site-theme="mr-cake"] {
-  background: #ffffff;
+  background: #f6f1e5;
   background-image: none;
 }
 .settings-menu .sm-theme-profile[data-site-theme="mr-cake"] .sm-mini-preview {
-  background: #ffffff;
+  background: #f6f1e5;
   background-image: none;
 }
 

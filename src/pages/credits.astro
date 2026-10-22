@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import CreditSection from "../components/CreditSection.astro";
+import Icon from "../components/Icon.astro";
 import {
   creditsSections,
   creditsSequence,
@@ -202,10 +203,8 @@ for (const item of creditsSequence) {
         aria-pressed="false"
         title="Mute credits audio"
       >
-        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <path d="M4 10v4h4l5 4V6l-5 4H4z" />
-          <path data-mute-mark d="m17 9 5 6m0-6-5 6" />
-        </svg>
+        <Icon name="volume" data-mute-on aria-hidden="true" focusable="false" />
+        <Icon name="volume-off" data-mute-mark aria-hidden="true" focusable="false" />
       </button>
       <button
         type="button"
@@ -213,9 +212,7 @@ for (const item of creditsSequence) {
         aria-label="Close credits"
         title="Close credits"
       >
-        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <path d="m6 6 12 12M18 6 6 18" />
-        </svg>
+        <Icon name="x" aria-hidden="true" focusable="false" />
       </button>
     </nav>
     <button class="credits-return" type="button" data-credits-return hidden>
@@ -463,7 +460,8 @@ for (const item of creditsSequence) {
     stroke-linecap: round;
     stroke-linejoin: round;
   }
-  .credits-controls [data-mute-mark] {
+  .credits-controls [data-mute-mark],
+  .credits-controls [aria-pressed="true"] [data-mute-on] {
     display: none;
   }
   .credits-audio-prompt {

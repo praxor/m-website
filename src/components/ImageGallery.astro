@@ -1,5 +1,6 @@
 ﻿---
 import type { ArtworkCollection } from "../scripts/site-state";
+import Icon from "./Icon.astro";
 
 export interface GalleryItem {
   src: string;
@@ -45,7 +46,7 @@ const { items, title, label = "artwork", achievementCollection } = Astro.props;
           data-gallery-close
           aria-label="Close gallery"
         >
-          ×
+          <Icon name="x" width="18" height="18" aria-hidden="true" />
         </button>
       </div>
     </header>
@@ -56,9 +57,7 @@ const { items, title, label = "artwork", achievementCollection } = Astro.props;
         data-gallery-previous
         aria-label={`Previous ${label}`}
       >
-        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <path d="m15 18-6-6 6-6" />
-        </svg>
+        <Icon name="chevron-left" aria-hidden="true" focusable="false" />
       </button>
       <figure class="gallery-feature">
         <div class="gallery-image-frame">
@@ -75,9 +74,7 @@ const { items, title, label = "artwork", achievementCollection } = Astro.props;
         data-gallery-next
         aria-label={`Next ${label}`}
       >
-        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <path d="m9 18 6-6-6-6" />
-        </svg>
+        <Icon name="chevron-right" aria-hidden="true" focusable="false" />
       </button>
     </div>
     <nav class="gallery-thumbnails" aria-label={`Choose ${label}`}>
@@ -141,6 +138,13 @@ const { items, title, label = "artwork", achievementCollection } = Astro.props;
   .fanart-gallery[open] {
     display: grid;
     place-items: center;
+  }
+  :root[data-announcement-visible="true"] .fanart-gallery {
+    inset: 25px 0 0;
+    height: calc(100dvh - 25px);
+  }
+  :root[data-announcement-visible="true"] .fanart-gallery::backdrop {
+    background: transparent;
   }
   .fanart-gallery::backdrop {
     background: var(--bg);
@@ -230,15 +234,11 @@ const { items, title, label = "artwork", achievementCollection } = Astro.props;
     height: 42px;
     border-radius: 0;
   }
-  .gallery-step svg {
+  :global(.gallery-step svg) {
     display: block;
     width: 18px;
     height: 18px;
-    fill: none;
-    stroke: currentColor;
     stroke-width: 1.8;
-    stroke-linecap: round;
-    stroke-linejoin: round;
   }
   .gallery-close:hover,
   .gallery-step:hover {

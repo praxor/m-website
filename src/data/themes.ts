@@ -11,7 +11,19 @@ export type ThemeDefinition = {
   preview: ThemePreviewTokens;
   /** Theme is only selectable once this achievement is unlocked. */
   unlockedBy?: AchievementId;
+  /** Theme is only available on these days of the given month, every year. */
+  season?: ThemeSeason;
+  /** During the season, this theme takes over the slot (and default role) of the theme with this id. */
+  replaces?: string;
 };
+
+export type ThemeSeason = { month: number; startDay: number; endDay: number };
+
+export const isInSeason = (season?: ThemeSeason, now = new Date()) =>
+  !season ||
+  (now.getMonth() + 1 === season.month &&
+    now.getDate() >= season.startDay &&
+    now.getDate() <= season.endDay);
 
 export type ThemePreviewTokens = {
   bg: string;
@@ -25,6 +37,10 @@ export type ThemePreviewTokens = {
 };
 
 export const DEFAULT_THEME = "praxorian";
+
+/** The theme currently standing in for `id` because of an active season, if any. */
+export const seasonalReplacement = (id: string, now = new Date()) =>
+  themes.find((t) => t.replaces === id && isInSeason(t.season, now));
 
 export const themes: readonly ThemeDefinition[] = [
   {
@@ -63,16 +79,16 @@ export const themes: readonly ThemeDefinition[] = [
     id: "mr-cake",
     name: "Vanilla",
     mode: "light",
-    swatch: "#fff3d8",
+    swatch: "linear-gradient(135deg,#fffaf0 0%,#f3e8cb 62%,#dfaa52)",
     preview: {
-      bg: "#ffffff",
-      card: "#141414",
-      text: "#211e19",
-      muted: "rgba(89,83,74,.72)",
-      accent: "#6b4c16",
+      bg: "#f6f1e5",
+      card: "#fffaf0",
+      text: "#4c4f69",
+      muted: "#6c6f85",
+      accent: "#c5790d",
       accentContrast: "#ffffff",
-      accent10: "rgba(107,76,22,.1)",
-      mutedBorder: "rgba(20,18,15,.15)",
+      accent10: "rgba(223,142,29,.12)",
+      mutedBorder: "#e4d9c3",
     },
   },
   {
@@ -223,5 +239,24 @@ export const themes: readonly ThemeDefinition[] = [
       mutedBorder: "rgba(255,255,255,.22)",
     },
     unlockedBy: "surpriseSurprise",
+  },
+  {
+    id: "halloween",
+    name: "Halloween",
+    mode: "dark",
+    swatch: "linear-gradient(135deg,#050303 55%,#ff7518)",
+    preview: {
+      bg: "#060303",
+      card: "#120a08",
+      text: "#ffe6cf",
+      muted: "#d99a62",
+      accent: "#ff7518",
+      accentContrast: "#060303",
+      accent10: "rgba(255,117,24,.1)",
+      mutedBorder: "rgba(255,117,24,.28)",
+    },
+    season: { month: 10, startDay: 24, endDay: 31 },
+    replaces: "praxorian",
+    unlockedBy: "happyHalloween",
   },
 ];

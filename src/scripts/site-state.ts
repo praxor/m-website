@@ -1,9 +1,11 @@
 import { achievements, type AchievementDefinition, type AchievementId, type AchievementReward } from '../data/achievements';
 import { characters } from '../data/characters';
-import { DEFAULT_THEME, themes, type ThemeDefinition } from '../data/themes';
+import { DEFAULT_THEME, isInSeason, seasonalReplacement, themes, type ThemeDefinition } from '../data/themes';
 import { PLINKO_STATE_EVENT, type PlinkoStateDetail } from './plinko-events';
 
 export const STORAGE_KEY = 'praxor:site-state';
+/** Deliberately not in RESETTABLE_KEYS: permanent achievements survive Reset Data. */
+export const PERMANENT_STORAGE_KEY = 'praxor:permanent-achievements';
 /** Every localStorage key holding personalised data; register new ones here so Reset Data clears them. */
 const RESETTABLE_KEYS: string[] = [STORAGE_KEY];
 export const registerResettableKey = (key: string) => { if (!RESETTABLE_KEYS.includes(key)) RESETTABLE_KEYS.push(key); };
@@ -51,7 +53,7 @@ export type AchievementView = {
 	goal: number;
 	progressVisible: boolean;
 	goalVisible: boolean;
-	category: 'site' | 'characters' | 'plinko' | 'stats';
+	category: 'site' | 'characters' | 'plinko' | 'stats' | 'permanent';
 	hint?: string;
 	unit?: 'seconds';
 };
@@ -203,10 +205,33 @@ const sanitize = (raw: unknown): SiteState => {
 const read = (): SiteState => {
 	try {
 		const text = window.localStorage.getItem(STORAGE_KEY);
-		return sanitize(text ? JSON.parse(text) : null);
+		return withPermanent(sanitize(text ? JSON.parse(text) : null));
 	} catch {
-		return defaultState();
+		return withPermanent(defaultState());
 	}
+};
+
+const permanentIds = () => (Object.keys(achievements) as AchievementId[]).filter((id) => (achievements[id] as AchievementDefinition).permanent);
+
+/** Restores permanent achievements from their own storage key. */
+const withPermanent = (state: SiteState): SiteState => {
+	try {
+		const saved: unknown = JSON.parse(window.localStorage.getItem(PERMANENT_STORAGE_KEY) || 'null');
+		if (!isRecord(saved)) return state;
+		for (const id of permanentIds()) {
+			const item = saved[id];
+			if (!isRecord(item) || item.unlocked !== true) continue;
+			state.achievements[id] = {
+				unlocked: true,
+				progress: goalOf(definitionOf(id)),
+				...(item.notified === true ? { notified: true } : {}),
+				...(typeof item.unlockedAt === 'number' ? { unlockedAt: item.unlockedAt } : {}),
+			};
+		}
+	} catch {
+		// Storage unavailable or corrupt: fall back to the main state.
+	}
+	return state;
 };
 
 let cache: SiteState | null = null;
@@ -215,11 +240,32 @@ const getState = () => (cache ??= read());
 
 const emit = (name: string, detail?: unknown) => window.dispatchEvent(new CustomEvent(name, { detail }));
 
+const RECURSIVE_STAT_GOAL = 67;
+
+/** Every numeric stat shown in the menu's Info tab (seconds for the time stats). */
+const checkRecursiveStats = () => {
+	if (getState().achievements.recursiveStats67?.unlocked) return;
+	const { stats, siteVisits } = getState();
+	const values = [
+		stats.activeSeconds, stats.idleSeconds, stats.postsClicked, stats.pagesVisited, stats.musicListenedSeconds,
+		stats.songsPlayed, siteVisits, stats.plinkoRoundsPlayed, stats.plinkoResets, stats.plinkoRoundsPlayedInPEM,
+		stats.highestPlinkoScore, stats.totalPlinkoScore, stats.settingsClicks, stats.catsExploded, stats.timesWatchedCredits,
+	];
+	if (values.every((value) => value >= RECURSIVE_STAT_GOAL)) unlockAchievement('recursiveStats67');
+};
+
 /** Writes to storage without notifying listeners; used for high-frequency data like active time. */
 export const flushState = () => {
 	if (frozen) return;
+	checkRecursiveStats();
 	try {
 		window.localStorage.setItem(STORAGE_KEY, JSON.stringify(getState()));
+		const permanent: Record<string, AchievementState> = {};
+		for (const id of permanentIds()) {
+			const saved = getState().achievements[id];
+			if (saved?.unlocked) permanent[id] = saved;
+		}
+		if (Object.keys(permanent).length) window.localStorage.setItem(PERMANENT_STORAGE_KEY, JSON.stringify(permanent));
 	} catch {
 		// Storage unavailable or full: keep working from memory.
 	}
@@ -244,20 +290,33 @@ const entry = (id: AchievementId): AchievementState => (getState().achievements[
 
 export const isThemeAvailable = (id: string) => {
 	const theme = themes.find((item) => item.id === id);
-	return !!theme && (!theme.unlockedBy || getState().achievements[theme.unlockedBy]?.unlocked === true);
+	if (!theme) return false;
+	if (theme.season && isInSeason(theme.season)) return true;
+	if (theme.unlockedBy) return getState().achievements[theme.unlockedBy]?.unlocked === true;
+	return !theme.season;
+};
+
+/** Whether the theme appears in the selector: seasonal themes only when usable, replaced themes never. */
+export const isThemeListed = (id: string) => {
+	const theme = themes.find((item) => item.id === id);
+	return !!theme && !seasonalReplacement(id) && (!theme.season || isThemeAvailable(id));
 };
 
 export const getAvailableThemes = (): ThemeDefinition[] => themes.filter((item) => isThemeAvailable(item.id));
 
-/** The stored theme if still selectable, otherwise the default. */
-export const effectiveTheme = () => (isThemeAvailable(getState().settings.theme) ? getState().settings.theme : DEFAULT_THEME);
+/** The stored theme if still selectable, otherwise the (possibly seasonal) default. */
+export const effectiveTheme = () => {
+	const stored = getState().settings.theme;
+	const id = seasonalReplacement(stored)?.id ?? stored;
+	return isThemeAvailable(id) ? id : (seasonalReplacement(DEFAULT_THEME)?.id ?? DEFAULT_THEME);
+};
 
 // Settings
 
 /** Erases all stored personalised data; later writes are blocked so a pending flush can't restore it. */
 export const resetAllData = () => {
 	frozen = true;
-	cache = defaultState();
+	cache = withPermanent(defaultState());
 	try {
 		for (const key of RESETTABLE_KEYS) window.localStorage.removeItem(key);
 		window.sessionStorage.removeItem(VISIT_SESSION_KEY);
@@ -328,6 +387,7 @@ export const recordTimeSample = (pathname: string, seconds: number, active: bool
 		const slug = segments[1];
 		state.stats.characterSeconds[slug] = (state.stats.characterSeconds[slug] ?? 0) + seconds;
 	}
+	checkRecursiveStats();
 };
 
 let lastMusicListenFlush = 0;
@@ -335,6 +395,7 @@ let lastMusicListenFlush = 0;
 export const recordMusicListenSeconds = (seconds: number) => {
 	if (!Number.isFinite(seconds) || seconds <= 0) return;
 	getState().stats.musicListenedSeconds += seconds;
+	checkRecursiveStats();
 	const now = Date.now();
 	if (now - lastMusicListenFlush >= 5000) {
 		lastMusicListenFlush = now;
@@ -570,6 +631,17 @@ const trackPageView = () => {
 	else if (syncDerived()) save();
 	const unlockId = document.querySelector<HTMLElement>('[data-unlock-on-view]')?.dataset.unlockOnView;
 	if (unlockId && unlockId in achievements) unlockAchievement(unlockId as AchievementId);
+	checkDateAchievements();
+};
+
+/** Unlocks date-bound achievements; also runs on interaction so a tab left open past midnight still counts. */
+const checkDateAchievements = () => {
+	const now = new Date();
+	for (const id of Object.keys(achievements) as AchievementId[]) {
+		const date = definitionOf(id).onDate;
+		if (!date || getState().achievements[id]?.unlocked) continue;
+		if (now.getMonth() + 1 === date.month && now.getDate() === date.day) unlockAchievement(id);
+	}
 };
 
 let lastTrackedPageLocation = '';
@@ -601,6 +673,8 @@ export const initSiteState = () => {
 	document.addEventListener('click', (event) => {
 		if ((event.target as Element).closest('[data-post-href]')) incrementUsageStat('postsClicked');
 	});
+	for (const type of ['pointerdown', 'keydown']) document.addEventListener(type, checkDateAchievements, { passive: true });
+	document.addEventListener('visibilitychange', () => { if (!document.hidden) checkDateAchievements(); });
 	window.addEventListener('storage', (event) => {
 		if (event.key !== STORAGE_KEY) return;
 		cache = read();

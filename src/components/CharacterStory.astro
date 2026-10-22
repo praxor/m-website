@@ -1,6 +1,7 @@
 ---
 import { marked } from "marked";
 import type { CharacterChapter } from "../data/characters";
+import Icon from "./Icon.astro";
 
 interface Props {
   chapters: CharacterChapter[];
@@ -70,7 +71,7 @@ const formatChapterDate = (date: string) => {
           data-story-close
           aria-label="Close chapter"
         >
-          ×
+          <Icon name="x" width="18" height="18" aria-hidden="true" />
         </button>
       </header>
       <div class="story-dialog-content" data-story-dialog-content></div>

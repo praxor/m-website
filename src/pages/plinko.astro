@@ -1,5 +1,6 @@
 ﻿---
 import Layout from "../layouts/Layout.astro";
+import Icon from "../components/Icon.astro";
 const base = import.meta.env.BASE_URL;
 ---
 
@@ -15,9 +16,7 @@ const base = import.meta.env.BASE_URL;
             aria-label="Reset Plinko"
             title="Reset Plinko"
           >
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <path d="M3 11a8 8 0 0 1 14.8-4L20 10M20 4v6h-6M21 13a8 8 0 0 1-14.8 4L4 14M4 20v-6h6" />
-            </svg>
+            <Icon name="refresh" aria-hidden="true" focusable="false" />
           </button>
         </div>
         <div class="plinko-board">
@@ -41,14 +40,7 @@ const base = import.meta.env.BASE_URL;
       >
         <div class="plinko-score-heading">
           <h2>points</h2>
-          <svg
-            class="plinko-score-icon"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-            focusable="false"
-          >
-            <path d="m12 2.5 2.8 5.7 6.3.9-4.6 4.5 1.1 6.3-5.6-3-5.6 3 1.1-6.3L3 9.1l6.3-.9L12 2.5z" />
-          </svg>
+          <Icon name="star" class="plinko-score-icon" aria-hidden="true" focusable="false" />
         </div>
         <p>
           <span>total</span>
@@ -148,15 +140,11 @@ const base = import.meta.env.BASE_URL;
       color 140ms ease,
       box-shadow 140ms ease;
   }
-  #plinko-reset svg {
+  :global(#plinko-reset svg) {
     display: block;
     width: 17px;
     height: 17px;
-    fill: none;
-    stroke: currentColor;
     stroke-width: 1.8;
-    stroke-linecap: round;
-    stroke-linejoin: round;
   }
   #plinko-reset:hover {
     transform: translateY(-2px);
@@ -213,15 +201,12 @@ const base = import.meta.env.BASE_URL;
     font-weight: 700;
     text-transform: uppercase;
   }
-  .plinko-score-icon {
+  :global(.plinko-score-icon) {
     display: block;
     width: 15px;
     height: 15px;
-    fill: none;
     stroke: var(--accent);
     stroke-width: 1.6;
-    stroke-linecap: round;
-    stroke-linejoin: round;
   }
   .plinko-score-panel p {
     display: flex;

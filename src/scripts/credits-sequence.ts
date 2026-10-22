@@ -21,7 +21,7 @@ export const initializeCreditsSequence = (baseUrl: string) => {
   const controls = screen?.querySelector<HTMLElement>('[data-credits-controls]');
   const closeButton = screen?.querySelector<HTMLButtonElement>('[data-credits-close]');
   const muteButton = screen?.querySelector<HTMLButtonElement>('[data-credits-mute]');
-  const muteMark = screen?.querySelector<SVGPathElement>('[data-mute-mark]');
+  const muteMark = screen?.querySelector<SVGElement>('[data-mute-mark]');
   const startAudioButton = screen?.querySelector<HTMLButtonElement>('[data-credits-audio-start]');
   const returnButton = screen?.querySelector<HTMLButtonElement>('[data-credits-return]');
   const flyingPraxor = screen?.querySelector<HTMLButtonElement>('[data-flying-praxor]');

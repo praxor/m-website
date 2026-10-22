@@ -1,6 +1,7 @@
 ﻿---
 const base = import.meta.env.BASE_URL;
 import { Image } from "astro:assets";
+import Icon from "./Icon.astro";
 ---
 
 <div
@@ -37,7 +38,7 @@ import { Image } from "astro:assets";
           aria-pressed="false"
           title="Shuffle"
         >
-          &#8645;
+          <Icon name="arrows-shuffle" width="16" height="16" aria-hidden="true" />
         </button>
         <button
           class="music-control"
@@ -45,7 +46,7 @@ import { Image } from "astro:assets";
           data-action="previous"
           aria-label="Previous track"
         >
-          &#9664;&#9664;
+          <Icon name="player-track-prev" width="16" height="16" aria-hidden="true" />
         </button>
         <button
           class="music-control"
@@ -62,7 +63,7 @@ import { Image } from "astro:assets";
           data-action="play"
           aria-label="Play"
         >
-          &#9654;
+          <Icon name="player-play" width="18" height="18" aria-hidden="true" />
         </button>
         <button
           class="music-control"
@@ -79,7 +80,7 @@ import { Image } from "astro:assets";
           data-action="next"
           aria-label="Next track"
         >
-          &#9654;&#9654;
+          <Icon name="player-track-next" width="16" height="16" aria-hidden="true" />
         </button>
         <button
           class="music-control"
@@ -89,12 +90,12 @@ import { Image } from "astro:assets";
           aria-pressed="false"
           title="Repeat"
         >
-          &#8635;
+          <Icon name="repeat" width="16" height="16" aria-hidden="true" />
         </button>
       </div>
       <div class="music-player-tools">
         <label class="music-volume" aria-label="Volume">
-          <span aria-hidden="true">&#9835;</span>
+          <Icon name="music" width="16" height="16" aria-hidden="true" />
           <input
             id="music-volume"
             type="range"
@@ -112,7 +113,7 @@ import { Image } from "astro:assets";
           aria-controls="music-playlist"
           aria-label="Toggle playlist"
         >
-          &#9776;
+          <Icon name="playlist" width="17" height="17" aria-hidden="true" />
         </button>
       </div>
     </div>
@@ -194,7 +195,7 @@ import { Image } from "astro:assets";
     z-index: 0;
     width: 100%;
     height: 100%;
-    opacity: 0.32;
+    opacity: 0.42;
     pointer-events: none;
   }
   .music-player-main {
@@ -672,6 +673,7 @@ import { Image } from "astro:assets";
     recordSongClick,
     recordTrackPlay,
   } from "../scripts/site-state";
+  import { createTablerIcon } from "../scripts/tabler-icons";
 
   const initializeMusicPlayer = () => {
     const player = document.querySelector<HTMLElement>(
@@ -716,8 +718,16 @@ import { Image } from "astro:assets";
     let audioContext: AudioContext | null = null;
     let analyser: AnalyserNode | null = null;
     let sourceNode: MediaElementAudioSourceNode | null = null;
+    let outputGain: GainNode | null = null;
     let visualizerFrame = 0;
-    let waveformState: number[] = [];
+    const waveformPoints = 192;
+    const waveformWindow = 1024;
+    let visualizerSamples: Float32Array<ArrayBuffer> | null = null;
+    // Smoothed, normalized waveform shape (-1..1), one value per drawn point
+    const waveformState = new Float32Array(waveformPoints);
+    let visualizerRms = 0;
+    let visualizerColor = "";
+    let lastVisualizerFrameTime = 0;
     type RollingCatState = {
       element: HTMLElement;
       lineIndex: number;
@@ -846,10 +856,31 @@ import { Image } from "astro:assets";
         button.dataset.playerSrc = track.src || "";
         button.dataset.playerTitle = track.title || `track ${index + 1}`;
         button.dataset.trackTitle = button.dataset.playerTitle;
-        const artist = track.artist
-          ? `<strong>${track.artist}</strong><b aria-hidden="true">·</b>`
-          : "";
-        button.innerHTML = `<span class="music-track-play" aria-hidden="true">▶</span><small>${String(index + 1).padStart(2, "0")}</small><span class="music-track-divider" aria-hidden="true"></span><span class="music-track-details">${artist}<em>${button.dataset.playerTitle}</em></span><time>${track.duration || "--:--"}</time>`;
+        const playIcon = document.createElement("span");
+        playIcon.className = "music-track-play";
+        playIcon.setAttribute("aria-hidden", "true");
+        playIcon.append(createTablerIcon("player-play"));
+        const number = document.createElement("small");
+        number.textContent = String(index + 1).padStart(2, "0");
+        const divider = document.createElement("span");
+        divider.className = "music-track-divider";
+        divider.setAttribute("aria-hidden", "true");
+        const details = document.createElement("span");
+        details.className = "music-track-details";
+        if (track.artist) {
+          const artistName = document.createElement("strong");
+          artistName.textContent = track.artist;
+          const artistDivider = document.createElement("b");
+          artistDivider.setAttribute("aria-hidden", "true");
+          artistDivider.textContent = "·";
+          details.append(artistName, artistDivider);
+        }
+        const trackTitle = document.createElement("em");
+        trackTitle.textContent = button.dataset.playerTitle;
+        details.append(trackTitle);
+        const duration = document.createElement("time");
+        duration.textContent = track.duration || "--:--";
+        button.append(playIcon, number, divider, details, duration);
         playlist.append(button);
       });
       tracks = Array.from(
@@ -887,33 +918,31 @@ import { Image } from "astro:assets";
       return `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, "0")}`;
     };
 
+    const refreshVisualizerColor = () => {
+      visualizerColor = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim();
+    };
+
     const stopVisualizer = () => {
       if (visualizerFrame) cancelAnimationFrame(visualizerFrame);
       visualizerFrame = 0;
-      waveformState = [];
+      visualizerRms = 0;
+      waveformState.fill(0);
+      lastVisualizerFrameTime = 0;
       const context = visualizer?.getContext("2d");
-      if (context && visualizer)
+      if (context && visualizer) {
+        context.setTransform(1, 0, 0, 1, 0, 0);
         context.clearRect(0, 0, visualizer.width, visualizer.height);
+      }
     };
 
     const drawVisualizer = () => {
       const playerAudio = audio;
 
-      if (
-        !visualizer ||
-        !analyser ||
-        !audioContext ||
-        !playerAudio ||
-        playerAudio.paused
-      ) {
-        return;
-      }
+      if (!visualizer || !analyser || !audioContext || !playerAudio) return;
 
-      if (prefersReducedMotion()) {
-        visualizerFrame = 0;
-        visualizer
-          .getContext("2d")
-          ?.clearRect(0, 0, visualizer.width, visualizer.height);
+      // Paused (including track changes, which pause without a pause event) or reduced motion
+      if (playerAudio.paused || prefersReducedMotion()) {
+        stopVisualizer();
         return;
       }
 
@@ -923,6 +952,10 @@ import { Image } from "astro:assets";
       const ratio = window.devicePixelRatio || 1;
       const width = visualizer.clientWidth;
       const height = visualizer.clientHeight;
+      if (!width || !height) {
+        visualizerFrame = requestAnimationFrame(drawVisualizer);
+        return;
+      }
 
       if (
         visualizer.width !== Math.round(width * ratio) ||
@@ -935,31 +968,63 @@ import { Image } from "astro:assets";
       context.setTransform(ratio, 0, 0, ratio, 0, 0);
       context.clearRect(0, 0, width, height);
 
-      const samples = new Uint8Array(analyser.fftSize);
-      analyser.getByteTimeDomainData(samples);
+      if (!visualizerSamples) {
+        visualizerSamples = new Float32Array(analyser.fftSize);
+      }
+      analyser.getFloatTimeDomainData(visualizerSamples);
 
-      context.beginPath();
-      context.strokeStyle = getComputedStyle(document.documentElement)
-        .getPropertyValue("--accent")
-        .trim();
+      const now = performance.now();
+      // Clamped so a long gap (hidden tab) doesn't cause a jump
+      const elapsed = lastVisualizerFrameTime ? Math.min((now - lastVisualizerFrameTime) / 1000, 0.1) : 1 / 60;
+      lastVisualizerFrameTime = now;
 
-      context.lineWidth = 1;
-      context.lineJoin = "miter";
-      context.lineCap = "butt";
+      let sumSquares = 0;
+      for (let index = 0; index < visualizerSamples.length; index++) {
+        const sample = visualizerSamples[index];
+        sumSquares += sample * sample;
+      }
+      const rms = Math.sqrt(sumSquares / visualizerSamples.length);
 
-      for (let index = 0; index < samples.length; index += 2) {
-        const x = (index / (samples.length - 1)) * width;
-        const target = samples[index] / 255;
+      // Fast attack, slower release: follows loudness without flicker
+      const rmsTime = rms > visualizerRms ? 0.04 : 0.2;
+      visualizerRms += (rms - visualizerRms) * (1 - Math.exp(-elapsed / rmsTime));
 
-        const y = target * height * 1.36 - height * 0.18;
+      // Map smoothed RMS (dBFS) to wave height; below about -58 dB it is treated as silence/noise
+      const level = Math.max(0, Math.min(1, (20 * Math.log10(visualizerRms + 1e-6) + 58) / 54));
+      const amplitude = Math.pow(level, 1.6) * 0.92;
+      const centerY = height / 2;
+      const maxWaveHeight = height * 0.5;
 
-        if (index === 0) {
-          context.moveTo(x, y);
-        } else {
-          context.lineTo(x, y);
+      // Start at a rising zero crossing so the shape stays visually stable between frames
+      let start = 0;
+      const searchEnd = visualizerSamples.length - waveformWindow;
+      for (let index = 1; index < searchEnd; index++) {
+        if (visualizerSamples[index - 1] < 0 && visualizerSamples[index] >= 0) {
+          start = index;
+          break;
         }
       }
 
+      // Shape is scaled relative to the RMS envelope, then soft-limited with tanh so peaks never hard clip
+      const shapeScale = 0.9 / Math.max(visualizerRms, 0.01);
+      const shapeSmoothing = 1 - Math.exp(-elapsed / 0.022);
+      for (let point = 0; point < waveformPoints; point++) {
+        const sample = visualizerSamples[start + Math.round((point / (waveformPoints - 1)) * (waveformWindow - 1))];
+        const target = Math.tanh(sample * shapeScale);
+        waveformState[point] += (target - waveformState[point]) * shapeSmoothing;
+      }
+
+      context.beginPath();
+      for (let point = 0; point < waveformPoints; point++) {
+        const x = (point / (waveformPoints - 1)) * width;
+        const y = centerY - waveformState[point] * amplitude * maxWaveHeight;
+        if (point === 0) context.moveTo(x, y);
+        else context.lineTo(x, y);
+      }
+      context.strokeStyle = visualizerColor || "#ffffff";
+      context.lineWidth = 1.5 + amplitude;
+      context.lineJoin = "round";
+      context.lineCap = "round";
       context.stroke();
 
       visualizerFrame = requestAnimationFrame(drawVisualizer);
@@ -972,16 +1037,23 @@ import { Image } from "astro:assets";
         audioContext = new AudioContext();
         sourceNode = audioContext.createMediaElementSource(audio);
         analyser = audioContext.createAnalyser();
+        outputGain = audioContext.createGain();
 
         analyser.fftSize = 2048;
         analyser.smoothingTimeConstant = 0;
+        visualizerSamples = new Float32Array(analyser.fftSize);
 
+        // The analyser must see the unattenuated signal, so volume is applied after it
+        outputGain.gain.value = audio.volume;
+        audio.volume = 1;
         sourceNode.connect(analyser);
-        analyser.connect(audioContext.destination);
+        analyser.connect(outputGain);
+        outputGain.connect(audioContext.destination);
       }
 
       if (audioContext.state === "suspended") await audioContext.resume();
 
+      refreshVisualizerColor();
       if (!visualizerFrame) drawVisualizer();
     };
 
@@ -1003,7 +1075,9 @@ import { Image } from "astro:assets";
 
     const updatePlayButton = () => {
       if (!playButton || !audio) return;
-      playButton.textContent = audio.paused ? "\u25b6" : "\u275a\u275a";
+      playButton.replaceChildren(
+        createTablerIcon(audio.paused ? "player-play" : "player-pause"),
+      );
       playButton.setAttribute("aria-label", audio.paused ? "Play" : "Pause");
       player?.classList.toggle("is-playing", !audio.paused);
     };
@@ -1418,7 +1492,9 @@ import { Image } from "astro:assets";
       if (actionButton.dataset.action === "repeat" && repeatButton) {
         repeatMode =
           repeatMode === "off" ? "all" : repeatMode === "all" ? "one" : "off";
-        repeatButton.textContent = repeatMode === "one" ? "1↻" : "↻";
+        repeatButton.replaceChildren(
+          createTablerIcon(repeatMode === "one" ? "repeat-once" : "repeat"),
+        );
         repeatButton.setAttribute("aria-pressed", String(repeatMode !== "off"));
         repeatButton.setAttribute("aria-label", `Repeat ${repeatMode}`);
       }
@@ -1494,12 +1570,21 @@ import { Image } from "astro:assets";
       }
     });
     volume?.addEventListener("input", () => {
-      if (audio) audio.volume = Number(volume.value);
+      const level = Number(volume.value);
+      if (outputGain) outputGain.gain.value = level;
+      else if (audio) audio.volume = level;
       volume.style.setProperty("--fill", `${Number(volume.value) * 100}%`);
     });
     window.addEventListener("site-state:change", () => {
+      refreshVisualizerColor();
       if (!prefersReducedMotion() && audio && !audio.paused && !visualizerFrame)
         void startVisualizer();
+    });
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden || prefersReducedMotion() || !audio || audio.paused)
+        return;
+      lastVisualizerFrameTime = 0;
+      void startVisualizer();
     });
     if (audio && volume) {
       audio.volume = Number(volume.value);

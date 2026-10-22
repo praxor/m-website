@@ -1,39 +1,22 @@
 ---
+import Icon from "./Icon.astro";
+
 interface Props {
   type: "update" | "major" | "post";
 }
 
 const { type } = Astro.props;
+const name = type === "update" ? "tool" : type === "major" ? "star" : "file-text";
 ---
 
-<svg
-  class="post-type-svg"
-  viewBox="0 0 24 24"
-  aria-hidden="true"
-  focusable="false"
->
-  {type === "update" ? (
-    <path d="M20.8 6.2a5.6 5.6 0 0 1-7.2 5.3l-6.2 6.2a2 2 0 1 1-2.8-2.8l6.2-6.2a5.6 5.6 0 0 1 7.1-7.2l-3.3 3.3 2.9 2.9 3.3-3.3z" />
-  ) : type === "major" ? (
-    <path d="m12 2.5 2.8 5.7 6.3.9-4.6 4.5 1.1 6.3-5.6-3-5.6 3 1.1-6.3L3 9.1l6.3-.9L12 2.5z" />
-  ) : (
-    <g>
-      <path d="M6.5 3.5h7l4 4v13h-11z" />
-      <path d="M13.5 3.5v4h4M9.5 11.5h5M9.5 15h5M9.5 18.5h5" />
-    </g>
-  )}
-</svg>
+<Icon name={name} class="post-type-svg" aria-hidden="true" focusable="false" />
 
-<style>
+<style is:global>
   /* Component styles: post type icon */
   .post-type-svg {
     display: block;
     width: 15px;
     height: 15px;
-    fill: none;
-    stroke: currentColor;
     stroke-width: 1.65;
-    stroke-linecap: round;
-    stroke-linejoin: round;
   }
 </style>

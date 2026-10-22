@@ -214,7 +214,7 @@ export const characters: Character[] = [
       { label: 'age', value: 'unknown' },
       { label: 'race', value: 'Sprout' },
       { label: 'technical name', value: '\'Pubbly\'' },
-      { label: 'nickname', value: '\'The Cuddler\'' },
+      { label: 'nicknames', value: '\'The Cuddler\'\niamveryhappy3' },
     ],
     references: [
       {
@@ -289,6 +289,9 @@ export const characters: Character[] = [
   },
   {
     name: 'Curse',
+    chapters: [
+      { number: 1, title: 'The Beginning', date: '2026-10-16', content: 'Uh.... WHAT DO YOU MEAN THERE\'S NO LORE!?' },
+    ],
     slug: 'curse',
     group: 'misc',
     quote: '"..."',
@@ -307,7 +310,7 @@ export const characters: Character[] = [
       }
     ],
     introduction: 'Hell\'s incarnation. This little spikeball of joy and whimsy is honestly... terrifying... in a way... He\'s got no skin. He\'s also kinda made out of flesh and stuff.',
-    backstory: '[write the backstory here]',
+    backstory: 'He\'s got \*quite\* the history indeed! For being around 700 years old, it\'s not even a say it\'s a definite stretch that this old guy\'s got some stories. You can personally find out more (of the uncovered pieces) on the chapters right there. There. Yeah there. I am POINTING to RIGHT there ON YOUR SCREEN do you SEE ME!?',
     credits: 'praxor',
     creation: 'praxor',
     design: 'praxor + whoever in catalog made that fit lmao',

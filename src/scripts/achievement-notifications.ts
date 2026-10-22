@@ -1,7 +1,16 @@
 import type { AchievementUnlockDetail } from './site-state';
+import type { AchievementReward } from '../data/achievements';
 import { CHANGE_EVENT, UNLOCK_EVENT, effectiveTheme, prefersReducedMotion } from './site-state';
+
+// The root attribute is what the page is actually rendering with.
+const currentTheme = () => document.documentElement.dataset.siteTheme || effectiveTheme();
 import { themes } from '../data/themes';
-import { applyThemePreviewPalette } from './theme-preview';
+import { applyThemePreviewCat, applyThemePreviewPalette } from './theme-preview';
+import { createTablerIcon } from './tabler-icons';
+
+type ToastNotice =
+  | { kind: 'achievement'; name: string }
+  | { kind: 'reward'; reward: AchievementReward };
 
 export const setupAchievementNotifications = (root: HTMLElement) => {
   const host = root.querySelector<HTMLElement>('[data-achievement-rewards]');
@@ -9,11 +18,10 @@ export const setupAchievementNotifications = (root: HTMLElement) => {
   if (!host || !previewTemplate || host.dataset.bound === 'true') return;
   host.dataset.bound = 'true';
 
-  const queue: AchievementUnlockDetail[] = [];
+  const queue: ToastNotice[] = [];
   const visibleToasts: HTMLElement[] = [];
   const timers = new WeakMap<HTMLElement, ToastTimerState>();
   const TOAST_DURATION_MS = 5000;
-  const MAX_VISIBLE_TOASTS = 3;
 
   type ToastTimerState = {
     progress: HTMLElement;
@@ -81,64 +89,60 @@ export const setupAchievementNotifications = (root: HTMLElement) => {
     else state.removeTimer = window.setTimeout(remove, 220);
   };
 
-  const createToast = (detail: AchievementUnlockDetail) => {
+  const createToast = (notice: ToastNotice) => {
     const toast = document.createElement('section');
     toast.className = 'sm-reward-toast sm-theme-profile';
-    toast.dataset.siteTheme = effectiveTheme();
+    toast.dataset.siteTheme = currentTheme();
     toast.dataset.visible = 'false';
     toast.setAttribute('role', 'group');
-    toast.setAttribute('aria-label', `${detail.name} achievement unlocked`);
+    const reward = notice.kind === 'reward' ? notice.reward : undefined;
+    const title = notice.kind === 'achievement' ? notice.name : notice.reward.name;
+    const notificationType = notice.kind === 'achievement'
+      ? 'Achievement unlocked'
+      : reward.themeId
+        ? 'Theme unlocked'
+        : 'Reward unlocked';
+    toast.setAttribute('aria-label', `${title}, ${notificationType.toLowerCase()}`);
 
     const head = document.createElement('div');
     head.className = 'sm-reward-head';
     const kicker = document.createElement('span');
     kicker.className = 'sm-reward-kicker';
-    kicker.textContent = 'Achievement Unlocked!';
+    kicker.textContent = notificationType;
     const dismiss = document.createElement('button');
     dismiss.className = 'sm-reward-dismiss';
     dismiss.type = 'button';
     dismiss.setAttribute('aria-label', 'Dismiss achievement notification');
-    dismiss.innerHTML = '<svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8" /></svg>';
+    dismiss.append(createTablerIcon('x'));
     dismiss.addEventListener('click', () => dismissToast(toast));
     head.append(kicker, dismiss);
 
     const achievement = document.createElement('strong');
     achievement.className = 'sm-reward-achievement';
-    achievement.textContent = detail.name;
+    achievement.textContent = title;
     toast.append(head, achievement);
 
-    const rewards = detail.rewards ?? [];
-    if (rewards.length) {
-      const list = document.createElement('div');
-      list.className = 'sm-reward-list';
-      rewards.forEach((reward) => {
-        const item = document.createElement('div');
-        item.className = 'sm-reward-item';
-        const name = document.createElement('strong');
-        name.className = 'sm-reward-name';
-        name.textContent = reward.name;
-        const description = document.createElement('p');
-        description.className = 'sm-reward-description';
-        description.textContent = reward.description;
-        item.append(name, description);
+    if (reward) {
+      const description = document.createElement('p');
+      description.className = 'sm-reward-description';
+      description.textContent = reward.description;
+      toast.append(description);
 
-        const theme = reward.themeId ? themes.find((candidate) => candidate.id === reward.themeId) : undefined;
-        if (theme) {
-          const preview = previewTemplate.content.firstElementChild?.cloneNode(true) as HTMLElement | null;
-          if (preview) {
-            preview.dataset.siteTheme = theme.id;
-            preview.style.setProperty('--sm-mini-swatch', theme.swatch);
-            applyThemePreviewPalette(preview, theme);
-            preview.querySelector<HTMLElement>('[data-sm-mini-name]')!.textContent = theme.name;
-            const previewWrap = document.createElement('div');
-            previewWrap.className = 'sm-reward-preview';
-            previewWrap.append(preview);
-            item.append(previewWrap);
-          }
+      const theme = reward.themeId ? themes.find((candidate) => candidate.id === reward.themeId) : undefined;
+      if (theme) {
+        const preview = previewTemplate.content.firstElementChild?.cloneNode(true) as HTMLElement | null;
+        if (preview) {
+          preview.dataset.siteTheme = theme.id;
+          preview.style.setProperty('--sm-mini-swatch', theme.swatch);
+          applyThemePreviewPalette(preview, theme);
+          applyThemePreviewCat(preview, theme);
+          preview.querySelector<HTMLElement>('[data-sm-mini-name]')!.textContent = theme.name;
+          const previewWrap = document.createElement('div');
+          previewWrap.className = 'sm-reward-preview';
+          previewWrap.append(preview);
+          toast.append(previewWrap);
         }
-        list.append(item);
-      });
-      toast.append(list);
+      }
     }
 
     const progress = document.createElement('span');
@@ -178,14 +182,36 @@ export const setupAchievementNotifications = (root: HTMLElement) => {
   };
 
   const showNext = () => {
-    while (queue.length && visibleToasts.length < MAX_VISIBLE_TOASTS) createToast(queue.shift()!);
+    while (queue.length) createToast(queue.shift()!);
   };
 
+  const syncToastThemes = () => {
+    const theme = currentTheme();
+    visibleToasts.forEach((toast) => { toast.dataset.siteTheme = theme; });
+  };
+
+  // Keep the stack just below the sticky navbar, wherever it currently sits.
+  const anchorToHeader = () => {
+    const header = document.querySelector<HTMLElement>('.site-header');
+    const bottom = header ? Math.max(0, header.getBoundingClientRect().bottom) : 0;
+    host.style.top = `calc(${Math.round(bottom)}px + 8px + env(safe-area-inset-top))`;
+    host.style.maxHeight = `calc(100dvh - ${Math.round(bottom)}px - 16px - env(safe-area-inset-top))`;
+  };
+  anchorToHeader();
+  window.addEventListener('scroll', anchorToHeader, { passive: true });
+  window.addEventListener('resize', anchorToHeader);
+  document.addEventListener('astro:page-load', anchorToHeader);
+  const header = document.querySelector<HTMLElement>('.site-header');
+  if (header && 'ResizeObserver' in window) new ResizeObserver(anchorToHeader).observe(header);
+
   window.addEventListener(UNLOCK_EVENT, (event) => {
-    queue.push((event as CustomEvent<AchievementUnlockDetail>).detail);
+    const detail = (event as CustomEvent<AchievementUnlockDetail>).detail;
+    queue.push({ kind: 'achievement', name: detail.name });
+    detail.rewards?.forEach((reward) => queue.push({ kind: 'reward', reward }));
+    anchorToHeader();
     showNext();
   });
-  window.addEventListener(CHANGE_EVENT, () => {
-    visibleToasts.forEach((toast) => { toast.dataset.siteTheme = effectiveTheme(); });
-  });
+  window.addEventListener(CHANGE_EVENT, syncToastThemes);
+  document.addEventListener('astro:after-swap', syncToastThemes);
+  new MutationObserver(syncToastThemes).observe(document.documentElement, { attributes: true, attributeFilter: ['data-site-theme'] });
 };

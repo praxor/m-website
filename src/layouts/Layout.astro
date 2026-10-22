@@ -8,7 +8,7 @@ import SettingsMenu from "../components/SettingsMenu.astro";
 import { themes, DEFAULT_THEME } from "../data/themes";
 import "../styles/global.css";
 import { getVisiblePostIds } from "../data/posts";
-import { STORAGE_KEY } from "../scripts/site-state";
+import { STORAGE_KEY, PERMANENT_STORAGE_KEY } from "../scripts/site-state";
 
 interface Props {
   title: string;
@@ -43,6 +43,10 @@ const postIds = JSON.stringify(await getVisiblePostIds()).replace(
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap"
       rel="stylesheet"
     />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Creepster&display=swap"
+      rel="stylesheet"
+    />
     <link rel="icon" href="/favicon.ico" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={Astro.url.href} />
@@ -56,23 +60,54 @@ const postIds = JSON.stringify(await getVisiblePostIds()).replace(
     <meta property="twitter:image" content={image} />
     <script
       is:inline
-      define:vars={{ key: STORAGE_KEY, themes, fallback: DEFAULT_THEME }}
+      define:vars={{
+        key: STORAGE_KEY,
+        permanentKey: PERMANENT_STORAGE_KEY,
+        themes,
+        fallback: DEFAULT_THEME,
+      }}
     >
       // Applies saved theme/motion settings before first paint to avoid a flash.
       (function () {
         try {
           var d = JSON.parse(localStorage.getItem(key)) || {};
+          var p = {};
+          try {
+            p = JSON.parse(localStorage.getItem(permanentKey)) || {};
+          } catch (e) {}
           var s = d.settings || {};
           var a = d.achievements || {};
           var r = document.documentElement;
-          var t = themes.filter(function (x) {
+          var now = new Date();
+          var inSeason = function (x) {
             return (
-              x.id === s.theme &&
-              (!x.unlockedBy ||
-                (a[x.unlockedBy] && a[x.unlockedBy].unlocked === true))
+              !!x.season &&
+              now.getMonth() + 1 === x.season.month &&
+              now.getDate() >= x.season.startDay &&
+              now.getDate() <= x.season.endDay
             );
+          };
+          var replacement = function (id) {
+            return themes.filter(function (x) {
+              return x.replaces === id && inSeason(x);
+            })[0];
+          };
+          var available = function (x) {
+            if (inSeason(x)) return true;
+            if (x.unlockedBy)
+              return (
+                (a[x.unlockedBy] && a[x.unlockedBy].unlocked === true) ||
+                (p[x.unlockedBy] && p[x.unlockedBy].unlocked === true)
+              );
+            return !x.season;
+          };
+          var wanted = replacement(s.theme);
+          var wantedId = wanted ? wanted.id : s.theme;
+          var t = themes.filter(function (x) {
+            return x.id === wantedId && available(x);
           })[0];
-          r.dataset.siteTheme = t ? t.id : fallback;
+          var seasonal = replacement(fallback);
+          r.dataset.siteTheme = t ? t.id : seasonal ? seasonal.id : fallback;
           r.dataset.forceTheme = String(s.forceTheme === true);
           r.dataset.reducedMotion = String(
             typeof s.reducedMotion === "boolean"

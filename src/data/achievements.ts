@@ -5,7 +5,7 @@ import { historyImages } from './credits';
 export type AchievementDefinition = {
 	name: string;
 	description: string;
-	category?: 'site' | 'characters' | 'plinko' | 'stats';
+	category?: 'site' | 'characters' | 'plinko' | 'stats' | 'permanent';
 	showProgress?: boolean;
 	hint?: string;
 	rewards?: readonly AchievementReward[];
@@ -30,6 +30,10 @@ export type AchievementDefinition = {
 	chapterCharacter?: string;
 	/** Press-and-hold on an element marked data-hold-unlock; weekday is 0 (Sunday) to 6. */
 	hold?: { ms: number; weekday?: number };
+	/** Unlock on this calendar day (month is 1-based) whenever the site is visited or used. */
+	onDate?: { month: number; day: number };
+	/** Kept in separate storage so Reset Data doesn't remove it. */
+	permanent?: boolean;
 };
 
 export type AchievementProgressDefinition = {
@@ -249,6 +253,14 @@ export const achievements = {
 		category: 'plinko',
 		secret: false,
 		progress: { maximum: 3 },
+	},
+	happyHalloween: {
+		name: 'Happy Halloween!',
+		description: 'Visit the website on Halloween (October 31st).',
+		category: 'permanent',
+		secret: false,
+		permanent: true,
+		onDate: { month: 10, day: 31 },
 	},
 } as const satisfies Record<string, AchievementDefinition>;
 

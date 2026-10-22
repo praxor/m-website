@@ -1,5 +1,6 @@
 ﻿---
 import Layout from "../../layouts/Layout.astro";
+import Icon from "../../components/Icon.astro";
 import { Image } from "astro:assets";
 import { characters } from "../../data/characters";
 import { getCharacterArtwork } from "../../data/character-artwork";
@@ -24,7 +25,8 @@ const references = galleryItems.slice(mainArtCount);
 <Layout title={character.name}>
   <main class="character-main" data-track-page={`character-${character.slug}`}>
     <a class="character-back" href="/characters">
-      ← all characters
+      <Icon name="arrow-left" width="15" height="15" aria-hidden="true" />
+      all characters
     </a>
     <article class="character-biography">
       <h1 id="character-title">{character.name}</h1>

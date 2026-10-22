@@ -1,0 +1,38 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"svg"> {
+  name: string;
+  filled?: boolean;
+}
+
+const outline = import.meta.glob("/node_modules/@tabler/icons/icons/outline/*.svg", {
+  query: "?raw",
+  import: "default",
+  eager: true,
+}) as Record<string, string>;
+const solid = import.meta.glob("/node_modules/@tabler/icons/icons/filled/*.svg", {
+  query: "?raw",
+  import: "default",
+  eager: true,
+}) as Record<string, string>;
+
+const { name, filled = false, ...attrs } = Astro.props;
+const source = (filled ? solid : outline)[
+  `/node_modules/@tabler/icons/icons/${filled ? "filled" : "outline"}/${name}.svg`
+];
+if (!source) throw new Error(`Unknown Tabler icon: ${name}${filled ? " (filled)" : ""}`);
+const inner = source.replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "");
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 24 24"
+  fill={filled ? "currentColor" : "none"}
+  stroke={filled ? "none" : "currentColor"}
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  {...attrs}
+  set:html={inner}
+/>
