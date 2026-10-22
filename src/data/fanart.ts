@@ -5,8 +5,8 @@ export interface FanartImage {
   height: number;
   artist: string;
   caption?: string;
-  // Character slug from characters.ts; shows this art on that character's page.
-  cSlug?: string;
+  // Character slugs from characters.ts; shows this art on each character's page.
+  cSlug?: string | string[];
 }
 
 export const fanartOptions: FanartImage[] = [
@@ -37,7 +37,8 @@ export const fanartOptions: FanartImage[] = [
   { number: 25, src: '/media/fanart/fanart25.png', width: 2048, height: 2048, artist: 'sillysatorugojo_', caption: 'The pubbler. Twice. Technically.', cSlug: 'pubbly' },
   { number: 26, src: '/media/fanart/fanart26.png', width: 983, height: 959, artist: 'bloody_soda', caption: 'Soup\'s Headcanon of Mr. Cake. Indubitably splendid.', cSlug: 'mrcake' },
   { number: 27, src: '/media/fanart/fanart27.png', width: 579, height: 569, artist: 'thatonedude7637', caption: '"praxor cat" ', cSlug: 'the-praxor-cat' },
-  { number: 28, src: '/media/fanart/fanart28.png', width: 870, height: 1024, artist: 'null', caption: 'Flesh man himself. Better than fentanyl or whatever.', cSlug: 'curse' }
+  { number: 28, src: '/media/fanart/fanart28.png', width: 870, height: 1024, artist: 'null', caption: 'Flesh man himself. Better than fentanyl or whatever.', cSlug: 'curse' },
+  { number: 29, src: '/media/fanart/fanart29.png', width: 2464, height: 2413, artist: 'luvhwngry', caption: 'hey this guy kinda looks familiar!', cSlug: ['praxor-v1', 'prophet'] },
 ];
 
 export const fanartByNumber = new Map(fanartOptions.map((image) => [image.number, image]));

@@ -25,7 +25,9 @@ export const getCharacterArtwork = (character: Character): CharacterArtwork[] =>
       credit: reference.artist || character.credits,
     }));
   const fanart: CharacterArtwork[] = fanartOptions
-    .filter((art) => art.cSlug === character.slug)
+    .filter((art) => Array.isArray(art.cSlug)
+      ? art.cSlug.includes(character.slug)
+      : art.cSlug === character.slug)
     .sort((first, second) => first.number - second.number)
     .map((art) => ({
       src: art.src,
