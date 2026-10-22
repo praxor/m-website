@@ -685,6 +685,37 @@ a:focus-visible {
   --plinko-peg: var(--accent) !important;
   --plinko-label: var(--accent) !important;
 }
+:root[data-site-theme="praxorian-light"],
+:root[data-force-theme="true"][data-site-theme="praxorian-light"] *,
+:root .settings-menu .sm-theme-profile[data-site-theme="praxorian-light"] {
+  color-scheme: light !important;
+  --bg: #f7f2ff !important;
+  --card: #fffaff !important;
+  --text: #28133c !important;
+  --muted: #654b7e !important;
+  --accent: #6822b3 !important;
+  --accent-contrast: #ffffff !important;
+  --accent-dark: #4a10cd !important;
+  --accent-10: rgba(104, 34, 179, 0.1) !important;
+  --accent-12: rgba(104, 34, 179, 0.18) !important;
+  --muted-border: rgba(74, 16, 205, 0.2) !important;
+  --danger: #b4234b !important;
+  --pattern-url: url("https://praxor.de/media/res/bricks.png") !important;
+  --accent-2: #8a4fd6 !important;
+  --accent-3: #b99aff !important;
+  --overlay: rgba(40, 19, 60, 0.48) !important;
+  --shadow-soft: rgba(74, 16, 205, 0.1) !important;
+  --shadow-strong: rgba(40, 19, 60, 0.22) !important;
+  --surface-hover: rgba(104, 34, 179, 0.06) !important;
+  --surface-inset: rgba(74, 16, 205, 0.04) !important;
+  --code-bg: #efe8f8 !important;
+  --image-scrim: rgba(0, 0, 0, 0.72) !important;
+  --on-image: #ffffff !important;
+  --plinko-board: rgba(247, 242, 255, 0.82) !important;
+  --plinko-slot: #6822b3 !important;
+  --plinko-peg: var(--accent) !important;
+  --plinko-label: #4a10cd !important;
+}
 :root[data-site-theme="berhian"],
 :root[data-force-theme="true"][data-site-theme="berhian"] *,
 :root .settings-menu .sm-theme-profile[data-site-theme="berhian"] {
@@ -2167,6 +2198,81 @@ img.bouncy-cat.theme-cat-solid-red {
 :root[data-reduced-motion="true"]::view-transition-old(*),
 :root[data-reduced-motion="true"]::view-transition-new(*) {
   animation: none !important;
+}
+
+/* Praxorian Light keeps the original purple accents on bright lavender surfaces. */
+:root[data-site-theme="praxorian-light"] body:not(.cult-page),
+:root[data-force-theme="true"][data-site-theme="praxorian-light"] body {
+  color: var(--text);
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(
+      900px 520px at 0 0,
+      rgba(185, 154, 255, 0.18),
+      transparent 62%
+    ),
+    radial-gradient(
+      900px 520px at 100% 0,
+      rgba(104, 34, 179, 0.08),
+      transparent 62%
+    );
+  background-attachment: fixed;
+}
+:root[data-site-theme="praxorian-light"] body:not(.cult-page)::before,
+:root[data-force-theme="true"][data-site-theme="praxorian-light"] body::before {
+  display: none;
+}
+:is(
+    :root[data-site-theme="praxorian-light"] body:not(.cult-page),
+    :root[data-site-theme="praxorian-light"][data-force-theme="true"]
+  )
+  :is(
+    .site-header,
+    .card,
+    .home-shell,
+    .post-card,
+    .music-player,
+    .sm-panel,
+    .characters-main,
+    .character-main,
+    .pa-main,
+    .music-frame,
+    .character-choice,
+    .plinko-frame,
+    .plinko-board,
+    .plinko-score-panel,
+    .cult-writing-space,
+    .contact-inner
+  ) {
+  background-color: var(--card);
+  background-image: none;
+  border-color: var(--muted-border);
+  box-shadow: 0 6px 20px var(--shadow-soft);
+}
+:is(
+    :root[data-site-theme="praxorian-light"] body:not(.cult-page),
+    :root[data-site-theme="praxorian-light"][data-force-theme="true"]
+  )
+  .site-header {
+  background-image: linear-gradient(180deg, #fffaff, #f1e8ff);
+}
+:is(
+    :root[data-site-theme="praxorian-light"] body:not(.cult-page),
+    :root[data-site-theme="praxorian-light"][data-force-theme="true"]
+  )
+  :is(.cta, .btn, .music-play) {
+  background: linear-gradient(180deg, #7b35c3, #6822b3);
+  border-color: #4a10cd;
+  color: #ffffff;
+}
+:is(
+    :root[data-site-theme="praxorian-light"] body:not(.cult-page),
+    :root[data-site-theme="praxorian-light"][data-force-theme="true"]
+  )
+  .music-control:not(.music-play) {
+  background: var(--card);
+  border-color: var(--muted-border);
+  color: var(--text);
 }
 
 ::selection {

@@ -44,6 +44,22 @@ export const seasonalReplacement = (id: string, now = new Date()) =>
 
 export const themes: readonly ThemeDefinition[] = [
   {
+    id: "praxorian-light",
+    name: "Lightxorian",
+    mode: "light",
+    swatch: "linear-gradient(135deg,#f7f2ff 45%,#6822b3)",
+    preview: {
+      bg: "#f7f2ff",
+      card: "#fffaff",
+      text: "#28133c",
+      muted: "#654b7e",
+      accent: "#6822b3",
+      accentContrast: "#ffffff",
+      accent10: "rgba(104,34,179,.1)",
+      mutedBorder: "rgba(74,16,205,.2)",
+    },
+  },
+  {
     id: "macintoshing",
     name: "Macintoshing",
     mode: "light",
@@ -93,7 +109,7 @@ export const themes: readonly ThemeDefinition[] = [
   },
   {
     id: "praxorian",
-    name: "Praxorian",
+    name: "Darkxorian",
     mode: "dark",
     swatch: "linear-gradient(135deg,#130623 45%,#6822b3)",
     preview: {
