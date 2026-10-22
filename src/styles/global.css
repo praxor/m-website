@@ -222,6 +222,7 @@ main {
 }
 
 .gallery-thumbnails,
+.reference-carousel,
 #music-playlist,
 .music-tree,
 .workspace-tracks {
@@ -230,6 +231,7 @@ main {
   scrollbar-color: var(--accent-dark) transparent;
 }
 .gallery-thumbnails::-webkit-scrollbar,
+.reference-carousel::-webkit-scrollbar,
 #music-playlist::-webkit-scrollbar,
 .music-tree::-webkit-scrollbar,
 .workspace-tracks::-webkit-scrollbar {
@@ -238,6 +240,7 @@ main {
   height: 7px !important;
 }
 .gallery-thumbnails::-webkit-scrollbar-thumb,
+.reference-carousel::-webkit-scrollbar-thumb,
 #music-playlist::-webkit-scrollbar-thumb,
 .music-tree::-webkit-scrollbar-thumb,
 .workspace-tracks::-webkit-scrollbar-thumb {
@@ -245,6 +248,7 @@ main {
   background: var(--accent-dark);
 }
 .gallery-thumbnails::-webkit-scrollbar-track,
+.reference-carousel::-webkit-scrollbar-track,
 #music-playlist::-webkit-scrollbar-track,
 .music-tree::-webkit-scrollbar-track,
 .workspace-tracks::-webkit-scrollbar-track {

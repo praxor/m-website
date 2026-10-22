@@ -329,7 +329,7 @@ const { items, title, label = "artwork", achievementCollection } = Astro.props;
     gap: 8px;
     min-width: 0;
     overflow-x: auto;
-    padding: 4px 3px 10px;
+    padding: 4px calc(50% - 38px) 10px;
     scrollbar-width: thin;
     scrollbar-color: var(--accent-dark) transparent;
   }
@@ -541,6 +541,7 @@ const { items, title, label = "artwork", achievementCollection } = Astro.props;
       headerPlaceholder = null;
     };
 
+    let wasOpen = false;
     const selectArtwork = (index: number) => {
       if (!thumbnails.length) return;
       activeIndex = (index + thumbnails.length) % thumbnails.length;
@@ -569,15 +570,23 @@ const { items, title, label = "artwork", achievementCollection } = Astro.props;
         void featureImage.offsetWidth;
         featureImage.classList.add("is-changing");
       }
-      if (dialog.open)
-        thumbnails[activeIndex].scrollIntoView({
-          block: "nearest",
-          inline: "center",
-          behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
-            .matches
-            ? "auto"
-            : "smooth",
+      if (dialog.open && thumbnailRail) {
+        const active = thumbnails[activeIndex];
+        const railBox = thumbnailRail.getBoundingClientRect();
+        const activeBox = active.getBoundingClientRect();
+        thumbnailRail.scrollTo({
+          left:
+            thumbnailRail.scrollLeft +
+            activeBox.left -
+            railBox.left -
+            (railBox.width - activeBox.width) / 2,
+          behavior:
+            wasOpen &&
+            !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+              ? "smooth"
+              : "auto",
         });
+      }
     };
 
     thumbnailRail?.addEventListener(
@@ -646,8 +655,10 @@ const { items, title, label = "artwork", achievementCollection } = Astro.props;
       captureHeaderTheme();
       document.body.classList.add("fanart-gallery-open");
       moveHeaderIntoGallery();
+      wasOpen = dialog.open;
       if (!dialog.open) dialog.showModal();
       selectArtwork(index);
+      wasOpen = true;
       dialog.querySelector<HTMLButtonElement>("[data-gallery-close]")?.focus();
       releaseHeaderTheme();
     };
