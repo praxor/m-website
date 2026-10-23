@@ -1,0 +1,72 @@
+---
+const primary = "https://discord.gg/praxor";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>discord</title>
+    <noscript>
+      <meta http-equiv="refresh" content={`0; url=${primary}`} />
+    </noscript>
+    <style>
+      body {
+        background: #000;
+        color: #777;
+        font-family: monospace;
+        display: grid;
+        place-items: center;
+        min-height: 100vh;
+        margin: 0;
+      }
+      a {
+        color: inherit;
+      }
+    </style>
+  </head>
+  <body>
+    <p id="status">redirecting to discord… <a href={primary}>click here</a> if nothing happens.</p>
+    <script is:inline define:vars={{ primary }}>
+      (async () => {
+        const INVALID_TTL = 5 * 60 * 1000;
+        const go = (url) => window.location.replace(url);
+
+        const backup = "https://discord.gg/u2SQwTusMS";
+        // ?check=<code> swaps the invite being checked, to test the fallback path.
+        const override = new URLSearchParams(location.search).get("check");
+        const code = override && /^[\w-]{2,32}$/.test(override) ? override : "praxor";
+        const KEY = "discord-primary-invalid-at:" + code;
+
+        try {
+          const at = Number(localStorage.getItem(KEY));
+          if (at && Date.now() - at < INVALID_TTL && backup) return go(backup);
+        } catch {}
+
+        let invalid = false;
+        try {
+          const res = await fetch("https://discord.com/api/v10/invites/" + code, {
+            signal: AbortSignal.timeout(4000),
+            cache: "no-store",
+          });
+          // Only a 404 with Discord's "Unknown Invite" code (10006) proves it is dead.
+          // 429, 5xx, timeouts and network errors are inconclusive.
+          if (res.status === 404) {
+            const body = await res.json().catch(() => null);
+            invalid = body?.code === 10006;
+          }
+        } catch {}
+
+        if (invalid && backup) {
+          try {
+            localStorage.setItem(KEY, String(Date.now()));
+          } catch {}
+          return go(backup);
+        }
+        go(primary);
+      })();
+    </script>
+  </body>
+</html>
